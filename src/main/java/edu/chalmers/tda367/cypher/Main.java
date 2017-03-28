@@ -6,12 +6,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/root.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/root.fxml"),
+				ResourceBundle.getBundle("Cypher", new Locale("sv", "SE")));
         primaryStage.setTitle("Cypher");
         primaryStage.setScene(new Scene(root, 1000, 600));
         primaryStage.setMinWidth(25);

@@ -7,5 +7,6 @@ public class RootController {
 
 	@FXML
 	private void initialize() {
+
 	}
 }
