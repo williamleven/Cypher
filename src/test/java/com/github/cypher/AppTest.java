@@ -1,4 +1,4 @@
-package edu.chalmers.tda367.cypher;
+package com.github.cypher;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
