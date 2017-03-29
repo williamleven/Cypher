@@ -1,4 +1,4 @@
-package edu.chalmers.tda367.cypher.controller;
+package com.github.cypher.controller;
 
 import javafx.fxml.FXML;
 
