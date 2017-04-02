@@ -18,7 +18,23 @@ public class Main extends Application {
         // TODO: Integer acts as placeholder until a model has been built
         final Integer model = 8;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/root.fxml"));
+        FXMLLoader loader = NewFXMLLoader(model);
+
+        loader.setLocation(getClass().getResource("/fxml/root.fxml"));
+
+        loader.setResources(ResourceBundle.getBundle("Cypher", new Locale("sv", "SE")));
+
+        Parent root = loader.load();
+
+        primaryStage.setTitle("Cypher");
+        primaryStage.setScene(new Scene(root, 1000, 600));
+        primaryStage.setMinWidth(25);
+        primaryStage.setMinHeight(25);
+        primaryStage.show();
+    }
+
+    private static FXMLLoader NewFXMLLoader(Integer model){
+        FXMLLoader loader = new FXMLLoader();
 
         // Set a custom controller factory to handle dependency injection
         loader.setControllerFactory((Class<?> controllerType) -> {
@@ -38,21 +54,7 @@ public class Main extends Application {
                 return null;
             }
         });
-
-
-
-
-
-
-        loader.setResources(ResourceBundle.getBundle("Cypher", new Locale("sv", "SE")));
-
-        Parent root = loader.load();
-
-        primaryStage.setTitle("Cypher");
-        primaryStage.setScene(new Scene(root, 1000, 600));
-        primaryStage.setMinWidth(25);
-        primaryStage.setMinHeight(25);
-        primaryStage.show();
+        return loader;
     }
 
     public static void main(String[] args) {
