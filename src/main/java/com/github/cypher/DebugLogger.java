@@ -4,7 +4,7 @@ public class DebugLogger {
     public static final boolean ENABLED = true;
 
     public static void log(Object o){
-        if (!ENABLED) {
+        if (ENABLED) {
             System.out.println(o.toString());
         }
     }
