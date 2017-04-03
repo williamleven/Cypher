@@ -24,7 +24,7 @@ public class MatrixApiLayer implements ApiLayer {
 
         JsonObject response = login(username, password, homeserver);
 
-        if(response.has("error")) {
+        if(response.has("errcode")) {
             if(DebugLogger.ENABLED) {
                 DebugLogger.log(response.get("error").getAsString());
                 DebugLogger.log(response.get("errcode").getAsString());
@@ -65,8 +65,12 @@ public class MatrixApiLayer implements ApiLayer {
             if(DebugLogger.ENABLED) {
                 DebugLogger.log(e);
             }
-            return null;
+        } catch(ExtendedHTTPException e) {
+            if(DebugLogger.ENABLED) {
+                DebugLogger.log(e);
+            }
         }
+        return null;
     }
 
     public JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence) {
@@ -91,8 +95,14 @@ public class MatrixApiLayer implements ApiLayer {
         try {
             response = Util.makeJsonGetRequest(url);
         } catch(IOException e) {
-            if(DebugLogger.ENABLED)
+            if(DebugLogger.ENABLED) {
                 DebugLogger.log(e);
+            }
+            return null;
+        } catch(ExtendedHTTPException e) {
+            if(DebugLogger.ENABLED) {
+                DebugLogger.log(e);
+            }
             return null;
         }
 

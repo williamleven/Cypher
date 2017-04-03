@@ -30,7 +30,7 @@ public class Util {
         return new URL(builder.toString());
     }
 
-    static JsonElement makeJsonPostRequest(URL url, JsonObject data) throws IOException {
+    static JsonElement makeJsonPostRequest(URL url, JsonObject data) throws IOException, ExtendedHTTPException {
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");
@@ -44,14 +44,20 @@ public class Util {
 
         JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
         JsonParser parser = new JsonParser();
-        return parser.parse(reader);
+        JsonElement json = parser.parse(reader);
+        if(!(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300))
+            throw new ExtendedHTTPException(conn.getResponseCode(), json.getAsJsonObject());
+        return json;
     }
 
-    static JsonElement makeJsonGetRequest(URL url) throws IOException {
+    static JsonElement makeJsonGetRequest(URL url) throws IOException, ExtendedHTTPException {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
         JsonParser parser = new JsonParser();
-        return parser.parse(reader);
+        JsonElement json = parser.parse(reader);
+        if(!(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300))
+            throw new ExtendedHTTPException(conn.getResponseCode(), json.getAsJsonObject());
+        return json;
     }
 }
