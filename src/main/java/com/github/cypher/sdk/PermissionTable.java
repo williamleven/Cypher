@@ -1,6 +1,7 @@
 package com.github.cypher.sdk;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class PermissionTable {
@@ -21,7 +22,7 @@ public class PermissionTable {
         this.ban = ban;
         this.defaultPower = defaultPower;
         this.kick = kick;
-        this.specialEvents = specialEvents;
+        this.specialEvents = new HashMap<String, Integer>(specialEvents);
     }
 
 
@@ -60,7 +61,8 @@ public class PermissionTable {
 
 
     public Map<String, Integer> getSpecialEvents() {
-        return specialEvents;
+
+        return new HashMap<String, Integer>(specialEvents);
     }
 
 
