@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Main extends Application {
+    public static final String WORKING_DIRECTORY = ""; //The path to the folder where settings, credentials etc are saved.
 
     @Override
     public void start(Stage primaryStage) throws Exception {
