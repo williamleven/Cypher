@@ -2,4 +2,5 @@ package com.github.cypher.sdk;
 
 // Represents a user
 public class User {
+    public enum Presence{online, offline};
 }
