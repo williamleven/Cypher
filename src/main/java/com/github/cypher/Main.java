@@ -17,10 +17,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 		Locale.setDefault(new Locale("sv", "SE"));
         Map<Object, Object> customProperties = new HashMap<>();
-        customProperties.put("n1", new Integer(8));
-        customProperties.put("s1", "hejsan");
+        customProperties.put("n1", 8);
+        customProperties.put("s1", "test");
 		Injector.setConfigurationSource(customProperties::get);
 		RootView rootView = new RootView();
+
 		Scene scene = new Scene(rootView.getView());
 		final String uri = getClass().getResource("main.css").toExternalForm();
 		scene.getStylesheets().add(uri);

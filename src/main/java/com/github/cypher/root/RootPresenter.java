@@ -1,11 +1,15 @@
 package com.github.cypher.root;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 
 import javax.inject.Inject;
 
 // Controller for the root/main pane of the application
 public class RootPresenter {
+
+	@FXML
+	Label label;
 
 	@Inject
 	private Integer n1;
@@ -15,6 +19,6 @@ public class RootPresenter {
 
 	@FXML
 	private void initialize() {
-
+		label.setText(s1);
 	}
 }
