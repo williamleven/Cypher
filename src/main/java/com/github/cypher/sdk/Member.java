@@ -13,7 +13,7 @@ public class Member {
 
 
     public User getUser() {
-        return new User(user);
+        return user;
     }
 
 
