@@ -1,7 +1,7 @@
 .boxSpacing{
-    -fx-padding: 10 10 10 10;
+	-fx-padding: 10 10 10 10;
 }
 
 .root {    
-    -fx-font: 14px "Helvetica";
+	-fx-font: 14px "Helvetica";
 }
