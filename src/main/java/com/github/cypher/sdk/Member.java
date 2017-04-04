@@ -3,11 +3,11 @@ package com.github.cypher.sdk;
 // Represents a member of a room
 public class Member {
     private final User user;
-    private final String membership;
+    private final int privilege;
 
-    public Member(User user, String displayname, String avatarUrl, String membership) {
+    public Member(User user, int privilege) {
         this.user = user;
-        this.membership = membership;
+        this.privilege = privilege;
     }
 
 
@@ -17,7 +17,7 @@ public class Member {
     }
 
 
-    public String getMembership() {
-        return membership;
+    public int getMembership() {
+        return privilege;
     }
 }
