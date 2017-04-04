@@ -17,7 +17,7 @@ public class Member {
     }
 
 
-    public int getMembership() {
+    public int getPrivilege() {
         return privilege;
     }
 }
