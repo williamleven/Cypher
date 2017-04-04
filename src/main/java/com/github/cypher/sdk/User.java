@@ -1,10 +1,12 @@
 package com.github.cypher.sdk;
 
+import java.net.URL;
+
 // Represents a user
 public class User {
-    protected String id;
+    protected final String id;
     protected String name;
-    protected String url;
+    protected URL avatarUrl;
     protected boolean isActive;
     protected long lastActiveAgo;
 
@@ -12,10 +14,18 @@ public class User {
     public User(User user) {
         id = user.getId();
         name = user.getName();
-        url = user.getURl();
+        avatarUrl = user.getAvatarUrl();
         isActive = user.getIsActive();
         lastActiveAgo = user.getLastActiveAgo();
 
+    }
+
+    public User(String id, String name, URL avatarUrl, boolean isActive, long lastActiveAgo){
+        this.id = id;
+        this.name = name;
+        this. avatarUrl= avatarUrl;
+        this.isActive = isActive;
+        this.lastActiveAgo = lastActiveAgo;
     }
 
     public void update(){
@@ -36,8 +46,8 @@ public class User {
         return name;
     }
 
-    public String getURl() {
-        return url;
+    public URL getAvatarUrl() {
+        return avatarUrl;
     }
 
     public boolean getIsActive() {
