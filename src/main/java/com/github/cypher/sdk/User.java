@@ -4,7 +4,7 @@ package com.github.cypher.sdk;
 public class User {
     protected String id;
     protected String name;
-    protected String url;
+    protected String avatarUrl;
     protected boolean isActive;
     protected long lastActiveAgo;
 
@@ -12,7 +12,7 @@ public class User {
     public User(User user) {
         id = user.getId();
         name = user.getName();
-        url = user.getURl();
+        avatarUrl = user.getURl();
         isActive = user.getIsActive();
         lastActiveAgo = user.getLastActiveAgo();
 
@@ -37,7 +37,7 @@ public class User {
     }
 
     public String getURl() {
-        return url;
+        return avatarUrl;
     }
 
     public boolean getIsActive() {
