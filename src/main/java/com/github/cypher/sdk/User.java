@@ -10,15 +10,7 @@ public class User {
     protected boolean isActive;
     protected long lastActiveAgo;
 
-
-    public User(User user) {
-        id = user.getId();
-        name = user.getName();
-        avatarUrl = user.getAvatarUrl();
-        isActive = user.getIsActive();
-        lastActiveAgo = user.getLastActiveAgo();
-
-    }
+    
 
     public User(String id, String name, URL avatarUrl, boolean isActive, long lastActiveAgo){
         this.id = id;
