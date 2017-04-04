@@ -16,10 +16,17 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 		Locale.setDefault(new Locale("sv", "SE"));
-        Map<Object, Object> customProperties = new HashMap<>();
-        customProperties.put("n1", 8);
+
+		// Dependency injection with afterburner.fx
+		//
+		// key is name of injected variable & value is injected object
+
+        Map<String, Object> customProperties = new HashMap<>();
+        customProperties.put("n1", 8); // This corresponds to the line @Inject Integer n1; in the Presenter
         customProperties.put("s1", "test");
 		Injector.setConfigurationSource(customProperties::get);
+
+
 		RootView rootView = new RootView();
 
 		Scene scene = new Scene(rootView.getView());
