@@ -30,7 +30,7 @@ public class Util {
 		return new URL(builder.toString());
 	}
 
-	static JsonElement makeJsonPostRequest(URL url, JsonObject data) throws IOException, ExtendedHTTPException {
+	static JsonElement makeJsonPostRequest(URL url, JsonObject data) throws ExtendedHTTPException, IOException {
 		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 		conn.setDoOutput(true);
 		conn.setRequestMethod("POST");
@@ -50,7 +50,7 @@ public class Util {
 		return json;
 	}
 
-	static JsonElement makeJsonGetRequest(URL url) throws IOException, ExtendedHTTPException {
+	static JsonElement makeJsonGetRequest(URL url) throws ExtendedHTTPException, IOException {
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
