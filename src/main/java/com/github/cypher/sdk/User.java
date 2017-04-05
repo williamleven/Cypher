@@ -4,7 +4,7 @@ import java.net.URL;
 
 // Represents a user
 public class User {
-    public enum Presence{online, offline};
+    public enum Presence{ONLINE, OFFLINE};
 
     protected final String id;
     protected String name;
