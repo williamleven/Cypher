@@ -44,7 +44,7 @@ public class MatrixApiLayer implements ApiLayer {
 	public String getDeviceId() { return deviceId; }
 
 	private JsonObject login(String username, String password, String homeserver) throws ExtendedHTTPException, IOException {
-		URL url = Util.UrlBuilder(homeserver, Endpoint.login, null);
+		URL url = Util.UrlBuilder(homeserver, Endpoint.LOGIN, null);
 
 		JsonObject request  = new JsonObject();
 		request.addProperty("type", "m.login.password");
@@ -63,14 +63,14 @@ public class MatrixApiLayer implements ApiLayer {
 		parameters.put("full_state"  , fullState ? "true" : "false");
 		parameters.put("access_token", accessToken);
 
-		URL url = Util.UrlBuilder(homeServer, Endpoint.sync, parameters);
+		URL url = Util.UrlBuilder(homeServer, Endpoint.SYNC, parameters);
 
 		JsonElement response = Util.makeJsonGetRequest(url);
 		return response.getAsJsonObject();
 	}
 
 	public JsonObject publicRooms(String server) throws ExtendedHTTPException, IOException {
-		URL url = Util.UrlBuilder(server, Endpoint.publicRooms, null);
+		URL url = Util.UrlBuilder(server, Endpoint.PUBLIC_ROOMS, null);
 		return Util.makeJsonGetRequest(url).getAsJsonObject();
 	}
 }
