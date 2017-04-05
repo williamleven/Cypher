@@ -5,8 +5,9 @@ package com.github.cypher.sdk.api;
  */
 enum Endpoint {
 
-	login ("login"),
-	sync  ("sync");
+	LOGIN        ("login"),
+	SYNC         ("sync"),
+	PUBLIC_ROOMS ("publicRooms");
 
 	private final String name;
 
