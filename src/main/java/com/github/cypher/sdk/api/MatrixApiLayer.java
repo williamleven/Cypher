@@ -68,4 +68,9 @@ public class MatrixApiLayer implements ApiLayer {
 		JsonElement response = Util.makeJsonGetRequest(url);
 		return response.getAsJsonObject();
 	}
+
+	public JsonObject publicRooms(String server) throws ExtendedHTTPException, IOException {
+		URL url = Util.UrlBuilder(server, Endpoint.publicRooms, null);
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
+	}
 }

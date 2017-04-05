@@ -7,4 +7,5 @@ import java.io.IOException;
 
 public interface ApiLayer {
 	JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence) throws ExtendedHTTPException, IOException;
+	JsonObject publicRooms(String server) throws ExtendedHTTPException, IOException;
 }
