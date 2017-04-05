@@ -51,6 +51,7 @@ public class MatrixApiLayer implements ApiLayer {
 		return Util.makeJsonPostRequest(url, request).getAsJsonObject();
 	}
 
+	@Override
 	public JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence) throws ExtendedHTTPException, IOException{
 		Map<String, String> parameters = new HashMap<String, String>();
 
@@ -66,6 +67,7 @@ public class MatrixApiLayer implements ApiLayer {
 		return response.getAsJsonObject();
 	}
 
+	@Override
 	public JsonObject publicRooms(String server) throws ExtendedHTTPException, IOException {
 		URL url = Util.UrlBuilder(server, Endpoint.PUBLIC_ROOMS, null);
 		return Util.makeJsonGetRequest(url).getAsJsonObject();
