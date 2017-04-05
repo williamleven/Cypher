@@ -1,13 +1,13 @@
 package com.github.cypher;
 
 public class DebugLogger {
-    public static final boolean ENABLED = true;
+	public static final boolean ENABLED = true;
 
-    public static void log(Object o){
-        if (!ENABLED) {
-            System.out.println(o.toString());
-        }
-    }
+	public static void log(Object o){
+		if (ENABLED) {
+			System.out.println(o.toString());
+		}
+	}
 }
 
 /*
