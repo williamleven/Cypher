@@ -6,12 +6,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.lang.System.out;
 
 public class MatrixApiLayer implements ApiLayer {
 
