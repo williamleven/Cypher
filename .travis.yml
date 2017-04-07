@@ -2,4 +2,4 @@ language: java
 sudo: false
 script: mvn clean verify
 jdk:
-  - openjdk6
+  - openjdk8
