@@ -33,7 +33,7 @@ public class MatrixApiLayer implements ApiLayer {
 	 *
 	 * @param username Username
 	 * @param password Password
-	 * @param homeserver A homeserver to connect trough
+	 * @param homeserver A homeserver to connect trough (etc. example.org:8448,  matrix.org or 8.8.8.8)
 	 */
 	public MatrixApiLayer(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
 		login(username, password, homeserver);

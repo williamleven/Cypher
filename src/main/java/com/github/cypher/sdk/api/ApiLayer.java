@@ -33,7 +33,7 @@ public interface ApiLayer {
 	/**
 	 * Lists the public rooms on the server.
 	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_discovery/get_matrix_client_r0_publicRooms">matrix.org</a>
-	 * @param server A homeserver to fetch public rooms from.
+	 * @param server A homeserver to fetch public rooms from (etc. example.org:8448,  matrix.org or 8.8.8.8)
 	 * @return Valid Json response
 	 */
 	JsonObject publicRooms(String server) throws RestfulHTTPException, IOException;
@@ -44,7 +44,7 @@ public interface ApiLayer {
 	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Session_management/post_matrix_client_r0_login">matrix.org</a>
 	 * @param username Username
 	 * @param password Password
-	 * @param homeserver A homeserver to connect trough
+	 * @param homeserver A homeserver to connect trough (etc. example.org:8448,  matrix.org or 8.8.8.8)
 	 */
 	void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException;
 }
