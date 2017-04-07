@@ -9,8 +9,8 @@ import javax.xml.ws.http.HTTPException;
  */
 public class ExtendedHTTPException extends HTTPException {
 
-	final String message;
-	final String errorCode;
+	private final String message;
+	private final String errorCode;
 
 	/**
 	 * Create error without error code and error message.
