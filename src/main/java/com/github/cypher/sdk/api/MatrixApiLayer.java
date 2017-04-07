@@ -10,6 +10,14 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class provides access to matrix endpoints trough
+ * ordinary java methods returning Json Objects.
+ *
+ * <p>Most endpoints require the {@link #login(String, String, String)} method to
+ * have been successfully run as the data provided by the
+ * endpoint itself isn't publicly available.
+ */
 public class MatrixApiLayer implements ApiLayer {
 
 	private String userId;
@@ -35,12 +43,15 @@ public class MatrixApiLayer implements ApiLayer {
 		this.deviceId = response.get("device_id").getAsString();
 	}
 
-	public String getUserId() { return userId; }
-	public String getAccessToken() { return accessToken; }
-	public String getHomeServer() { return homeServer; }
-	public String getDeviceId() { return deviceId; }
-
-	private JsonObject login(String username, String password, String homeserver) throws ExtendedHTTPException, IOException {
+	/**
+	 * Authenticates the user.
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Session_management/post_matrix_client_r0_login">matrix.org</a>
+	 * @param username Username
+	 * @param password Password
+	 * @param homeserver A homeserver to connect trough
+	 * @return Valid Json response
+	 */
+	public static JsonObject login(String username, String password, String homeserver) throws ExtendedHTTPException, IOException {
 		URL url = Util.UrlBuilder(homeserver, Endpoint.LOGIN, null);
 
 		JsonObject request  = new JsonObject();
@@ -51,6 +62,15 @@ public class MatrixApiLayer implements ApiLayer {
 		return Util.makeJsonPostRequest(url, request).getAsJsonObject();
 	}
 
+	/**
+	 * Synchronise the client's state and receive new messages.
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_participation/get_matrix_client_r0_sync">matrix.org</a>
+	 * @param filter Id of filter to be used on the sync data
+	 * @param since Point in time of last sync request
+	 * @param fullState Shall all events be collected
+	 * @param setPresence User status
+	 * @return Valid Json response
+	 */
 	@Override
 	public JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence) throws ExtendedHTTPException, IOException{
 		Map<String, String> parameters = new HashMap<String, String>();
@@ -67,6 +87,12 @@ public class MatrixApiLayer implements ApiLayer {
 		return response.getAsJsonObject();
 	}
 
+	/**
+	 * Lists the public rooms on the server.
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_discovery/get_matrix_client_r0_publicRooms">matrix.org</a>
+	 * @param server A homeserver to fetch public rooms from.
+	 * @return Valid Json response
+	 */
 	@Override
 	public JsonObject publicRooms(String server) throws ExtendedHTTPException, IOException {
 		URL url = Util.UrlBuilder(server, Endpoint.PUBLIC_ROOMS, null);

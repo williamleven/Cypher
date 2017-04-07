@@ -4,29 +4,52 @@ import com.google.gson.JsonObject;
 
 import javax.xml.ws.http.HTTPException;
 
+/**
+ * This class proves information rich errors usually returned from restful http API's
+ */
 public class ExtendedHTTPException extends HTTPException {
 
 	final String message;
 	final String errorCode;
 
+	/**
+	 * Create error without error code and error message.
+	 * @param statusCode HTTP status code
+	 */
 	public ExtendedHTTPException(int statusCode) {
 		super(statusCode);
 		message = "";
 		errorCode = "";
 	}
 
+	/**
+	 * Create error without error message.
+	 * @param statusCode HTTP status code
+	 * @param errorCode Json error code
+	 */
 	public ExtendedHTTPException(int statusCode, String errorCode) {
 		super(statusCode);
 		this.errorCode = errorCode;
 		message = "";
 	}
 
+	/**
+	 * Create error with error message and error code
+	 * @param statusCode HTTP status code
+	 * @param errorCode Json error code
+	 * @param error Message corresponding to the error code
+	 */
 	public ExtendedHTTPException(int statusCode, String errorCode, String error) {
 		super(statusCode);
 		this.errorCode = errorCode;
 		this.message = error;
 	}
 
+	/**
+	 * Create error from a jsonObject
+	 * @param statusCode HTTP status code
+	 * @param error JsonObject containing error information
+	 */
 	public ExtendedHTTPException(int statusCode, JsonObject error){
 		super(statusCode);
 
@@ -41,6 +64,9 @@ public class ExtendedHTTPException extends HTTPException {
 			errorCode = "";
 	}
 
+	/**
+	 * Crate and collect the error message.
+	 */
 	@Override
 	public String getMessage() {
 		if(!message.equals(""))
