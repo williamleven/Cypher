@@ -51,7 +51,8 @@ public class MatrixApiLayer implements ApiLayer {
 	 * @param homeserver A homeserver to connect trough
 	 * @return Valid Json response
 	 */
-	public static JsonObject login(String username, String password, String homeserver) throws ExtendedHTTPException, IOException {
+	@Override
+	public JsonObject login(String username, String password, String homeserver) throws ExtendedHTTPException, IOException {
 		URL url = Util.UrlBuilder(homeserver, Endpoint.LOGIN, null);
 
 		JsonObject request  = new JsonObject();
