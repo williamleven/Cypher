@@ -1,5 +1,5 @@
 package com.github.cypher.model;
 
-public interface Updateable {
+interface Updateable {
 	void update();
 }

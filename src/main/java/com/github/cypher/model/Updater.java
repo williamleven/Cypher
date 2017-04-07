@@ -3,8 +3,18 @@ package com.github.cypher.model;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Updater extends Thread {
-	Map<Updateable, Integer> watching = new ConcurrentHashMap<>(10);
+class Updater extends Thread {
+	private Map<Updateable, Integer> watching = new ConcurrentHashMap<>(10);
+
+	private final int interval;
+
+	public Updater(){
+		interval = 500;
+	}
+
+	public Updater(int interval){
+		this.interval = interval;
+	}
 
 	@Override
 	public void run() {
@@ -17,7 +27,7 @@ public class Updater extends Thread {
 			}
 
 			try{
-				Thread.sleep(500);
+				Thread.sleep(interval);
 			}catch (InterruptedException err){
 
 			}
