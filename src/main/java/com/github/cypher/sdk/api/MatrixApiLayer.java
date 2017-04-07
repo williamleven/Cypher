@@ -19,6 +19,8 @@ import java.util.Map;
  *
  * <p>A session can be initiated with {@link #login(String, String, String)}
  * or wia the constructor {@link #MatrixApiLayer(String, String, String)}
+ *
+ * @see <a href="http://matrix.org/docs/api/client-server/">matrix.org</a>
  */
 public class MatrixApiLayer implements ApiLayer {
 
@@ -26,6 +28,8 @@ public class MatrixApiLayer implements ApiLayer {
 
 	/**
 	 * Creates a MatrixApiLayer with a session.
+	 *
+	 * <p> Session is created with {@link #login(String, String, String)}
 	 *
 	 * @param username Username
 	 * @param password Password
@@ -42,13 +46,6 @@ public class MatrixApiLayer implements ApiLayer {
 	 */
 	public MatrixApiLayer() {}
 
-	/**
-	 * Authenticates the user.
-	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Session_management/post_matrix_client_r0_login">matrix.org</a>
-	 * @param username Username
-	 * @param password Password
-	 * @param homeserver A homeserver to connect trough
-	 */
 	@Override
 	public void login(String username, String password, String homeserver) throws ExtendedHTTPException, IOException {
 		// Only run if session isn't already set
@@ -68,15 +65,6 @@ public class MatrixApiLayer implements ApiLayer {
 		this.session = new Session(response);
 	}
 
-	/**
-	 * Synchronise the client's state and receive new messages.
-	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_participation/get_matrix_client_r0_sync">matrix.org</a>
-	 * @param filter Id of filter to be used on the sync data
-	 * @param since Point in time of last sync request
-	 * @param fullState Shall all events be collected
-	 * @param setPresence User status
-	 * @return Valid Json response
-	 */
 	@Override
 	public JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence) throws ExtendedHTTPException, IOException{
 		Map<String, String> parameters = new HashMap<String, String>();
@@ -93,12 +81,6 @@ public class MatrixApiLayer implements ApiLayer {
 		return response.getAsJsonObject();
 	}
 
-	/**
-	 * Lists the public rooms on the server.
-	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_discovery/get_matrix_client_r0_publicRooms">matrix.org</a>
-	 * @param server A homeserver to fetch public rooms from.
-	 * @return Valid Json response
-	 */
 	@Override
 	public JsonObject publicRooms(String server) throws ExtendedHTTPException, IOException {
 		URL url = Util.UrlBuilder(server, Endpoint.PUBLIC_ROOMS, null);
