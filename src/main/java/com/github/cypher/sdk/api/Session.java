@@ -21,9 +21,9 @@ class Session {
 
 		// Make sure response is valid
 		if (loginResponse.has("user_id") &&
-			loginResponse.has("access_token") &&
-			loginResponse.has("home_server") &&
-			loginResponse.has("device_id")){
+		    loginResponse.has("access_token") &&
+		    loginResponse.has("home_server") &&
+		    loginResponse.has("device_id")){
 
 			// Parse Data
 			this.userId = loginResponse.get("user_id").getAsString();
