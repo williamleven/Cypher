@@ -5,10 +5,14 @@ package com.github.cypher.sdk.api;
  */
 enum Endpoint {
 
+	// All endpoints
 	LOGIN        ("login"),
 	SYNC         ("sync"),
 	PUBLIC_ROOMS ("publicRooms");
 
+	/*
+		The code bellow allows for custom return of .toString() for each endpoint.
+	 */
 	private final String name;
 
 	Endpoint(String s) {

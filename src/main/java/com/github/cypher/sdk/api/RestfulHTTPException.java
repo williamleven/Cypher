@@ -53,15 +53,19 @@ public class RestfulHTTPException extends HTTPException {
 	public RestfulHTTPException(int statusCode, JsonObject error){
 		super(statusCode);
 
-		if (error.has("error"))
+		// Parse error message
+		if (error.has("error")){
 			message = error.get("error").getAsString();
-		else
+		}else {
 			message = "";
+		}
 
-		if (error.has("errcode"))
+		// Parse error code
+		if (error.has("errcode")) {
 			errorCode = error.get("errcode").getAsString();
-		else
+		}else {
 			errorCode = "";
+		}
 	}
 
 	/**
@@ -69,11 +73,12 @@ public class RestfulHTTPException extends HTTPException {
 	 */
 	@Override
 	public String getMessage() {
-		if(!message.equals(""))
+		if(!message.equals("")) {
 			return super.getMessage().concat("\n").concat(message);
-		else if(errorCode.equals(""))
+		}else if(errorCode.equals("")) {
 			return super.getMessage().concat("\n").concat(errorCode);
-		else
+		}else {
 			return super.getMessage();
+		}
 	}
 }

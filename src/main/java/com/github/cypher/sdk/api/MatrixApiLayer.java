@@ -53,37 +53,53 @@ public class MatrixApiLayer implements ApiLayer {
 			return;
 		}
 
+		// Build URL
 		URL url = Util.UrlBuilder(homeserver, Endpoint.LOGIN, null);
 
+		// Build request body
 		JsonObject request  = new JsonObject();
 		request.addProperty("type", "m.login.password");
 		request.addProperty("user", username);
 		request.addProperty("password", password);
 
+		// Send Request
 		JsonObject response = Util.makeJsonPostRequest(url, request).getAsJsonObject();
 
+		// Set Session
 		this.session = new Session(response);
 	}
 
 	@Override
 	public JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence) throws RestfulHTTPException, IOException{
-		Map<String, String> parameters = new HashMap<String, String>();
 
-		if(filter != null && !filter.equals("")) parameters.put("filter"      , filter);
-		if(since  != null && !since.equals(""))  parameters.put("since"       , since);
-		if(setPresence != null)                 parameters.put("set_presence", setPresence.name());
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<String, String>();
+		if(filter != null && !filter.equals("")) {
+			parameters.put("filter"      , filter);
+		}
+		if(since  != null && !since.equals("")) {
+			parameters.put("since"       , since);
+		}
+		if(setPresence != null) {
+			parameters.put("set_presence", setPresence.name());
+		}
 		parameters.put("full_state"  , fullState ? "true" : "false");
 		parameters.put("access_token", session.getAccessToken());
 
+		// Build URL
 		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.SYNC, parameters);
 
-		JsonElement response = Util.makeJsonGetRequest(url);
-		return response.getAsJsonObject();
+		// Send request
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
 	}
 
 	@Override
 	public JsonObject publicRooms(String server) throws RestfulHTTPException, IOException {
+
+		// Build URL
 		URL url = Util.UrlBuilder(server, Endpoint.PUBLIC_ROOMS, null);
+
+		// Send request
 		return Util.makeJsonGetRequest(url).getAsJsonObject();
 	}
 }
