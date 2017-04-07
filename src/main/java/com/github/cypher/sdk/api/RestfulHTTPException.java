@@ -7,7 +7,7 @@ import javax.xml.ws.http.HTTPException;
 /**
  * This class proves information rich errors usually returned from restful http API's
  */
-public class ExtendedHTTPException extends HTTPException {
+public class RestfulHTTPException extends HTTPException {
 
 	private final String message;
 	private final String errorCode;
@@ -16,7 +16,7 @@ public class ExtendedHTTPException extends HTTPException {
 	 * Create error without error code and error message.
 	 * @param statusCode HTTP status code
 	 */
-	public ExtendedHTTPException(int statusCode) {
+	public RestfulHTTPException(int statusCode) {
 		super(statusCode);
 		message = "";
 		errorCode = "";
@@ -27,7 +27,7 @@ public class ExtendedHTTPException extends HTTPException {
 	 * @param statusCode HTTP status code
 	 * @param errorCode Json error code
 	 */
-	public ExtendedHTTPException(int statusCode, String errorCode) {
+	public RestfulHTTPException(int statusCode, String errorCode) {
 		super(statusCode);
 		this.errorCode = errorCode;
 		message = "";
@@ -39,7 +39,7 @@ public class ExtendedHTTPException extends HTTPException {
 	 * @param errorCode Json error code
 	 * @param error Message corresponding to the error code
 	 */
-	public ExtendedHTTPException(int statusCode, String errorCode, String error) {
+	public RestfulHTTPException(int statusCode, String errorCode, String error) {
 		super(statusCode);
 		this.errorCode = errorCode;
 		this.message = error;
@@ -50,7 +50,7 @@ public class ExtendedHTTPException extends HTTPException {
 	 * @param statusCode HTTP status code
 	 * @param error JsonObject containing error information
 	 */
-	public ExtendedHTTPException(int statusCode, JsonObject error){
+	public RestfulHTTPException(int statusCode, JsonObject error){
 		super(statusCode);
 
 		if (error.has("error"))

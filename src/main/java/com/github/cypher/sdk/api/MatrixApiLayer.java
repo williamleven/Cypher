@@ -35,7 +35,7 @@ public class MatrixApiLayer implements ApiLayer {
 	 * @param password Password
 	 * @param homeserver A homeserver to connect trough
 	 */
-	public MatrixApiLayer(String username, String password, String homeserver) throws ExtendedHTTPException, IOException {
+	public MatrixApiLayer(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
 		login(username, password, homeserver);
 	}
 
@@ -47,7 +47,7 @@ public class MatrixApiLayer implements ApiLayer {
 	public MatrixApiLayer() {}
 
 	@Override
-	public void login(String username, String password, String homeserver) throws ExtendedHTTPException, IOException {
+	public void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
 		// Only run if session isn't already set
 		if (session != null){
 			return;
@@ -66,7 +66,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence) throws ExtendedHTTPException, IOException{
+	public JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence) throws RestfulHTTPException, IOException{
 		Map<String, String> parameters = new HashMap<String, String>();
 
 		if(filter != null && !filter.equals("")) parameters.put("filter"      , filter);
@@ -82,7 +82,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public JsonObject publicRooms(String server) throws ExtendedHTTPException, IOException {
+	public JsonObject publicRooms(String server) throws RestfulHTTPException, IOException {
 		URL url = Util.UrlBuilder(server, Endpoint.PUBLIC_ROOMS, null);
 		return Util.makeJsonGetRequest(url).getAsJsonObject();
 	}

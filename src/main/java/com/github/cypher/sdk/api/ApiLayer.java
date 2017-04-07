@@ -28,7 +28,7 @@ public interface ApiLayer {
 	 * @param setPresence User status
 	 * @return Valid Json response
 	 */
-	JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence) throws ExtendedHTTPException, IOException;
+	JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence) throws RestfulHTTPException, IOException;
 
 	/**
 	 * Lists the public rooms on the server.
@@ -36,7 +36,7 @@ public interface ApiLayer {
 	 * @param server A homeserver to fetch public rooms from.
 	 * @return Valid Json response
 	 */
-	JsonObject publicRooms(String server) throws ExtendedHTTPException, IOException;
+	JsonObject publicRooms(String server) throws RestfulHTTPException, IOException;
 
 	/**
 	 * Authenticates the user and crates a session
@@ -46,5 +46,5 @@ public interface ApiLayer {
 	 * @param password Password
 	 * @param homeserver A homeserver to connect trough
 	 */
-	void login(String username, String password, String homeserver) throws ExtendedHTTPException, IOException;
+	void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException;
 }
