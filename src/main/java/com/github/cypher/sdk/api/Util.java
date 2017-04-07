@@ -13,7 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-public class Util {
+class Util {
 	static URL UrlBuilder(String homeServer, Endpoint endPoint, Map<String, String> parameters) throws MalformedURLException {
 		StringBuilder builder = new StringBuilder("https://");
 		builder.append(homeServer);
