@@ -32,7 +32,7 @@ class Session {
 			this.deviceId = loginResponse.get("device_id").getAsString();
 
 		}else {
-			throw new IOException("loginResponse was and parsable");
+			throw new IOException("loginResponse wasn't parsable");
 		}
 
 	}
