@@ -74,11 +74,11 @@ public class RestfulHTTPException extends HTTPException {
 	@Override
 	public String getMessage() {
 		if(!message.equals("")) {
-			return super.getMessage().concat("\n").concat(message);
-		}else if(errorCode.equals("")) {
-			return super.getMessage().concat("\n").concat(errorCode);
+			return Integer.toString(super.getStatusCode()).concat(": ").concat(message);
+		}else if(!errorCode.equals("")) {
+			return Integer.toString(super.getStatusCode()).concat(": ").concat(errorCode);
 		}else {
-			return super.getMessage();
+			return Integer.toString(super.getStatusCode());
 		}
 	}
 }
