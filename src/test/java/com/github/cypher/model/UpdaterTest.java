@@ -34,7 +34,8 @@ public class UpdaterTest {
 		while (interrupted) {
 			interrupted = false;
 
-			Updater u = new Updater(1);
+			Updater u = Updater.getInstance();
+			u.setInterval(1);
 
 			// Reset counters and make them listen for updates
 			c1.reset();

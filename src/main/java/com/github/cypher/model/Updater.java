@@ -4,15 +4,22 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 class Updater extends Thread {
-	private Map<Updateable, Integer> watching = new ConcurrentHashMap<>(10);
 
-	private final int interval;
-
-	public Updater(){
-		interval = 500;
+	private static class Holder{
+		static final Updater INSTANCE = new Updater();
 	}
 
-	public Updater(int interval){
+	public static Updater getInstance(){
+		return Holder.INSTANCE;
+	}
+
+	private Map<Updateable, Integer> watching = new ConcurrentHashMap<>(10);
+
+	private int interval = 500;
+
+	private Updater(){}
+
+	public void setInterval(int interval){
 		this.interval = interval;
 	}
 
