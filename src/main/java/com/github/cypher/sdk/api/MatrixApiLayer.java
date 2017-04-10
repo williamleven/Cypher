@@ -102,4 +102,72 @@ public class MatrixApiLayer implements ApiLayer {
 		// Send request
 		return Util.makeJsonGetRequest(url).getAsJsonObject();
 	}
+
+	@Override
+	public JsonObject roomMessages(String roomId) throws RestfulHTTPException, IOException {
+
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_MESSAGES, new Object[] {roomId}, parameters);
+
+		// Send Request
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
+	}
+
+	@Override
+	public JsonObject roomMembers(String roomId) throws RestfulHTTPException, IOException {
+
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_MEMBERS, new Object[] {roomId}, parameters);
+
+		// Send Request
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
+	}
+
+	@Override
+	public JsonObject userProfile(String userId) throws RestfulHTTPException, IOException {
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.USER_PROFILE, new Object[] {userId}, null);
+
+		// Send Request
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
+	}
+
+	@Override
+	public JsonObject userAvatarUrl(String userId) throws RestfulHTTPException, IOException {
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.USER_AVATAR_URL, new Object[] {userId}, null);
+
+		// Send Request
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
+	}
+
+	@Override
+	public JsonObject userDisplayName(String userId) throws RestfulHTTPException, IOException {
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.USER_DISPLAY_NAME, new Object[] {userId}, null);
+
+		// Send Request
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
+	}
+
+	@Override
+	public JsonObject roomSendEvent(String roomId, String eventType, int transactionId, JsonObject content) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_SEND_EVENT, new Object[] {roomId, eventType, transactionId}, parameters);
+
+		// Send Request
+		return Util.makeJsonPutRequest(url, content).getAsJsonObject();
+	}
 }
