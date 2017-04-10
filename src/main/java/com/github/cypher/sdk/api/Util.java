@@ -64,13 +64,15 @@ class Util {
 		writer.flush();
 		writer.close();
 
-		// Retrieve Data
-		JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
-		JsonParser parser = new JsonParser();
-		JsonElement json = parser.parse(reader);
-
-		// Throw exception if unsuccessful
-		if(!(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300)) {
+		JsonElement json;
+		try {
+			// Retrieve Data
+			JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
+			json = new JsonParser().parse(reader);
+		} catch(IOException e) {
+			// Try to throw additional json error data
+			JsonReader errorReader = new JsonReader(new InputStreamReader(conn.getErrorStream()));
+			json = new JsonParser().parse(errorReader);
 			throw new RestfulHTTPException(conn.getResponseCode(), json.getAsJsonObject());
 		}
 
@@ -84,13 +86,15 @@ class Util {
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 
-		// Retrieve Data
-		JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
-		JsonParser parser = new JsonParser();
-		JsonElement json = parser.parse(reader);
-
-		// Throw exception if unsuccessful
-		if(!(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300)) {
+		JsonElement json;
+		try {
+			// Retrieve Data
+			JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
+			json = new JsonParser().parse(reader);
+		} catch(IOException e) {
+			// Try to throw additional json error data
+			JsonReader errorReader = new JsonReader(new InputStreamReader(conn.getErrorStream()));
+			json = new JsonParser().parse(errorReader);
 			throw new RestfulHTTPException(conn.getResponseCode(), json.getAsJsonObject());
 		}
 
