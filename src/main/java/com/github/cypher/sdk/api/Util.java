@@ -4,13 +4,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.Map;
 
 /*
@@ -21,17 +21,24 @@ class Util {
 	/*
 		Build a URL with a specified set of parameters
 	 */
-	static URL UrlBuilder(String homeServer, Endpoint endPoint, Map<String, String> parameters) throws MalformedURLException {
+	static URL UrlBuilder(String homeServer, Endpoint endPoint, Object[] endPointParameters, Map<String, String> getParameters) throws MalformedURLException {
 		StringBuilder builder = new StringBuilder("https://");
 
 		// Add homeserver and specified endpoint to the URL
 		builder.append(homeServer);
-		builder.append(endPoint);
 
-		// Add Parameters
-		if(parameters != null) {
+		// Inject end point parameters into the URL
+		if(endPointParameters == null) {
+			builder.append(endPoint);
+		} else {
+			MessageFormat finalEndPoint = new MessageFormat(endPoint.toString());
+			builder.append(finalEndPoint.format(endPointParameters));
+		}
+
+		// Append GET-parameters
+		if(getParameters != null) {
 			boolean first = true;
-			for (Map.Entry<String, String> parameter : parameters.entrySet()) {
+			for (Map.Entry<String, String> parameter : getParameters.entrySet()) {
 				builder.append(first ? "?" : "&");
 				first = false;
 				builder.append(parameter.getKey()).append("=");
