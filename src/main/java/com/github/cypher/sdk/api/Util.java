@@ -101,4 +101,35 @@ class Util {
 		// Return response
 		return json;
 	}
+
+	static JsonElement makeJsonPutRequest(URL url, JsonObject data) throws RestfulHTTPException, IOException {
+		// Setup the connection
+		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+		conn.setDoOutput(true);
+		conn.setRequestMethod("PUT");
+		conn.setRequestProperty("Content-Type", "application/json");
+		conn.setRequestProperty("Accept", "application/json");
+
+		// Push Data
+		DataOutputStream writer = new DataOutputStream(conn.getOutputStream());
+		writer.writeBytes(data.toString());
+		writer.flush();
+		writer.close();
+
+		JsonElement json;
+		try {
+			// Retrieve Data
+			JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
+			JsonParser parser = new JsonParser();
+			json = parser.parse(reader);
+		} catch(IOException e) {
+			// Try to throw additional json error data
+			JsonReader errorReader = new JsonReader(new InputStreamReader(conn.getErrorStream()));
+			json = new JsonParser().parse(errorReader);
+			throw new RestfulHTTPException(conn.getResponseCode(), json.getAsJsonObject());
+		}
+
+		// Return response
+		return json;
+	}
 }
