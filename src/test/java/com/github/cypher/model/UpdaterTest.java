@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 public class UpdaterTest {
 
-	public class Counter implements Updateable{
+	public class Counter implements Updatable {
 
 		private int counter = 0;
 

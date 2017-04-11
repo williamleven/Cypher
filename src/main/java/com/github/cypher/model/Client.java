@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class Client implements Updateable {
+public class Client implements Updatable {
 
 	private final com.github.cypher.sdk.Client sdkClient;
 

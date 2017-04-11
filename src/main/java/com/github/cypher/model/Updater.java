@@ -16,7 +16,7 @@ class Updater extends Thread {
 
 
 	// Holds all updatable classes
-	private Map<Updateable, Integer> watching = new ConcurrentHashMap<>(10);
+	private Map<Updatable, Integer> watching = new ConcurrentHashMap<>(10);
 
 	// The time between each tic
 	private int interval = 500;
@@ -32,7 +32,7 @@ class Updater extends Thread {
 		for (int i = 1;;i++){
 
 			// Notify all Updatable classes
-			for (Map.Entry<Updateable, Integer> entry: watching.entrySet()) {
+			for (Map.Entry<Updatable, Integer> entry: watching.entrySet()) {
 				if (i % entry.getValue() == 0 ){
 					entry.getKey().update();
 				}
@@ -48,12 +48,12 @@ class Updater extends Thread {
 	}
 
 	// Register a listener. The listener will be notified avery {i}'th tic
-	public void add(Updateable u, Integer i){
+	public void add(Updatable u, Integer i){
 		watching.put(u, i);
 	}
 
 	// Remove a listener
-	public void remove(Updateable u){
+	public void remove(Updatable u){
 		watching.remove(u);
 	}
 }
