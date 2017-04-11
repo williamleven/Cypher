@@ -3,9 +3,15 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="757.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.server.room.RoomPresenter">
-   <children>
-      <Text layoutX="397.0" layoutY="313.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%name.text" />
-      <Label fx:id="label" layoutX="414.0" layoutY="230.0" text="Label" />
-   </children>
-</AnchorPane>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.StackPane?>
+<SplitPane dividerPositions="0.26152304609218435" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="999.0" prefWidth="999.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.server.room.RoomPresenter">
+   <items>
+      <StackPane prefHeight="600.0" prefWidth="821.0">
+         <children>
+            <fx:include source="settings/settings.fxml"/>
+            <fx:include source="chatroot/chatroot.fxml"/>
+         </children>
+      </StackPane>
+   </items>
+</SplitPane>

@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Text?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="757.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.server.room.chatroot.ChatRootPresenter">
-   <children>
-      <Text layoutX="397.0" layoutY="313.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%name.text" />
-      <Label fx:id="label" layoutX="414.0" layoutY="230.0" text="Label" />
-   </children>
-</AnchorPane>
+
+<SplitPane dividerPositions="0.26152304609218435" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="757.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.server.room.chatroot.ChatRootPresenter">
+   <items>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="240.0">
+         <children>
+            <fx:include source="chat/chat.fxml"/>
+         </children>
+      </AnchorPane>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="240.0">
+         <children>
+            <fx:include source="chatextra/chatextra.fxml"/>
+         </children>
+      </AnchorPane>
+   </items>
+</SplitPane>
