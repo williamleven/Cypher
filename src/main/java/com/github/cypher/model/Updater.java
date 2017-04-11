@@ -5,34 +5,40 @@ import java.util.concurrent.ConcurrentHashMap;
 
 class Updater extends Thread {
 
+	// Singleton Code
 	private static class Holder{
 		static final Updater INSTANCE = new Updater();
 	}
-
 	public static Updater getInstance(){
 		return Holder.INSTANCE;
 	}
+	private Updater(){}
 
+
+	// Holds all updatable classes
 	private Map<Updateable, Integer> watching = new ConcurrentHashMap<>(10);
 
+	// The time between each tic
 	private int interval = 500;
-
-	private Updater(){}
 
 	public void setInterval(int interval){
 		this.interval = interval;
 	}
 
+	// Tic loop
 	@Override
 	public void run() {
 
 		for (int i = 1;;i++){
+
+			// Notify all Updatable classes
 			for (Map.Entry<Updateable, Integer> entry: watching.entrySet()) {
 				if (i % entry.getValue() == 0 ){
 					entry.getKey().update();
 				}
 			}
 
+			// Sleep
 			try{
 				Thread.sleep(interval);
 			}catch (InterruptedException err){
@@ -41,10 +47,12 @@ class Updater extends Thread {
 		}
 	}
 
+	// Register a listener. The listener will be notified avery {i}'th tic
 	public void add(Updateable u, Integer i){
 		watching.put(u, i);
 	}
 
+	// Remove a listener
 	public void remove(Updateable u){
 		watching.remove(u);
 	}

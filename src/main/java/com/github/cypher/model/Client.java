@@ -9,10 +9,13 @@ public class Client implements Updateable {
 
 	private final com.github.cypher.sdk.Client sdkClient;
 
+	// Servers
 	private ObservableList<Server> servers = FXCollections.observableArrayList();
 
+	// Personal messages
 	private PMCollection pmCollection = new PMCollection();
 
+	// General chatrooms
 	private GeneralCollection genCollection = new GeneralCollection();
 
 	private BooleanProperty isLoggedIn = new SimpleBooleanProperty(false);
