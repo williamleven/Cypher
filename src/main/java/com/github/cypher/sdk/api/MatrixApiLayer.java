@@ -17,8 +17,8 @@ import java.util.Map;
  * have been successfully initiated as the data provided by the
  * endpoint itself isn't publicly available.
  *
- * <p>A session can be initiated with {@link #login(String, String, String)}
- * or wia the constructor {@link #MatrixApiLayer(String, String, String)}
+ * <p>A session can be initiated with {@link #login(String username, String password, String homeserver)}
+ * or via the constructor {@link #MatrixApiLayer(String username, String password, String homeserver)}
  *
  * @see <a href="http://matrix.org/docs/api/client-server/">matrix.org</a>
  */
@@ -29,11 +29,11 @@ public class MatrixApiLayer implements ApiLayer {
 	/**
 	 * Creates a MatrixApiLayer with a session.
 	 *
-	 * <p> Session is created with {@link #login(String, String, String)}
+	 * <p> Session is created with {@link #login(String username, String password, String homeserver)}
 	 *
 	 * @param username Username
 	 * @param password Password
-	 * @param homeserver A homeserver to connect trough (etc. example.org:8448,  matrix.org or 8.8.8.8)
+	 * @param homeserver A homeserver to connect trough (e.g. example.org:8448 or matrix.org)
 	 */
 	public MatrixApiLayer(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
 		login(username, password, homeserver);
@@ -42,7 +42,7 @@ public class MatrixApiLayer implements ApiLayer {
 	/**
 	 * Crates a new MatrixApiLayer without a session.
 	 *
-	 * <p> Use {@link #login(String, String, String)} to create a session.
+	 * <p> Use {@link #login(String username, String password, String homeserver)} to create a session.
 	 */
 	public MatrixApiLayer() {}
 
@@ -54,7 +54,7 @@ public class MatrixApiLayer implements ApiLayer {
 		}
 
 		// Build URL
-		URL url = Util.UrlBuilder(homeserver, Endpoint.LOGIN, null);
+		URL url = Util.UrlBuilder(homeserver, Endpoint.LOGIN, null, null);
 
 		// Build request body
 		JsonObject request  = new JsonObject();
@@ -87,7 +87,7 @@ public class MatrixApiLayer implements ApiLayer {
 		parameters.put("access_token", session.getAccessToken());
 
 		// Build URL
-		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.SYNC, parameters);
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.SYNC, null, parameters);
 
 		// Send request
 		return Util.makeJsonGetRequest(url).getAsJsonObject();
@@ -97,9 +97,77 @@ public class MatrixApiLayer implements ApiLayer {
 	public JsonObject publicRooms(String server) throws RestfulHTTPException, IOException {
 
 		// Build URL
-		URL url = Util.UrlBuilder(server, Endpoint.PUBLIC_ROOMS, null);
+		URL url = Util.UrlBuilder(server, Endpoint.PUBLIC_ROOMS, null, null);
 
 		// Send request
 		return Util.makeJsonGetRequest(url).getAsJsonObject();
+	}
+
+	@Override
+	public JsonObject roomMessages(String roomId) throws RestfulHTTPException, IOException {
+
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_MESSAGES, new Object[] {roomId}, parameters);
+
+		// Send Request
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
+	}
+
+	@Override
+	public JsonObject roomMembers(String roomId) throws RestfulHTTPException, IOException {
+
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_MEMBERS, new Object[] {roomId}, parameters);
+
+		// Send Request
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
+	}
+
+	@Override
+	public JsonObject userProfile(String userId) throws RestfulHTTPException, IOException {
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.USER_PROFILE, new Object[] {userId}, null);
+
+		// Send Request
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
+	}
+
+	@Override
+	public JsonObject userAvatarUrl(String userId) throws RestfulHTTPException, IOException {
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.USER_AVATAR_URL, new Object[] {userId}, null);
+
+		// Send Request
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
+	}
+
+	@Override
+	public JsonObject userDisplayName(String userId) throws RestfulHTTPException, IOException {
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.USER_DISPLAY_NAME, new Object[] {userId}, null);
+
+		// Send Request
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
+	}
+
+	@Override
+	public JsonObject roomSendEvent(String roomId, String eventType, int transactionId, JsonObject content) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_SEND_EVENT, new Object[] {roomId, eventType, transactionId}, parameters);
+
+		// Send Request
+		return Util.makeJsonPutRequest(url, content).getAsJsonObject();
 	}
 }
