@@ -45,13 +45,13 @@ public class UtilTest {
 
 			assertEquals(
 				"UrlBuilder must build correct URL with no arguments",
-				"https://matrix.org/_matrix/client/r0/rooms/!cURbafjkfsMDVwdRDQ:matrix.org/messages",
+				"https://matrix.org/_matrix/client/r0/rooms/%21cURbafjkfsMDVwdRDQ%3Amatrix.org/messages",
 				Util.UrlBuilder("matrix.org", Endpoint.ROOM_MESSAGES, new Object[] {"!cURbafjkfsMDVwdRDQ:matrix.org"}, null).toString()
 			);
 
 			assertEquals(
 				"UrlBuilder must build correct URL with multiple arguments",
-				"https://matrix.org/_matrix/client/r0/rooms/!cURbafjkfsMDVwdRDQ:matrix.org/messages?av=23&ab=true",
+				"https://matrix.org/_matrix/client/r0/rooms/%21cURbafjkfsMDVwdRDQ%3Amatrix.org/messages?av=23&ab=true",
 				Util.UrlBuilder("matrix.org", Endpoint.ROOM_MESSAGES, new Object[] {"!cURbafjkfsMDVwdRDQ:matrix.org"}, maps.get(1)).toString()
 			);
 
