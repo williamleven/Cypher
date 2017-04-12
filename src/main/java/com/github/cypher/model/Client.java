@@ -7,6 +7,8 @@ import javafx.collections.ObservableList;
 
 public class Client implements Updatable {
 
+	private final Updater updater;
+
 	private final com.github.cypher.sdk.Client sdkClient;
 
 	// Servers
@@ -22,7 +24,9 @@ public class Client implements Updatable {
 
 	Client(com.github.cypher.sdk.Client c){
 		sdkClient = c;
-		Updater.getInstance().add(this, 1);
+		updater = new Updater(500);
+		updater.add(this, 1);
+		updater.start();
 	}
 
 	// Add server, room or private chat

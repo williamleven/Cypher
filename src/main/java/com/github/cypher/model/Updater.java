@@ -5,23 +5,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 class Updater extends Thread {
 
-	// Singleton Code
-	private static class Holder{
-		static final Updater INSTANCE = new Updater();
-	}
-	public static Updater getInstance(){
-		return Holder.INSTANCE;
-	}
-	private Updater(){}
-
-
 	// Holds all updatable classes
 	private Map<Updatable, Integer> watching = new ConcurrentHashMap<>(10);
 
 	// The time between each tic
-	private int interval = 500;
+	private final int interval;
 
-	public void setInterval(int interval){
+	public Updater(int interval){
 		this.interval = interval;
 	}
 
