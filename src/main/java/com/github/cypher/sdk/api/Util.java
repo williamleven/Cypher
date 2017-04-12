@@ -54,11 +54,11 @@ class Util {
 		// Setup the connection
 		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 		conn.setRequestMethod(method);
+		conn.setRequestProperty("Accept", "application/json");
 
 		if(data != null) {
 			conn.setDoOutput(true);
 			conn.setRequestProperty("Content-Type", "application/json");
-			conn.setRequestProperty("Accept", "application/json");
 
 			// Push Data
 			DataOutputStream writer = new DataOutputStream(conn.getOutputStream());
@@ -69,14 +69,20 @@ class Util {
 
 		JsonElement json;
 		try {
-			// Retrieve Data
-			JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
-			json = new JsonParser().parse(reader);
-		} catch(IOException e) {
-			// Try to throw additional json error data
-			JsonReader errorReader = new JsonReader(new InputStreamReader(conn.getErrorStream()));
-			json = new JsonParser().parse(errorReader);
-			throw new RestfulHTTPException(conn.getResponseCode(), json.getAsJsonObject());
+			try {
+				// Retrieve Data
+				JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
+				json = new JsonParser().parse(reader);
+			} catch(IOException e) {
+				DebugLogger.log(e);
+				// Try to throw additional json error data
+				JsonReader errorReader = new JsonReader(new InputStreamReader(conn.getErrorStream()));
+				json = new JsonParser().parse(errorReader);
+				DebugLogger.log(json.toString());
+				throw new RestfulHTTPException(conn.getResponseCode(), json.getAsJsonObject());
+			}
+		} catch(IllegalStateException e) {
+			return null;
 		}
 
 		// Return response

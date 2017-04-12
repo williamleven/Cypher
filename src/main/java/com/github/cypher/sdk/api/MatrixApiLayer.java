@@ -150,12 +150,46 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
+	public void setUserAvatarUrl(String avatarUrl) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.USER_AVATAR_URL, new Object[] {session.getUserId()}, parameters);
+
+		// Build Json Object containing data
+		JsonObject json = new JsonObject();
+		json.addProperty("avatar_url", avatarUrl);
+
+		// Send Request
+		Util.makeJsonPutRequest(url, json);
+	}
+
+	@Override
 	public JsonObject getUserDisplayName(String userId) throws RestfulHTTPException, IOException {
 		// Build URL
 		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.USER_DISPLAY_NAME, new Object[] {userId}, null);
 
 		// Send Request
 		return Util.makeJsonGetRequest(url).getAsJsonObject();
+	}
+
+	@Override
+	public void setUserDisplayName(String displayName) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.USER_DISPLAY_NAME, new Object[] {session.getUserId()}, parameters);
+
+		// Build Json Object containing data
+		JsonObject json = new JsonObject();
+		json.addProperty("displayname", displayName);
+
+		// Send Request
+		Util.makeJsonPutRequest(url, json);
 	}
 
 	@Override

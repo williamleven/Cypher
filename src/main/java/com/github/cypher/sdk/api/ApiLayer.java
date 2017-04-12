@@ -81,12 +81,26 @@ public interface ApiLayer {
 	JsonObject getUserAvatarUrl(String userId) throws RestfulHTTPException, IOException;
 
 	/**
+	 * Set the user's avatar.
+	 * @see <a href="https://matrix.org/docs/api/client-server/#!/User_data/get_matrix_client_r0_profile_userId_avatar_url">matrix.org</a>
+	 * @param avatarUrl The matrix media URL of the image (e.g. "avatar_url": "mxc://matrix.org/wefh34uihSDRGhw34")
+	 */
+	void setUserAvatarUrl(String avatarUrl) throws RestfulHTTPException, IOException;
+
+	/**
 	 * Get the user's display name.
 	 * @see <a href="https://matrix.org/docs/api/client-server/#!/User_data/get_matrix_client_r0_profile_userId_displayname">matrix.org</a>
 	 * @param userId The unique ID of the user (e.g. "@bob:matrix.org")
 	 * @return Valid Json response containing the user display name
 	 */
 	JsonObject getUserDisplayName(String userId) throws RestfulHTTPException, IOException;
+
+	/**
+	 * Set the user's display name.
+	 * @see <a href="https://matrix.org/docs/api/client-server/#!/User_data/get_matrix_client_r0_profile_userId_displayname">matrix.org</a>
+	 * @param displayName The new display name to be set
+	 */
+	void setUserDisplayName(String displayName) throws RestfulHTTPException, IOException;
 
 	/**
 	 * This endpoint is used to send a message event to a room.
