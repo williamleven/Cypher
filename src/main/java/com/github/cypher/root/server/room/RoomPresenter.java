@@ -1,12 +1,11 @@
-package com.github.cypher.root;
+package com.github.cypher.root.server.room;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 import javax.inject.Inject;
 
-// Presenter for the root/main pane of the application
-public class RootPresenter {
+public class RoomPresenter {
 
 	@Inject
 	private Integer n1;
@@ -16,5 +15,6 @@ public class RootPresenter {
 
 	@FXML
 	private void initialize() {
+
 	}
 }

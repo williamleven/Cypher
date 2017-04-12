@@ -1,12 +1,11 @@
-package com.github.cypher.root;
+package com.github.cypher.root.server.room.chatroot;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 import javax.inject.Inject;
 
-// Presenter for the root/main pane of the application
-public class RootPresenter {
+public class ChatRootPresenter {
 
 	@Inject
 	private Integer n1;

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<SplitPane dividerPositions="0.26152304609218435" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0"
+           minWidth="0.0" prefHeight="999.0" prefWidth="999.0" xmlns="http://javafx.com/javafx/8"
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.server.ServerPresenter">
+    <items>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="240.0">
+            <children>
+                <fx:include source="roomlist/roomlist.fxml"/>
+            </children>
+        </AnchorPane>
+        <StackPane prefHeight="600.0" prefWidth="821.0">
+            <children>
+                <fx:include source="room/room.fxml"/>
+                <fx:include source="directory/directory.fxml"/>
+            </children>
+        </StackPane>
+    </items>
+</SplitPane>
