@@ -4,6 +4,7 @@ import com.github.cypher.sdk.User;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -168,5 +169,14 @@ public class MatrixApiLayer implements ApiLayer {
 
 		// Send Request
 		return Util.makeJsonPutRequest(url, content).getAsJsonObject();
+	}
+
+	@Override
+	public JsonObject getRoomIDFromAlias(String roomAlias) throws RestfulHTTPException, IOException {
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.GET_ROOMID_FROM_ALIAS,new Object[] {roomAlias}, null);
+
+		//Send request URL.
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
 	}
 }
