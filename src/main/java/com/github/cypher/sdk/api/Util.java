@@ -74,11 +74,9 @@ class Util {
 				JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
 				json = new JsonParser().parse(reader);
 			} catch(IOException e) {
-				DebugLogger.log(e);
 				// Try to throw additional json error data
 				JsonReader errorReader = new JsonReader(new InputStreamReader(conn.getErrorStream()));
 				json = new JsonParser().parse(errorReader);
-				DebugLogger.log(json.toString());
 				throw new RestfulHTTPException(conn.getResponseCode(), json.getAsJsonObject());
 			}
 		} catch(IllegalStateException e) {
