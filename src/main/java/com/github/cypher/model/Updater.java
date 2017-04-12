@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 class Updater extends Thread {
 
 	// Holds all updatable classes
+	// Initiated to size 10 but will resize if necessary
 	private Map<Updatable, Integer> watching = new ConcurrentHashMap<>(10);
 
 	// The time between each tic
