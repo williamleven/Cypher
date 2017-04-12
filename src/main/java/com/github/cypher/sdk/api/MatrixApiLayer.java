@@ -1,7 +1,6 @@
 package com.github.cypher.sdk.api;
 
 import com.github.cypher.sdk.User;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
@@ -94,7 +93,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public JsonObject publicRooms(String server) throws RestfulHTTPException, IOException {
+	public JsonObject getPublicRooms(String server) throws RestfulHTTPException, IOException {
 
 		// Build URL
 		URL url = Util.UrlBuilder(server, Endpoint.PUBLIC_ROOMS, null, null);
@@ -104,7 +103,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public JsonObject roomMessages(String roomId) throws RestfulHTTPException, IOException {
+	public JsonObject getRoomMessages(String roomId) throws RestfulHTTPException, IOException {
 
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
@@ -118,7 +117,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public JsonObject roomMembers(String roomId) throws RestfulHTTPException, IOException {
+	public JsonObject getRoomMembers(String roomId) throws RestfulHTTPException, IOException {
 
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
@@ -132,7 +131,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public JsonObject userProfile(String userId) throws RestfulHTTPException, IOException {
+	public JsonObject getUserProfile(String userId) throws RestfulHTTPException, IOException {
 		// Build URL
 		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.USER_PROFILE, new Object[] {userId}, null);
 
@@ -141,7 +140,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public JsonObject userAvatarUrl(String userId) throws RestfulHTTPException, IOException {
+	public JsonObject getUserAvatarUrl(String userId) throws RestfulHTTPException, IOException {
 		// Build URL
 		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.USER_AVATAR_URL, new Object[] {userId}, null);
 
@@ -150,7 +149,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public JsonObject userDisplayName(String userId) throws RestfulHTTPException, IOException {
+	public JsonObject getUserDisplayName(String userId) throws RestfulHTTPException, IOException {
 		// Build URL
 		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.USER_DISPLAY_NAME, new Object[] {userId}, null);
 

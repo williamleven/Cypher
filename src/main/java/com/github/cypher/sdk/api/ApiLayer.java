@@ -36,7 +36,7 @@ public interface ApiLayer {
 	 * @param server A homeserver to fetch public rooms from (e.g. example.org:8448 or matrix.org)
 	 * @return Valid Json response
 	 */
-	JsonObject publicRooms(String server) throws RestfulHTTPException, IOException;
+	JsonObject getPublicRooms(String server) throws RestfulHTTPException, IOException;
 
 	/**
 	 * Authenticates the user and crates a new session
@@ -53,7 +53,7 @@ public interface ApiLayer {
 	 * @param roomId The unique ID of a room (e.g. "!cURbafjkfsMDVwdRDQ:matrix.org")
 	 * @return Valid Json response
 	 */
-	JsonObject roomMessages(String roomId) throws RestfulHTTPException, IOException;
+	JsonObject getRoomMessages(String roomId) throws RestfulHTTPException, IOException;
 
 	/**
 	 * Get the list of members for this room.
@@ -61,7 +61,7 @@ public interface ApiLayer {
 	 * @param roomId The unique ID of a room (e.g. "!cURbafjkfsMDVwdRDQ:matrix.org")
 	 * @return Valid Json response
 	 */
-	JsonObject roomMembers(String roomId) throws RestfulHTTPException, IOException;
+	JsonObject getRoomMembers(String roomId) throws RestfulHTTPException, IOException;
 
 	/**
 	 * Get the combined profile information for this user.
@@ -69,7 +69,7 @@ public interface ApiLayer {
 	 * @param userId The unique ID of the user (e.g. "@bob:matrix.org")
 	 * @return Valid Json response containing the combined profile information for the user
 	 */
-	JsonObject userProfile(String userId) throws RestfulHTTPException, IOException;
+	JsonObject getUserProfile(String userId) throws RestfulHTTPException, IOException;
 
 	/**
 	 * Get the user's avatar URL.
@@ -77,7 +77,7 @@ public interface ApiLayer {
 	 * @param userId The unique ID of the user (e.g. "@bob:matrix.org")
 	 * @return Valid Json response containing the user avatar url
 	 */
-	JsonObject userAvatarUrl(String userId) throws RestfulHTTPException, IOException;
+	JsonObject getUserAvatarUrl(String userId) throws RestfulHTTPException, IOException;
 
 	/**
 	 * Get the user's display name.
@@ -85,7 +85,7 @@ public interface ApiLayer {
 	 * @param userId The unique ID of the user (e.g. "@bob:matrix.org")
 	 * @return Valid Json response containing the user display name
 	 */
-	JsonObject userDisplayName(String userId) throws RestfulHTTPException, IOException;
+	JsonObject getUserDisplayName(String userId) throws RestfulHTTPException, IOException;
 
 	/**
 	 * This endpoint is used to send a message event to a room.
