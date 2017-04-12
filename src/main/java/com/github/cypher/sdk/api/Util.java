@@ -50,19 +50,22 @@ class Util {
 		return new URL(builder.toString());
 	}
 
-	static JsonElement makeJsonPostRequest(URL url, JsonObject data) throws RestfulHTTPException, IOException {
+	private static JsonElement makeRequest(URL url, String method, JsonObject data) throws RestfulHTTPException, IOException {
 		// Setup the connection
 		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-		conn.setDoOutput(true);
-		conn.setRequestMethod("POST");
-		conn.setRequestProperty("Content-Type", "application/json");
-		conn.setRequestProperty("Accept", "application/json");
+		conn.setRequestMethod(method);
 
-		// Push Data
-		DataOutputStream writer = new DataOutputStream(conn.getOutputStream());
-		writer.writeBytes(data.toString());
-		writer.flush();
-		writer.close();
+		if(data != null) {
+			conn.setDoOutput(true);
+			conn.setRequestProperty("Content-Type", "application/json");
+			conn.setRequestProperty("Accept", "application/json");
+
+			// Push Data
+			DataOutputStream writer = new DataOutputStream(conn.getOutputStream());
+			writer.writeBytes(data.toString());
+			writer.flush();
+			writer.close();
+		}
 
 		JsonElement json;
 		try {
@@ -78,58 +81,17 @@ class Util {
 
 		// Return response
 		return json;
+	}
+
+	static JsonElement makeJsonPostRequest(URL url, JsonObject data) throws RestfulHTTPException, IOException {
+		return makeRequest(url, "POST", data);
 	}
 
 	static JsonElement makeJsonGetRequest(URL url) throws RestfulHTTPException, IOException {
-
-		// Setup connection
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("GET");
-
-		JsonElement json;
-		try {
-			// Retrieve Data
-			JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
-			json = new JsonParser().parse(reader);
-		} catch(IOException e) {
-			// Try to throw additional json error data
-			JsonReader errorReader = new JsonReader(new InputStreamReader(conn.getErrorStream()));
-			json = new JsonParser().parse(errorReader);
-			throw new RestfulHTTPException(conn.getResponseCode(), json.getAsJsonObject());
-		}
-
-		// Return response
-		return json;
+		return makeRequest(url, "GET", null);
 	}
 
 	static JsonElement makeJsonPutRequest(URL url, JsonObject data) throws RestfulHTTPException, IOException {
-		// Setup the connection
-		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-		conn.setDoOutput(true);
-		conn.setRequestMethod("PUT");
-		conn.setRequestProperty("Content-Type", "application/json");
-		conn.setRequestProperty("Accept", "application/json");
-
-		// Push Data
-		DataOutputStream writer = new DataOutputStream(conn.getOutputStream());
-		writer.writeBytes(data.toString());
-		writer.flush();
-		writer.close();
-
-		JsonElement json;
-		try {
-			// Retrieve Data
-			JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
-			JsonParser parser = new JsonParser();
-			json = parser.parse(reader);
-		} catch(IOException e) {
-			// Try to throw additional json error data
-			JsonReader errorReader = new JsonReader(new InputStreamReader(conn.getErrorStream()));
-			json = new JsonParser().parse(errorReader);
-			throw new RestfulHTTPException(conn.getResponseCode(), json.getAsJsonObject());
-		}
-
-		// Return response
-		return json;
+		return makeRequest(url, "PUT", data);
 	}
 }
