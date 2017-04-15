@@ -213,4 +213,13 @@ public class MatrixApiLayer implements ApiLayer {
 		//Send request URL.
 		return Util.makeJsonGetRequest(url).getAsJsonObject();
 	}
+	@Override
+	public JsonObject deleteRoomAlias(String roomAlias) throws RestfulHTTPException, IOException {
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.GET_ROOMID_FROM_ALIAS,new Object[] {roomAlias}, null);
+
+		//Send request URL.
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
+	}
+
 }

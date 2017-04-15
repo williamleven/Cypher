@@ -6,7 +6,8 @@ package com.github.cypher.sdk.api;
 enum Endpoint {
 
 	// All endpoints
-	GET_ROOMID_FROM_ALIAS("directory/room/{0}"), // {0} = roomAlias
+	GET_ROOMID_FROM_ALIAS("directory/room/{0}"),   // {0} = roomAlias
+	DELETE_ROOM_ALIAS("directory/room/{0}"), 	   // {0} = roomAlias
 	LOGIN             ("login"),
 	SYNC              ("sync"),
 	USER_PROFILE      ("profile/{0}"),             // {0} = userId
