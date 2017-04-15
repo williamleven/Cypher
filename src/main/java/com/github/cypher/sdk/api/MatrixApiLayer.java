@@ -223,13 +223,12 @@ public class MatrixApiLayer implements ApiLayer {
 		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_DIRECTORY,new Object[] {roomAlias}, parameters);
 
 		//Send request URL.
-		return Util.makeJsonGetRequest(url).getAsJsonObject();
+		return Util.makeJsonDeleteRequest(url, null).getAsJsonObject();
 	}
 
 
-	// roomID is stated as a parameter in the api specifications, as far as I can tell it isn't needed in URL requests.
 	@Override
-	public JsonObject putRoomAlias(String roomAlias, String roomID) throws RestfulHTTPException, IOException {
+	public JsonObject putRoomAlias(String roomAlias, JsonObject roomID) throws RestfulHTTPException, IOException {
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("access_token", session.getAccessToken());
@@ -239,7 +238,7 @@ public class MatrixApiLayer implements ApiLayer {
 		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_DIRECTORY,new Object[] {roomAlias}, parameters);
 
 		//Send request URL.
-		return Util.makeJsonGetRequest(url).getAsJsonObject();
+		return Util.makeJsonPutRequest(url, roomID).getAsJsonObject();
 	}
 
 }
