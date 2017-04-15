@@ -6,6 +6,7 @@ package com.github.cypher.sdk.api;
 enum Endpoint {
 
 	// All endpoints
+	CREATE_ROOM        ("createRoom"),
 	ROOM_DIRECTORY    ("directory/room/{0}"),      // {0} = roomAlias
 	LOGIN             ("login"),
 	SYNC              ("sync"),
