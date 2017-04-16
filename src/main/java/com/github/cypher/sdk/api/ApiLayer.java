@@ -146,6 +146,7 @@ public interface ApiLayer {
 	JsonObject putRoomAlias(String roomAlias, JsonObject roomID) throws RestfulHTTPException, IOException;
 
 	/**
+	 * Used to create a room.
 	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_creation/post_matrix_client_r0_createRoom">matrix.org</a>
 	 * @param roomCreation JsonObject containing all required and optional parameters for room creation.
 	 * @return Valid Json response containing the Room ID.
@@ -153,6 +154,7 @@ public interface ApiLayer {
 	JsonObject postCreateRoom(JsonObject roomCreation) throws RestfulHTTPException, IOException;
 
 	/**
+	 * Used to join a given room.
 	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_membership/post_matrix_client_r0_rooms_roomId_join">matrix.org</a>
 	 * @param roomId The rooms ID.
 	 * @param thirdPartySigned Proof of invite from third party entity.
@@ -160,6 +162,13 @@ public interface ApiLayer {
 
 	 */
 	JsonObject postJoinRoom(String roomId, JsonObject thirdPartySigned) throws RestfulHTTPException, IOException;
+
+	/**
+	 * Used to leave a given room.
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_membership/post_matrix_client_r0_rooms_roomId_leave">matrix.org</a>
+	 * @param roomId The rooms ID.
+	 */
+	void postLeaveRoom(String roomId) throws RestfulHTTPException, IOException;
 
 	/**
 	 * @see <a href="http://matrix.org/docs/api/client-server/#!/User_data/get_matrix_client_r0_account_3pid">matrix.org</a>

@@ -7,7 +7,7 @@ enum Endpoint {
 
 	// All endpoints
 	THIRD_PERSON_ID   ("account/3pid"),
-	ROOM_CREATE("createRoom"),
+	ROOM_CREATE       ("createRoom"),
 	ROOM_DIRECTORY    ("directory/room/{0}"),      // {0} = roomAlias
 	LOGIN             ("login"),
 	SYNC              ("sync"),
@@ -19,6 +19,7 @@ enum Endpoint {
 	ROOM_MEMBERS      ("rooms/{0}/members"),       // {0} = roomId
 	ROOM_SEND_EVENT   ("rooms/{0}/send/{1}/{2}"),  // {0} = roomId, {1} = eventType, {2} = txnId
 	ROOM_JOIN         ("rooms/{0}/join"),          // {0} = roomId
+	ROOM_LEAVE        ("rooms/{0}/leave"),         // {0} = roomId
 	PRESENCE_LIST     ("presence/list/{0}");       // {0} = userId
 
 	/*
