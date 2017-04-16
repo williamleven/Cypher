@@ -20,6 +20,7 @@ enum Endpoint {
 	ROOM_SEND_EVENT   ("rooms/{0}/send/{1}/{2}"),  // {0} = roomId, {1} = eventType, {2} = txnId
 	ROOM_JOIN         ("rooms/{0}/join"),          // {0} = roomId
 	ROOM_LEAVE        ("rooms/{0}/leave"),         // {0} = roomId
+	ROOM_KICK         ("rooms/{0}/kick"),          // {0} = roomId
 	PRESENCE_LIST     ("presence/list/{0}");       // {0} = userId
 
 	/*

@@ -169,6 +169,13 @@ public interface ApiLayer {
 	 * @param roomId The rooms ID.
 	 */
 	void postLeaveRoom(String roomId) throws RestfulHTTPException, IOException;
+	/**
+	 * Used to kick someone from a given room.
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_membership/post_matrix_client_r0_rooms_roomId_kick">matrix.org</a>
+	 * @param roomId The rooms ID.
+	 * @param kick The JsonObject containing "reason" and "user_id".
+	 */
+	void postKickFromRoom(String roomId, JsonObject kick/*kick contains a "reason" and a user_id"*/) throws RestfulHTTPException, IOException;
 
 	/**
 	 * @see <a href="http://matrix.org/docs/api/client-server/#!/User_data/get_matrix_client_r0_account_3pid">matrix.org</a>

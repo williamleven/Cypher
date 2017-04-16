@@ -288,6 +288,17 @@ public class MatrixApiLayer implements ApiLayer {
 		Util.makeJsonPostRequest(url, null);
 	}
 	@Override
+	public void postKickFromRoom(String roomId, JsonObject kick/*kick contains a "reason" and a user_id"*/) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_KICK, new Object[] {roomId}, parameters);
+
+		//Send request URL.
+		Util.makeJsonPostRequest(url, kick);
+	}
+	@Override
 	public JsonObject get3Pid() throws RestfulHTTPException, IOException {
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
