@@ -178,6 +178,13 @@ public interface ApiLayer {
 	void postKickFromRoom(String roomId, JsonObject kick/*kick contains a "reason" and a user_id"*/) throws RestfulHTTPException, IOException;
 
 	/**
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_membership/post_matrix_client_r0_rooms_roomId_invite_0">matrix.org</a>
+	 * @param roomId The rooms ID
+	 * @param invite Contains "id_server","medium" and "address", or simply "user_id"
+	 */
+	void postInviteToRoom(String roomId, JsonObject invite/*contains "id_server","medium" and "address", or simply "user_id"*/) throws RestfulHTTPException, IOException;
+
+	/**
 	 * @see <a href="http://matrix.org/docs/api/client-server/#!/User_data/get_matrix_client_r0_account_3pid">matrix.org</a>
 	 * @return Valid Json response containing the Room ID.
 	 */

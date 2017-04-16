@@ -298,6 +298,18 @@ public class MatrixApiLayer implements ApiLayer {
 		//Send request URL.
 		Util.makeJsonPostRequest(url, kick);
 	}
+	//CURRENTLY BUGGED
+	@Override
+	public void postInviteToRoom(String roomId, JsonObject invite/*contains "id_server","medium" and "address", or simply "user_id"*/) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_INVITE, new Object[] {roomId}, parameters);
+
+		//Send request URL.
+		Util.makeJsonPostRequest(url, invite);
+	}
 	@Override
 	public JsonObject get3Pid() throws RestfulHTTPException, IOException {
 		// Build parameter Map
