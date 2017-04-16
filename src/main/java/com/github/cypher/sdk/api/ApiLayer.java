@@ -103,6 +103,13 @@ public interface ApiLayer {
 	void setUserDisplayName(String displayName) throws RestfulHTTPException, IOException;
 
 	/**
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Presence/get_matrix_client_r0_presence_list_userId">matrix.org</a>
+	 * @param userId The unique ID of the user (e.g. "@bob:matrix.org")
+	 * @return Valid Json response containing the user presence list
+	 */
+	JsonObject getUserPresence(String userId) throws IOException;
+
+	/**
 	 * This endpoint is used to send a message event to a room.
 	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Room_participation/put_matrix_client_r0_rooms_roomId_send_eventType_txnId">matrix.org</a>
 	 * @param roomId The unique ID of the room (e.g. "!cURbafjkfsMDVwdRDQ:matrix.org")

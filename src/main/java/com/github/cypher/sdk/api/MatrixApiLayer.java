@@ -191,6 +191,20 @@ public class MatrixApiLayer implements ApiLayer {
 		// Send Request
 		Util.makeJsonPutRequest(url, json);
 	}
+	//Bugged in current version of matrix, use with caution.
+	@Override
+	public JsonObject getUserPresence(String userId)throws RestfulHTTPException, IOException{
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.PRESENCE_LIST, new Object[] {userId}, parameters);
+
+		// Send Request
+		return Util.makeJsonGetRequest(url).getAsJsonObject();
+
+	}
 
 	@Override
 	public JsonObject roomSendEvent(String roomId, String eventType, int transactionId, JsonObject content) throws RestfulHTTPException, IOException {
