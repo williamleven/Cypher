@@ -4,7 +4,6 @@ import com.github.cypher.sdk.User;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -261,10 +260,21 @@ public class MatrixApiLayer implements ApiLayer {
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("access_token", session.getAccessToken());
 		//Build request URL.
-		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.CREATE_ROOM,null, parameters);
+		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_CREATE,null, parameters);
 
 		//Send request URL.
 		return  Util.makeJsonPostRequest(url, roomCreation).getAsJsonObject();
+	}
+	@Override
+	public JsonObject postJoinRoom(String roomId, JsonObject thirdPartySigned) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_JOIN,new Object[] {roomId}, parameters);
+
+		//Send request URL.
+		return  Util.makeJsonPostRequest(url, thirdPartySigned).getAsJsonObject();
 	}
 
 	@Override
