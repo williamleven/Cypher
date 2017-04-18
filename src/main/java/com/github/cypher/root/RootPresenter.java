@@ -1,7 +1,10 @@
 package com.github.cypher.root;
 
+import com.github.cypher.Settings;
+import com.github.cypher.model.Client;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
+import javafx.scene.layout.AnchorPane;
 
 import javax.inject.Inject;
 
@@ -9,12 +12,25 @@ import javax.inject.Inject;
 public class RootPresenter {
 
 	@Inject
-	private Integer n1;
+	private Client client;
 
 	@Inject
-	private String s1;
+	private Settings settings;
+
+	@FXML
+	private AnchorPane settingsPane;
+
+	@FXML
+	private SplitPane serverPane;
 
 	@FXML
 	private void initialize() {
+		client.showSettings.addListener((observable, oldValue, newValue) -> {
+			if (newValue) {
+				settingsPane.toFront();
+			} else {
+				serverPane.toFront();
+			}
+		});
 	}
 }

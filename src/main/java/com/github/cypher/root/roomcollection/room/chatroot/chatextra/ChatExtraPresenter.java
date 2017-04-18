@@ -1,4 +1,4 @@
-package com.github.cypher.root.settings;
+package com.github.cypher.root.roomcollection.room.chatroot.chatextra;
 
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
@@ -6,7 +6,8 @@ import javafx.fxml.FXML;
 
 import javax.inject.Inject;
 
-public class SettingsPresenter {
+public class ChatExtraPresenter {
+
 	@Inject
 	private Client client;
 

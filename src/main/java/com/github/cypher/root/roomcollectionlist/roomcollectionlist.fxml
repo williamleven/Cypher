@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="487.0" prefWidth="80.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollectionlist.RoomCollectionListPresenter">
+   <children>
+      <Label layoutX="15.0" layoutY="14.0" text="ServerList" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="14.0" />
+      <Button layoutX="9.0" layoutY="423.0" mnemonicParsing="false" onMouseClicked="#toggleSettings" prefHeight="50.0" prefWidth="63.0" text="Toogle &#10;settings" />
+   </children>
+</AnchorPane>
