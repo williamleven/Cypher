@@ -1,15 +1,20 @@
 package com.github.cypher.sdk;
 
-// Represents a member of a room
+/**
+ * Represents the membership of a User in a Room
+ */
 public class Member {
 	private final User user;
-	private final int privilege;
+	private int privilege = 0;
 
-	public Member(User user, int privilege) {
+	Member(User user) {
+		this.user = user;
+	}
+
+	Member(User user, int privilege) {
 		this.user = user;
 		this.privilege = privilege;
 	}
-
 
 	public User getUser() {
 		return user;
