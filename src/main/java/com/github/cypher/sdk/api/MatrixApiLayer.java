@@ -4,7 +4,6 @@ import com.github.cypher.sdk.User;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,17 +72,19 @@ public class MatrixApiLayer implements ApiLayer {
 	public JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence) throws RestfulHTTPException, IOException{
 
 		// Build parameter Map
-		Map<String, String> parameters = new HashMap<String, String>();
+		Map<String, String> parameters = new HashMap<>();
 		if(filter != null && !filter.equals("")) {
-			parameters.put("filter"      , filter);
+			parameters.put("filter", filter);
 		}
 		if(since  != null && !since.equals("")) {
-			parameters.put("since"       , since);
+			parameters.put("since", since);
 		}
 		if(setPresence != null) {
-			parameters.put("set_presence", setPresence.name());
+			parameters.put("set_presence", setPresence == User.Presence.ONLINE ? "online" : "offline");
 		}
-		parameters.put("full_state"  , fullState ? "true" : "false");
+		if(fullState) {
+			parameters.put("full_state", "true");
+		}
 		parameters.put("access_token", session.getAccessToken());
 
 		// Build URL
@@ -150,7 +151,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public void setUserAvatarUrl(String avatarUrl) throws RestfulHTTPException, IOException {
+	public void setUserAvatarUrl(URL avatarUrl) throws RestfulHTTPException, IOException {
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("access_token", session.getAccessToken());
@@ -160,7 +161,7 @@ public class MatrixApiLayer implements ApiLayer {
 
 		// Build Json Object containing data
 		JsonObject json = new JsonObject();
-		json.addProperty("avatar_url", avatarUrl);
+		json.addProperty("avatar_url", avatarUrl.toString());
 
 		// Send Request
 		Util.makeJsonPutRequest(url, json);
@@ -193,13 +194,13 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public JsonObject roomSendEvent(String roomId, String eventType, int transactionId, JsonObject content) throws RestfulHTTPException, IOException {
+	public JsonObject roomSendEvent(String roomId, String eventType, JsonObject content) throws RestfulHTTPException, IOException {
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("access_token", session.getAccessToken());
 
-		// Build URL
-		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_SEND_EVENT, new Object[] {roomId, eventType, transactionId}, parameters);
+		// Build URL, increment transactionId
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_SEND_EVENT, new Object[] {roomId, eventType, session.transactionId++}, parameters);
 
 		// Send Request
 		return Util.makeJsonPutRequest(url, content).getAsJsonObject();
