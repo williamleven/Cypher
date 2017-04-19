@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * This class provides access to matrix like endpoints trough
@@ -85,7 +86,7 @@ public interface ApiLayer {
 	 * @see <a href="https://matrix.org/docs/api/client-server/#!/User_data/get_matrix_client_r0_profile_userId_avatar_url">matrix.org</a>
 	 * @param avatarUrl The matrix media URL of the image (e.g. "avatar_url": "mxc://matrix.org/wefh34uihSDRGhw34")
 	 */
-	void setUserAvatarUrl(String avatarUrl) throws RestfulHTTPException, IOException;
+	void setUserAvatarUrl(URL avatarUrl) throws RestfulHTTPException, IOException;
 
 	/**
 	 * Get the user's display name.

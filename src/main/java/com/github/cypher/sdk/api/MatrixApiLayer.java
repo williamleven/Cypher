@@ -150,7 +150,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public void setUserAvatarUrl(String avatarUrl) throws RestfulHTTPException, IOException {
+	public void setUserAvatarUrl(URL avatarUrl) throws RestfulHTTPException, IOException {
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("access_token", session.getAccessToken());
@@ -160,7 +160,7 @@ public class MatrixApiLayer implements ApiLayer {
 
 		// Build Json Object containing data
 		JsonObject json = new JsonObject();
-		json.addProperty("avatar_url", avatarUrl);
+		json.addProperty("avatar_url", avatarUrl.toString());
 
 		// Send Request
 		Util.makeJsonPutRequest(url, json);
