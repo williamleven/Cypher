@@ -193,13 +193,13 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public JsonObject roomSendEvent(String roomId, String eventType, int transactionId, JsonObject content) throws RestfulHTTPException, IOException {
+	public JsonObject roomSendEvent(String roomId, String eventType, JsonObject content) throws RestfulHTTPException, IOException {
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("access_token", session.getAccessToken());
 
-		// Build URL
-		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_SEND_EVENT, new Object[] {roomId, eventType, transactionId}, parameters);
+		// Build URL, increment transactionId
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_SEND_EVENT, new Object[] {roomId, eventType, session.transactionId++}, parameters);
 
 		// Send Request
 		return Util.makeJsonPutRequest(url, content).getAsJsonObject();

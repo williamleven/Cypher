@@ -13,6 +13,7 @@ class Session {
 	private String accessToken;
 	private String homeServer;
 	private String deviceId;
+	long transactionId = 0;
 
 	/*
 		Parses the data from a login response to create a session
