@@ -5,3 +5,7 @@
 .root {    
 	-fx-font: 14px "Helvetica";
 }
+
+AnchorPane {
+	-fx-background-color: -fx-base;
+}

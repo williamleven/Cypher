@@ -1,8 +1,7 @@
 package com.github.cypher.model;
 
-public class Server {
-
-	public Server(String server){
+public class Server implements RoomCollection {
+	Server(String server) {
 
 	}
 }
