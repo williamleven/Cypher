@@ -243,7 +243,7 @@ public class MatrixApiLayer implements ApiLayer {
 
 
 	@Override
-	public JsonObject putRoomAlias(String roomAlias, JsonObject roomID) throws RestfulHTTPException, IOException {
+	public JsonObject putRoomAlias(String roomAlias, String roomId) throws RestfulHTTPException, IOException {
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("access_token", session.getAccessToken());
@@ -252,8 +252,12 @@ public class MatrixApiLayer implements ApiLayer {
 		//Build request URL.
 		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_DIRECTORY,new Object[] {roomAlias}, parameters);
 
+		//Build JsonObject
+		JsonObject roomIdJsonObject = new JsonObject();
+		roomIdJsonObject.addProperty("room_id", roomId);
+
 		//Send request URL.
-		return Util.makeJsonPutRequest(url, roomID).getAsJsonObject();
+		return Util.makeJsonPutRequest(url, roomIdJsonObject).getAsJsonObject();
 	}
 
 	@Override

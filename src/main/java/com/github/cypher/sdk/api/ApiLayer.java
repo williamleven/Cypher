@@ -140,11 +140,11 @@ public interface ApiLayer {
 	/**
 	 * This endpoint is used to set the current rooms Room Alias.
 	 * @param roomAlias The rquested roomAlias.
-	 * @param roomID The rooms ID.
+	 * @param roomId The rooms ID.
 	 * @return Valid Json response containing the Room ID.
 
 	 */
-	JsonObject putRoomAlias(String roomAlias, JsonObject roomID) throws RestfulHTTPException, IOException;
+	JsonObject putRoomAlias(String roomAlias, String roomId) throws RestfulHTTPException, IOException;
 
 	/**
 	 * Used to create a room.
