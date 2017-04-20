@@ -1,6 +1,7 @@
 package com.github.cypher.sdk.api;
 
 import com.github.cypher.sdk.User;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
@@ -107,7 +108,7 @@ public interface ApiLayer {
 	 * @param userId The unique ID of the user (e.g. "@bob:matrix.org")
 	 * @return Valid Json response containing the user presence list
 	 */
-	JsonObject getUserPresence(String userId) throws IOException;
+	JsonArray getUserPresence(String userId) throws IOException;
 
 	/**
 	 * This endpoint is used to send a message event to a room.
