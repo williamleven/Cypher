@@ -4,11 +4,13 @@ import com.airhacks.afterburner.injection.Injector;
 import com.github.cypher.model.Client;
 import com.github.cypher.root.RootView;
 import com.github.cypher.sdk.api.MatrixApiLayer;
+import com.github.cypher.sdk.api.MatrixMediaURLStreamHandlerFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -21,7 +23,10 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+    
 		Locale.setDefault(settings.getLanguage());
+
+		URL.setURLStreamHandlerFactory(new MatrixMediaURLStreamHandlerFactory());
 
 		// Dependency injection with afterburner.fx
 		//
