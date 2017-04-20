@@ -174,16 +174,27 @@ public interface ApiLayer {
 	 * Used to kick someone from a given room.
 	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_membership/post_matrix_client_r0_rooms_roomId_kick">matrix.org</a>
 	 * @param roomId The rooms ID.
-	 * @param kick The JsonObject containing "reason" and "user_id".
+	 * @param reason The given reason for posting the kick.
+	 * @param userId The userId of the one being kicked.
 	 */
-	void postKickFromRoom(String roomId, JsonObject kick/*kick contains a "reason" and a user_id"*/) throws RestfulHTTPException, IOException;
+	void postKickFromRoom(String roomId, String reason, String userId) throws RestfulHTTPException, IOException;
 
 	/**
+	 * Sends an invite.
 	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_membership/post_matrix_client_r0_rooms_roomId_invite_0">matrix.org</a>
 	 * @param roomId The rooms ID
-	 * @param invite Contains "id_server","medium" and "address", or simply "user_id"
+	 * @param idServer The hostname+port of the identity server which should be used for third party identifier lookups.
+	 * @param address  The invitee's third party identifier.
+	 * @param medium The kind of address being passed in the address field, for example email.
 	 */
-	void postInviteToRoom(String roomId, JsonObject invite/*contains "id_server","medium" and "address", or simply "user_id"*/) throws RestfulHTTPException, IOException;
+	void postInviteToRoom(String roomId, String address, String idServer, String medium/*contains "id_server","medium" and "address", or simply "user_id"*/) throws RestfulHTTPException, IOException;
+
+	/**
+	 * Sends invite to specific matrix user.
+	 * @param roomId The rooms ID
+	 * @param userId The invitees user ID
+	 */
+	void postInviteToRoom(String roomId, String userId) throws RestfulHTTPException, IOException;
 
 	/**
 	 * @see <a href="http://matrix.org/docs/api/client-server/#!/User_data/get_matrix_client_r0_account_3pid">matrix.org</a>

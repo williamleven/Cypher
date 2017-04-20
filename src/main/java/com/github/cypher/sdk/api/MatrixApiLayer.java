@@ -215,6 +215,7 @@ public class MatrixApiLayer implements ApiLayer {
 		// Build URL
 		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_SEND_EVENT, new Object[] {roomId, eventType, transactionId}, parameters);
 
+
 		// Send Request
 		return Util.makeJsonPutRequest(url, content).getAsJsonObject();
 	}
@@ -289,24 +290,47 @@ public class MatrixApiLayer implements ApiLayer {
 		Util.makeJsonPostRequest(url, null);
 	}
 	@Override
-	public void postKickFromRoom(String roomId, JsonObject kick/*kick contains a "reason" and a user_id"*/) throws RestfulHTTPException, IOException {
+	public void postKickFromRoom(String roomId, String reason, String userId) throws RestfulHTTPException, IOException {
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("access_token", session.getAccessToken());
 		//Build request URL.
 		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_KICK, new Object[] {roomId}, parameters);
 
+		//Build JsonObject
+		JsonObject kick = new JsonObject();
+		kick.addProperty("reason", reason);
+		kick.addProperty("user_id",userId);
 		//Send request URL.
 		Util.makeJsonPostRequest(url, kick);
 	}
-	//CURRENTLY BUGGED
 	@Override
-	public void postInviteToRoom(String roomId, JsonObject invite/*contains "id_server","medium" and "address", or simply "user_id"*/) throws RestfulHTTPException, IOException {
+	public void postInviteToRoom(String roomId, String address, String idServer, String medium) throws RestfulHTTPException, IOException {
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("access_token", session.getAccessToken());
 		//Build request URL.
 		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_INVITE, new Object[] {roomId}, parameters);
+
+		//Build Json object
+		JsonObject invite = new JsonObject();
+		invite.addProperty("address", address);
+		invite.addProperty("id_server", idServer);
+		invite.addProperty("medium", medium);
+		//Send request URL.
+		Util.makeJsonPostRequest(url, invite);
+	}
+	@Override
+	public void postInviteToRoom(String roomId, String userId/*contains "id_server","medium" and "address", or simply "user_id"*/) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_INVITE, new Object[] {roomId}, parameters);
+
+		//Build JsonObject
+		JsonObject invite = new JsonObject();
+		invite.addProperty("user_id", userId);
 
 		//Send request URL.
 		Util.makeJsonPostRequest(url, invite);
