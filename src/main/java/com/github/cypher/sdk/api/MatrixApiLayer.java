@@ -1,6 +1,7 @@
 package com.github.cypher.sdk.api;
 
 import com.github.cypher.sdk.User;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
@@ -192,6 +193,20 @@ public class MatrixApiLayer implements ApiLayer {
 		// Send Request
 		Util.makeJsonPutRequest(url, json);
 	}
+	//Bugged in current version of matrix, use with caution.
+	@Override
+	public JsonArray getUserPresence(String userId)throws RestfulHTTPException, IOException{
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.PRESENCE_LIST, new Object[] {userId}, parameters);
+
+		// Send Request
+		return Util.makeJsonGetRequest(url).getAsJsonArray();
+
+	}
 
 	@Override
 	public JsonObject roomSendEvent(String roomId, String eventType, JsonObject content) throws RestfulHTTPException, IOException {
@@ -202,6 +217,7 @@ public class MatrixApiLayer implements ApiLayer {
 		// Build URL, increment transactionId
 		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_SEND_EVENT, new Object[] {roomId, eventType, session.transactionId++}, parameters);
 
+
 		// Send Request
 		return Util.makeJsonPutRequest(url, content).getAsJsonObject();
 	}
@@ -209,9 +225,135 @@ public class MatrixApiLayer implements ApiLayer {
 	@Override
 	public JsonObject getRoomIDFromAlias(String roomAlias) throws RestfulHTTPException, IOException {
 		//Build request URL.
-		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.GET_ROOMID_FROM_ALIAS,new Object[] {roomAlias}, null);
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_DIRECTORY,new Object[] {roomAlias}, null);
 
 		//Send request URL.
 		return Util.makeJsonGetRequest(url).getAsJsonObject();
 	}
+	@Override
+	public JsonObject deleteRoomAlias(String roomAlias) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_DIRECTORY,new Object[] {roomAlias}, parameters);
+
+		//Send request URL.
+		return Util.makeJsonDeleteRequest(url, null).getAsJsonObject();
+	}
+
+
+	@Override
+	public JsonObject putRoomAlias(String roomAlias, String roomId) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_DIRECTORY,new Object[] {roomAlias}, parameters);
+
+		//Build JsonObject
+		JsonObject roomIdJsonObject = new JsonObject();
+		roomIdJsonObject.addProperty("room_id", roomId);
+
+		//Send request URL.
+		return Util.makeJsonPutRequest(url, roomIdJsonObject).getAsJsonObject();
+	}
+
+	@Override
+	public JsonObject postCreateRoom(JsonObject roomCreation) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_CREATE,null, parameters);
+
+		//Send request URL.
+		return  Util.makeJsonPostRequest(url, roomCreation).getAsJsonObject();
+	}
+	@Override
+	public JsonObject postJoinRoom(String roomId, JsonObject thirdPartySigned) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_JOIN,new Object[] {roomId}, parameters);
+
+		//Send request URL.
+		return  Util.makeJsonPostRequest(url, thirdPartySigned).getAsJsonObject();
+	}
+	@Override
+	public void postLeaveRoom(String roomId) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_LEAVE, new Object[] {roomId}, parameters);
+
+		//Send request URL.
+		Util.makeJsonPostRequest(url, null);
+	}
+	@Override
+	public void postKickFromRoom(String roomId, String reason, String userId) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_KICK, new Object[] {roomId}, parameters);
+
+		//Build JsonObject
+		JsonObject kick = new JsonObject();
+		kick.addProperty("reason", reason);
+		kick.addProperty("user_id",userId);
+		//Send request URL.
+		Util.makeJsonPostRequest(url, kick);
+	}
+	@Override
+	public void postInviteToRoom(String roomId, String address, String idServer, String medium) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_INVITE, new Object[] {roomId}, parameters);
+
+		//Build Json object
+		JsonObject invite = new JsonObject();
+		invite.addProperty("address", address);
+		invite.addProperty("id_server", idServer);
+		invite.addProperty("medium", medium);
+		//Send request URL.
+		Util.makeJsonPostRequest(url, invite);
+	}
+	@Override
+	public void postInviteToRoom(String roomId, String userId/*contains "id_server","medium" and "address", or simply "user_id"*/) throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_INVITE, new Object[] {roomId}, parameters);
+
+		//Build JsonObject
+		JsonObject invite = new JsonObject();
+		invite.addProperty("user_id", userId);
+
+		//Send request URL.
+		Util.makeJsonPostRequest(url, invite);
+	}
+	@Override
+	public JsonObject get3Pid() throws RestfulHTTPException, IOException {
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.THIRD_PERSON_ID,null, parameters);
+
+		//Send request URL.
+		return  Util.makeJsonGetRequest(url).getAsJsonObject();
+
+
+	}
+
 }
