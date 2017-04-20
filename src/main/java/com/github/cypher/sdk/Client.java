@@ -7,6 +7,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.sun.javafx.collections.ObservableMapWrapper;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableMap;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,9 +26,16 @@ public class Client {
 
 	private Map<String, User> users = new HashMap<>();
 
-	private Map<String, Room> joinRooms = new HashMap<>();
-	private Map<String, Room> inviteRooms = new HashMap<>();
-	private Map<String, Room> leaveRooms = new HashMap<>();
+	private ObservableMap<String, Room> joinRooms   = new ObservableMapWrapper<>(new HashMap<>());
+	private ObservableMap<String, Room> inviteRooms = new ObservableMapWrapper<>(new HashMap<>());
+	private ObservableMap<String, Room> leaveRooms  = new ObservableMapWrapper<>(new HashMap<>());
+
+	public void addJoinRoomsListener     (MapChangeListener<String, Room> listener) { joinRooms.addListener(listener);      }
+	public void removeJoinRoomsListener  (MapChangeListener<String, Room> listener) { joinRooms.removeListener(listener);   }
+	public void addInviteRoomsListener   (MapChangeListener<String, Room> listener) { inviteRooms.addListener(listener);    }
+	public void removeInviteRoomsListener(MapChangeListener<String, Room> listener) { inviteRooms.removeListener(listener); }
+	public void addLeaveRoomsListener    (MapChangeListener<String, Room> listener) { leaveRooms.addListener(listener);     }
+	public void removeLeaveRoomsListener (MapChangeListener<String, Room> listener) { leaveRooms.removeListener(listener);  }
 
 	/**
 	 * @see com.github.cypher.sdk.api.ApiLayer
@@ -62,7 +72,8 @@ public class Client {
 	/**
 	 * Call ApiLayer.sync(...) and parse the returned data.
 	 * <p>Presence-data is used to update the map of users: {@link #getUser(String)}</p>
-	 * <p>Join-data is used to update the map of rooms the user has joined: {@link #getJoinRooms()}</p>
+	 * <p>Join-data is used to update the map of rooms the user has joined: {@link #getJoinRooms()}.</p>
+	 * <p>All room maps are observable using the various add*RoomsListener(...) methods</p>
 	 * @see com.github.cypher.sdk.api.ApiLayer#sync(String, String, boolean, User.Presence)
 	 * @throws RestfulHTTPException
 	 * @throws IOException
