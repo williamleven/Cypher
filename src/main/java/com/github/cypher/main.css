@@ -2,7 +2,7 @@
 	-fx-padding: 10 10 10 10;
 }
 
-* {
+root {
 	-fx-font-size: 14px;
 }
 
