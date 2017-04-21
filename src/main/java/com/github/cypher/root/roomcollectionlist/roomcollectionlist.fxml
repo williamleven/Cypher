@@ -8,37 +8,40 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<AnchorPane maxWidth="-Infinity" minHeight="300.0" minWidth="-Infinity" prefHeight="545.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollectionlist.RoomCollectionListPresenter">
+<AnchorPane maxWidth="-Infinity" minHeight="300.0" minWidth="-Infinity" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollectionlist.RoomCollectionListPresenter">
    <children>
-      <Button layoutX="14.0" layoutY="34.0" mnemonicParsing="false" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+      <Button layoutX="14.0" layoutY="34.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <styleClass>
             <String fx:value="btn" />
             <String fx:value="btn-info" />
+            <String fx:value="image-btn" />
          </styleClass>
          <graphic>
             <FontIcon iconColor="WHITE" iconLiteral="fa-wechat" iconSize="40" />
          </graphic>
       </Button>
-      <Button layoutX="5.0" layoutY="96.0" mnemonicParsing="false" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="64.0">
+      <Button layoutX="5.0" layoutY="70.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="70.0">
          <styleClass>
             <String fx:value="btn" />
             <String fx:value="btn-info" />
+            <String fx:value="image-btn" />
          </styleClass>
          <graphic>
             <FontIcon iconColor="WHITE" iconLiteral="fa-users" iconSize="40" />
          </graphic>
       </Button>
-      <VBox layoutX="-10.0" layoutY="154.0" prefHeight="326.0" prefWidth="70.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="123.0">
+      <VBox layoutX="5.0" layoutY="134.0" prefHeight="309.0" prefWidth="60.0" AnchorPane.bottomAnchor="71.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="134.0">
          <children>
-            <ListView prefHeight="10.0" prefWidth="70.0">
+            <ListView prefHeight="10.0" prefWidth="60.0">
                <VBox.margin>
                   <Insets bottom="6.0" />
                </VBox.margin>
             </ListView>
-            <Button mnemonicParsing="false">
+            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0">
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="btn-info" />
+                  <String fx:value="image-btn" />
                </styleClass>
                <graphic>
                   <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="40" text="" />
@@ -46,13 +49,14 @@
             </Button>
          </children>
       </VBox>
-      <Button layoutX="13.0" layoutY="443.0" mnemonicParsing="false" onMouseClicked="#toggleSettings" style="-fx-min-width: 2px;" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+      <Button layoutX="13.0" layoutY="443.0" mnemonicParsing="false" onMouseClicked="#toggleSettings" prefHeight="60.0" prefWidth="60.0" style="-fx-min-width: 2px;" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
          <graphic>
-            <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="40" />
+            <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="40" textAlignment="CENTER" />
          </graphic>
          <styleClass>
             <String fx:value="btn-info" />
             <String fx:value="btn" />
+            <String fx:value="image-btn" />
          </styleClass></Button>
    </children>
 </AnchorPane>
