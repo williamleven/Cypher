@@ -5,6 +5,7 @@ import com.github.cypher.model.Client;
 import javafx.fxml.FXML;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 
 import javax.inject.Inject;
 
@@ -21,7 +22,7 @@ public class RootPresenter {
 	private AnchorPane settingsPane;
 
 	@FXML
-	private SplitPane serverPane;
+	private HBox serverPane;
 
 	@FXML
 	private void initialize() {
