@@ -2,8 +2,8 @@
 	-fx-padding: 10 10 10 10;
 }
 
-.root {    
-	-fx-font: 14px "Helvetica";
+* {
+	-fx-font-size: 14px;
 }
 
 AnchorPane {

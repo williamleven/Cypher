@@ -18,5 +18,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.testfx:testfx-junit:4.0.4-alpha" level="project" />
     <orderEntry type="library" name="Maven: com.airhacks:afterburner.fx:1.7.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.0" level="project" />
+    <orderEntry type="library" name="Maven: org.kordamp.bootstrapfx:bootstrapfx-core:0.2.1" level="project" />
   </component>
 </module>
