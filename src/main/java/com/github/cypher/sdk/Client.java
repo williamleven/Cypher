@@ -24,7 +24,14 @@ public class Client {
 	private ApiLayer api;
 	private String lastSyncMarker = null;
 
+	private static final String settingsNamespace = "com.github.cypher.settings";
+
 	private Map<String, User> users = new HashMap<>();
+
+	private ObservableMap<String, String> accountData = new ObservableMapWrapper<>(new HashMap<>());
+
+	public void addAccountDataListener   (MapChangeListener<String, String> listener) { accountData.addListener(listener);    }
+	public void removeAccountDataListener(MapChangeListener<String, String> listener) { accountData.removeListener(listener); }
 
 	private ObservableMap<String, Room> joinRooms   = new ObservableMapWrapper<>(new HashMap<>());
 	private ObservableMap<String, Room> inviteRooms = new ObservableMapWrapper<>(new HashMap<>());
@@ -120,6 +127,24 @@ public class Client {
 			// TODO: "leave"-rooms
 			// TODO: "invite"-rooms
 		}
+
+		if(syncData.has("account_data") &&
+		   syncData.get("account_data").isJsonObject()) {
+			JsonObject accountDataObject = syncData.get("account_data").getAsJsonObject();
+
+			if(accountDataObject.has("events") &&
+			   accountDataObject.get("events").isJsonArray()) {
+				JsonArray accountDataEvents = accountDataObject.get("events").getAsJsonArray();
+
+				for(JsonElement eventElement : accountDataEvents) {
+					if(eventElement.isJsonObject()) {
+						JsonObject event = eventElement.getAsJsonObject();
+
+						parseAccountDataEvent(event);
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -173,5 +198,35 @@ public class Client {
 			}
 		}
 		return listedRooms;
+	}
+
+	public String getSetting(String key) {
+		return accountData.get(key);
+	}
+
+	public void setSetting(String key, String value) {
+		// TODO
+	}
+
+	private void parseAccountDataEvent(JsonObject event) {
+		if(event.has("type") &&
+		   event.has("content") &&
+		   event.get("type").isJsonPrimitive() &&
+		   event.get("content").isJsonObject()) {
+			String type = event.get("type").getAsString();
+
+			if(type.equals(settingsNamespace)) {
+				// Some GSON magic to convert the "content" JsonObject to an array
+				HashMap<String, JsonElement> settings = new Gson().fromJson(
+						event.get("content").getAsJsonObject(),
+						new TypeToken<HashMap<String, JsonElement>>() {}.getType());
+				for(Map.Entry<String, JsonElement> setting : settings.entrySet()) {
+
+					String settingKey = setting.getKey();
+					String settingValue = setting.getValue().getAsString();
+					accountData.put(settingKey, settingValue);
+				}
+			}
+		}
 	}
 }
