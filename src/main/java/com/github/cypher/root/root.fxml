@@ -5,15 +5,7 @@
 <?import javafx.scene.layout.StackPane?>
 <SplitPane dividerPositions="0.26152304609218435" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="757.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.RootPresenter">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="240.0">
-         <children>
-            <fx:include source="roomcollectionlist/roomcollectionlist.fxml" />
-         </children></AnchorPane>
-      <StackPane prefHeight="600.0" prefWidth="821.0">
-         <children>
-            <fx:include source="settings/settings.fxml" fx:id="settingsPane"/>
-            <fx:include source="roomcollection/roomcollection.fxml" fx:id="serverPane"/>
-         </children>
-      </StackPane>
+            <AnchorPane fx:id="leftSideAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="240.0"/>
+            <StackPane fx:id="rightSideStackPane" prefHeight="600.0" prefWidth="821.0"/>
         </items>
 </SplitPane>
