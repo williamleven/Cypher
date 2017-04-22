@@ -1,4 +1,4 @@
-package com.github.cypher.root.settings;
+package com.github.cypher.root.roomcollectionlist;
 
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
@@ -6,7 +6,8 @@ import javafx.fxml.FXML;
 
 import javax.inject.Inject;
 
-public class SettingsPresenter {
+public class RoomCollectionListPresenter {
+
 	@Inject
 	private Client client;
 
@@ -15,5 +16,10 @@ public class SettingsPresenter {
 
 	@FXML
 	private void initialize() {
+	}
+
+	@FXML
+	private void toggleSettings() {
+		client.showSettings.set(!client.showSettings.get());
 	}
 }

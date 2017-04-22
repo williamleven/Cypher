@@ -112,4 +112,7 @@ class Util {
 	static JsonElement makeJsonPutRequest(URL url, JsonObject data) throws RestfulHTTPException, IOException {
 		return makeRequest(url, "PUT", data);
 	}
+	static JsonElement makeJsonDeleteRequest(URL url, JsonObject data) throws RestfulHTTPException, IOException{
+		return makeRequest(url,"DELETE", data);
+	}
 }

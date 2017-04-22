@@ -6,7 +6,9 @@ package com.github.cypher.sdk.api;
 enum Endpoint {
 
 	// All endpoints
-	GET_ROOMID_FROM_ALIAS("directory/room/{0}"), // {0} = roomAlias
+	THIRD_PERSON_ID   ("account/3pid"),
+	ROOM_CREATE       ("createRoom"),
+	ROOM_DIRECTORY    ("directory/room/{0}"),      // {0} = roomAlias
 	LOGIN             ("login"),
 	SYNC              ("sync"),
 	USER_PROFILE      ("profile/{0}"),             // {0} = userId
@@ -15,7 +17,12 @@ enum Endpoint {
 	PUBLIC_ROOMS      ("publicRooms"),
 	ROOM_MESSAGES     ("rooms/{0}/messages"),      // {0} = roomId
 	ROOM_MEMBERS      ("rooms/{0}/members"),       // {0} = roomId
-	ROOM_SEND_EVENT   ("rooms/{0}/send/{1}/{2}");  // {0} = roomId, {1} = eventType, {2} = txnId
+	ROOM_SEND_EVENT   ("rooms/{0}/send/{1}/{2}"),  // {0} = roomId, {1} = eventType, {2} = txnId
+	ROOM_JOIN         ("rooms/{0}/join"),          // {0} = roomId
+	ROOM_LEAVE        ("rooms/{0}/leave"),         // {0} = roomId
+	ROOM_KICK         ("rooms/{0}/kick"),          // {0} = roomId
+	ROOM_INVITE       ("rooms/{0}/invite"),        // {0} = roomId
+	PRESENCE_LIST     ("presence/list/{0}");       // {0} = userId
 
 	/*
 		The code bellow allows for custom return of .toString() for each endpoint.

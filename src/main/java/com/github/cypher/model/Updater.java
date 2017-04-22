@@ -12,7 +12,7 @@ class Updater extends Thread {
 	// The time between each tic
 	private final int interval;
 
-	public Updater(int interval){
+	public Updater(int interval) {
 		this.interval = interval;
 	}
 
@@ -20,31 +20,31 @@ class Updater extends Thread {
 	@Override
 	public void run() {
 
-		for (int i = 1;;i++){
+		for (int i = 1; ; i++) {
 
 			// Notify all Updatable classes
-			for (Map.Entry<Updatable, Integer> entry: watching.entrySet()) {
-				if (i % entry.getValue() == 0 ){
+			for (Map.Entry<Updatable, Integer> entry : watching.entrySet()) {
+				if (i % entry.getValue() == 0) {
 					entry.getKey().update();
 				}
 			}
 
 			// Sleep
-			try{
+			try {
 				Thread.sleep(interval);
-			}catch (InterruptedException err){
+			} catch (InterruptedException err) {
 
 			}
 		}
 	}
 
 	// Register a listener. The listener will be notified avery {i}'th tic
-	public void add(Updatable u, Integer i){
+	public void add(Updatable u, Integer i) {
 		watching.put(u, i);
 	}
 
 	// Remove a listener
-	public void remove(Updatable u){
+	public void remove(Updatable u) {
 		watching.remove(u);
 	}
 }

@@ -1,6 +1,7 @@
 package com.github.cypher.sdk.api;
 
 import com.github.cypher.sdk.User;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
@@ -104,6 +105,13 @@ public interface ApiLayer {
 	void setUserDisplayName(String displayName) throws RestfulHTTPException, IOException;
 
 	/**
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Presence/get_matrix_client_r0_presence_list_userId">matrix.org</a>
+	 * @param userId The unique ID of the user (e.g. "@bob:matrix.org")
+	 * @return Valid Json response containing the user presence list
+	 */
+	JsonArray getUserPresence(String userId) throws IOException;
+
+	/**
 	 * This endpoint is used to send a message event to a room.
 	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Room_participation/put_matrix_client_r0_rooms_roomId_send_eventType_txnId">matrix.org</a>
 	 * @param roomId The unique ID of the room (e.g. "!cURbafjkfsMDVwdRDQ:matrix.org")
@@ -120,4 +128,77 @@ public interface ApiLayer {
 	 * @return Valid Json response containing roomID.
 	 */
 	JsonObject getRoomIDFromAlias(String roomAlias) throws MalformedURLException, IOException;
+
+	/**
+	 * This endpoint is used to delete the Room Alias from the current room.
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_directory/delete_matrix_client_r0_directory_room_roomAlias">matrix.org</a>
+	 * @param roomAlias The alias of a given room.
+	 * @return Valid Json response containing the room ID.
+	 */
+	JsonObject deleteRoomAlias(String roomAlias) throws RestfulHTTPException, IOException;
+
+	/**
+	 * This endpoint is used to set the current rooms Room Alias.
+	 * @param roomAlias The rquested roomAlias.
+	 * @param roomId The rooms ID.
+	 * @return Valid Json response containing the Room ID.
+
+	 */
+	JsonObject putRoomAlias(String roomAlias, String roomId) throws RestfulHTTPException, IOException;
+
+	/**
+	 * Used to create a room.
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_creation/post_matrix_client_r0_createRoom">matrix.org</a>
+	 * @param roomCreation JsonObject containing all required and optional parameters for room creation.
+	 * @return Valid Json response containing the Room ID.
+	 */
+	JsonObject postCreateRoom(JsonObject roomCreation) throws RestfulHTTPException, IOException;
+
+	/**
+	 * Used to join a given room.
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_membership/post_matrix_client_r0_rooms_roomId_join">matrix.org</a>
+	 * @param roomId The rooms ID.
+	 * @param thirdPartySigned Proof of invite from third party entity.
+	 * @return Valid Json response containing the Room ID.   CURRENTLY RETURNING NOTHING, BUT THE HTTP REQUEST IS GOING THROUGH
+
+	 */
+	JsonObject postJoinRoom(String roomId, JsonObject thirdPartySigned) throws RestfulHTTPException, IOException;
+
+	/**
+	 * Used to leave a given room.
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_membership/post_matrix_client_r0_rooms_roomId_leave">matrix.org</a>
+	 * @param roomId The rooms ID.
+	 */
+	void postLeaveRoom(String roomId) throws RestfulHTTPException, IOException;
+	/**
+	 * Used to kick someone from a given room.
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_membership/post_matrix_client_r0_rooms_roomId_kick">matrix.org</a>
+	 * @param roomId The rooms ID.
+	 * @param reason The given reason for posting the kick.
+	 * @param userId The userId of the one being kicked.
+	 */
+	void postKickFromRoom(String roomId, String reason, String userId) throws RestfulHTTPException, IOException;
+
+	/**
+	 * Sends an invite.
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Room_membership/post_matrix_client_r0_rooms_roomId_invite_0">matrix.org</a>
+	 * @param roomId The rooms ID
+	 * @param idServer The hostname+port of the identity server which should be used for third party identifier lookups.
+	 * @param address  The invitee's third party identifier.
+	 * @param medium The kind of address being passed in the address field, for example email.
+	 */
+	void postInviteToRoom(String roomId, String address, String idServer, String medium/*contains "id_server","medium" and "address", or simply "user_id"*/) throws RestfulHTTPException, IOException;
+
+	/**
+	 * Sends invite to specific matrix user.
+	 * @param roomId The rooms ID
+	 * @param userId The invitees user ID
+	 */
+	void postInviteToRoom(String roomId, String userId) throws RestfulHTTPException, IOException;
+
+	/**
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/User_data/get_matrix_client_r0_account_3pid">matrix.org</a>
+	 * @return Valid Json response containing the Room ID.
+	 */
+	JsonObject get3Pid() throws RestfulHTTPException, IOException;
 }

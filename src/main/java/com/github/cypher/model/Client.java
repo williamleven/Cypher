@@ -1,7 +1,6 @@
 package com.github.cypher.model;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -12,48 +11,61 @@ public class Client implements Updatable {
 	private final com.github.cypher.sdk.Client sdkClient;
 
 	// Servers
-	private ObservableList<Server> servers = FXCollections.observableArrayList();
+	private final ObservableList<Server> servers = FXCollections.observableArrayList();
 
 	// Personal messages
-	private PMCollection pmCollection = new PMCollection();
+	private final PMCollection pmCollection = new PMCollection();
 
 	// General chatrooms
-	private GeneralCollection genCollection = new GeneralCollection();
+	private final GeneralCollection genCollection = new GeneralCollection();
 
-	private BooleanProperty isLoggedIn = new SimpleBooleanProperty(false);
+	// Properties
 
-	Client(com.github.cypher.sdk.Client c){
+	public final BooleanProperty loggedIn = new SimpleBooleanProperty(false);
+	public final BooleanProperty showSettings = new SimpleBooleanProperty(false);
+	public final BooleanProperty showRoomSettings = new SimpleBooleanProperty(false);
+	// GeneralCollection is set as the default selected RoomCollection
+	public final ObjectProperty<RoomCollection> selectedRoomCollection = new SimpleObjectProperty<>(genCollection);
+	//TODO: Change selectedRoom from StringProperty to "RoomProperty"
+	public final StringProperty selectedRoom = new SimpleStringProperty();
+	public final BooleanProperty showDirectory = new SimpleBooleanProperty(false);
+
+	public Client(com.github.cypher.sdk.Client c) {
 		sdkClient = c;
 		updater = new Updater(500);
 		updater.add(this, 1);
 		updater.start();
 	}
 
-	// Add server, room or private chat
-	public void add(String input){
-		if (Util.isHomeserver(input)){
+	// Add roomcollection, room or private chat
+	public void add(String input) {
+		if (Util.isHomeserver(input)) {
 			addServer(input);
-		}else if (Util.isRoomLabel(input)){
+		} else if (Util.isRoomLabel(input)) {
 			addRoom(input);
-		}else if (Util.isUser(input)){
+		} else if (Util.isUser(input)) {
 			addUser(input);
 		}
 	}
 
-	private void addServer(String server){
+	private void addServer(String server) {
 		//Todo
 		servers.add(new Server(server));
 	}
 
-	private void addRoom(String room){
+	private void addRoom(String room) {
 		//Todo
 	}
 
-	private void addUser(String user){
+	private void addUser(String user) {
 		//Todo
 	}
 
-	public void update(){
+	public void update() {
 		//isLoggedIn.setValue(sdkClient.isLoggedIn());
+	}
+
+	public void exit() {
+		updater.interrupt();
 	}
 }

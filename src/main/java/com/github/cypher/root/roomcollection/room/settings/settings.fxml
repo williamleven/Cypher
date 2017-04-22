@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="999.0" prefWidth="999.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollection.room.settings.SettingsPresenter">
+   <children>
+      <Label layoutX="40.0" layoutY="42.0" text="Settings" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="50.0" />
+      <Button layoutX="11.0" layoutY="90.0" mnemonicParsing="false" onMouseClicked="#hideRoomSettings" text="Back / Hide settings" />
+   </children>
+</AnchorPane>

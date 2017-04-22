@@ -1,4 +1,4 @@
 package com.github.cypher.model;
 
-public class PMCollection {
+public class PMCollection implements RoomCollection {
 }
