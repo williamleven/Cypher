@@ -7,6 +7,6 @@
 <HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollection.RoomCollectionPresenter">
     <children>
         <AnchorPane fx:id="leftSideAnchorPane"/>
-        <StackPane fx:id="rightSideStackPane"/>
+        <StackPane fx:id="rightSideStackPane" HBox.hgrow="ALWAYS" />
     </children>
 </HBox>
