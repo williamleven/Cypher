@@ -2,15 +2,11 @@
 
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.AnchorPane?>
 
 <HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollection.RoomCollectionPresenter">
     <children>
-        <fx:include source="roomlist/roomlist.fxml" />
-        <StackPane prefHeight="600.0" prefWidth="821.0">
-            <children>
-                <fx:include fx:id="directoryPane" source="directory/directory.fxml" />
-                <fx:include fx:id="roomPane" source="room/room.fxml" />
-            </children>
-        </StackPane>
+        <AnchorPane fx:id="leftSideAnchorPane"/>
+        <StackPane fx:id="rightSideStackPane"/>
     </children>
 </HBox>

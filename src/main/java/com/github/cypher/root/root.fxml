@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
-
+<?import javafx.scene.layout.AnchorPane?>
 <HBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.RootPresenter">
      <children>
-              <fx:include source="roomcollectionlist/roomcollectionlist.fxml" />
-        <StackPane>
-           <children>
-              <fx:include fx:id="settingsPane" source="settings/settings.fxml" />
-              <fx:include fx:id="serverPane" source="roomcollection/roomcollection.fxml" />
-           </children>
-        </StackPane>
+         <AnchorPane fx:id="leftSideAnchorPane"/>
+         <StackPane fx:id="rightSideStackPane"/>
      </children>
 </HBox>
