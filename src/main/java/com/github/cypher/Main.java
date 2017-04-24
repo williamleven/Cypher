@@ -47,8 +47,8 @@ public class Main extends Application {
 
 		primaryStage.setTitle("Cypher");
 		primaryStage.setScene(scene);
-		primaryStage.setMinWidth(25);
-		primaryStage.setMinHeight(25);
+		primaryStage.setMinWidth(1100);
+		primaryStage.setMinHeight(500);
 		primaryStage.setOnCloseRequest(event -> {
 			client.exit();
 			Platform.exit();

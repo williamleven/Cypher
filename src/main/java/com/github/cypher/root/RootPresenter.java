@@ -24,6 +24,7 @@ public class RootPresenter {
 	@FXML
 	private AnchorPane leftSideAnchorPane;
 
+
 	@FXML
 	private StackPane rightSideStackPane;
 
