@@ -29,9 +29,10 @@ public interface ApiLayer {
 	 * @param since Point in time of last sync request
 	 * @param fullState Shall all events be collected
 	 * @param setPresence User status
+	 * @param timeout The maximum time to poll in milliseconds before returning this request
 	 * @return Valid Json response
 	 */
-	JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence) throws RestfulHTTPException, IOException;
+	JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence, int timeout) throws RestfulHTTPException, IOException;
 
 	/**
 	 * Lists the public rooms on the server.
