@@ -121,16 +121,16 @@ public class Client {
 
 			JsonObject roomsData = syncData.get("rooms").getAsJsonObject();
 
-			if(roomsData.has("join")) {
-				// Some GSON magic to convert the "join" JsonObject to an array
-				HashMap<String, JsonObject> joinEvents = new Gson().fromJson(
-						roomsData.get("join").getAsJsonObject(),
-						new TypeToken<HashMap<String, JsonObject>>() {}.getType());
-				for(Map.Entry<String, JsonObject> joinEventEntries : joinEvents.entrySet()) {
-					String roomId = joinEventEntries.getKey();
-					JsonObject joinEvent = joinEventEntries.getValue();
-					Room room = getOrCreateRoom(joinRooms, roomId);
-					room.update(joinEvent);
+			if(roomsData.has("join") &&
+			   roomsData.get("join").isJsonObject()) {
+				JsonObject joinEvents = roomsData.get("join").getAsJsonObject();
+				for(Map.Entry<String, JsonElement> joinEventEntry : joinEvents.entrySet()) {
+					if(joinEventEntry.getValue().isJsonObject()) {
+						String roomId = joinEventEntry.getKey();
+						JsonObject joinEvent = joinEventEntry.getValue().getAsJsonObject();
+						Room room = getOrCreateRoom(joinRooms, roomId);
+						room.update(joinEvent);
+					}
 				}
 			}
 
@@ -224,14 +224,10 @@ public class Client {
 		   event.get("type").isJsonPrimitive() &&
 		   event.get("content").isJsonObject()) {
 			String type = event.get("type").getAsString();
+			JsonObject eventContent = event.get("content").getAsJsonObject();
 
 			if(type.equals(settingsNamespace)) {
-				// Some GSON magic to convert the "content" JsonObject to an array
-				HashMap<String, JsonElement> settings = new Gson().fromJson(
-						event.get("content").getAsJsonObject(),
-						new TypeToken<HashMap<String, JsonElement>>() {}.getType());
-				for(Map.Entry<String, JsonElement> setting : settings.entrySet()) {
-
+				for(Map.Entry<String, JsonElement> setting : eventContent.entrySet()) {
 					String settingKey = setting.getKey();
 					String settingValue = setting.getValue().getAsString();
 					accountData.put(settingKey, settingValue);
