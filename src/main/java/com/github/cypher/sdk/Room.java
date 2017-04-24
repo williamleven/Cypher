@@ -28,7 +28,7 @@ public class Room {
 	private final ApiLayer api;
 	private final Client client;
 
-	private String roomId;
+	private final String id;
 	private String name = null;
 	private String topic = null;
 	private URL avatarUrl = null;
@@ -36,10 +36,10 @@ public class Room {
 	private ObservableMap<String, Event> events = new ObservableMapWrapper<>(new HashMap<>());
 	private ObservableMap<String, Member> members = new ObservableMapWrapper<>(new HashMap<>());
 
-	Room(ApiLayer api, Client client, String roomId) {
+	Room(ApiLayer api, Client client, String id) {
 		this.api = api;
 		this.client = client;
-		this.roomId = roomId;
+		this.id = id;
 	}
 
 	public void addEventListener(MapChangeListener<String, Event> listener) {
@@ -161,13 +161,13 @@ public class Room {
 	 * @throws IOException
 	 */
 	public void sendMessage(JsonObject content) throws RestfulHTTPException, IOException {
-		api.roomSendEvent(roomId, "m.room.message", content);
+		api.roomSendEvent(this.id, "m.room.message", content);
 	}
 
 	/**
 	 * @return A valid room ID (e.g. "!cURbafjkfsMDVwdRDQ:matrix.org")
 	 */
-	public String getId() { return roomId; }
+	public String getId() { return this.id; }
 	public String getName() { return name; }
 	public String getTopic() { return topic; }
 	public Image getAvatar() { return avatar; }
