@@ -100,32 +100,41 @@ public class Room {
 							JsonObject content = event.get("content").getAsJsonObject();
 
 							if(eventType.equals("m.room.message")) {
-								this.events.put(
-										eventId,
-										new Message(api, originServerTs, sender, eventId, content)
-								);
-							} else if(eventType.equals("m.room.member") &&
-							          content.has("membership") &&
-							          event.has("state_key")) {
-								String memberId = event.get("state_key").getAsString();
-								String membership = content.get("membership").getAsString();
-
-								User user = client.getUser(memberId);
-
-								if(membership.equals("join")) {
-									if(!members.containsKey(memberId)) {
-										members.put(
-												memberId,
-												new Member(user)
-										);
-									}
-								} else if(members.containsKey(memberId)) {
-									members.remove(memberId);
-								}
+								parseMessageEvent(originServerTs, sender, eventId, content);
+							} else if(eventType.equals("m.room.member")) {
+								parseMemberEvent(event, content);
 							}
 						}
 					}
 				}
+			}
+		}
+	}
+
+	private void parseMessageEvent(int originServerTs, String sender, String eventId, JsonObject content) {
+		this.events.put(
+				eventId,
+				new Message(api, originServerTs, sender, eventId, content)
+		);
+	}
+
+	private void parseMemberEvent(JsonObject event, JsonObject content) {
+		if(content.has("membership") &&
+		   event.has("state_key")) {
+			String memberId = event.get("state_key").getAsString();
+			String membership = content.get("membership").getAsString();
+
+			User user = client.getUser(memberId);
+
+			if (membership.equals("join")) {
+				if (!members.containsKey(memberId)) {
+					members.put(
+							memberId,
+							new Member(user)
+					);
+				}
+			} else if (members.containsKey(memberId)) {
+				members.remove(memberId);
 			}
 		}
 	}
