@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
-
-<StackPane fx:id="mainStackPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollection.room.RoomPresenter" />
+<StackPane fx:id="mainStackPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollection.room.RoomPresenter" >
+    <children>
+        <HBox fx:id="chatRoot">
+            <children>
+                <AnchorPane fx:id="chat" HBox.hgrow="ALWAYS" />
+                <AnchorPane fx:id="chatExtra"/>
+            </children>
+        </HBox>
+    </children>
+</StackPane>

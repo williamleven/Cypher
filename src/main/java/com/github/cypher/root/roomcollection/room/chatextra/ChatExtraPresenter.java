@@ -1,4 +1,4 @@
-package com.github.cypher.root.roomcollection.room.chatroot.chat;
+package com.github.cypher.root.roomcollection.room.chatextra;
 
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 
 import javax.inject.Inject;
 
-public class ChatPresenter {
+public class ChatExtraPresenter {
 
 	@Inject
 	private Client client;
@@ -16,10 +16,5 @@ public class ChatPresenter {
 
 	@FXML
 	private void initialize() {
-	}
-
-	@FXML
-	private void showRoomSettings() {
-		client.showRoomSettings.set(true);
 	}
 }
