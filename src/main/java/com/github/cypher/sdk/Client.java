@@ -77,6 +77,16 @@ public class Client {
 	}
 
 	/**
+	 * Call ApiLayer.login(...)
+	 * @see com.github.cypher.sdk.api.ApiLayer#login(String, String, String)
+	 * @throws RestfulHTTPException
+	 * @throws IOException
+	 */
+	public void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
+		api.login(username, password, homeserver);
+	}
+
+	/**
 	 * Call ApiLayer.sync(...) and parse the returned data.
 	 * <p>Presence-data is used to update the map of users: {@link #getUser(String)}</p>
 	 * <p>Join-data is used to update the map of rooms the user has joined: {@link #getJoinRooms()}.</p>
