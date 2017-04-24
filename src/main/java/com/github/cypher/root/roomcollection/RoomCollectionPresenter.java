@@ -2,9 +2,13 @@ package com.github.cypher.root.roomcollection;
 
 import com.github.cypher.Settings;
 import com.github.cypher.model.*;
+import com.github.cypher.root.roomcollection.directory.DirectoryView;
+import com.github.cypher.root.roomcollection.room.RoomView;
+import com.github.cypher.root.roomcollection.roomlist.RoomListView;
 import javafx.fxml.FXML;
-import javafx.scene.control.SplitPane;
+import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
 
@@ -17,13 +21,20 @@ public class RoomCollectionPresenter {
 	private Settings settings;
 
 	@FXML
-	private SplitPane roomPane;
+	private AnchorPane leftSideAnchorPane;
 
 	@FXML
-	private AnchorPane directoryPane;
+	private StackPane rightSideStackPane;
 
 	@FXML
 	private void initialize() {
+		RoomListView roomListView = new RoomListView();
+		leftSideAnchorPane.getChildren().add(roomListView.getView());
+		Parent directoryPane = new DirectoryView().getView();
+		rightSideStackPane.getChildren().add(directoryPane);
+		Parent roomPane = new RoomView().getView();
+		rightSideStackPane.getChildren().add(roomPane);
+
 		client.selectedRoomCollection.addListener((observable, oldValue, newValue) -> {
 			// If a new RoomCollection is selected the directory view is hidden.
 			if (oldValue != null && newValue != null && oldValue != newValue) {

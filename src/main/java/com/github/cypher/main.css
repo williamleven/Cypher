@@ -2,10 +2,15 @@
 	-fx-padding: 10 10 10 10;
 }
 
-.root {    
-	-fx-font: 14px "Helvetica";
+root {
+	-fx-font-size: 14px;
 }
 
 AnchorPane {
 	-fx-background-color: -fx-base;
+}
+
+.image-btn {
+	-fx-min-width: 0px !important;
+	-fx-padding: 5px !important;
 }

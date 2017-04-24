@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.StackPane?>
-<SplitPane dividerPositions="0.26152304609218435" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="999.0" prefWidth="999.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollection.room.RoomPresenter">
-   <items>
-      <StackPane prefHeight="999.0" prefWidth="999.0">
-         <children>
-            <fx:include source="settings/settings.fxml" fx:id="settingsPane"/>
-            <fx:include source="chatroot/chatroot.fxml" fx:id="chatRootPane"/>
-         </children>
-      </StackPane>
-   </items>
-</SplitPane>
+
+
+<StackPane fx:id="mainStackPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollection.room.RoomPresenter" />

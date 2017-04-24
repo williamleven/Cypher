@@ -43,11 +43,12 @@ public class Main extends Application {
 		Scene scene = new Scene(rootView.getView());
 		final String uri = getClass().getResource("main.css").toExternalForm();
 		scene.getStylesheets().add(uri);
+		scene.getStylesheets().add("bootstrapfx.css");
 
 		primaryStage.setTitle("Cypher");
 		primaryStage.setScene(scene);
-		primaryStage.setMinWidth(25);
-		primaryStage.setMinHeight(25);
+		primaryStage.setMinWidth(1100);
+		primaryStage.setMinHeight(500);
 		primaryStage.setOnCloseRequest(event -> {
 			client.exit();
 			Platform.exit();

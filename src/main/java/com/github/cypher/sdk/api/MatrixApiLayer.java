@@ -70,7 +70,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence) throws RestfulHTTPException, IOException{
+	public JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence, int timeout) throws RestfulHTTPException, IOException{
 
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
@@ -85,6 +85,9 @@ public class MatrixApiLayer implements ApiLayer {
 		}
 		if(fullState) {
 			parameters.put("full_state", "true");
+		}
+		if(timeout > 0) {
+			parameters.put("timeout", Integer.toString(timeout));
 		}
 		parameters.put("access_token", session.getAccessToken());
 

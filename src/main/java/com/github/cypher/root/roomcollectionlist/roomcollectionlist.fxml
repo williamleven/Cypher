@@ -1,11 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="487.0" prefWidth="80.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollectionlist.RoomCollectionListPresenter">
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<AnchorPane maxWidth="-Infinity" minHeight="300.0" minWidth="-Infinity" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollectionlist.RoomCollectionListPresenter">
    <children>
-      <Label layoutX="15.0" layoutY="14.0" text="ServerList" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="14.0" />
-      <Button layoutX="9.0" layoutY="423.0" mnemonicParsing="false" onMouseClicked="#toggleSettings" prefHeight="50.0" prefWidth="63.0" text="Toogle &#10;settings" />
+      <Button layoutX="14.0" layoutY="34.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <styleClass>
+            <String fx:value="btn" />
+            <String fx:value="btn-info" />
+            <String fx:value="image-btn" />
+         </styleClass>
+         <graphic>
+            <FontIcon iconColor="WHITE" iconLiteral="fa-wechat" iconSize="40" />
+         </graphic>
+      </Button>
+      <Button layoutX="5.0" layoutY="70.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="70.0">
+         <styleClass>
+            <String fx:value="btn" />
+            <String fx:value="btn-info" />
+            <String fx:value="image-btn" />
+         </styleClass>
+         <graphic>
+            <FontIcon iconColor="WHITE" iconLiteral="fa-users" iconSize="40" />
+         </graphic>
+      </Button>
+      <VBox layoutX="5.0" layoutY="134.0" prefHeight="309.0" prefWidth="60.0" AnchorPane.bottomAnchor="71.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="134.0">
+         <children>
+            <ListView prefHeight="10.0" prefWidth="60.0">
+               <VBox.margin>
+                  <Insets bottom="6.0" />
+               </VBox.margin>
+            </ListView>
+            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0">
+               <styleClass>
+                  <String fx:value="btn" />
+                  <String fx:value="btn-info" />
+                  <String fx:value="image-btn" />
+               </styleClass>
+               <graphic>
+                  <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="40" text="" />
+               </graphic>
+            </Button>
+         </children>
+      </VBox>
+      <Button layoutX="13.0" layoutY="443.0" mnemonicParsing="false" onMouseClicked="#toggleSettings" prefHeight="60.0" prefWidth="60.0" style="-fx-min-width: 2px;" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+         <graphic>
+            <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="40" textAlignment="CENTER" />
+         </graphic>
+         <styleClass>
+            <String fx:value="btn-info" />
+            <String fx:value="btn" />
+            <String fx:value="image-btn" />
+         </styleClass></Button>
    </children>
 </AnchorPane>

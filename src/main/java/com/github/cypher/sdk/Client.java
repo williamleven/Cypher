@@ -91,12 +91,12 @@ public class Client {
 	 * <p>Presence-data is used to update the map of users: {@link #getUser(String)}</p>
 	 * <p>Join-data is used to update the map of rooms the user has joined: {@link #getJoinRooms()}.</p>
 	 * <p>All room maps are observable using the various add*RoomsListener(...) methods</p>
-	 * @see com.github.cypher.sdk.api.ApiLayer#sync(String, String, boolean, User.Presence)
+	 * @see com.github.cypher.sdk.api.ApiLayer#sync(String, String, boolean, User.Presence, int)
 	 * @throws RestfulHTTPException
 	 * @throws IOException
 	 */
-	public void update() throws RestfulHTTPException, IOException {
-		JsonObject syncData = api.sync(null, lastSyncMarker, lastSyncMarker == null, User.Presence.ONLINE);
+	public void update(int timeout) throws RestfulHTTPException, IOException {
+		JsonObject syncData = api.sync(null, lastSyncMarker, lastSyncMarker == null, User.Presence.ONLINE, timeout);
 
 		if(syncData.has("next_batch")) {
 			lastSyncMarker = syncData.get("next_batch").getAsString();
