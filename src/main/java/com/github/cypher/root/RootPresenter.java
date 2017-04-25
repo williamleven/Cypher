@@ -3,11 +3,9 @@ package com.github.cypher.root;
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.root.roomcollection.RoomCollectionView;
-import com.github.cypher.root.roomcollectionlist.RoomCollectionListView;
 import com.github.cypher.root.settings.SettingsView;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
@@ -22,16 +20,10 @@ public class RootPresenter {
 	private Settings settings;
 
 	@FXML
-	private AnchorPane leftSideAnchorPane;
-
-
-	@FXML
 	private StackPane rightSideStackPane;
 
 	@FXML
 	private void initialize() {
-		RoomCollectionListView roomCollectionListView = new RoomCollectionListView();
-		leftSideAnchorPane.getChildren().add(roomCollectionListView.getView());
 
 		Parent settingsPane = new SettingsView().getView();
 		rightSideStackPane.getChildren().add(settingsPane);
@@ -45,5 +37,10 @@ public class RootPresenter {
 				roomCollectionPane.toFront();
 			}
 		});
+	}
+
+	@FXML
+	private void toggleSettings() {
+		client.showSettings.set(!client.showSettings.get());
 	}
 }

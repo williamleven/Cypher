@@ -4,9 +4,28 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.AnchorPane?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import java.lang.String?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.scene.control.ListView?>
 <HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollection.RoomCollectionPresenter">
     <children>
-        <AnchorPane fx:id="leftSideAnchorPane"/>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefWidth="184.0">
+            <children>
+                <Label layoutX="10.0" layoutY="10.0" prefHeight="27.0" prefWidth="180.0" styleClass="h3" text="Server Name" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                <Button layoutX="156.0" layoutY="37.0" mnemonicParsing="false" onMouseClicked="#showDirectory" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="37.0">
+                    <styleClass>
+                        <String fx:value="btn" />
+                        <String fx:value="btn-info" />
+                        <String fx:value="image-btn" />
+                    </styleClass>
+                    <graphic>
+                        <FontIcon iconColor="WHITE" iconLiteral="fa-folder-open" iconSize="20" />
+                    </graphic></Button>
+                <ListView layoutY="73.0" prefHeight="15.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="73.0" />
+            </children>
+        </AnchorPane>
         <StackPane fx:id="rightSideStackPane" HBox.hgrow="ALWAYS" />
     </children>
 </HBox>
