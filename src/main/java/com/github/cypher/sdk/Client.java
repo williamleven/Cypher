@@ -24,7 +24,7 @@ public class Client {
 	private ApiLayer api;
 	private String lastSyncMarker = null;
 
-	private static final String settingsNamespace = "com.github.cypher.settings";
+	private final String settingsNamespace;
 
 	private Map<String, User> users = new HashMap<>();
 
@@ -48,8 +48,9 @@ public class Client {
 	 * @see com.github.cypher.sdk.api.ApiLayer
 	 * @throws IOException
 	 */
-	public Client(ApiLayer api) {
+	public Client(ApiLayer api, String settingsNamespace) {
 		this.api = api;
+		this.settingsNamespace = settingsNamespace;
 	}
 
 	/**
@@ -102,59 +103,11 @@ public class Client {
 			lastSyncMarker = syncData.get("next_batch").getAsString();
 		}
 
-		if(syncData.has("presence")) {
-			JsonObject presenceData = syncData.get("presence").getAsJsonObject();
-			if(presenceData.has("events")) {
-				JsonArray presenceEvents = presenceData.get("events").getAsJsonArray();
-				for(JsonElement eventElement : presenceEvents) {
-					JsonObject eventObject = eventElement.getAsJsonObject();
-					if(eventObject.has("sender")) {
-						User user = getUser(eventObject.get("sender").getAsString());
-						user.update(eventObject);
-					}
-				}
-			}
-		}
+		parsePresenceEvents(syncData);
 
-		if(syncData.has("rooms") &&
-		   syncData.get("rooms").isJsonObject()) {
+		parseRoomEvents(syncData);
 
-			JsonObject roomsData = syncData.get("rooms").getAsJsonObject();
-
-			if(roomsData.has("join") &&
-			   roomsData.get("join").isJsonObject()) {
-				JsonObject joinEvents = roomsData.get("join").getAsJsonObject();
-				for(Map.Entry<String, JsonElement> joinEventEntry : joinEvents.entrySet()) {
-					if(joinEventEntry.getValue().isJsonObject()) {
-						String roomId = joinEventEntry.getKey();
-						JsonObject joinEvent = joinEventEntry.getValue().getAsJsonObject();
-						Room room = getOrCreateRoom(joinRooms, roomId);
-						room.update(joinEvent);
-					}
-				}
-			}
-
-			// TODO: "leave"-rooms
-			// TODO: "invite"-rooms
-		}
-
-		if(syncData.has("account_data") &&
-		   syncData.get("account_data").isJsonObject()) {
-			JsonObject accountDataObject = syncData.get("account_data").getAsJsonObject();
-
-			if(accountDataObject.has("events") &&
-			   accountDataObject.get("events").isJsonArray()) {
-				JsonArray accountDataEvents = accountDataObject.get("events").getAsJsonArray();
-
-				for(JsonElement eventElement : accountDataEvents) {
-					if(eventElement.isJsonObject()) {
-						JsonObject event = eventElement.getAsJsonObject();
-
-						parseAccountDataEvent(event);
-					}
-				}
-			}
-		}
+		parseAccountDataEvents(syncData);
 	}
 
 	/**
@@ -216,6 +169,66 @@ public class Client {
 
 	public void setSetting(String key, String value) {
 		// TODO
+	}
+
+	private void parsePresenceEvents(JsonObject syncData) {
+		if(syncData.has("presence")) {
+			JsonObject presenceData = syncData.get("presence").getAsJsonObject();
+			if(presenceData.has("events")) {
+				JsonArray presenceEvents = presenceData.get("events").getAsJsonArray();
+				for(JsonElement eventElement : presenceEvents) {
+					JsonObject eventObject = eventElement.getAsJsonObject();
+					if(eventObject.has("sender")) {
+						User user = getUser(eventObject.get("sender").getAsString());
+						user.update(eventObject);
+					}
+				}
+			}
+		}
+	}
+
+	private void parseRoomEvents(JsonObject syncData) {
+		if(syncData.has("rooms") &&
+				syncData.get("rooms").isJsonObject()) {
+
+			JsonObject roomsData = syncData.get("rooms").getAsJsonObject();
+
+			if(roomsData.has("join") &&
+					roomsData.get("join").isJsonObject()) {
+				JsonObject joinEvents = roomsData.get("join").getAsJsonObject();
+				for(Map.Entry<String, JsonElement> joinEventEntry : joinEvents.entrySet()) {
+					if(joinEventEntry.getValue().isJsonObject()) {
+						String roomId = joinEventEntry.getKey();
+						JsonObject joinEvent = joinEventEntry.getValue().getAsJsonObject();
+						Room room = getOrCreateRoom(joinRooms, roomId);
+						room.update(joinEvent);
+					}
+				}
+			}
+
+			// TODO: "leave"-rooms
+			// TODO: "invite"-rooms
+		}
+	}
+
+	private void parseAccountDataEvents(JsonObject syncData) {
+		if(syncData.has("account_data") &&
+		   syncData.get("account_data").isJsonObject()) {
+			JsonObject accountDataObject = syncData.get("account_data").getAsJsonObject();
+
+			if(accountDataObject.has("events") &&
+			   accountDataObject.get("events").isJsonArray()) {
+				JsonArray accountDataEvents = accountDataObject.get("events").getAsJsonArray();
+
+				for(JsonElement eventElement : accountDataEvents) {
+					if(eventElement.isJsonObject()) {
+						JsonObject event = eventElement.getAsJsonObject();
+
+						parseAccountDataEvent(event);
+					}
+				}
+			}
+		}
 	}
 
 	private void parseAccountDataEvent(JsonObject event) {

@@ -59,25 +59,16 @@ public class Room {
 	}
 
 	void update(JsonObject data) {
-		if(data.has("name")) {
-			name = data.get("name").getAsString();
-		}
+		parseNameData(data);
 
-		if(data.has("topic")) {
-			topic = data.get("topic").getAsString();
-		}
+		parseTopicData(data);
 
-		if(data.has("avatar_url")) {
-			try {
-				URL newAvatarUrl = new URL(data.get("avatar_url").getAsString());
-				if(!newAvatarUrl.equals(avatarUrl)) {
-					// TODO: Get avatar image media
-				}
-			} catch(MalformedURLException e) {
-				DebugLogger.log(e);
-			}
-		}
+		parseAvatarUrlData(data);
 
+		parseTimelineData(data);
+	}
+
+	private void parseTimelineData(JsonObject data) {
 		if(data.has("timeline") &&
 		   data.get("timeline").isJsonObject()) {
 			JsonObject timeline = data.get("timeline").getAsJsonObject();
@@ -86,27 +77,55 @@ public class Room {
 				JsonArray events = timeline.get("events").getAsJsonArray();
 				for(JsonElement eventElement : events) {
 					if(eventElement.isJsonObject()) {
-						JsonObject event = eventElement.getAsJsonObject();
-						if(event.has("type") &&
-						   event.has("origin_server_ts") &&
-						   event.has("sender") &&
-						   event.has("event_id") &&
-						   event.has("content")) {
-
-							int originServerTs = event.get("origin_server_ts").getAsInt();
-							String sender = event.get("sender").getAsString();
-							String eventId = event.get("event_id").getAsString();
-							String eventType = event.get("type").getAsString();
-							JsonObject content = event.get("content").getAsJsonObject();
-
-							if(eventType.equals("m.room.message")) {
-								parseMessageEvent(originServerTs, sender, eventId, content);
-							} else if(eventType.equals("m.room.member")) {
-								parseMemberEvent(event, content);
-							}
-						}
+						parseTimelineEventData(eventElement.getAsJsonObject());
 					}
 				}
+			}
+		}
+	}
+
+	private void parseTimelineEventData(JsonObject event) {
+		if(event.has("type") &&
+		   event.has("origin_server_ts") &&
+		   event.has("sender") &&
+		   event.has("event_id") &&
+		   event.has("content")) {
+
+			int originServerTs = event.get("origin_server_ts").getAsInt();
+			String sender = event.get("sender").getAsString();
+			String eventId = event.get("event_id").getAsString();
+			String eventType = event.get("type").getAsString();
+			JsonObject content = event.get("content").getAsJsonObject();
+
+			if(eventType.equals("m.room.message")) {
+				parseMessageEvent(originServerTs, sender, eventId, content);
+			} else if(eventType.equals("m.room.member")) {
+				parseMemberEvent(event, content);
+			}
+		}
+	}
+
+	private void parseNameData(JsonObject data) {
+		if(data.has("name")) {
+			name = data.get("name").getAsString();
+		}
+	}
+
+	private void parseTopicData(JsonObject data) {
+		if(data.has("topic")) {
+			topic = data.get("topic").getAsString();
+		}
+	}
+
+	private void parseAvatarUrlData(JsonObject data) {
+		if(data.has("avatar_url")) {
+			try {
+				URL newAvatarUrl = new URL(data.get("avatar_url").getAsString());
+				if(!newAvatarUrl.equals(avatarUrl)) {
+					// TODO: Get avatar image media
+				}
+			} catch(MalformedURLException e) {
+				DebugLogger.log(e);
 			}
 		}
 	}
