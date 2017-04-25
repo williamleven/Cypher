@@ -15,7 +15,6 @@
          <styleClass>
             <String fx:value="btn" />
             <String fx:value="btn-info" />
-            <String fx:value="btn-info" />
             <String fx:value="image-btn" />
          </styleClass>
          <graphic>
