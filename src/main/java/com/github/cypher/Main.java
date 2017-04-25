@@ -18,7 +18,7 @@ import java.util.Map;
 public class Main extends Application {
 	public static final String WORKING_DIRECTORY = ""; //The path to the folder where settings, credentials etc are saved.
 
-	private final Client client = new Client(new com.github.cypher.sdk.Client(new MatrixApiLayer()));
+	private final Client client = new Client(new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings"));
 	private final Settings settings = new SerializableSettings();
 
 	@Override
