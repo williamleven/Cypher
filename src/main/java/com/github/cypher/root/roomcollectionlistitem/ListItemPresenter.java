@@ -1,4 +1,4 @@
-package com.github.cypher.root.roomcollectionlist.listitem;
+package com.github.cypher.root.roomcollectionlistitem;
 
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
