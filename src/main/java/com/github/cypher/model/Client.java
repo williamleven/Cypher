@@ -1,10 +1,17 @@
 package com.github.cypher.model;
 
+import com.github.cypher.DebugLogger;
+import com.github.cypher.Settings;
+import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.IOException;
+
 public class Client implements Updatable {
+
+	private final Settings settings;
 
 	private final Updater updater;
 
@@ -30,8 +37,9 @@ public class Client implements Updatable {
 	public final StringProperty selectedRoom = new SimpleStringProperty();
 	public final BooleanProperty showDirectory = new SimpleBooleanProperty(false);
 
-	public Client(com.github.cypher.sdk.Client c) {
-		sdkClient = c;
+	public Client(com.github.cypher.sdk.Client sdkClient, Settings settings) {
+		this.settings = settings;
+		this.sdkClient = sdkClient;
 		updater = new Updater(500);
 		updater.add(this, 1);
 		updater.start();
@@ -62,7 +70,13 @@ public class Client implements Updatable {
 	}
 
 	public void update() {
-		//isLoggedIn.setValue(sdkClient.isLoggedIn());
+		try {
+			sdkClient.update(settings.getSDKTimeout());
+		} catch (RestfulHTTPException | IOException e) {
+			DebugLogger.log(e.getMessage());
+		}
+
+		//loggedIn.setValue(sdkClient.isLoggedIn());
 	}
 
 	public void exit() {

@@ -10,6 +10,7 @@ public class SerializableSettings implements Settings {
 	public static final String FILE_NAME = "config";
 
 	private SettingsData settingsData;
+	private int SDKTimeout; // In ms
 
 	private static class SettingsData implements Serializable{
 		Locale language;
@@ -25,17 +26,29 @@ public class SerializableSettings implements Settings {
 			// Set defaults
 
 			settingsData.language = Locale.getDefault();
+			SDKTimeout = 500;
 		}
 	}
 
-
+	@Override
 	public synchronized Locale getLanguage() {
 		return settingsData.language; //java.util.Locale is immutable so no defensive copying is needed.
 	}
 
+	@Override
 	public synchronized void setLanguage(Locale language) {
 		settingsData.language = language; //java.util.Locale is immutable so no defensive copying is needed.
 		writeSettings();
+	}
+
+	@Override
+	public synchronized int getSDKTimeout() {
+		return SDKTimeout;
+	}
+
+	@Override
+	public synchronized void setSDKTimeout(int timeout) {
+		SDKTimeout = timeout;
 	}
 
 	private SettingsData loadSettings() {
