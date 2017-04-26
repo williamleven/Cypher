@@ -5,14 +5,9 @@ import com.github.cypher.model.Client;
 import com.github.cypher.model.Server;
 import com.github.cypher.root.roomcollectionlist.listitem.ListItemPresenter;
 import com.github.cypher.root.roomcollectionlist.listitem.ListItemView;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableArray;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 
 import javax.inject.Inject;
@@ -28,7 +23,8 @@ public class RoomCollectionListPresenter{
 	@FXML
 	private ListView roomCollectionListListView;
 
-	private static final int SERVERLISTCELLHEIGHT = 65;
+	private static final double SERVERLISTCELLHEIGHT=60;
+	private static final double SERVERLISTCELLPADDING_BOTTOM=5;
 
 	@FXML
 	private void initialize() {
@@ -43,13 +39,7 @@ public class RoomCollectionListPresenter{
 		client.getServers().addListener((ListChangeListener<? super Server>) (o) -> {
 			updateListHeight();
 		});
-		client.getServers().add(new Server());
-		client.getServers().add(new Server());
-		client.getServers().add(new Server());
-		client.getServers().add(new Server());
-		client.getServers().add(new Server());
 
-		updateListHeight();
 
 	}
 
@@ -59,7 +49,7 @@ public class RoomCollectionListPresenter{
 	}
 
 	private void updateListHeight() {
-		roomCollectionListListView.setPrefHeight(SERVERLISTCELLHEIGHT * client.getServers().size() );
+		roomCollectionListListView.setPrefHeight((SERVERLISTCELLHEIGHT+SERVERLISTCELLPADDING_BOTTOM) * client.getServers().size() );
 	}
 
 }
