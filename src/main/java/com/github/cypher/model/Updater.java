@@ -10,7 +10,7 @@ class Updater extends Thread {
 	// The value (Integer) represents the "tick interval". I.e. the Updatable will be notified every {i}'th tic (where i is the value of the Integer)
 	private Map<Updatable, Integer> watching = new ConcurrentHashMap<>(10);
 
-	// The time between each tic
+	// The time between each tic in ms
 	private final int interval;
 
 	public Updater(int interval) {

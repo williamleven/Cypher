@@ -40,7 +40,7 @@ public class Client implements Updatable {
 	public Client(com.github.cypher.sdk.Client sdkClient, Settings settings) {
 		this.settings = settings;
 		this.sdkClient = sdkClient;
-		updater = new Updater(500);
+		updater = new Updater(settings.getModelTickInterval());
 		updater.add(this, 1);
 		updater.start();
 	}

@@ -11,6 +11,7 @@ public class SerializableSettings implements Settings {
 
 	private SettingsData settingsData;
 	private int SDKTimeout; // In ms
+	private int modelTickInterval; // In ms
 
 	private static class SettingsData implements Serializable{
 		Locale language;
@@ -49,6 +50,18 @@ public class SerializableSettings implements Settings {
 	@Override
 	public synchronized void setSDKTimeout(int timeout) {
 		SDKTimeout = timeout;
+		writeSettings();
+	}
+
+	@Override
+	public synchronized int getModelTickInterval() {
+		return modelTickInterval;
+	}
+
+	@Override
+	public synchronized void setModelTickInterval(int interval) {
+		modelTickInterval = interval;
+		writeSettings();
 	}
 
 	private SettingsData loadSettings() {
