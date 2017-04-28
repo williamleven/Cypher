@@ -30,8 +30,8 @@ public class RootPresenter {
 	@FXML
 	private ListView roomCollectionListListView;
 
-	private static final double SERVERLISTCELLHEIGHT=60;
-	private static final double SERVERLISTCELLPADDING_BOTTOM=5;
+	private static final double ROOM_COLLECTION_LIST_CELL_HEIGHT =60;
+	private static final double ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM =5;
 
 	@FXML
 	private void initialize() {
@@ -68,6 +68,6 @@ public class RootPresenter {
 	}
 
 	private void updateListHeight() {
-		roomCollectionListListView.setPrefHeight((SERVERLISTCELLHEIGHT+SERVERLISTCELLPADDING_BOTTOM) * client.getServers().size() );
+		roomCollectionListListView.setPrefHeight((ROOM_COLLECTION_LIST_CELL_HEIGHT + ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM) * client.getServers().size() );
 	}
 }
