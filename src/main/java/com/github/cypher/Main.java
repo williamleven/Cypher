@@ -19,7 +19,7 @@ public class Main extends Application {
 	public static final String WORKING_DIRECTORY = ""; //The path to the folder where settings, credentials etc are saved.
 
 	private final Client client = new Client(new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings"));
-	private final Settings settings = new SerializableSettings();
+	private final Settings settings = new TOMLSettings();
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -50,6 +50,7 @@ public class Main extends Application {
 		primaryStage.setMinWidth(1100);
 		primaryStage.setMinHeight(500);
 		primaryStage.setOnCloseRequest(event -> {
+			settings.saveSettings();
 			client.exit();
 			Platform.exit();
 			System.exit(0);
