@@ -3,7 +3,7 @@ package com.github.cypher.root.roomcollection.room;
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.root.roomcollection.room.chat.ChatView;
-import com.github.cypher.root.roomcollection.room.chatextra.ChatExtraView;
+
 import com.github.cypher.root.roomcollection.room.settings.SettingsView;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -39,8 +39,6 @@ public class RoomPresenter {
 
 		ChatView chatView = new ChatView();
 		chat.getChildren().add(chatView.getView());
-		ChatExtraView chatExtraView = new ChatExtraView();
-		chatExtra.getChildren().add(chatExtraView.getView());
 
 		Parent settingsPane = new SettingsView().getView();
 		mainStackPane.getChildren().add(settingsPane);
