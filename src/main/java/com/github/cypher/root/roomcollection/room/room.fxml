@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,20 +16,24 @@
                     <tabs>
                       <Tab text="Members">
                         <content>
-                          <AnchorPane fx:id="members" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          <AnchorPane fx:id="members" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" stylesheets="@../../../main.css" />
                         </content>
                       </Tab>
                       <Tab text="Files">
                         <content>
-                          <AnchorPane fx:id="files" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          <AnchorPane fx:id="files" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" stylesheets="@../../../main.css" />
                         </content>
                       </Tab>
                         <Tab text="Notifications">
                            <content>
-                              <AnchorPane fx:id="notififications" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                              <AnchorPane fx:id="notififications" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" stylesheets="@../../../main.css" />
                            </content>
                         </Tab>
                     </tabs>
+               <stylesheets>
+                  <URL value="@room.css" />
+                  <URL value="@../../../main.css" />
+               </stylesheets>
                   </TabPane>
             </children>
         </HBox>
