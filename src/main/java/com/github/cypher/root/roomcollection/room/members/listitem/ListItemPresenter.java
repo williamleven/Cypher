@@ -47,7 +47,7 @@ public class ListItemPresenter extends CustomListCell<Member>{
 
 	@Override
 	protected void updateBindings() {
-		imageView.imageProperty().bind(getModelComponent().imagePropertyProperty());
+		//imageView.imageProperty().bind(getModelComponent().imagePropertyProperty());
 		label.textProperty().bind(getModelComponent().getName());
 	}
 

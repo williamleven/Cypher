@@ -2,6 +2,7 @@ package com.github.cypher.model;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.*;
 
@@ -11,7 +12,7 @@ public class Member {
 
 	private ObjectProperty<Image> imageProperty= new SimpleObjectProperty();
 
-	private StringProperty name;
+	private StringProperty name = new SimpleStringProperty();
 
 	public Member(String name){
 		this.name.set(name);
