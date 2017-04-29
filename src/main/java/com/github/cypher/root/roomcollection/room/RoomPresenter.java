@@ -4,6 +4,7 @@ import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.root.roomcollection.room.chat.ChatView;
 
+import com.github.cypher.root.roomcollection.room.members.MembersView;
 import com.github.cypher.root.roomcollection.room.settings.SettingsView;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -32,13 +33,15 @@ public class RoomPresenter {
 	private AnchorPane chat;
 
 	@FXML
-	private AnchorPane chatExtra;
+	private AnchorPane members;
 
 	@FXML
 	private void initialize() {
 
 		ChatView chatView = new ChatView();
 		chat.getChildren().add(chatView.getView());
+		MembersView membersView = new MembersView();
+		members.getChildren().add(membersView.getView());
 
 		Parent settingsPane = new SettingsView().getView();
 		mainStackPane.getChildren().add(settingsPane);

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="root" maxHeight="99999.0" maxWidth="99999.0" prefHeight="28.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollection.room.members.listitem.ListItemPresenter">
+   <children>
+      <ImageView fx:id="imageView" fitHeight="24.0" fitWidth="24.0" layoutX="2.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="label" layoutX="34.0" layoutY="6.0" text="placeholder" />
+   </children>
+</AnchorPane>
