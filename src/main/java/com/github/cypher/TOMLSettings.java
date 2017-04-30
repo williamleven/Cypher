@@ -14,7 +14,7 @@ public class TOMLSettings implements Settings {
 
 	private final File settingsFile;
 
-	private SettingsData settingsData;
+	private final SettingsData settingsData;
 
 	private static class SettingsData{
 		String languageTag = Locale.getDefault().toLanguageTag(); // Default Value
@@ -22,7 +22,7 @@ public class TOMLSettings implements Settings {
 
 	TOMLSettings() {
 		settingsFile = createOrLoadFile();
-		load();
+		settingsData = load(settingsFile);
 		save();
 	}
 
@@ -55,14 +55,14 @@ public class TOMLSettings implements Settings {
 		save();
 	}
 
-	private synchronized void load() {
+	private static synchronized SettingsData load(File settingsFile) {
 		// Make sure settingsFile is set before loading settings
 		if (settingsFile != null) {
 			DebugLogger.log("reading settings from: " + settingsFile);
-			settingsData =  new Toml().read(settingsFile).to(SettingsData.class);
+			return new Toml().read(settingsFile).to(SettingsData.class);
 		}else{
 			DebugLogger.log("Could not access settings file, defaults will be loaded.");
-			settingsData = new SettingsData();
+			return new SettingsData();
 		}
 	}
 
