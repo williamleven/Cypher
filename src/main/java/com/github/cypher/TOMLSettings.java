@@ -55,7 +55,7 @@ public class TOMLSettings implements Settings {
 		save();
 	}
 
-	public synchronized void load() {
+	private synchronized void load() {
 		// Make sure settingsFile is set before loading settings
 		if (settingsFile != null) {
 			DebugLogger.log("reading settings from: " + settingsFile);
@@ -66,7 +66,7 @@ public class TOMLSettings implements Settings {
 		}
 	}
 
-	public synchronized void save() {
+	private synchronized void save() {
 		// Make sure settingsFile is set before saving settings
 		if (settingsFile != null){
 			try {
