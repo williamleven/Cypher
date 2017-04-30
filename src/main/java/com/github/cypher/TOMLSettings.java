@@ -39,7 +39,7 @@ public class TOMLSettings implements Settings {
 
 			return file;
 		}catch (IOException e) {
-			System.out.println("Could not create settings file");
+			DebugLogger.log("Could not create settings file");
 			return null;
 		}
 	}
@@ -57,10 +57,10 @@ public class TOMLSettings implements Settings {
 	public synchronized void loadSettings() {
 		// Make sure settingsFile is set before loading settings
 		if (settingsFile != null) {
-			System.out.println("reading settings from: " + settingsFile);
+			DebugLogger.log("reading settings from: " + settingsFile);
 			settingsData =  new Toml().read(settingsFile).to(SettingsData.class);
 		}else{
-			System.out.println("Could not access settings file, defaults will be loaded.");
+			DebugLogger.log("Could not access settings file, defaults will be loaded.");
 			settingsData = new SettingsData();
 		}
 	}
@@ -70,12 +70,12 @@ public class TOMLSettings implements Settings {
 		if (settingsFile != null){
 			try {
 				new TomlWriter().write(settingsData, settingsFile);
-				System.out.println("Settings saved to: " + settingsFile);
+				DebugLogger.log("Settings saved to: " + settingsFile);
 			} catch (IOException e) {
-				System.out.println("Could not access settings file, settings won't be saved.");
+				DebugLogger.log("Could not access settings file, settings won't be saved.");
 			}
 		}else{
-			System.out.println("Could not access settings file, settings won't be saved.");
+			DebugLogger.log("Could not access settings file, settings won't be saved.");
 		}
 	}
 
