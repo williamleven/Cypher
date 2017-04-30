@@ -22,8 +22,8 @@ public class TOMLSettings implements Settings {
 
 	TOMLSettings() {
 		settingsFile = createOrLoadFile();
-		loadSettings();
-		saveSettings();
+		load();
+		save();
 	}
 
 	private static File createOrLoadFile(){
@@ -52,10 +52,10 @@ public class TOMLSettings implements Settings {
 
 	public synchronized void setLanguage(Locale language) {
 		settingsData.languageTag = language.toLanguageTag();
-		saveSettings();
+		save();
 	}
 
-	public synchronized void loadSettings() {
+	public synchronized void load() {
 		// Make sure settingsFile is set before loading settings
 		if (settingsFile != null) {
 			DebugLogger.log("reading settings from: " + settingsFile);
@@ -66,7 +66,7 @@ public class TOMLSettings implements Settings {
 		}
 	}
 
-	public synchronized void saveSettings() {
+	public synchronized void save() {
 		// Make sure settingsFile is set before saving settings
 		if (settingsFile != null){
 			try {
