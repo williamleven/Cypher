@@ -23,6 +23,7 @@ public class TOMLSettings implements Settings {
 	TOMLSettings() {
 		settingsFile = createOrLoadFile();
 		loadSettings();
+		saveSettings();
 	}
 
 	private static File createOrLoadFile(){

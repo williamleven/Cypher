@@ -50,7 +50,6 @@ public class Main extends Application {
 		primaryStage.setMinWidth(1100);
 		primaryStage.setMinHeight(500);
 		primaryStage.setOnCloseRequest(event -> {
-			settings.saveSettings();
 			client.exit();
 			Platform.exit();
 			System.exit(0);

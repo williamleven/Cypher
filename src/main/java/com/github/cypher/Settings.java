@@ -5,6 +5,4 @@ import java.util.Locale;
 public interface Settings {
 	Locale getLanguage();
 	void setLanguage(Locale language);
-	void loadSettings();
-	void saveSettings();
 }
