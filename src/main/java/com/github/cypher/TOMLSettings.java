@@ -46,11 +46,11 @@ public class TOMLSettings implements Settings {
 
 
 	public synchronized Locale getLanguage() {
-		return Locale.forLanguageTag(settingsData.languageTag); //java.util.Locale is immutable so no defensive copying is needed.
+		return Locale.forLanguageTag(settingsData.languageTag);
 	}
 
 	public synchronized void setLanguage(Locale language) {
-		settingsData.languageTag = language.toLanguageTag(); //java.util.Locale is immutable so no defensive copying is needed.
+		settingsData.languageTag = language.toLanguageTag();
 		saveSettings();
 	}
 
