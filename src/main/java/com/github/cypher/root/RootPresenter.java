@@ -2,6 +2,7 @@ package com.github.cypher.root;
 
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
+import com.github.cypher.root.login.LoginView;
 import com.github.cypher.root.roomcollection.RoomCollectionView;
 import com.github.cypher.root.settings.SettingsView;
 import javafx.fxml.FXML;
@@ -20,10 +21,26 @@ public class RootPresenter {
 	private Settings settings;
 
 	@FXML
+	private StackPane mainStackPane;
+
+	@FXML
 	private StackPane rightSideStackPane;
 
 	@FXML
 	private void initialize() {
+		Parent loginPane = new LoginView().getView();
+		mainStackPane.getChildren().add(loginPane);
+
+		client.loggedIn.addListener((observable, oldValue, newValue) -> {
+			if (newValue) {
+				loginPane.toBack();
+			}
+			else {
+				loginPane.toFront();
+			}
+		});
+
+		client.loggedIn.set(true);
 
 		Parent settingsPane = new SettingsView().getView();
 		rightSideStackPane.getChildren().add(settingsPane);
