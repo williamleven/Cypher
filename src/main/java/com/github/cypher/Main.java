@@ -10,20 +10,22 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 public class Main extends Application {
-	public static final String WORKING_DIRECTORY = ""; //The path to the folder where settings, credentials etc are saved.
+	public static final String APPLICATION_NAME = "Cypher";
+	public static final String USER_DATA_DIRECTORY = getUserDataDirectoryPath(); //The path to the folder where settings, credentials etc are saved.
 
-	private final Settings settings = new SerializableSettings();
-	private final Client client = new Client(new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings"), settings);
+	private final Client client = new Client(new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings"));
+	private final Settings settings = new TOMLSettings();
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-    
+
 		Locale.setDefault(settings.getLanguage());
 
 		URL.setURLStreamHandlerFactory(new MatrixMediaURLStreamHandlerFactory());
@@ -59,5 +61,22 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
+	}
+
+	// Creates the user data folder path
+	private static String getUserDataDirectoryPath() {
+		if (System.getenv("APPDATA") != null) { // Windows style
+			return System.getenv("APPDATA") + File.separator + capitalize(APPLICATION_NAME);
+		} else { //Unix style
+			return System.getProperty("user.home") + File.separator + "." + decapitalize(APPLICATION_NAME);
+		}
+	}
+
+	// Utility methods
+	private static String capitalize(String name){
+		return name.substring(0, 1).toUpperCase() + name.substring(1);
+	}
+	private static String decapitalize(String name){
+		return name.substring(0, 1).toLowerCase() + name.substring(1);
 	}
 }
