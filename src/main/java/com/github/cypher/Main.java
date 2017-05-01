@@ -63,7 +63,7 @@ public class Main extends Application {
 		launch(args);
 	}
 
-	// Creates the settings folder path
+	// Creates the user data folder path
 	private static String getUserDataDirectoryPath() {
 		if (System.getenv("APPDATA") != null) { // Windows style
 			return System.getenv("APPDATA") + File.separator + capitalize(APPLICATION_NAME);
