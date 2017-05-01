@@ -6,58 +6,54 @@
 <?import java.lang.*?>
 <AnchorPane prefHeight="754.0" prefWidth="828.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.github.cypher.root.login.LoginPresenter">
-    <children>
-        <HBox alignment="CENTER" fillHeight="false" layoutX="170.0" layoutY="200.0" prefHeight="354.0" prefWidth="488.0"
-              AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="170.0"
-              AnchorPane.topAnchor="200.0">
+    <HBox alignment="CENTER" fillHeight="false" layoutX="170.0" layoutY="200.0" prefHeight="354.0" prefWidth="488.0"
+          AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="170.0"
+          AnchorPane.topAnchor="200.0">
+        <AnchorPane maxHeight="354.0" maxWidth="488.0" minHeight="354.0" minWidth="488.0" prefHeight="354.0"
+                    prefWidth="488.0">
             <children>
-                <AnchorPane maxHeight="354.0" maxWidth="488.0" minHeight="354.0" minWidth="488.0" prefHeight="354.0"
-                            prefWidth="488.0">
-                    <children>
-                        <Label layoutX="110.0" layoutY="120.0" text="Username" AnchorPane.rightAnchor="324.0">
-                            <styleClass>
-                                <String fx:value="lbl"/>
-                                <String fx:value="lbl-default"/>
-                            </styleClass>
-                        </Label>
-                        <Label layoutX="114.0" layoutY="165.0" text="Password" AnchorPane.rightAnchor="324.0">
-                            <styleClass>
-                                <String fx:value="lbl"/>
-                                <String fx:value="lbl-default"/>
-                            </styleClass>
-                        </Label>
-                        <Label alignment="CENTER" layoutY="61.0" prefHeight="35.0" prefWidth="483.0"
-                               text="Login"
-                               textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                            <styleClass>
-                                <String fx:value="lbl"/>
-                                <String fx:value="lbl-primary"/>
-                            </styleClass>
-                            <font>
-                                <Font size="18.0"/>
-                            </font>
-                        </Label>
-                        <Button layoutX="179.0" layoutY="259.0" mnemonicParsing="false" prefHeight="35.0"
-                                prefWidth="129.0" text="Login">
-                            <styleClass>
-                                <String fx:value="btn"/>
-                                <String fx:value="btn-primary"/>
-                            </styleClass>
-                        </Button>
-                        <PasswordField fx:id="passwordField" layoutX="176.0" layoutY="161.0" prefHeight="25.0"
-                                       prefWidth="149.0"/>
-                        <TextField fx:id="usernameField" layoutX="176.0" layoutY="116.0"/>
-                        <TextField fx:id="homeServerField" layoutX="176.0" layoutY="206.0" prefHeight="25.0"
-                                   prefWidth="149.0"/>
-                        <Label layoutX="114.0" layoutY="210.0" text="Homeserver" AnchorPane.rightAnchor="324.0">
-                            <styleClass>
-                                <String fx:value="lbl"/>
-                                <String fx:value="lbl-default"/>
-                            </styleClass>
-                        </Label>
-                    </children>
-                </AnchorPane>
+                <Label layoutX="110.0" layoutY="120.0" text="Username" AnchorPane.rightAnchor="324.0">
+                    <styleClass>
+                        <String fx:value="lbl"/>
+                        <String fx:value="lbl-default"/>
+                    </styleClass>
+                </Label>
+                <Label layoutX="114.0" layoutY="165.0" text="Password" AnchorPane.rightAnchor="324.0">
+                    <styleClass>
+                        <String fx:value="lbl"/>
+                        <String fx:value="lbl-default"/>
+                    </styleClass>
+                </Label>
+                <Label alignment="CENTER" layoutY="61.0" prefHeight="35.0" prefWidth="483.0"
+                       text="Login"
+                       textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                    <styleClass>
+                        <String fx:value="lbl"/>
+                        <String fx:value="lbl-primary"/>
+                    </styleClass>
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+                <Button layoutX="179.0" layoutY="259.0" mnemonicParsing="false" prefHeight="35.0"
+                        prefWidth="129.0" text="Login" onAction="#login">
+                    <styleClass>
+                        <String fx:value="btn"/>
+                        <String fx:value="btn-primary"/>
+                    </styleClass>
+                </Button>
+                <PasswordField fx:id="passwordField" layoutX="176.0" layoutY="161.0" prefHeight="25.0"
+                               prefWidth="149.0"/>
+                <TextField fx:id="usernameField" layoutX="176.0" layoutY="116.0"/>
+                <TextField fx:id="homeserverField" layoutX="176.0" layoutY="206.0" prefHeight="25.0"
+                           prefWidth="149.0"/>
+                <Label layoutX="114.0" layoutY="210.0" text="Homeserver" AnchorPane.rightAnchor="324.0">
+                    <styleClass>
+                        <String fx:value="lbl"/>
+                        <String fx:value="lbl-default"/>
+                    </styleClass>
+                </Label>
             </children>
-        </HBox>
-    </children>
+        </AnchorPane>
+    </HBox>
 </AnchorPane>
