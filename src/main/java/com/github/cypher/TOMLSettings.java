@@ -20,7 +20,11 @@ public class TOMLSettings implements Settings {
 
 	// Class representing all settings
 	private static class SettingsData{
-		String languageTag = Locale.getDefault().toLanguageTag(); // Default Value
+		// All variables are initiated to default values
+		String languageTag = Locale.getDefault().toLanguageTag();
+		int SDKTimeout = 500; // In ms
+		int modelTickInterval = 500; // In ms
+
 	}
 
 	TOMLSettings() {
@@ -89,6 +93,28 @@ public class TOMLSettings implements Settings {
 	}
 	public synchronized void setLanguage(Locale language) {
 		settingsData.languageTag = language.toLanguageTag();
+		save();
+	}
+
+	@Override
+	public int getSDKTimeout() {
+		return settingsData.SDKTimeout;
+	}
+
+	@Override
+	public void setSDKTimeout(int timeout) {
+		settingsData.SDKTimeout = timeout;
+		save();
+	}
+
+	@Override
+	public int getModelTickInterval() {
+		return settingsData.modelTickInterval;
+	}
+
+	@Override
+	public void setModelTickInterval(int interval) {
+		settingsData.modelTickInterval = interval;
 		save();
 	}
 }
