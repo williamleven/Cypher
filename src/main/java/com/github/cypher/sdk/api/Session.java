@@ -9,10 +9,10 @@ import java.io.IOException;
  */
 class Session {
 
-	private String userId;
-	private String accessToken;
-	private String homeServer;
-	private String deviceId;
+	private final String userId;
+	private final String accessToken;
+	private final String homeServer;
+	private final String deviceId;
 	long transactionId = 0;
 
 	/*
