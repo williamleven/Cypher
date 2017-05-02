@@ -68,4 +68,8 @@ public class Client implements Updatable {
 	public void exit() {
 		updater.interrupt();
 	}
+
+	public ObservableList<Server> getServers() {
+		return servers;
+	}
 }
