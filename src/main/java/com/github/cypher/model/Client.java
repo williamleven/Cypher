@@ -1,6 +1,8 @@
 package com.github.cypher.model;
 
+import com.github.cypher.Settings;
 import com.github.cypher.sdk.api.RestfulHTTPException;
+import com.github.cypher.sdk.api.Session;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,8 +12,9 @@ import java.io.IOException;
 public class Client implements Updatable {
 
 	private final Updater updater;
-
 	private final com.github.cypher.sdk.Client sdkClient;
+	private final Settings settings;
+	private final SessionManager sessionManager;
 
 	// Servers
 	private final ObservableList<Server> servers = FXCollections.observableArrayList();
@@ -33,8 +36,22 @@ public class Client implements Updatable {
 	public final StringProperty selectedRoom = new SimpleStringProperty();
 	public final BooleanProperty showDirectory = new SimpleBooleanProperty(false);
 
-	public Client(com.github.cypher.sdk.Client c) {
+	public Client(com.github.cypher.sdk.Client c, Settings settings) {
 		sdkClient = c;
+		this.settings = settings;
+		sessionManager = new SessionManager(sdkClient);
+		if (sessionManager.savedSessionExists()) {
+			Session session = sessionManager.loadSession();
+			if (session != null) {
+				sdkClient.setSession(session);
+				if (sdkClient.validateCurrentSession()) {
+					loggedIn.setValue(true);
+				} else {
+					//TODO logout? setSession(null)?
+				}
+			}
+		}
+
 		updater = new Updater(500);
 		updater.add(this, 1);
 		updater.start();
@@ -73,6 +90,9 @@ public class Client implements Updatable {
 	}
 
 	public void exit() {
+		if (settings.getSaveSession()) {
+			sessionManager.saveSession();
+		}
 		updater.interrupt();
 	}
 }

@@ -2,11 +2,10 @@ package com.github.cypher.sdk;
 
 import com.github.cypher.sdk.api.ApiLayer;
 import com.github.cypher.sdk.api.RestfulHTTPException;
-import com.google.gson.Gson;
+import com.github.cypher.sdk.api.Session;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.sun.javafx.collections.ObservableMapWrapper;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
@@ -75,6 +74,19 @@ public class Client {
 		Room room = new Room(api, this, roomId);
 		map.put(roomId, room);
 		return room;
+	}
+
+	public Session getSession() {
+		return  api.getSession();
+	}
+
+	public void setSession(Session session) {
+		api.setSession(session);
+	}
+
+	public boolean validateCurrentSession() {
+		//TODO
+		return true;
 	}
 
 	/**

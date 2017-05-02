@@ -20,8 +20,8 @@ public class Main extends Application {
 	public static final String APPLICATION_NAME = "Cypher";
 	public static final String USER_DATA_DIRECTORY = getUserDataDirectoryPath(); //The path to the folder where settings, credentials etc are saved.
 
-	private final Client client = new Client(new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings"));
 	private final Settings settings = new TOMLSettings();
+	private final Client client = new Client(new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings"), settings);
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {

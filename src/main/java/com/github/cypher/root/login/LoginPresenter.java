@@ -5,6 +5,7 @@ import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
@@ -29,12 +30,16 @@ public class LoginPresenter {
 	private TextField homeserverField;
 
 	@FXML
+	private CheckBox rememberMeCheckBox;
+
+	@FXML
 	private void login() {
 		if (usernameField.getText() != null && passwordField.getText() != null && homeserverField.getText() != null) {
 
 			try {
 				client.login(usernameField.getText(), passwordField.getText(), homeserverField.getText());
 				client.loggedIn.setValue(true);
+				settings.setSaveSession(rememberMeCheckBox.isSelected());
 			} catch (RestfulHTTPException e) {
 				if (DebugLogger.ENABLED) {
 					DebugLogger.log("RestfulHTTPException when trying to login - " + e.getMessage());
