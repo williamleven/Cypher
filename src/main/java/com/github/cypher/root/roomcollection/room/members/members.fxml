@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
 <?import javafx.scene.control.ListView?>
 
 
-<ListView fx:id="listView" focusTraversable="false" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollection.room.members.MembersPresenter">
-   <stylesheets>
-      <URL value="@members.css" />
-      <URL value="@../../../../main.css" />
-   </stylesheets>
+<ListView fx:id="listView" focusTraversable="false" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollection.room.members.MembersPresenter">s
 </ListView>
