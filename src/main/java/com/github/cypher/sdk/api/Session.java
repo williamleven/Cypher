@@ -47,6 +47,22 @@ class Session {
 		}
 	}
 
+	public Session(
+		String userId,
+		String accessToken,
+		String refreshToken,
+		String homeServer,
+		String deviceId,
+		long transactionId
+	) {
+		this.userId = userId;
+		this.accessToken = accessToken;
+		this.refreshToken = refreshToken;
+		this.homeServer = homeServer;
+		this.deviceId = deviceId;
+		this.transactionId = transactionId;
+	}
+
 	public String getUserId() {
 		return userId;
 	}
