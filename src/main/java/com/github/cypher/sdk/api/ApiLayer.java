@@ -22,6 +22,9 @@ import java.net.URL;
  */
 public interface ApiLayer {
 
+	Session getSession();
+	void setSession(Session session);
+
 	/**
 	 * Synchronise the client's state and receive new messages.
 	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Room_participation/get_matrix_client_r0_sync">matrix.org</a>

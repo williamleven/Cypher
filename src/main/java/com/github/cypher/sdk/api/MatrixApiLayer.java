@@ -26,6 +26,16 @@ public class MatrixApiLayer implements ApiLayer {
 
 	private Session session;
 
+	@Override
+	public Session getSession() {
+		return session;
+	}
+
+	@Override
+	public void setSession(Session session) {
+		this.session = session;
+	}
+
 	/**
 	 * Creates a MatrixApiLayer with a session.
 	 *
