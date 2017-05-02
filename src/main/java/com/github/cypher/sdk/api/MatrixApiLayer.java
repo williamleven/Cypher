@@ -80,6 +80,52 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
+	public void refreshToken() throws RestfulHTTPException, IOException {
+		// Only run if session is set
+		if(session == null) {
+			return;
+		}
+
+		// Only run if refreshToken is available
+		if (session.getRefreshToken() == null) {
+			throw new IOException("Refresh token not available");
+		}
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.TOKEN_REFRESH, null, null);
+
+		// Build request body
+		JsonObject request  = new JsonObject();
+		request.addProperty("refresh_token", session.getRefreshToken());
+
+		// Send Request
+		JsonObject response = Util.makeJsonPostRequest(url, request).getAsJsonObject();
+
+		// Check if response is valid
+		if(response.has("access_token")) {
+
+			// If refresh token is available, use it
+			String refreshToken = null;
+			if(response.has("refresh_token")) {
+				refreshToken = response.get("refresh_token").getAsString();
+			}
+
+			// Create new session object
+			session = new Session(
+					session.getUserId(),
+					response.get("access_token").getAsString(),
+					refreshToken,
+					session.getHomeServer(),
+					session.getDeviceId(),
+					0
+			);
+		} else {
+			// Something went wrong, force re-login
+			session = null;
+		}
+	}
+
+	@Override
 	public JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence, int timeout) throws RestfulHTTPException, IOException{
 
 		// Build parameter Map

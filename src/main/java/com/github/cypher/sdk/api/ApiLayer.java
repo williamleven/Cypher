@@ -55,6 +55,12 @@ public interface ApiLayer {
 	void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException;
 
 	/**
+	 * Use a refresh token to create a new Session
+	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Session32management/post_matrix_client_r0_tokenrefresh">matrix.org</a>
+	 */
+	void refreshToken() throws RestfulHTTPException, IOException;
+
+	/**
 	 * This API returns a list of message and state events for a room. It uses pagination query parameters to paginate history in the room.
 	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Room_participation/get_matrix_client_r0_rooms_roomId_messages">matrix.org</a>
 	 * @param roomId The unique ID of a room (e.g. "!cURbafjkfsMDVwdRDQ:matrix.org")
