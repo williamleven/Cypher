@@ -3,12 +3,13 @@ package com.github.cypher.root;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import org.junit.Test;
+
 import static org.junit.Assert.assertTrue;
 
 public class ExecutorTest {
 
 	@Test
-	public void executorTest(){
+	public void executorTest() {
 		// Create and start executor
 		Executor executor = new Executor();
 		executor.start();
@@ -27,13 +28,12 @@ public class ExecutorTest {
 		// Wait for action to be done
 		try {
 			Thread.sleep(5);
-		}catch (InterruptedException e){}
+		} catch (InterruptedException e) {
+		}
 		executor.interrupt();
 
 		// Check if action were done
 		assertTrue("Executor didn't execute.", action1.get());
 		assertTrue("Executor doesn't seem to be running in its own thread", isSeparateThread.get());
 	}
-
-
 }
