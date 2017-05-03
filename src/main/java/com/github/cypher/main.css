@@ -14,3 +14,11 @@ AnchorPane {
 	-fx-min-width: 0px !important;
 	-fx-padding: 5px !important;
 }
+
+.inline-monospace {
+    -fx-background-color: #777777;
+}
+
+.block-monospace {
+	-fx-background-color: #777777;
+}
