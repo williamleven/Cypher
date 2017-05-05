@@ -22,7 +22,16 @@ import java.net.URL;
  */
 public interface ApiLayer {
 
+	/**
+	 * Gets the session
+	 * @return Session
+	 */
 	Session getSession();
+
+	/**
+	 * Sets the session
+	 * @param session Session
+	 */
 	void setSession(Session session);
 
 	/**
