@@ -24,7 +24,7 @@ class SessionManager {
 		return Files.exists(lastSessionFilePath) && Files.isRegularFile(lastSessionFilePath);
 	}
 
-	// Returns null if load failed
+	// Returns null if loading failed
 	// Session is loaded from USER_DATA_DIRECTORY + File.separator + SESSION_FILE_NAME
 	public Session loadSession() {
 		Session lastSession = null;

@@ -26,7 +26,6 @@ public class Client implements Updatable {
 	private final GeneralCollection genCollection = new GeneralCollection();
 
 	// Properties
-
 	public final BooleanProperty loggedIn = new SimpleBooleanProperty(false);
 	public final BooleanProperty showSettings = new SimpleBooleanProperty(false);
 	public final BooleanProperty showRoomSettings = new SimpleBooleanProperty(false);
@@ -40,10 +39,14 @@ public class Client implements Updatable {
 		sdkClient = c;
 		this.settings = settings;
 		sessionManager = new SessionManager(sdkClient);
+
+		// Loads the session file from the disk if it exists.
 		if (sessionManager.savedSessionExists()) {
 			Session session = sessionManager.loadSession();
+			// If not session exists SessionManager::loadSession returns null
 			if (session != null) {
 				sdkClient.setSession(session);
+				// Checks if the loaded session is valid. If it is, sets logged in to true.
 				if (sdkClient.validateCurrentSession()) {
 					loggedIn.setValue(true);
 				} else {
