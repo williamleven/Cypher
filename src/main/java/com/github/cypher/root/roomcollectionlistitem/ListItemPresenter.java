@@ -2,6 +2,7 @@ package com.github.cypher.root.roomcollectionlistitem;
 
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
+import com.github.cypher.model.RoomCollection;
 import com.github.cypher.model.Server;
 import com.github.cypher.root.CustomListCell;
 import javafx.event.ActionEvent;
@@ -14,7 +15,7 @@ import javax.inject.Inject;
 
 
 
-public class ListItemPresenter extends CustomListCell<Server>{
+public class ListItemPresenter extends CustomListCell<RoomCollection>{
 
 	@Inject
 	private Client client;
