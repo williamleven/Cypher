@@ -72,12 +72,16 @@ public class MatrixApiLayer implements ApiLayer {
 	@Override
 	public void logout() throws RestfulHTTPException, IOException {
 		// Only run if the session is set
-		if (session != null) {
+		if (session == null) {
 			return;
 		}
 
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
 		// Build URL
-		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.LOGOUT, null, null);
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.LOGOUT, null, parameters);
 
 		// Send request
 		JsonObject respone = Util.makeJsonPostRequest(url, null).getAsJsonObject();
