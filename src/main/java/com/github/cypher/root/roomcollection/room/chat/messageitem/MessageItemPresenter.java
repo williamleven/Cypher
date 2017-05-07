@@ -49,7 +49,6 @@ public class MessageItemPresenter extends CustomListCell<Message> {
 
 	@FXML
 	private void initialize() {
-		//body.prefWidthProperty().bind(root.widthProperty().subtract(author.prefWidthProperty()).subtract(13));
 	}
 
 	@Override
@@ -103,24 +102,29 @@ public class MessageItemPresenter extends CustomListCell<Message> {
 		List textFlowList = bodyContainer.getChildren();
 
 		if(node instanceof TextNode) {
+			// Ignore TextNodes containing only whitespace
 			if(!node.outerHtml().replace(" ", "").equals("")) {
 
 				String text = ((TextNode) node).getWholeText();
 				Text textObject = new Text(text);
 				boolean pre = false;
 
+				// Go through all parent tags and apply styling
 				for(Element element : parents) {
 					String tagName = element.tagName();
 
-					if       (tagName.equals("ul")) {
-					} else if(tagName.equals("ol")) {
+					if       (tagName.equals("ul")) { // Begin bullet list
+					} else if(tagName.equals("ol")) { // TODO: Begin numbered list
 					} else if(tagName.equals("li")) {
+						// List item
 						textFlowList.add(new Text(" • "));
 					} else if(tagName.equals("blockquote")) {
 						textObject.getStyleClass().add("block-quote");
 					} else if(tagName.equals("pre")) {
+						// Preceeds a <code> tag to specify a multiline block
 						pre = true;
 					} else if(tagName.equals("code")) {
+						// Monospace and TODO: code highlighting
 						if(!pre) {
 							textObject.getStyleClass().add("inline-monospace");
 						} else {
@@ -128,6 +132,7 @@ public class MessageItemPresenter extends CustomListCell<Message> {
 						}
 						break; // We don't care about anything appearing within a <code> tag
 					} else {
+						// Other tags are applied ass CSS classes
 						textObject.getStyleClass().add(tagName);
 					}
 				}
@@ -139,9 +144,9 @@ public class MessageItemPresenter extends CustomListCell<Message> {
 			parents.add((Element)node);
 		}
 
+		// Recursively parse child tags
 		for(org.jsoup.nodes.Node child: node.childNodes()) {
 			parseFormattedMessageNode(child, parents);
-			//DebugLogger.log(String.format("%s: %s", node.nodeName(), node.toString()));
 		}
 	}
 }
