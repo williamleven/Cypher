@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.SVGPath?>
+
+<AnchorPane fx:id="root" focusTraversable="true" prefHeight="100.0" prefWidth="158.0" styleClass="room-item" stylesheets="@roomitem.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollection.roomitem.RoomItemPresenter">
+   <children>
+      <Label fx:id="name" focusTraversable="false" layoutX="14.0" layoutY="-1.0" prefHeight="40.0" prefWidth="118.0" styleClass="h5" text="&lt;name&gt;" wrapText="true" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="4.0" />
+      <TextArea fx:id="topic" editable="false" focusTraversable="false" layoutX="14.0" layoutY="38.0" styleClass="topic-area" stylesheets="@roomitem.css" text="&lt;topic&gt;" wrapText="true" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
+      <ImageView fx:id="avatar" fitHeight="48.0" fitWidth="48.0" layoutX="174.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="6.0" />
+      <SVGPath content="M 40 10 L 60 30 L 40 30 L 40 10" fill="TRANSPARENT" layoutX="-40.0" layoutY="-10.0" rotate="90.0" styleClass="room-item-selector" />
+      <SVGPath content="M 40 10 L 60 30 L 40 30 L 40 10" fill="TRANSPARENT" layoutX="108.0" layoutY="70.0" rotate="-90.0" styleClass="room-item-selector" />
+   </children>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
+</AnchorPane>

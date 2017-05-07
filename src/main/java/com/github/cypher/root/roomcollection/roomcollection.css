@@ -1,0 +1,10 @@
+.room-list {
+	-fx-padding: 0;
+}
+
+.room-list .scroll-bar:horizontal .increment-arrow,
+.room-list .scroll-bar:horizontal .decrement-arrow,
+.room-list .scroll-bar:horizontal .increment-button,
+.room-list .scroll-bar:horizontal .decrement-button {
+	-fx-padding: 0;
+}
