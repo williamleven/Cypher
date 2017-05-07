@@ -84,7 +84,7 @@ public class MatrixApiLayer implements ApiLayer {
 		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.LOGOUT, null, parameters);
 
 		// Send request
-		JsonObject respone = Util.makeJsonPostRequest(url, null).getAsJsonObject();
+		JsonObject response = Util.makeJsonPostRequest(url, null).getAsJsonObject();
 
 		// Null session
 		this.session = null;
