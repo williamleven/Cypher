@@ -1,5 +1,6 @@
 package com.github.cypher.model;
 
+import com.github.cypher.sdk.Room;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -74,5 +75,37 @@ public class Client implements Updatable {
 
 	public void exit() {
 		updater.interrupt();
+	}
+
+	private void distributeRoom(Room room){
+		// Todo place in pm
+		if (isPmChat(room)){
+			pmCollection.addRoom(room);
+		}else{
+			String mainServer = extractServer(room.getCanonicalAlias());
+			addServer(mainServer);
+			boolean placed = false;
+			for (String alias : room.getAliases()) {
+				for (Server server: servers) {
+					if (server.getAddress().equals(extractServer(alias))) {
+						server.addRoom(room);
+						placed = true;
+					}
+				}
+			}
+			if (!placed){
+				genCollection.addRoom(room);
+			}
+		}
+
+	}
+
+	private boolean isPmChat(Room room) {
+		boolean hasName = (room.getName() != null && !room.getName().isEmpty());
+		return (room.getMemberCount() < 3 && !hasName);
+	}
+
+	private String extractServer(String input){
+		return input.split(":", 2)[1];
 	}
 }
