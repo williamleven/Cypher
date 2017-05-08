@@ -13,12 +13,6 @@ import java.nio.file.Paths;
 class SessionManager {
 	private static final String SESSION_FILE_NAME = "lastSession";
 
-	private final com.github.cypher.sdk.Client sdkClient;
-
-	public SessionManager(com.github.cypher.sdk.Client sdkClient) {
-		this.sdkClient = sdkClient;
-	}
-
 	public boolean savedSessionExists() {
 		Path lastSessionFilePath = Paths.get(Main.USER_DATA_DIRECTORY + File.separator + SESSION_FILE_NAME);
 		return Files.exists(lastSessionFilePath) && Files.isRegularFile(lastSessionFilePath);
@@ -26,7 +20,7 @@ class SessionManager {
 
 	// Returns null if loading failed
 	// Session is loaded from USER_DATA_DIRECTORY + File.separator + SESSION_FILE_NAME
-	public Session loadSession() {
+	public Session loadSessionFromDisk() {
 		Session lastSession = null;
 		FileInputStream fin = null;
 		ObjectInputStream ois = null;
@@ -68,12 +62,10 @@ class SessionManager {
 
 
 	// Session is saved to USER_DATA_DIRECTORY + File.separator + SESSION_FILE_NAME
-	public void saveSession() {
-		Session session = sdkClient.getSession();
-
+	public void saveSessionToDisk(Session session) {
 		if (session == null) {
 			if (DebugLogger.ENABLED) {
-				DebugLogger.log("Session not saved! SDK returned a null session.");
+				DebugLogger.log("Session not saved! Session parameter was null.");
 			}
 			return;
 		}
@@ -109,6 +101,17 @@ class SessionManager {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
+		}
+	}
+
+	// Deletes the saved session (if it exists) from the disk. The path USER_DATA_DIRECTORY + File.separator + SESSION_FILE_NAME is used
+	public void deleteSessionFromDisk() {
+		try {
+			Files.deleteIfExists(Paths.get(Main.USER_DATA_DIRECTORY + File.separator + SESSION_FILE_NAME));
+		} catch (IOException e) {
+			if (DebugLogger.ENABLED) {
+				DebugLogger.log("Session file exists but deleting it failed!" + e.getMessage());
 			}
 		}
 	}

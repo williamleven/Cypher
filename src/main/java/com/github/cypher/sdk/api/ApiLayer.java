@@ -46,13 +46,19 @@ public interface ApiLayer {
 	JsonObject getPublicRooms(String server) throws RestfulHTTPException, IOException;
 
 	/**
-	 * Authenticates the user and crates a new session
+	 * Authenticates the user and creates a new session.
 	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Session_management/post_matrix_client_r0_login">matrix.org</a>
 	 * @param username Username
 	 * @param password Password
 	 * @param homeserver A homeserver to connect trough (e.g. example.org:8448 or matrix.org)
 	 */
 	void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException;
+
+	/**
+	 * Invalidates the current session.
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Session32management/post_matrix_client_r0_logout">matrix.org</a>
+	 */
+	void logout() throws RestfulHTTPException, IOException;
 
 	/**
 	 * Use a refresh token to create a new Session

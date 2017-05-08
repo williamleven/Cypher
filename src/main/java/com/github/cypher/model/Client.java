@@ -38,20 +38,16 @@ public class Client implements Updatable {
 	public Client(com.github.cypher.sdk.Client c, Settings settings) {
 		sdkClient = c;
 		this.settings = settings;
-		sessionManager = new SessionManager(sdkClient);
+		sessionManager = new SessionManager();
 
 		// Loads the session file from the disk if it exists.
 		if (sessionManager.savedSessionExists()) {
-			Session session = sessionManager.loadSession();
+			Session session = sessionManager.loadSessionFromDisk();
 			// If not session exists SessionManager::loadSession returns null
 			if (session != null) {
+				// No guarantee that the session is valid. setSession doesn't throw an exception if the session is invalid.
 				sdkClient.setSession(session);
-				// Checks if the loaded session is valid. If it is, sets logged in to true.
-				if (sdkClient.validateCurrentSession()) {
-					loggedIn.setValue(true);
-				} else {
-					//TODO logout? setSession(null)?
-				}
+				loggedIn.setValue(true);
 			}
 		}
 
@@ -62,6 +58,11 @@ public class Client implements Updatable {
 
 	public void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
 		sdkClient.login(username, password, homeserver);
+	}
+
+	public void logout() throws RestfulHTTPException, IOException {
+		sdkClient.logout();
+		sessionManager.deleteSessionFromDisk();
 	}
 
 	// Add roomcollection, room or private chat
@@ -94,7 +95,7 @@ public class Client implements Updatable {
 
 	public void exit() {
 		if (settings.getSaveSession()) {
-			sessionManager.saveSession();
+			sessionManager.saveSessionToDisk(sdkClient.getSession());
 		}
 		updater.interrupt();
 	}

@@ -84,11 +84,6 @@ public class Client {
 		api.setSession(session);
 	}
 
-	public boolean validateCurrentSession() {
-		//TODO
-		return true;
-	}
-
 	/**
 	 * Call ApiLayer.login(...)
 	 * @see com.github.cypher.sdk.api.ApiLayer#login(String, String, String)
@@ -97,6 +92,16 @@ public class Client {
 	 */
 	public void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
 		api.login(username, password, homeserver);
+	}
+
+	/**
+	 * Call ApiLayer.logout(...)
+	 * @see com.github.cypher.sdk.api.ApiLayer#logout()
+	 * @throws RestfulHTTPException
+	 * @throws IOException
+	 */
+	public void logout() throws RestfulHTTPException, IOException {
+		api.logout();
 	}
 
 	/**

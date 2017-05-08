@@ -3,7 +3,9 @@ package com.github.cypher.root.login;
 import com.github.cypher.DebugLogger;
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
+import com.github.cypher.root.Executor;
 import com.github.cypher.sdk.api.RestfulHTTPException;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
@@ -20,6 +22,9 @@ public class LoginPresenter {
 	@Inject
 	private Settings settings;
 
+	@Inject
+	private Executor executor;
+
 	@FXML
 	private TextField usernameField;
 
@@ -35,20 +40,21 @@ public class LoginPresenter {
 	@FXML
 	private void login() {
 		if (usernameField.getText() != null && passwordField.getText() != null && homeserverField.getText() != null) {
-
-			try {
-				client.login(usernameField.getText(), passwordField.getText(), homeserverField.getText());
-				client.loggedIn.setValue(true);
-				settings.setSaveSession(rememberMeCheckBox.isSelected());
-			} catch (RestfulHTTPException e) {
-				if (DebugLogger.ENABLED) {
-					DebugLogger.log("RestfulHTTPException when trying to login - " + e.getMessage());
+			executor.handle(() -> {
+				try {
+					client.login(usernameField.getText(), passwordField.getText(), homeserverField.getText());
+					Platform.runLater(() -> client.loggedIn.set(true));
+					settings.setSaveSession(rememberMeCheckBox.isSelected());
+				} catch (RestfulHTTPException e) {
+					if (DebugLogger.ENABLED) {
+						DebugLogger.log("RestfulHTTPException when trying to login - " + e.getMessage());
+					}
+				} catch (IOException e) {
+					if (DebugLogger.ENABLED) {
+						DebugLogger.log("IOException when trying to login - " + e.getMessage());
+					}
 				}
-			} catch (IOException e) {
-				if (DebugLogger.ENABLED) {
-					DebugLogger.log("IOException when trying to login - " + e.getMessage());
-				}
-			}
+			});
 		}
 	}
 }
