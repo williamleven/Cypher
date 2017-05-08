@@ -59,29 +59,29 @@ public class MessageItemPresenter extends CustomListCell<Message> {
 	@Override
 	protected void updateBindings() {
 		Message message = getModelComponent();
-		author.textProperty().bind(message.getAuthor());
+		author.textProperty().bind(message.authorProperty());
 
-		if(message.getFormattedBody().get() != null) {
+		if(message.getFormattedBody() != null) {
 			formatted = true;
-			message.getFormattedBody().addListener(bodyChangeListener);
+			message.formattedBodyProperty().addListener(bodyChangeListener);
 		} else {
-			message.getBody().addListener(bodyChangeListener);
+			message.bodyProperty().addListener(bodyChangeListener);
 		}
 
 		if(formatted) {
-			generateFormattedTextObjects(message.getFormattedBody().get());
+			generateFormattedTextObjects(message.getFormattedBody());
 		} else {
-			generateTextObjects(message.getBody().get());
+			generateTextObjects(message.getBody());
 		}
-		avatar.imageProperty().bind(message.getAvatar());
+		avatar.imageProperty().bind(message.avatarProperty());
 	}
 
 	@Override
 	protected void clearBindings() {
 		Message message = getModelComponent();
 		author.textProperty().unbind();
-		message.getBody().removeListener(bodyChangeListener);
-		message.getFormattedBody().removeListener(bodyChangeListener);
+		message.bodyProperty().removeListener(bodyChangeListener);
+		message.formattedBodyProperty().removeListener(bodyChangeListener);
 		avatar.imageProperty().unbind();
 	}
 

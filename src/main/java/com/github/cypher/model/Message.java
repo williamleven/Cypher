@@ -7,10 +7,10 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
 public class Message {
-	private StringProperty        body;
-	private StringProperty        formattedBody;
-	private StringProperty        author;
-	private ObjectProperty<Image> avatar;
+	private final StringProperty        body;
+	private final StringProperty        formattedBody;
+	private final StringProperty        author;
+	private final ObjectProperty<Image> avatar;
 
 	public Message(String author, String body) {
 		this.author = new SimpleStringProperty(author);
@@ -26,8 +26,35 @@ public class Message {
 		this.avatar = new SimpleObjectProperty<>(null);
 	}
 
-	public StringProperty getBody() { return body; }
-	public StringProperty getFormattedBody() { return formattedBody; }
-	public StringProperty getAuthor() { return author; }
-	public ObjectProperty<Image> getAvatar() { return avatar; }
+	public String getBody() {
+		return body.get();
+	}
+
+	public StringProperty bodyProperty() {
+		return body;
+	}
+
+	public String getFormattedBody() {
+		return formattedBody.get();
+	}
+
+	public StringProperty formattedBodyProperty() {
+		return formattedBody;
+	}
+
+	public String getAuthor() {
+		return author.get();
+	}
+
+	public StringProperty authorProperty() {
+		return author;
+	}
+
+	public Image getAvatar() {
+		return avatar.get();
+	}
+
+	public ObjectProperty<Image> avatarProperty() {
+		return avatar;
+	}
 }
