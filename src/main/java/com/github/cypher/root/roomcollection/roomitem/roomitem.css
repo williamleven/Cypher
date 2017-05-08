@@ -37,3 +37,7 @@
 .room-item:selected > .room-item-selector {
 	-fx-fill: #09cdda;
 }
+
+.room-item-avatar-border {
+    -fx-fill: -fx-base
+}
