@@ -1,17 +1,21 @@
+.room-item {
+	-fx-background-color: -room-item-background;
+}
+
 /* Disable all TextArea stylng */
 .topic-area {
 	-fx-text-box-border: transparent;
 	-fx-font-style: italic;
 	-fx-background-insets: 0;
-	-fx-background-color: -fx-base;
+	-fx-background-color: -room-item-background;
 }
 
 .topic-area .content {
-	-fx-background-color: -fx-base;
+	-fx-background-color: -room-item-background;
 }
 
 .topic-area:focused .content {
-	-fx-background-color: -fx-base;
+	-fx-background-color: -room-item-background;
 }
 
 .topic-area:focused {
@@ -34,10 +38,6 @@
 	-fx-fill: transparent;
 }
 
-.room-item:selected > .room-item-selector {
-	-fx-fill: #09cdda;
-}
-
 .room-item-avatar-border {
-    -fx-fill: -fx-base
+	-fx-fill: -room-item-background
 }

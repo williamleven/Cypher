@@ -8,3 +8,16 @@
 .room-list .scroll-bar:horizontal .decrement-button {
 	-fx-padding: 0;
 }
+
+.room-list .list-cell {
+	-fx-padding: 2 0 2 0;
+	-fx-background-color: -room-list-background;
+}
+
+/* Color of the arrows which indicate the selected room item */
+.room-list .list-cell:selected .room-item > .room-item-selector {
+	-fx-fill: -room-item-selection-color;
+}
+.room-list .list-cell:selected {
+	-fx-background-color: -room-item-selection-color;
+}

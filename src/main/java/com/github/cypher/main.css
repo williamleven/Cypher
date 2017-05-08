@@ -14,3 +14,9 @@ AnchorPane {
 	-fx-min-width: 0px !important;
 	-fx-padding: 5px !important;
 }
+
+* {
+	-room-list-background: #f9f9f9;
+	-room-item-background: #e1e1e1;
+	-room-item-selection-color: #09cdda;
+}
