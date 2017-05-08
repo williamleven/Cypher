@@ -77,23 +77,23 @@ public class Client implements Updatable {
 		updater.interrupt();
 	}
 
-	private void distributeRoom(Room room){
+	private void distributeRoom(Room room) {
 		// Todo place in pm
-		if (isPmChat(room)){
+		if (isPmChat(room)) {
 			pmCollection.addRoom(room);
-		}else{
+		} else {
 			String mainServer = extractServer(room.getCanonicalAlias());
 			addServer(mainServer);
 			boolean placed = false;
 			for (String alias : room.getAliases()) {
-				for (Server server: servers) {
+				for (Server server : servers) {
 					if (server.getAddress().equals(extractServer(alias))) {
 						server.addRoom(room);
 						placed = true;
 					}
 				}
 			}
-			if (!placed){
+			if (!placed) {
 				genCollection.addRoom(room);
 			}
 		}
@@ -105,7 +105,7 @@ public class Client implements Updatable {
 		return (room.getMemberCount() < 3 && !hasName);
 	}
 
-	private String extractServer(String input){
+	private String extractServer(String input) {
 		return input.split(":", 2)[1];
 	}
 }
