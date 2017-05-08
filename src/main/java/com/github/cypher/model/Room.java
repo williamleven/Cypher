@@ -7,10 +7,10 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
 public class Room {
-	private StringProperty        id;
-	private StringProperty        name;
-	private StringProperty        topic;
-	private ObjectProperty<Image> avatar;
+	private final StringProperty        id;
+	private final StringProperty        name;
+	private final StringProperty        topic;
+	private final ObjectProperty<Image> avatar;
 
 	public Room(String id, String name, String topic) {
 		this.id    = new SimpleStringProperty(id);
