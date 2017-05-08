@@ -34,9 +34,9 @@ public class RootPresenter {
 
 		// Hide/move login pane to back if user is already logged in.
 		// This happens if a valid session is available when the application is launched.
-		//if (client.loggedIn.get()) {
+		if (client.loggedIn.get()) {
 			loginPane.toBack();
-		//}
+		}
 
 		client.loggedIn.addListener((observable, oldValue, newValue) -> {
 			if (newValue) {
