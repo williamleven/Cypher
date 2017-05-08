@@ -69,6 +69,7 @@ public interface ApiLayer {
 	 */
 	void refreshToken() throws RestfulHTTPException, IOException;
   
+	/**
 	 * Invalidates the current session.
 	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Session32management/post_matrix_client_r0_logout">matrix.org</a>
 	 */
