@@ -1,8 +1,11 @@
 package com.github.cypher.model;
 
+import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.io.IOException;
 
 public class Client implements Updatable {
 
@@ -35,6 +38,14 @@ public class Client implements Updatable {
 		updater = new Updater(500);
 		updater.add(this, 1);
 		updater.start();
+	}
+
+	public void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
+		sdkClient.login(username, password, homeserver);
+	}
+
+	public void logout() throws RestfulHTTPException, IOException {
+		sdkClient.logout();
 	}
 
 	// Add roomcollection, room or private chat

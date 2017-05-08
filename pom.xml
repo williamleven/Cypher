@@ -129,5 +129,10 @@
             <artifactId>ikonli-fontawesome-pack</artifactId>
             <version>1.9.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.moandjiezana.toml</groupId>
+            <artifactId>toml4j</artifactId>
+            <version>0.7.1</version>
+        </dependency>
     </dependencies>
 </project>
