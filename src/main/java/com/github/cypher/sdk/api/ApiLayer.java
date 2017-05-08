@@ -74,12 +74,6 @@ public interface ApiLayer {
 	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Session32management/post_matrix_client_r0_tokenrefresh">matrix.org</a>
 	 */
 	void refreshToken() throws RestfulHTTPException, IOException;
-  
-	/**
-	 * Invalidates the current session.
-	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Session32management/post_matrix_client_r0_logout">matrix.org</a>
-	 */
-	void logout() throws RestfulHTTPException, IOException;
 
 	/**
 	 * This API returns a list of message and state events for a room. It uses pagination query parameters to paginate history in the room.
