@@ -28,7 +28,7 @@
                       <TextField fx:id="usernameField" layoutX="126.0" layoutY="115.0" prefHeight="25.0" prefWidth="248.0" promptText="%username" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="125.0" />
                       <PasswordField fx:id="passwordField" layoutX="126.0" layoutY="161.0" prefHeight="25.0" prefWidth="248.0" promptText="%password" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="125.0" />
                       <TextField fx:id="homeserverField" layoutX="127.0" layoutY="203.0" prefHeight="25.0" prefWidth="248.0" promptText="%homeserver" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="125.0" />
-                  <CheckBox fx:id="rememberMeCheckBox" layoutX="127.0" layoutY="245.0" mnemonicParsing="false" text="Remember me" AnchorPane.leftAnchor="125.0" />
+                  <CheckBox fx:id="rememberMeCheckBox" layoutX="127.0" layoutY="245.0" mnemonicParsing="false" text="%rememberMe" AnchorPane.leftAnchor="125.0" />
                   </children>
               </AnchorPane>
           </children>
