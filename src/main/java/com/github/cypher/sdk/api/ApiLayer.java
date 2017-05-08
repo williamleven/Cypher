@@ -23,6 +23,18 @@ import java.net.URL;
 public interface ApiLayer {
 
 	/**
+	 * Gets the session
+	 * @return Session
+	 */
+	Session getSession();
+
+	/**
+	 * Sets the session
+	 * @param session Session
+	 */
+	void setSession(Session session);
+
+	/**
 	 * Synchronise the client's state and receive new messages.
 	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Room_participation/get_matrix_client_r0_sync">matrix.org</a>
 	 * @param filter Id of filter to be used on the sync data
@@ -51,6 +63,12 @@ public interface ApiLayer {
 	 */
 	void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException;
 
+	/**
+	 * Use a refresh token to create a new Session
+	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Session32management/post_matrix_client_r0_tokenrefresh">matrix.org</a>
+	 */
+	void refreshToken() throws RestfulHTTPException, IOException;
+  
 	/**
 	 * Invalidates the current session.
 	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Session32management/post_matrix_client_r0_logout">matrix.org</a>

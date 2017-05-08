@@ -10,6 +10,7 @@ enum Endpoint {
 	ROOM_CREATE       ("createRoom"),
 	ROOM_DIRECTORY    ("directory/room/{0}"),      // {0} = roomAlias
 	LOGIN             ("login"),
+	TOKEN_REFRESH     ("tokenrefresh"),
 	LOGOUT            ("logout"),
 	SYNC              ("sync"),
 	USER_PROFILE      ("profile/{0}"),             // {0} = userId
