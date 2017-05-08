@@ -10,9 +10,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.web.WebView;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.net.URL;
 
 public class LoginPresenter {
 
@@ -36,6 +38,16 @@ public class LoginPresenter {
 
 	@FXML
 	private CheckBox rememberMeCheckBox;
+
+	@FXML
+	private WebView webView;
+
+	@FXML
+	private void initialize() {
+		URL url = getClass().getResource("/particles/index.html");
+		System.out.println();
+		webView.getEngine().load(url.toString());
+	}
 
 	@FXML
 	private void login() {
