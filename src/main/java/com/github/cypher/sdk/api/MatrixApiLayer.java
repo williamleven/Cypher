@@ -40,7 +40,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	/**
-	 * Crates a new MatrixApiLayer without a session.
+	 * Creates a new MatrixApiLayer without a session.
 	 *
 	 * <p> Use {@link #login(String username, String password, String homeserver)} to create a session.
 	 */
@@ -67,6 +67,27 @@ public class MatrixApiLayer implements ApiLayer {
 
 		// Set Session
 		this.session = new Session(response);
+	}
+
+	@Override
+	public void logout() throws RestfulHTTPException, IOException {
+		// Only run if the session is set
+		if (session == null) {
+			return;
+		}
+
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.LOGOUT, null, parameters);
+
+		// Send request
+		JsonObject response = Util.makeJsonPostRequest(url, null).getAsJsonObject();
+
+		// Null session
+		this.session = null;
 	}
 
 	@Override
