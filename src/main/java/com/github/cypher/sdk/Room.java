@@ -7,13 +7,17 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sun.javafx.collections.ObservableMapWrapper;
+
+import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,11 +39,21 @@ public class Room {
 	private Image avatar = null;
 	private ObservableMap<String, Event> events = new ObservableMapWrapper<>(new HashMap<>());
 	private ObservableMap<String, Member> members = new ObservableMapWrapper<>(new HashMap<>());
+	private String[] aliases = null;
+	private String canonicalAlias = null;
 
 	Room(ApiLayer api, Client client, String id) {
 		this.api = api;
 		this.client = client;
 		this.id = id;
+	}
+
+	public String[] getAliases(){
+		return aliases.clone();
+	}
+
+	public String getCanonicalAlias(){
+		return canonicalAlias;
 	}
 
 	public void addEventListener(MapChangeListener<String, Event> listener) {
@@ -101,7 +115,31 @@ public class Room {
 				parseMessageEvent(originServerTs, sender, eventId, content);
 			} else if(eventType.equals("m.room.member")) {
 				parseMemberEvent(event, content);
+			} else if(eventType.equals("m.room.aliases")){
+				parseAliasesEvent(content);
+			} else if(eventType.equals("m.room.canonical_alias")){
+				parseCanonicalAlias(content);
 			}
+		}
+	}
+
+	private void parseCanonicalAlias(JsonObject content){
+		if (content.has("alias")){
+			canonicalAlias = content.get("alias").getAsString();
+		}
+	}
+
+	private void parseAliasesEvent(JsonObject content) {
+		if (content.has("aliases") &&
+			content.get("aliases").isJsonArray()){
+
+			JsonArray aliases = content.getAsJsonArray("aliases");
+
+			java.util.List<String> list = new ArrayList<String>();
+			for (JsonElement alias: aliases) {
+				list.add(alias.getAsString());
+			}
+			this.aliases = list.toArray(new String[list.size()]);
 		}
 	}
 
