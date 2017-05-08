@@ -24,6 +24,7 @@ public class Main extends Application {
 	private final Settings settings = new TOMLSettings();
 	private final Executor executor = new Executor();
 	private final Client client = new Client(new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings"), settings);
+	private final Executor executor = new Executor();
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {

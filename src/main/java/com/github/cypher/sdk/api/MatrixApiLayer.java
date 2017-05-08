@@ -82,7 +82,7 @@ public class MatrixApiLayer implements ApiLayer {
 	@Override
 	public void refreshToken() throws RestfulHTTPException, IOException {
 		// Only run if session is set
-		if(session == null) {
+		if (session == null) {
 			return;
 		}
 
@@ -95,34 +95,54 @@ public class MatrixApiLayer implements ApiLayer {
 		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.TOKEN_REFRESH, null, null);
 
 		// Build request body
-		JsonObject request  = new JsonObject();
+		JsonObject request = new JsonObject();
 		request.addProperty("refresh_token", session.getRefreshToken());
 
 		// Send Request
 		JsonObject response = Util.makeJsonPostRequest(url, request).getAsJsonObject();
 
 		// Check if response is valid
-		if(response.has("access_token")) {
+		if (response.has("access_token")) {
 
 			// If refresh token is available, use it
 			String refreshToken = null;
-			if(response.has("refresh_token")) {
+			if (response.has("refresh_token")) {
 				refreshToken = response.get("refresh_token").getAsString();
 			}
 
 			// Create new session object
 			session = new Session(
-					session.getUserId(),
-					response.get("access_token").getAsString(),
-					refreshToken,
-					session.getHomeServer(),
-					session.getDeviceId(),
-					0
+				session.getUserId(),
+				response.get("access_token").getAsString(),
+				refreshToken,
+				session.getHomeServer(),
+				session.getDeviceId(),
+				0
 			);
 		} else {
 			// Something went wrong, force re-login
 			session = null;
 		}
+	}
+  
+	public void logout() throws RestfulHTTPException, IOException {
+		// Only run if the session is set
+		if (session == null) {
+			return;
+		}
+
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.LOGOUT, null, parameters);
+
+		// Send request
+		JsonObject response = Util.makeJsonPostRequest(url, null).getAsJsonObject();
+
+		// Null session
+		this.session = null;
 	}
 
 	@Override
