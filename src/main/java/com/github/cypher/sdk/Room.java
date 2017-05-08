@@ -24,8 +24,9 @@ import java.util.Map;
 /**
  * This class contains the metadata of a Matrix chat room,
  * as well as its messages and information about its members.
- *
+ * <p>
  * <p>Room objects are returned by the methods of a Client object</p>
+ *
  * @see com.github.cypher.sdk.Client
  */
 public class Room {
@@ -48,11 +49,11 @@ public class Room {
 		this.id = id;
 	}
 
-	public String[] getAliases(){
+	public String[] getAliases() {
 		return aliases.clone();
 	}
 
-	public String getCanonicalAlias(){
+	public String getCanonicalAlias() {
 		return canonicalAlias;
 	}
 
@@ -83,14 +84,14 @@ public class Room {
 	}
 
 	private void parseTimelineData(JsonObject data) {
-		if(data.has("timeline") &&
-		   data.get("timeline").isJsonObject()) {
+		if (data.has("timeline") &&
+			data.get("timeline").isJsonObject()) {
 			JsonObject timeline = data.get("timeline").getAsJsonObject();
-			if(timeline.has("events") &&
-			   timeline.get("events").isJsonArray()) {
+			if (timeline.has("events") &&
+				timeline.get("events").isJsonArray()) {
 				JsonArray events = timeline.get("events").getAsJsonArray();
-				for(JsonElement eventElement : events) {
-					if(eventElement.isJsonObject()) {
+				for (JsonElement eventElement : events) {
+					if (eventElement.isJsonObject()) {
 						parseTimelineEventData(eventElement.getAsJsonObject());
 					}
 				}
@@ -99,11 +100,11 @@ public class Room {
 	}
 
 	private void parseTimelineEventData(JsonObject event) {
-		if(event.has("type") &&
-		   event.has("origin_server_ts") &&
-		   event.has("sender") &&
-		   event.has("event_id") &&
-		   event.has("content")) {
+		if (event.has("type") &&
+			event.has("origin_server_ts") &&
+			event.has("sender") &&
+			event.has("event_id") &&
+			event.has("content")) {
 
 			int originServerTs = event.get("origin_server_ts").getAsInt();
 			String sender = event.get("sender").getAsString();
@@ -111,32 +112,32 @@ public class Room {
 			String eventType = event.get("type").getAsString();
 			JsonObject content = event.get("content").getAsJsonObject();
 
-			if(eventType.equals("m.room.message")) {
+			if (eventType.equals("m.room.message")) {
 				parseMessageEvent(originServerTs, sender, eventId, content);
-			} else if(eventType.equals("m.room.member")) {
+			} else if (eventType.equals("m.room.member")) {
 				parseMemberEvent(event, content);
-			} else if(eventType.equals("m.room.aliases")){
+			} else if (eventType.equals("m.room.aliases")) {
 				parseAliasesEvent(content);
-			} else if(eventType.equals("m.room.canonical_alias")){
+			} else if (eventType.equals("m.room.canonical_alias")) {
 				parseCanonicalAlias(content);
 			}
 		}
 	}
 
-	private void parseCanonicalAlias(JsonObject content){
-		if (content.has("alias")){
+	private void parseCanonicalAlias(JsonObject content) {
+		if (content.has("alias")) {
 			canonicalAlias = content.get("alias").getAsString();
 		}
 	}
 
 	private void parseAliasesEvent(JsonObject content) {
 		if (content.has("aliases") &&
-			content.get("aliases").isJsonArray()){
+			content.get("aliases").isJsonArray()) {
 
 			JsonArray aliases = content.getAsJsonArray("aliases");
 
 			java.util.List<String> list = new ArrayList<String>();
-			for (JsonElement alias: aliases) {
+			for (JsonElement alias : aliases) {
 				list.add(alias.getAsString());
 			}
 			this.aliases = list.toArray(new String[list.size()]);
@@ -144,25 +145,25 @@ public class Room {
 	}
 
 	private void parseNameData(JsonObject data) {
-		if(data.has("name")) {
+		if (data.has("name")) {
 			name = data.get("name").getAsString();
 		}
 	}
 
 	private void parseTopicData(JsonObject data) {
-		if(data.has("topic")) {
+		if (data.has("topic")) {
 			topic = data.get("topic").getAsString();
 		}
 	}
 
 	private void parseAvatarUrlData(JsonObject data) {
-		if(data.has("avatar_url")) {
+		if (data.has("avatar_url")) {
 			try {
 				URL newAvatarUrl = new URL(data.get("avatar_url").getAsString());
-				if(!newAvatarUrl.equals(avatarUrl)) {
+				if (!newAvatarUrl.equals(avatarUrl)) {
 					// TODO: Get avatar image media
 				}
-			} catch(MalformedURLException e) {
+			} catch (MalformedURLException e) {
 				DebugLogger.log(e);
 			}
 		}
@@ -170,14 +171,14 @@ public class Room {
 
 	private void parseMessageEvent(int originServerTs, String sender, String eventId, JsonObject content) {
 		this.events.put(
-				eventId,
-				new Message(api, originServerTs, sender, eventId, content)
+			eventId,
+			new Message(api, originServerTs, sender, eventId, content)
 		);
 	}
 
 	private void parseMemberEvent(JsonObject event, JsonObject content) {
-		if(content.has("membership") &&
-		   event.has("state_key")) {
+		if (content.has("membership") &&
+			event.has("state_key")) {
 			String memberId = event.get("state_key").getAsString();
 			String membership = content.get("membership").getAsString();
 
@@ -186,8 +187,8 @@ public class Room {
 			if (membership.equals("join")) {
 				if (!members.containsKey(memberId)) {
 					members.put(
-							memberId,
-							new Member(user)
+						memberId,
+						new Member(user)
 					);
 				}
 			} else if (members.containsKey(memberId)) {
@@ -198,10 +199,11 @@ public class Room {
 
 	/**
 	 * Send a message event of the type "m.text" to this Matrix chat room
+	 *
 	 * @param message The message body
-	 * @see com.github.cypher.sdk.api.ApiLayer#roomSendEvent(String, String, JsonObject)
 	 * @throws RestfulHTTPException
 	 * @throws IOException
+	 * @see com.github.cypher.sdk.api.ApiLayer#roomSendEvent(String, String, JsonObject)
 	 */
 	public void sendTextMessage(String message) throws RestfulHTTPException, IOException {
 		JsonObject content = new JsonObject();
@@ -212,10 +214,11 @@ public class Room {
 
 	/**
 	 * Send a custom message event to this Matrix chat room
+	 *
 	 * @param content The json object containing the message
-	 * @see com.github.cypher.sdk.api.ApiLayer#roomSendEvent(String, String, JsonObject)
 	 * @throws RestfulHTTPException
 	 * @throws IOException
+	 * @see com.github.cypher.sdk.api.ApiLayer#roomSendEvent(String, String, JsonObject)
 	 */
 	public void sendMessage(JsonObject content) throws RestfulHTTPException, IOException {
 		api.roomSendEvent(this.id, "m.room.message", content);
@@ -224,11 +227,27 @@ public class Room {
 	/**
 	 * @return A valid room ID (e.g. "!cURbafjkfsMDVwdRDQ:matrix.org")
 	 */
-	public String getId() { return this.id; }
-	public String getName() { return name; }
-	public String getTopic() { return topic; }
-	public Image getAvatar() { return avatar; }
+	public String getId() {
+		return this.id;
+	}
 
-	public Map<String, Member> getMembers() { return new HashMap<>(members); }
-	public int getMemberCount() { return members.size(); }
+	public String getName() {
+		return name;
+	}
+
+	public String getTopic() {
+		return topic;
+	}
+
+	public Image getAvatar() {
+		return avatar;
+	}
+
+	public Map<String, Member> getMembers() {
+		return new HashMap<>(members);
+	}
+
+	public int getMemberCount() {
+		return members.size();
+	}
 }
