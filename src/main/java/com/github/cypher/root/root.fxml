@@ -10,31 +10,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<HBox xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.RootPresenter">
+<HBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.RootPresenter">
      <children>
          <AnchorPane minHeight="300.0" minWidth="-Infinity">
              <children>
-                 <Button layoutX="14.0" layoutY="34.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
-                     <styleClass>
-                         <String fx:value="btn" />
-                         <String fx:value="btn-info" />
-                         <String fx:value="image-btn" />
-                     </styleClass>
-                     <graphic>
-                         <FontIcon iconColor="WHITE" iconLiteral="fa-wechat" iconSize="40" />
-                     </graphic>
-                 </Button>
-                 <Button layoutX="5.0" layoutY="70.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="70.0">
-                     <styleClass>
-                         <String fx:value="btn" />
-                         <String fx:value="btn-info" />
-                         <String fx:value="image-btn" />
-                     </styleClass>
-                     <graphic>
-                         <FontIcon iconColor="WHITE" iconLiteral="fa-users" iconSize="40" />
-                     </graphic>
-                 </Button>
-                 <VBox layoutX="5.0" layoutY="134.0" prefHeight="309.0" AnchorPane.bottomAnchor="71.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="134.0">
+                 <VBox layoutX="5.0" layoutY="14.0" prefHeight="309.0" AnchorPane.bottomAnchor="191.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="14.0">
                      <children>
                          <ListView fx:id="roomCollectionListListView" focusTraversable="false" prefHeight="0.0" prefWidth="76.0" styleClass="server-list">
                              <VBox.margin>

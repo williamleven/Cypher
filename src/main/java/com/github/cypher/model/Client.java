@@ -1,7 +1,9 @@
 package com.github.cypher.model;
 
+import com.github.cypher.DebugLogger;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 public class Client implements Updatable {
@@ -9,6 +11,9 @@ public class Client implements Updatable {
 	private final Updater updater;
 
 	private final com.github.cypher.sdk.Client sdkClient;
+
+	//RoomCollections
+	private final ObservableList<RoomCollection> roomCollections = FXCollections.observableArrayList();
 
 	// Servers
 	private final ObservableList<Server> servers = FXCollections.observableArrayList();
@@ -34,7 +39,21 @@ public class Client implements Updatable {
 		sdkClient = c;
 		updater = new Updater(500);
 		updater.add(this, 1);
+		//testcode
+
+		roomCollections.add(pmCollection);
+		roomCollections.add(genCollection);
+		servers.addListener((ListChangeListener.Change<? extends Server> o) -> {
+			roomCollections.clear();
+			roomCollections.add(pmCollection);
+			roomCollections.add(genCollection);
+			roomCollections.addAll(servers);
+		});
+		//
+
+		DebugLogger.log(roomCollections);
 		updater.start();
+
 	}
 
 	// Add roomcollection, room or private chat
@@ -71,5 +90,8 @@ public class Client implements Updatable {
 
 	public ObservableList<Server> getServers() {
 		return servers;
+	}
+	public ObservableList<RoomCollection> getRoomCollections(){
+		return roomCollections;
 	}
 }
