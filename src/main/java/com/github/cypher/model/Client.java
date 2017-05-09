@@ -38,9 +38,9 @@ public class Client implements Updatable {
 
 	public Client(com.github.cypher.sdk.Client c) {
 		sdkClient = c;
-		
-		c.addJoinRoomsListener((change) -> {
-			if (change.wasAdded()){
+
+		sdkClient.addJoinRoomsListener((change) -> {
+			if (change.wasAdded()) {
 				distributeRoom(change.getValueAdded());
 			}
 		});
