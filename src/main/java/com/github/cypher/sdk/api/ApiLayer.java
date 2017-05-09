@@ -23,6 +23,18 @@ import java.net.URL;
 public interface ApiLayer {
 
 	/**
+	 * Gets the session
+	 * @return Session
+	 */
+	Session getSession();
+
+	/**
+	 * Sets the session
+	 * @param session Session
+	 */
+	void setSession(Session session);
+
+	/**
 	 * Synchronise the client's state and receive new messages.
 	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Room_participation/get_matrix_client_r0_sync">matrix.org</a>
 	 * @param filter Id of filter to be used on the sync data
@@ -43,13 +55,25 @@ public interface ApiLayer {
 	JsonObject getPublicRooms(String server) throws RestfulHTTPException, IOException;
 
 	/**
-	 * Authenticates the user and crates a new session
+	 * Authenticates the user and creates a new session.
 	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Session_management/post_matrix_client_r0_login">matrix.org</a>
 	 * @param username Username
 	 * @param password Password
 	 * @param homeserver A homeserver to connect trough (e.g. example.org:8448 or matrix.org)
 	 */
 	void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException;
+
+	/**
+	 * Invalidates the current session.
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Session32management/post_matrix_client_r0_logout">matrix.org</a>
+	 */
+	void logout() throws RestfulHTTPException, IOException;
+
+	/**
+	 * Use a refresh token to create a new Session
+	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Session32management/post_matrix_client_r0_tokenrefresh">matrix.org</a>
+	 */
+	void refreshToken() throws RestfulHTTPException, IOException;
 
 	/**
 	 * This API returns a list of message and state events for a room. It uses pagination query parameters to paginate history in the room.

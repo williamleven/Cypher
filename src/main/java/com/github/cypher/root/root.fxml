@@ -1,69 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-
-<?import javafx.scene.control.Button?>
-<?import java.lang.String?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.geometry.Insets?>
-<HBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.RootPresenter">
-     <children>
-         <AnchorPane minHeight="300.0" minWidth="-Infinity" >
-             <children>
-                 <Button layoutX="14.0" layoutY="34.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-                     <styleClass>
-                         <String fx:value="btn" />
-                         <String fx:value="btn-info" />
-                         <String fx:value="image-btn" />
-                     </styleClass>
-                     <graphic>
-                         <FontIcon iconColor="WHITE" iconLiteral="fa-wechat" iconSize="40" />
-                     </graphic>
-                 </Button>
-                 <Button layoutX="5.0" layoutY="70.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="70.0">
-                     <styleClass>
-                         <String fx:value="btn" />
-                         <String fx:value="btn-info" />
-                         <String fx:value="image-btn" />
-                     </styleClass>
-                     <graphic>
-                         <FontIcon iconColor="WHITE" iconLiteral="fa-users" iconSize="40" />
-                     </graphic>
-                 </Button>
-                 <VBox layoutX="5.0" layoutY="134.0" prefHeight="309.0" prefWidth="60.0" AnchorPane.bottomAnchor="71.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="134.0">
-                     <children>
-                         <ListView prefHeight="10.0" prefWidth="60.0">
-                             <VBox.margin>
-                                 <Insets bottom="6.0" />
-                             </VBox.margin>
-                         </ListView>
-                         <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0">
-                             <styleClass>
-                                 <String fx:value="btn" />
-                                 <String fx:value="btn-info" />
-                                 <String fx:value="image-btn" />
-                             </styleClass>
-                             <graphic>
-                                 <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="40" text="" />
-                             </graphic>
-                         </Button>
-                     </children>
-                 </VBox>
-                 <Button layoutX="13.0" layoutY="443.0" mnemonicParsing="false" onMouseClicked="#toggleSettings" prefHeight="60.0" prefWidth="60.0" style="-fx-min-width: 2px;" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
-                     <graphic>
-                         <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="40" textAlignment="CENTER" />
-                     </graphic>
-                     <styleClass>
-                         <String fx:value="btn-info" />
-                         <String fx:value="btn" />
-                         <String fx:value="image-btn" />
-                     </styleClass></Button>
-             </children>
-         </AnchorPane>
-         <StackPane fx:id="rightSideStackPane" HBox.hgrow="ALWAYS" />
-     </children>
-</HBox>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+<?import java.lang.*?>
+<StackPane fx:id="mainStackPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.RootPresenter">
+    <children>
+        <HBox>
+            <children>
+                <AnchorPane minHeight="300.0" minWidth="-Infinity">
+                    <children>
+                        <Button layoutX="14.0" layoutY="34.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                            <styleClass>
+                                <String fx:value="btn" />
+                                <String fx:value="btn-info" />
+                                <String fx:value="image-btn" />
+                            </styleClass>
+                            <graphic>
+                                <FontIcon iconColor="WHITE" iconLiteral="fa-wechat" iconSize="40" />
+                            </graphic>
+                        </Button>
+                        <Button layoutX="5.0" layoutY="70.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="70.0">
+                            <styleClass>
+                                <String fx:value="btn" />
+                                <String fx:value="btn-info" />
+                                <String fx:value="image-btn" />
+                            </styleClass>
+                            <graphic>
+                                <FontIcon iconColor="WHITE" iconLiteral="fa-users" iconSize="40" />
+                            </graphic>
+                        </Button>
+                        <VBox layoutX="5.0" layoutY="134.0" prefHeight="244.0" prefWidth="62.0" AnchorPane.bottomAnchor="136.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="134.0">
+                            <ListView prefHeight="10.0" prefWidth="60.0">
+                                <VBox.margin>
+                                    <Insets bottom="6.0" />
+                                </VBox.margin>
+                            </ListView>
+                            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0">
+                                <styleClass>
+                                    <String fx:value="btn" />
+                                    <String fx:value="btn-info" />
+                                    <String fx:value="image-btn" />
+                                </styleClass>
+                                <graphic>
+                                    <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="40" text="" />
+                                </graphic>
+                            </Button>
+                        </VBox>
+                        <Button layoutX="13.0" layoutY="370.0" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="60.0" style="-fx-min-width: 2px;" wrapText="true" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                            <graphic>
+                                <FontIcon iconColor="WHITE" iconLiteral="fa-angle-left" iconSize="40" textAlignment="CENTER" />
+                            </graphic>
+                            <styleClass>
+                                <String fx:value="btn-info" />
+                                <String fx:value="btn" />
+                                <String fx:value="image-btn" />
+                            </styleClass>
+                        </Button>
+                        <Button layoutX="13.0" layoutY="443.0" mnemonicParsing="false" onAction="#toggleSettings" prefHeight="60.0" prefWidth="60.0" style="-fx-min-width: 2px;" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                            <graphic>
+                                <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="40" textAlignment="CENTER" />
+                            </graphic>
+                            <styleClass>
+                                <String fx:value="btn-info" />
+                                <String fx:value="btn" />
+                                <String fx:value="image-btn" />
+                            </styleClass>
+                        </Button>
+                    </children>
+                </AnchorPane>
+                <StackPane fx:id="rightSideStackPane" HBox.hgrow="ALWAYS" />
+            </children>
+        </HBox>
+    </children>
+</StackPane>

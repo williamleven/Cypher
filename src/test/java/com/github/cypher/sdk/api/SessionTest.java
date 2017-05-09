@@ -16,19 +16,20 @@ public class SessionTest {
 		// Crate lacking json object
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("user_id", "234");
-		jsonObject.addProperty("access_token", "555");
 		jsonObject.addProperty("home_server", "matrix.org");
+		jsonObject.addProperty("refresh_token", "adj08aj9821321h9");
+		jsonObject.addProperty("device_id", "123");
 
 		// Make sure lacking object fails
 		try {
 			Session s = new Session(jsonObject);
-			assertFalse("Parsing should fail without device_id", true);
+			assertFalse("Parsing should fail without access_token", true);
 		}catch (IOException err){
 		}
 
 
 		// Complete Object
-		jsonObject.addProperty("device_id", "123");
+		jsonObject.addProperty("access_token", "555");
 
 		// Make sure complete object works
 		try{

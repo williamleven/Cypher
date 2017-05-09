@@ -24,7 +24,7 @@ public class TOMLSettings implements Settings {
 		String languageTag = Locale.getDefault().toLanguageTag();
 		int SDKTimeout = 500; // In ms
 		int modelTickInterval = 500; // In ms
-
+		boolean saveSession = false;
 	}
 
 	TOMLSettings() {
@@ -88,11 +88,26 @@ public class TOMLSettings implements Settings {
 	}
 
 	// Language setting
+	@Override
 	public synchronized Locale getLanguage() {
 		return Locale.forLanguageTag(settingsData.languageTag);
 	}
+
+	@Override
 	public synchronized void setLanguage(Locale language) {
 		settingsData.languageTag = language.toLanguageTag();
+		save();
+	}
+
+	//Save session ("keep me logged in") settings
+	@Override
+	public synchronized boolean getSaveSession() {
+		return settingsData.saveSession;
+	}
+
+	@Override
+	public synchronized void setSaveSession(boolean saveSession) {
+		settingsData.saveSession = saveSession;
 		save();
 	}
 
