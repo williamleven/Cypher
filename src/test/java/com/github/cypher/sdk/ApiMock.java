@@ -12,6 +12,7 @@ import java.net.URL;
 public class ApiMock implements ApiLayer {
 
 	boolean loggedIn = false;
+	boolean textMessageSent = false;
 
 	@Override
 	public JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence, int timeout) throws RestfulHTTPException, IOException {
@@ -179,6 +180,19 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public JsonObject roomSendEvent(String roomId, String eventType, JsonObject content) throws RestfulHTTPException, IOException {
+
+		if (roomId.equals("!zion:matrix.org") &&
+		    eventType.equals("m.room.message") &&
+		    content.has("body") &&
+		    content.has("msgtype") &&
+		    content.get("body").getAsString().equals("Down the rabbit hole") &&
+		    content.get("msgtype").getAsString().equals("m.text")) {
+			JsonObject response = new JsonObject();
+			response.addProperty("event_id", "OISAJdiojd8s");
+			textMessageSent = true;
+			return response;
+		}
+
 		return null;
 	}
 

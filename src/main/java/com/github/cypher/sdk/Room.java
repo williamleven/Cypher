@@ -191,6 +191,9 @@ public class Room {
 	public String getTopic() { return topic; }
 	public Image getAvatar() { return avatar; }
 
+	public Map<String, Event> getEvents() { return new HashMap<>(events); }
+	public int getEventCount() { return events.size(); }
+
 	public Map<String, Member> getMembers() { return new HashMap<>(members); }
 	public int getMemberCount() { return members.size(); }
 }
