@@ -5,18 +5,20 @@ import com.github.cypher.model.Client;
 import com.github.cypher.model.RoomCollection;
 import com.github.cypher.model.Server;
 import com.github.cypher.root.CustomListCell;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import javax.inject.Inject;
 
 
-public class ListItemPresenter extends CustomListCell<RoomCollection>{
+public class ListItemPresenter extends CustomListCell<RoomCollection> {
 
 	@Inject
 	private Client client;
@@ -25,22 +27,12 @@ public class ListItemPresenter extends CustomListCell<RoomCollection>{
 	private Settings settings;
 
 	@FXML
-	Button root;
-
-	private ImageView imageView = new ImageView();
+	AnchorPane root;
+	@FXML
+	private ImageView imageView;
 
 	@FXML
 	private void initialize() {
-		if (getModelComponent() instanceof Server){
-
-			imageView.setImage(new Image("https://hue.chalmers.it/assets/it-logo-54fcdb4210cc6e5f62676fee4e585a80.png"));
-			root = new Button("",imageView);
-		}
-		else {
-			root = new Button("",imageView);
-		}
-		root.getStyleClass().addAll("btn-info","btn","image-btn");
-		root.setPrefSize(60,60);
 	}
 
 	@FXML
@@ -58,7 +50,8 @@ public class ListItemPresenter extends CustomListCell<RoomCollection>{
 
 	@Override
 	protected void updateBindings() {
-			imageView.imageProperty().bind(getModelComponent().getImageProperty());
+		imageView.imageProperty().bind(getModelComponent().getImageProperty());
+		getModelComponent().getImageProperty().setValue(new Image("file:../../../../../../../../../../Users/Feffe/Pictures/nichibros-11h.jpg"));
 	}
 
 	@Override
