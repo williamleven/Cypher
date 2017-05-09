@@ -5,7 +5,6 @@ import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.root.Executor;
 import com.github.cypher.sdk.api.RestfulHTTPException;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
@@ -43,10 +42,15 @@ public class LoginPresenter {
 	private WebView webView;
 
 	@FXML
-	private void initialize() {
+	public void initialize() {
 		URL url = getClass().getResource("/particles/index.html");
 		System.out.println();
 		webView.getEngine().load(url.toString());
+	}
+
+	// Deinitializing has to be done when you are done with the class. Otherwise the interactive login background keeps running.
+	public void deinitialize() {
+		webView.getEngine().loadContent("");
 	}
 
 	@FXML
@@ -55,7 +59,7 @@ public class LoginPresenter {
 			executor.handle(() -> {
 				try {
 					client.login(usernameField.getText(), passwordField.getText(), homeserverField.getText());
-					Platform.runLater(() -> client.loggedIn.set(true));
+					client.loggedIn.set(true);
 					settings.setSaveSession(rememberMeCheckBox.isSelected());
 				} catch (RestfulHTTPException e) {
 					if (DebugLogger.ENABLED) {
