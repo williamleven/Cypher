@@ -59,7 +59,7 @@ public class MessageItemPresenter extends CustomListCell<Message> {
 	@Override
 	protected void updateBindings() {
 		Message message = getModelComponent();
-		author.textProperty().bind(message.authorProperty());
+		author.textProperty().bind(message.getAuthor().nameProperty());
 
 		if(message.getFormattedBody() != null) {
 			formatted = true;
@@ -73,7 +73,7 @@ public class MessageItemPresenter extends CustomListCell<Message> {
 		} else {
 			generateTextObjects(message.getBody());
 		}
-		avatar.imageProperty().bind(message.avatarProperty());
+		avatar.imageProperty().bind(message.getAuthor().avatarProperty());
 	}
 
 	@Override

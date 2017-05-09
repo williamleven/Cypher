@@ -1,29 +1,23 @@
 package com.github.cypher.model;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.image.Image;
 
 public class Message {
-	private final StringProperty        body;
-	private final StringProperty        formattedBody;
-	private final StringProperty        author;
-	private final ObjectProperty<Image> avatar;
+	private final User           author;
+	private final StringProperty body;
+	private final StringProperty formattedBody;
 
-	public Message(String author, String body) {
-		this.author = new SimpleStringProperty(author);
+	public Message(User author, String body) {
+		this.author = author;
 		this.body = new SimpleStringProperty(body);
 		this.formattedBody = new SimpleStringProperty(null);
-		this.avatar = new SimpleObjectProperty<>(null);
 	}
 
-	public Message(String author, String body, String formattedBody) {
-		this.author = new SimpleStringProperty(author);
+	public Message(User author, String body, String formattedBody) {
+		this.author = author;
 		this.body = new SimpleStringProperty(body);
 		this.formattedBody = new SimpleStringProperty(formattedBody);
-		this.avatar = new SimpleObjectProperty<>(null);
 	}
 
 	public String getBody() {
@@ -42,19 +36,7 @@ public class Message {
 		return formattedBody;
 	}
 
-	public String getAuthor() {
-		return author.get();
-	}
-
-	public StringProperty authorProperty() {
+	public User getAuthor() {
 		return author;
-	}
-
-	public Image getAvatar() {
-		return avatar.get();
-	}
-
-	public ObjectProperty<Image> avatarProperty() {
-		return avatar;
 	}
 }
