@@ -8,6 +8,8 @@ import javafx.collections.ObservableList;
 
 import java.io.IOException;
 
+import static com.github.cypher.model.Util.extractServer;
+
 public class Client implements Updatable {
 
 	private final Updater updater;
@@ -100,12 +102,9 @@ public class Client implements Updatable {
 
 	}
 
-	private boolean isPmChat(Room room) {
+	private static boolean isPmChat(Room room) {
 		boolean hasName = (room.getName() != null && !room.getName().isEmpty());
 		return (room.getMemberCount() < 3 && !hasName);
 	}
 
-	private String extractServer(String input) {
-		return input.split(":", 2)[1];
-	}
 }
