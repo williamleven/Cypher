@@ -12,6 +12,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableMap;
 
 import java.awt.*;
 import java.io.IOException;
@@ -34,10 +38,10 @@ public class Room {
 	private final Client client;
 
 	private final String id;
-	private String name = null;
-	private String topic = null;
-	private URL avatarUrl = null;
-	private Image avatar = null;
+	private final StringProperty name = new SimpleStringProperty(null);
+	private final StringProperty topic = new SimpleStringProperty(null);
+	private final ObjectProperty<URL> avatarUrl = new SimpleObjectProperty<>(null);
+	private final ObjectProperty<Image> avatar = new SimpleObjectProperty<>(null);
 	private ObservableMap<String, Event> events = new ObservableMapWrapper<>(new HashMap<>());
 	private ObservableMap<String, Member> members = new ObservableMapWrapper<>(new HashMap<>());
 	private final ObservableList<String> aliases = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
@@ -153,14 +157,14 @@ public class Room {
 	}
 
 	private void parseNameData(JsonObject data) {
-		if (data.has("name")) {
-			name = data.get("name").getAsString();
+		if(data.has("name")) {
+			name.set(data.get("name").getAsString());
 		}
 	}
 
 	private void parseTopicData(JsonObject data) {
-		if (data.has("topic")) {
-			topic = data.get("topic").getAsString();
+		if(data.has("topic")) {
+			topic.set(data.get("topic").getAsString());
 		}
 	}
 
@@ -171,16 +175,19 @@ public class Room {
 				if (!newAvatarUrl.equals(avatarUrl)) {
 					// TODO: Get avatar image media
 				}
-			} catch (MalformedURLException e) {
-				DebugLogger.log(e);
+			} catch(MalformedURLException e) {
+				if(DebugLogger.ENABLED) {
+					DebugLogger.log(e);
+				}
 			}
 		}
 	}
 
 	private void parseMessageEvent(int originServerTs, String sender, String eventId, JsonObject content) {
+		User author = client.getUser(sender);
 		this.events.put(
-			eventId,
-			new Message(api, originServerTs, sender, eventId, content)
+				eventId,
+				new Message(api, originServerTs, author, eventId, content)
 		);
 	}
 
@@ -232,24 +239,46 @@ public class Room {
 		api.roomSendEvent(this.id, "m.room.message", content);
 	}
 
+	public void addNameListener(ChangeListener<? super String> listener) {
+		name.addListener(listener);
+	}
+
+	public void removeNameListener(ChangeListener<? super String> listener) {
+		name.removeListener(listener);
+	}
+
+	public void addTopicListener(ChangeListener<? super String> listener) {
+		topic.addListener(listener);
+	}
+
+	public void removeTopicListener(ChangeListener<? super String> listener) {
+		topic.removeListener(listener);
+	}
+
+	public void addAvatarUrlListener(ChangeListener<? super URL> listener) {
+		avatarUrl.addListener(listener);
+	}
+
+	public void removeAvatarUrlListener(ChangeListener<? super URL> listener) {
+		avatarUrl.removeListener(listener);
+	}
+
+	public void addAvatarListener(ChangeListener<? super Image> listener) {
+		avatar.addListener(listener);
+	}
+
+	public void removeAvatarListener(ChangeListener<? super Image> listener) {
+		avatar.removeListener(listener);
+	}
+
 	/**
 	 * @return A valid room ID (e.g. "!cURbafjkfsMDVwdRDQ:matrix.org")
 	 */
-	public String getId() {
-		return this.id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getTopic() {
-		return topic;
-	}
-
-	public Image getAvatar() {
-		return avatar;
-	}
+	public String getId()        { return this.id; }
+	public String getName()      { return name.get(); }
+	public String getTopic()     { return topic.get(); }
+	public URL    getAvatarUrl() { return avatarUrl.get(); }
+	public Image  getAvatar()    { return avatar.get(); }
 
 	public Map<String, Member> getMembers() {
 		return new HashMap<>(members);
