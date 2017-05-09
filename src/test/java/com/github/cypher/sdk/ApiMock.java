@@ -151,7 +151,10 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public JsonObject getUserProfile(String userId) throws RestfulHTTPException, IOException {
-		return null;
+		JsonObject response = new JsonObject();
+		response.addProperty("displayname", "Morpheus");
+		response.addProperty("avatar_url", "mxc://matrix.org/7hdf98j8d0qwe");
+		return response;
 	}
 
 	@Override
