@@ -2,6 +2,7 @@ package com.github.cypher.sdk;
 
 import com.github.cypher.sdk.api.ApiLayer;
 import com.github.cypher.sdk.api.RestfulHTTPException;
+import com.github.cypher.sdk.api.Session;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -194,6 +195,26 @@ public class ApiMock implements ApiLayer {
 		}
 
 		return null;
+	}
+
+	@Override
+	public Session getSession() {
+		return null;
+	}
+
+	@Override
+	public void setSession(Session session) {
+
+	}
+
+	@Override
+	public void logout() throws RestfulHTTPException, IOException {
+
+	}
+
+	@Override
+	public void refreshToken() throws RestfulHTTPException, IOException {
+
 	}
 
 	@Override
