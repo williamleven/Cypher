@@ -126,10 +126,10 @@ public class Client implements Updatable {
 	}
 
 	private void distributeRoom(Room room) {
-		// Todo place in pm
+		// Place in PM
 		if (isPmChat(room)) {
 			pmCollection.addRoom(room);
-		} else {
+		} else { // Place in servers
 			String mainServer = extractServer(room.getCanonicalAlias());
 			addServer(mainServer);
 			boolean placed = false;
@@ -141,6 +141,7 @@ public class Client implements Updatable {
 					}
 				}
 			}
+			// Place in General if not placed in any server
 			if (!placed) {
 				genCollection.addRoom(room);
 			}
