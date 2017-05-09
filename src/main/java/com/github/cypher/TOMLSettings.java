@@ -21,6 +21,7 @@ public class TOMLSettings implements Settings {
 	// Class representing all settings
 	private static class SettingsData{
 		String languageTag = Locale.getDefault().toLanguageTag(); // Default Value
+		boolean saveSession = false;
 	}
 
 	TOMLSettings() {
@@ -84,11 +85,26 @@ public class TOMLSettings implements Settings {
 	}
 
 	// Language setting
+	@Override
 	public synchronized Locale getLanguage() {
 		return Locale.forLanguageTag(settingsData.languageTag);
 	}
+
+	@Override
 	public synchronized void setLanguage(Locale language) {
 		settingsData.languageTag = language.toLanguageTag();
+		save();
+	}
+
+	//Save session ("keep me logged in") settings
+	@Override
+	public synchronized boolean getSaveSession() {
+		return settingsData.saveSession;
+	}
+
+	@Override
+	public synchronized void setSaveSession(boolean saveSession) {
+		settingsData.saveSession = saveSession;
 		save();
 	}
 }

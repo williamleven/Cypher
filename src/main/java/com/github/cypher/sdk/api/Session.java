@@ -3,11 +3,12 @@ package com.github.cypher.sdk.api;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /*
 	Represents a User session
  */
-class Session {
+public class Session implements Serializable {
 
 	private final String userId;
 	private final String accessToken;
@@ -19,7 +20,7 @@ class Session {
 	/*
 		Parses the data from a login response to create a session
 	 */
-	Session(JsonObject loginResponse) throws IOException{
+	public Session(JsonObject loginResponse) throws IOException{
 
 		// Make sure response is valid
 		if (loginResponse.has("user_id") &&
