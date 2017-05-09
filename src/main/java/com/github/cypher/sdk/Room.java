@@ -8,10 +8,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sun.javafx.collections.ObservableMapWrapper;
 
-import javafx.collections.FXCollections;
-import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.*;
 
 import java.awt.*;
 import java.io.IOException;
@@ -40,21 +40,13 @@ public class Room {
 	private Image avatar = null;
 	private ObservableMap<String, Event> events = new ObservableMapWrapper<>(new HashMap<>());
 	private ObservableMap<String, Member> members = new ObservableMapWrapper<>(new HashMap<>());
-	private String[] aliases = null;
-	private String canonicalAlias = null;
+	private final ObservableList<String> aliases = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
+	private final StringProperty canonicalAlias = new SimpleStringProperty();
 
 	Room(ApiLayer api, Client client, String id) {
 		this.api = api;
 		this.client = client;
 		this.id = id;
-	}
-
-	public String[] getAliases() {
-		return aliases.clone();
-	}
-
-	public String getCanonicalAlias() {
-		return canonicalAlias;
 	}
 
 	public void addEventListener(MapChangeListener<String, Event> listener) {
@@ -71,6 +63,22 @@ public class Room {
 
 	public void removeMemberListener(MapChangeListener<String, Member> listener) {
 		members.removeListener(listener);
+	}
+
+	public void addAliasesListener(ListChangeListener<String> listener){
+		aliases.addListener(listener);
+	}
+
+	public void removeAliasesListener(ListChangeListener<String> listener){
+		aliases.removeListener(listener);
+	}
+
+	public void addCanonicalAliasListener(ChangeListener<String> listener){
+		canonicalAlias.addListener(listener);
+	}
+
+	public void removeCanonicalAliasListener(ChangeListener<String> listener){
+		canonicalAlias.removeListener(listener);
 	}
 
 	void update(JsonObject data) {
@@ -126,7 +134,7 @@ public class Room {
 
 	private void parseCanonicalAlias(JsonObject content) {
 		if (content.has("alias")) {
-			canonicalAlias = content.get("alias").getAsString();
+			canonicalAlias.setValue(content.get("alias").getAsString());
 		}
 	}
 
@@ -140,7 +148,7 @@ public class Room {
 			for (JsonElement alias : aliases) {
 				list.add(alias.getAsString());
 			}
-			this.aliases = list.toArray(new String[list.size()]);
+			this.aliases.setAll(list);
 		}
 	}
 
@@ -249,5 +257,13 @@ public class Room {
 
 	public int getMemberCount() {
 		return members.size();
+	}
+
+	public String[] getAliases() {
+		return (String[]) aliases.toArray();
+	}
+
+	public String getCanonicalAlias() {
+		return canonicalAlias.get();
 	}
 }
