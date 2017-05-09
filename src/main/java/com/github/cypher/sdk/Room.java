@@ -131,9 +131,10 @@ public class Room {
 	}
 
 	private void parseMessageEvent(int originServerTs, String sender, String eventId, JsonObject content) {
+		User author = client.getUser(sender);
 		this.events.put(
 				eventId,
-				new Message(api, originServerTs, sender, eventId, content)
+				new Message(api, originServerTs, author, eventId, content)
 		);
 	}
 

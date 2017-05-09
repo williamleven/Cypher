@@ -1,38 +1,51 @@
 package com.github.cypher.model;
 
+import com.github.cypher.DebugLogger;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
+import java.io.IOException;
+import java.net.URL;
+
 public class User {
 	private final StringProperty        id;
 	private final StringProperty        name;
+	private final ObjectProperty<URL> avatarUrl;
 	private final ObjectProperty<Image> avatar;
 
-	public User(String id) {
-		this.id = new SimpleStringProperty(id);
-		this.name = new SimpleStringProperty(null);
+	public User(com.github.cypher.sdk.User sdkUser) {
+		this.id = new SimpleStringProperty(sdkUser.getId());
+		this.name = new SimpleStringProperty(sdkUser.getName());
+		this.avatarUrl = new SimpleObjectProperty<>(sdkUser.getAvatarUrl());
 		this.avatar = new SimpleObjectProperty<>(null);
+		updateAvatar(sdkUser.getAvatar());
+
+		sdkUser.addNameListener((observable, oldValue, newValue) -> {
+			name.set(newValue);
+		});
+
+		sdkUser.addAvatarUrlListener((observable, oldValue, newValue) -> {
+			avatarUrl.set(newValue);
+		});
+
+		sdkUser.addAvatarListener((observable, oldValue, newValue) -> {
+			updateAvatar(newValue);
+		});
 	}
 
-	public User(String id, String name) {
-		this.id = new SimpleStringProperty(id);
-		this.name = new SimpleStringProperty(name);
-		this.avatar = new SimpleObjectProperty<>(null);
-	}
-
-	public User(String id, String name, Image avatar) {
-		this.id = new SimpleStringProperty(id);
-		this.name = new SimpleStringProperty(name);
-		this.avatar = new SimpleObjectProperty<>(avatar);
-	}
-
-	public User(String id, Image avatar) {
-		this.id = new SimpleStringProperty(id);
-		this.name = new SimpleStringProperty(null);
-		this.avatar = new SimpleObjectProperty<>(avatar);
+	private void updateAvatar(java.awt.Image image) {
+		try {
+			this.avatar.set(
+					image == null ? null : com.github.cypher.Util.createImage(image)
+			);
+		} catch(IOException e) {
+			if(DebugLogger.ENABLED) {
+				DebugLogger.log("IOException when converting user avatar image: " + e);
+			}
+		}
 	}
 
 	public String getId() {
@@ -49,6 +62,14 @@ public class User {
 
 	public StringProperty nameProperty() {
 		return name;
+	}
+
+	public URL getAvatarUrl() {
+		return avatarUrl.get();
+	}
+
+	public ObjectProperty<URL> avatarUrlProperty() {
+		return avatarUrl;
 	}
 
 	public Image getAvatar() {
