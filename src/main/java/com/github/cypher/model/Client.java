@@ -8,6 +8,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Client implements Updatable {
 
@@ -18,6 +20,8 @@ public class Client implements Updatable {
 
 	// Servers
 	private final ObservableList<Server> servers = FXCollections.observableArrayList();
+
+	private final Map<String, User> users = new HashMap<>();
 
 	// Personal messages
 	private final PMCollection pmCollection = new PMCollection();
@@ -74,6 +78,18 @@ public class Client implements Updatable {
 		} else if (Util.isUser(input)) {
 			addUser(input);
 		}
+	}
+
+	public User getUser(String id) {
+		if(users.containsKey(id)) {
+			return users.get(id);
+		}
+
+		com.github.cypher.sdk.User sdkUser = sdkClient.getUser(id);
+
+		User user = new User(sdkUser);
+		users.put(id, user);
+		return user;
 	}
 
 	private void addServer(String server) {
