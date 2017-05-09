@@ -22,3 +22,9 @@ AnchorPane {
 .block-monospace {
 	-fx-background-color: #777777;
 }
+
+* {
+	-room-list-background: #f9f9f9;
+	-room-item-background: #e1e1e1;
+	-room-item-selection-color: #09cdda;
+}

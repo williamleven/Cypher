@@ -48,6 +48,10 @@ public class Client implements Updatable {
 		sdkClient.login(username, password, homeserver);
 	}
 
+	public void logout() throws RestfulHTTPException, IOException {
+		sdkClient.logout();
+	}
+
 	// Add roomcollection, room or private chat
 	public void add(String input) {
 		if (Util.isHomeserver(input)) {

@@ -2,11 +2,9 @@ package com.github.cypher.sdk;
 
 import com.github.cypher.sdk.api.ApiLayer;
 import com.github.cypher.sdk.api.RestfulHTTPException;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.sun.javafx.collections.ObservableMapWrapper;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
@@ -85,6 +83,16 @@ public class Client {
 	 */
 	public void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
 		api.login(username, password, homeserver);
+	}
+
+	/**
+	 * Call ApiLayer.logout(...)
+	 * @see com.github.cypher.sdk.api.ApiLayer#logout()
+	 * @throws RestfulHTTPException
+	 * @throws IOException
+	 */
+	public void logout() throws RestfulHTTPException, IOException {
+		api.logout();
 	}
 
 	/**

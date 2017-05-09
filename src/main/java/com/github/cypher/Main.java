@@ -2,6 +2,7 @@ package com.github.cypher;
 
 import com.airhacks.afterburner.injection.Injector;
 import com.github.cypher.model.Client;
+import com.github.cypher.root.Executor;
 import com.github.cypher.root.RootView;
 import com.github.cypher.sdk.api.MatrixApiLayer;
 import com.github.cypher.sdk.api.MatrixMediaURLStreamHandlerFactory;
@@ -22,12 +23,14 @@ public class Main extends Application {
 
 	private final Client client = new Client(new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings"));
 	private final Settings settings = new TOMLSettings();
+	private final Executor executor = new Executor();
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
 		Locale.setDefault(settings.getLanguage());
-
+		// Starts the Executors thread
+		executor.start();
 		URL.setURLStreamHandlerFactory(new MatrixMediaURLStreamHandlerFactory());
 
 		// Dependency injection with afterburner.fx
@@ -37,6 +40,7 @@ public class Main extends Application {
 		Map<String, Object> customProperties = new HashMap<>();
 		customProperties.put("client", client); // This corresponds to the line @Inject Integer n1; in the Presenter
 		customProperties.put("settings", settings);
+		customProperties.put("executor", executor);
 		Injector.setConfigurationSource(customProperties::get);
 
 

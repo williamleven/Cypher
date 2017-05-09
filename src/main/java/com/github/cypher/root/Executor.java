@@ -3,7 +3,7 @@ package com.github.cypher.root;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-class Executor extends Thread {
+public class Executor extends Thread {
 
 	// Queue of actions
 	private Queue<Runnable> queue = new ConcurrentLinkedQueue<>();
