@@ -29,7 +29,7 @@ import java.util.Map;
  * This class contains the metadata of a Matrix chat room,
  * as well as its messages and information about its members.
  * <p>
- * <p>Room objects are returned by the methods of a Client object</p>
+ * Room objects are returned by the methods of a Client object
  *
  * @see com.github.cypher.sdk.Client
  */
