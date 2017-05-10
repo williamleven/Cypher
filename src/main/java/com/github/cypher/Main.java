@@ -11,11 +11,16 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import static com.github.cypher.Util.*;
 
 public class Main extends Application {
 	public static final String APPLICATION_NAME = "Cypher";
@@ -55,13 +60,76 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setMinWidth(1100);
 		primaryStage.setMinHeight(500);
+
+		// Only hide close the main window if system tray is enabled and supported.
 		primaryStage.setOnCloseRequest(event -> {
-			client.exit();
-			Platform.exit();
-			System.exit(0);
+			if (useSyetemTray()) {
+				primaryStage.close();
+			} else {
+				exit();
+			}
 		});
+		if (useSyetemTray()) {
+			addTrayIcon(primaryStage);
+		}
+
 		primaryStage.show();
 	}
+
+	private boolean useSyetemTray() {
+		return (SystemTray.isSupported() && settings.getExitToSystemTray());
+	}
+
+	private void addTrayIcon(Stage primaryStage) {
+
+		// Make sure application doesn't exit when main window is closed
+		Platform.setImplicitExit(false);
+
+		// Create the trayIcon
+		TrayIcon trayIcon = new TrayIcon(getIconImage(), capitalize(APPLICATION_NAME), new PopupMenu());
+		trayIcon.setImageAutoSize(true);
+
+		// Focus and show application on left click
+		trayIcon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				// Make sure left click
+				if (e.getButton() == 1) {
+					Platform.runLater(() -> {
+						primaryStage.show();
+						primaryStage.requestFocus();
+					});
+				}
+			}
+		});
+
+		{ /* The "SHOW" menu item */
+			MenuItem item = createMenuItem("Show", e -> {
+				Platform.runLater(() -> {
+					primaryStage.show();
+					primaryStage.requestFocus();
+				});
+			});
+			trayIcon.getPopupMenu().add(item);
+
+		}
+
+		{ /* The "EXIT" menu item */
+			MenuItem item = createMenuItem("Exit", e -> {
+				exit();
+			});
+			trayIcon.getPopupMenu().add(item);
+		}
+
+		// Add trayIcon to tray
+		try {
+			SystemTray.getSystemTray().add(trayIcon);
+		} catch (AWTException e) {
+			DebugLogger.log(e);
+		}
+	}
+
 
 	public static void main(String[] args) {
 		launch(args);
@@ -76,11 +144,9 @@ public class Main extends Application {
 		}
 	}
 
-	// Utility methods
-	private static String capitalize(String name){
-		return name.substring(0, 1).toUpperCase() + name.substring(1);
-	}
-	private static String decapitalize(String name){
-		return name.substring(0, 1).toLowerCase() + name.substring(1);
+	private void exit() {
+		client.exit();
+		Platform.exit();
+		System.exit(0);
 	}
 }
