@@ -4,8 +4,4 @@ public class Server implements RoomCollection {
 	Server(String server) {
 
 	}
-
-	void update() {
-
-	}
 }
