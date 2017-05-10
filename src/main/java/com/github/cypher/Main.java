@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static com.github.cypher.Util.*;
 
@@ -82,6 +83,9 @@ public class Main extends Application {
 
 	private void addTrayIcon(Stage primaryStage) {
 
+		// Load labels from bundle
+		ResourceBundle labels = ResourceBundle.getBundle("com.github.cypher.labels", Locale.getDefault());
+
 		// Make sure application doesn't exit when main window is closed
 		Platform.setImplicitExit(false);
 
@@ -105,7 +109,7 @@ public class Main extends Application {
 		});
 
 		{ /* The "SHOW" menu item */
-			MenuItem item = createMenuItem("Show", e -> {
+			MenuItem item = createMenuItem(labels.getString("show"), e -> {
 				Platform.runLater(() -> {
 					primaryStage.show();
 					primaryStage.requestFocus();
@@ -116,7 +120,7 @@ public class Main extends Application {
 		}
 
 		{ /* The "EXIT" menu item */
-			MenuItem item = createMenuItem("Exit", e -> {
+			MenuItem item = createMenuItem(labels.getString("exit"), e -> {
 				exit();
 			});
 			trayIcon.getPopupMenu().add(item);
