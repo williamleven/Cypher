@@ -46,6 +46,7 @@ public class LoginPresenter {
 		URL url = getClass().getResource("/particles/index.html");
 		System.out.println();
 		webView.getEngine().load(url.toString());
+		webView.contextMenuEnabledProperty().set(false);
 	}
 
 	// Deinitializing has to be done when you are done with the class. Otherwise the interactive login background keeps running.
