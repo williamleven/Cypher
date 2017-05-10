@@ -37,4 +37,12 @@ public class Util {
 		ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
 		return new javafx.scene.image.Image(in);
 	}
+
+	static String capitalize(String name) {
+		return name.substring(0, 1).toUpperCase() + name.substring(1);
+	}
+
+	static String decapitalize(String name) {
+		return name.substring(0, 1).toLowerCase() + name.substring(1);
+	}
 }
