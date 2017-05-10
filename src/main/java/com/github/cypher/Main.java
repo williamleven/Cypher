@@ -27,11 +27,6 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		//URL url = getClass().getResource("/particles/index.html");
-		//Path path = Paths.get(url.toURI());
-		//System.out.println(path.toString());
-
-
 		Locale.setDefault(settings.getLanguage());
 		// Starts the Executors thread
 		executor.start();
