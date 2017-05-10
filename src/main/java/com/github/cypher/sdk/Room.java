@@ -69,19 +69,19 @@ public class Room {
 		members.removeListener(listener);
 	}
 
-	public void addAliasesListener(ListChangeListener<String> listener){
+	public void addAliasesListener(ListChangeListener<String> listener) {
 		aliases.addListener(listener);
 	}
 
-	public void removeAliasesListener(ListChangeListener<String> listener){
+	public void removeAliasesListener(ListChangeListener<String> listener) {
 		aliases.removeListener(listener);
 	}
 
-	public void addCanonicalAliasListener(ChangeListener<String> listener){
+	public void addCanonicalAliasListener(ChangeListener<String> listener) {
 		canonicalAlias.addListener(listener);
 	}
 
-	public void removeCanonicalAliasListener(ChangeListener<String> listener){
+	public void removeCanonicalAliasListener(ChangeListener<String> listener) {
 		canonicalAlias.removeListener(listener);
 	}
 
@@ -97,10 +97,10 @@ public class Room {
 
 	private void parseTimelineData(JsonObject data) {
 		if (data.has("timeline") &&
-			data.get("timeline").isJsonObject()) {
+		    data.get("timeline").isJsonObject()) {
 			JsonObject timeline = data.get("timeline").getAsJsonObject();
 			if (timeline.has("events") &&
-				timeline.get("events").isJsonArray()) {
+			    timeline.get("events").isJsonArray()) {
 				JsonArray events = timeline.get("events").getAsJsonArray();
 				for (JsonElement eventElement : events) {
 					if (eventElement.isJsonObject()) {
@@ -113,10 +113,10 @@ public class Room {
 
 	private void parseTimelineEventData(JsonObject event) {
 		if (event.has("type") &&
-			event.has("origin_server_ts") &&
-			event.has("sender") &&
-			event.has("event_id") &&
-			event.has("content")) {
+		    event.has("origin_server_ts") &&
+		    event.has("sender") &&
+		    event.has("event_id") &&
+		    event.has("content")) {
 
 			int originServerTs = event.get("origin_server_ts").getAsInt();
 			String sender = event.get("sender").getAsString();
@@ -144,7 +144,7 @@ public class Room {
 
 	private void parseAliasesEvent(JsonObject content) {
 		if (content.has("aliases") &&
-			content.get("aliases").isJsonArray()) {
+		    content.get("aliases").isJsonArray()) {
 
 			JsonArray aliases = content.getAsJsonArray("aliases");
 
@@ -157,13 +157,13 @@ public class Room {
 	}
 
 	private void parseNameData(JsonObject data) {
-		if(data.has("name")) {
+		if (data.has("name")) {
 			name.set(data.get("name").getAsString());
 		}
 	}
 
 	private void parseTopicData(JsonObject data) {
-		if(data.has("topic")) {
+		if (data.has("topic")) {
 			topic.set(data.get("topic").getAsString());
 		}
 	}
@@ -175,8 +175,8 @@ public class Room {
 				if (!newAvatarUrl.equals(avatarUrl)) {
 					// TODO: Get avatar image media
 				}
-			} catch(MalformedURLException e) {
-				if(DebugLogger.ENABLED) {
+			} catch (MalformedURLException e) {
+				if (DebugLogger.ENABLED) {
 					DebugLogger.log(e);
 				}
 			}
@@ -186,14 +186,14 @@ public class Room {
 	private void parseMessageEvent(int originServerTs, String sender, String eventId, JsonObject content) {
 		User author = client.getUser(sender);
 		this.events.put(
-				eventId,
-				new Message(api, originServerTs, author, eventId, content)
-		);
+			eventId,
+			new Message(api, originServerTs, author, eventId, content)
+		               );
 	}
 
 	private void parseMemberEvent(JsonObject event, JsonObject content) {
 		if (content.has("membership") &&
-			event.has("state_key")) {
+		    event.has("state_key")) {
 			String memberId = event.get("state_key").getAsString();
 			String membership = content.get("membership").getAsString();
 
@@ -204,7 +204,7 @@ public class Room {
 					members.put(
 						memberId,
 						new Member(user)
-					);
+					           );
 				}
 			} else if (members.containsKey(memberId)) {
 				members.remove(memberId);
@@ -274,11 +274,25 @@ public class Room {
 	/**
 	 * @return A valid room ID (e.g. "!cURbafjkfsMDVwdRDQ:matrix.org")
 	 */
-	public String getId()        { return this.id; }
-	public String getName()      { return name.get(); }
-	public String getTopic()     { return topic.get(); }
-	public URL    getAvatarUrl() { return avatarUrl.get(); }
-	public Image  getAvatar()    { return avatar.get(); }
+	public String getId() {
+		return this.id;
+	}
+
+	public String getName() {
+		return name.get();
+	}
+
+	public String getTopic() {
+		return topic.get();
+	}
+
+	public URL getAvatarUrl() {
+		return avatarUrl.get();
+	}
+
+	public Image getAvatar() {
+		return avatar.get();
+	}
 
 	public Map<String, Member> getMembers() {
 		return new HashMap<>(members);
