@@ -1,6 +1,5 @@
 package com.github.cypher.model;
 
-import com.github.cypher.sdk.Room;
 import com.github.cypher.Settings;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;
@@ -47,7 +46,7 @@ public class Client implements Updatable {
 
 		sdkClient.addJoinRoomsListener((change) -> {
 			if (change.wasAdded()) {
-				distributeRoom(change.getValueAdded());
+				distributeRoom(new Room(change.getValueAdded()));
 			}
 		});
 		this.settings = settings;
