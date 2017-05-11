@@ -17,6 +17,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -85,7 +86,7 @@ public class Room {
 		canonicalAlias.removeListener(listener);
 	}
 
-	void update(JsonObject data) {
+	void update(JsonObject data) throws IOException{
 		parseNameData(data);
 
 		parseTopicData(data);
@@ -168,12 +169,12 @@ public class Room {
 		}
 	}
 
-	private void parseAvatarUrlData(JsonObject data) {
+	private void parseAvatarUrlData(JsonObject data) throws IOException {
 		if (data.has("avatar_url")) {
 			try {
 				URL newAvatarUrl = new URL(data.get("avatar_url").getAsString());
 				if (!newAvatarUrl.equals(avatarUrl)) {
-					// TODO: Get avatar image media
+					avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
 				}
 			} catch (MalformedURLException e) {
 				if (DebugLogger.ENABLED) {

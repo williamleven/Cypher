@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -59,8 +60,8 @@ public class User {
 		try {
 			if(profile.has("avatar_url")) {
 				URL newAvatarUrl = new URL(profile.get("avatar_url").getAsString());
-				if(!avatarUrl.equals(newAvatarUrl)) {
-					// TODO: Get avatar image media
+				if(!newAvatarUrl.equals(avatarUrl)) {
+					avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
 				}
 				avatarUrl.set(newAvatarUrl);
 			} else {

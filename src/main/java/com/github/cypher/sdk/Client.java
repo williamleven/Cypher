@@ -204,7 +204,7 @@ public class Client {
 		}
 	}
 
-	private void parseRoomEvents(JsonObject syncData) {
+	private void parseRoomEvents(JsonObject syncData) throws IOException {
 		if(syncData.has("rooms") &&
 				syncData.get("rooms").isJsonObject()) {
 
