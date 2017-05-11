@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -226,4 +227,14 @@ public interface ApiLayer {
 	 * @return Valid Json response containing the Room ID.
 	 */
 	JsonObject get3Pid() throws RestfulHTTPException, IOException;
+
+	/**
+	 * Download a file
+	 * @param mediaUrl The URL for the media content (e.g. "mxc://matrix.org/wefh34uihSDRGhw34")
+	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Media/get_matrix_media_r0_download_serverName_mediaId">matrix.org</a>
+	 * @return An InputStream from which the media content can be read
+	 * @throws RestfulHTTPException
+	 * @throws IOException
+	 */
+	InputStream getMediaContent(URL mediaUrl) throws RestfulHTTPException, IOException;
 }
