@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.cypher.model.Util.extractServer;
+
 public class Client implements Updatable {
 
 	private final Updater updater;
@@ -41,6 +43,12 @@ public class Client implements Updatable {
 
 	public Client(com.github.cypher.sdk.Client c, Settings settings) {
 		sdkClient = c;
+
+		sdkClient.addJoinRoomsListener((change) -> {
+			if (change.wasAdded()) {
+				distributeRoom(new Room(change.getValueAdded()));
+			}
+		});
 		this.settings = settings;
 		sessionManager = new SessionManager();
 
@@ -115,4 +123,34 @@ public class Client implements Updatable {
 		}
 		updater.interrupt();
 	}
+
+	private void distributeRoom(Room room) {
+		// Place in PM
+		if (isPmChat(room)) {
+			pmCollection.addRoom(room);
+		} else { // Place in servers
+			String mainServer = extractServer(room.getCanonicalAlias());
+			addServer(mainServer);
+			boolean placed = false;
+			for (String alias : room.getAliases()) {
+				for (Server server : servers) {
+					if (server.getAddress().equals(extractServer(alias))) {
+						server.addRoom(room);
+						placed = true;
+					}
+				}
+			}
+			// Place in General if not placed in any server
+			if (!placed) {
+				genCollection.addRoom(room);
+			}
+		}
+
+	}
+
+	private static boolean isPmChat(Room room) {
+		boolean hasName = (room.getName() != null && !room.getName().isEmpty());
+		return (room.getMemberCount() < 3 && !hasName);
+	}
+
 }
