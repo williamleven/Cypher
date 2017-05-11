@@ -3,7 +3,6 @@ package com.github.cypher.root;
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.RoomCollection;
-import com.github.cypher.model.Server;
 import com.github.cypher.root.roomcollection.RoomCollectionView;
 import com.github.cypher.root.roomcollectionlistitem.ListItemPresenter;
 import com.github.cypher.root.roomcollectionlistitem.ListItemView;
@@ -77,6 +76,5 @@ public class RootPresenter {
 	}
 
 	public void onAction(ActionEvent actionEvent) {
-		client.getServers().add(new Server("test"));
 	}
 }
