@@ -1,21 +1,21 @@
 package com.github.cypher.root.roomcollectionlistitem;
 
 import com.github.cypher.Settings;
-import com.github.cypher.model.Client;
-import com.github.cypher.model.RoomCollection;
-import com.github.cypher.model.Server;
+import com.github.cypher.model.*;
 import com.github.cypher.root.CustomListCell;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import javax.inject.Inject;
 
 
-
-public class ListItemPresenter extends CustomListCell<RoomCollection>{
+public class ListItemPresenter extends CustomListCell<RoomCollection> {
 
 	@Inject
 	private Client client;
@@ -24,10 +24,13 @@ public class ListItemPresenter extends CustomListCell<RoomCollection>{
 	private Settings settings;
 
 	@FXML
-	Button root;
-
+	private StackPane root;
 	@FXML
-	ImageView imageView;
+	private ImageView imageView;
+	@FXML
+	private FontIcon fontIcon;
+
+	private FontIcon fontIconKeeper = new FontIcon();
 
 	@FXML
 	private void initialize() {
@@ -48,7 +51,27 @@ public class ListItemPresenter extends CustomListCell<RoomCollection>{
 
 	@Override
 	protected void updateBindings() {
-		imageView.imageProperty().bind(getModelComponent().getImageProperty());
+		if (getModelComponent() instanceof Server) {
+			fontIcon.setIconColor(new Color(0,0,0,0));
+			imageView.imageProperty().bind(getModelComponent().getImageProperty());
+			getModelComponent().getImageProperty().setValue(new Image("file:../../../../../../../../../../Users/Feffe/Pictures/nichibros-11h.jpg"));
+		}
+		else if (getModelComponent() instanceof GeneralCollection || getModelComponent() instanceof PMCollection){
+			imageView.imageProperty().unbind();
+			imageView.imageProperty().setValue(null);
+			if (getModelComponent() instanceof GeneralCollection){
+				setIcon("fa-users");
+			}
+			else if(getModelComponent() instanceof PMCollection){
+				setIcon("fa-wechat");
+			}
+		}
+	}
+
+	private void setIcon(String literal){
+		fontIcon.setIconLiteral(literal);
+		fontIcon.setIconSize(40);
+		fontIcon.setIconColor(new Color(1,1,1,1));
 	}
 
 	@Override
