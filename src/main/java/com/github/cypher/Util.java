@@ -5,11 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.*;
 
 public class Util {
 	/**
@@ -52,9 +48,9 @@ public class Util {
 	static Image getIconImage() {
 		Image image = null;
 		try {
-			File pathToFile = new File(Util.class.getResource("/icon/small.gif").toURI());
-			image = ImageIO.read(pathToFile);
-		} catch (URISyntaxException | IOException ex) {
+			InputStream imageStream = Util.class.getResourceAsStream("/icon/small.gif");
+			image = ImageIO.read(imageStream);
+		} catch (IOException ex) {
 			DebugLogger.log(ex);
 		}
 		return image;
