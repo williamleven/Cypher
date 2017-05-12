@@ -3,17 +3,20 @@ package com.github.cypher.root;
 import com.github.cypher.DebugLogger;
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
+import com.github.cypher.root.login.LoginPresenter;
 import com.github.cypher.root.login.LoginView;
 import com.github.cypher.root.roomcollection.RoomCollectionView;
 import com.github.cypher.root.settings.SettingsView;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.util.Iterator;
 
 // Presenter for the root/main pane of the application
 public class RootPresenter {
@@ -36,23 +39,30 @@ public class RootPresenter {
 
 	@FXML
 	private void initialize() {
-		Parent loginPane = new LoginView().getView();
-		mainStackPane.getChildren().add(loginPane);
-
-
-		// Hide/move login pane to back if user is already logged in.
-		// This happens if a valid session is available when the application is launched.
-		if (client.loggedIn.get()) {
-			loginPane.toBack();
+		// Only load login pane if user is not already logged in
+		// User might already be logged in if a valid session is available when the application is launched
+		if (!client.loggedIn.get()) {
+			LoginView loginPane = new LoginView();
+			loginPane.getView().setUserData(loginPane.getPresenter());
+			mainStackPane.getChildren().add(loginPane.getView());
 		}
 
-		client.loggedIn.addListener((observable, oldValue, newValue) -> {
+		client.loggedIn.addListener((observable, oldValue, newValue) -> Platform.runLater(() -> {
 			if (newValue) {
-				loginPane.toBack();
+				// Iterators are used instead of for-each loop as the node is removed from inside the loop
+				for (Iterator<Node> iter = mainStackPane.getChildren().iterator(); iter.hasNext(); ) {
+					Node child = iter.next();
+					if (child.getUserData() != null && child.getUserData() instanceof LoginPresenter) {
+						((LoginPresenter) child.getUserData()).deinitialize();
+						iter.remove();
+					}
+				}
 			} else {
-				loginPane.toFront();
+				LoginView loginPane = new LoginView();
+				loginPane.getView().setUserData(loginPane.getPresenter());
+				mainStackPane.getChildren().add(loginPane.getView());
 			}
-		});
+		}));
 
 		Parent settingsPane = new SettingsView().getView();
 		rightSideStackPane.getChildren().add(settingsPane);
@@ -78,7 +88,7 @@ public class RootPresenter {
 		executor.handle(() -> {
 			try {
 				client.logout();
-				Platform.runLater(() -> client.loggedIn.setValue(false));
+				client.loggedIn.setValue(false);
 			} catch (RestfulHTTPException e) {
 				if (DebugLogger.ENABLED) {
 					DebugLogger.log("RestfulHTTPException when trying to logout - " + e.getMessage());
