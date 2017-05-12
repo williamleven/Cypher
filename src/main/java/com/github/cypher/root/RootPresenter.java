@@ -1,7 +1,6 @@
 package com.github.cypher.root;
 
 import com.github.cypher.DebugLogger;
-import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.RoomCollection;
 import com.github.cypher.root.login.LoginPresenter;
@@ -30,9 +29,6 @@ public class RootPresenter {
 	private Client client;
 
 	@Inject
-	private Settings settings;
-
-	@Inject
 	private Executor executor;
 
 	@FXML
@@ -42,7 +38,7 @@ public class RootPresenter {
 	private StackPane rightSideStackPane;
 
 	@FXML
-	private ListView roomCollectionListListView;
+	private ListView<RoomCollection> roomCollectionListView;
 
 	private static final double ROOM_COLLECTION_LIST_CELL_HEIGHT =60;
 	private static final double ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM =5;
@@ -87,18 +83,16 @@ public class RootPresenter {
 				roomCollectionPane.toFront();
 			}
 		});
-		roomCollectionListListView.setCellFactory((o) -> {
+
+		roomCollectionListView.setItems(client.getRoomCollections());
+		roomCollectionListView.setCellFactory(listView -> {
 			RoomCollectionListItemView roomCollectionListItemView = new RoomCollectionListItemView();
 			roomCollectionListItemView.getView();
 			return (RoomCollectionListItemPresenter) roomCollectionListItemView.getPresenter();
 		});
 
-
-		roomCollectionListListView.setItems(client.getRoomCollections());
-		updateListHeight();
-		client.getRoomCollections().addListener((ListChangeListener<? super RoomCollection>) (o) -> {
-			updateListHeight();
-		});
+		updateRoomCollectionListHeight();
+		client.getRoomCollections().addListener((ListChangeListener.Change<? extends RoomCollection> change) -> updateRoomCollectionListHeight());
 
 	}
 
@@ -107,11 +101,9 @@ public class RootPresenter {
 		client.showSettings.set(!client.showSettings.get());
 	}
 
-	private void updateListHeight() {
-		roomCollectionListListView.setPrefHeight((ROOM_COLLECTION_LIST_CELL_HEIGHT + ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM) * client.getRoomCollections().size() );
+	private void updateRoomCollectionListHeight() {
+		roomCollectionListView.setPrefHeight((ROOM_COLLECTION_LIST_CELL_HEIGHT + ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM) * client.getRoomCollections().size() );
 	}
-
-
 
 	@FXML
 	private void logout() {
