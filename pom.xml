@@ -56,10 +56,10 @@
                 <includes>
                     <include>**/*.xml</include>
                     <include>**/*.css</include>
-                    <include>**/*.css</include>
                     <include>**/*.properties</include>
                     <include>**/*.js</include>
                     <include>**/*.html</include>
+                    <include>**/*.png</include>
                 </includes>
             </resource>
             <resource>

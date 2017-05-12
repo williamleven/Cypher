@@ -5,5 +5,6 @@ import javafx.scene.image.Image;
 
 public interface RoomCollection {
 	void addRoom(Room room);
-	public ObjectProperty<Image> getImageProperty();
+	Image getImage();
+	ObjectProperty<Image> getImageProperty();
 }

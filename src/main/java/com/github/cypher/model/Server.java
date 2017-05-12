@@ -1,6 +1,5 @@
 package com.github.cypher.model;
 
-import com.github.cypher.model.Room;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -15,7 +14,7 @@ public class Server implements RoomCollection {
 		//TODO
 	}
 
-	String getAddress() {
+	public String getAddress() {
 		return null;
 	}
 
@@ -23,13 +22,14 @@ public class Server implements RoomCollection {
 	public void addRoom(Room room) {
 
 	}
-	public Server(){
 
+	@Override
+	public Image getImage() {
+		return imageProperty.get();
 	}
+
 	@Override
 	public ObjectProperty<Image> getImageProperty(){
 		return imageProperty;
 	}
-
-
 }

@@ -4,12 +4,11 @@ import com.github.cypher.DebugLogger;
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.RoomCollection;
-import com.github.cypher.model.Server;
 import com.github.cypher.root.login.LoginPresenter;
 import com.github.cypher.root.login.LoginView;
 import com.github.cypher.root.roomcollection.RoomCollectionView;
-import com.github.cypher.root.roomcollectionlistitem.ListItemPresenter;
-import com.github.cypher.root.roomcollectionlistitem.ListItemView;
+import com.github.cypher.root.roomcollectionlistitem.RoomCollectionListItemPresenter;
+import com.github.cypher.root.roomcollectionlistitem.RoomCollectionListItemView;
 import com.github.cypher.root.settings.SettingsView;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.application.Platform;
@@ -26,7 +25,6 @@ import java.util.Iterator;
 
 // Presenter for the root/main pane of the application
 public class RootPresenter {
-
 
 	@Inject
 	private Client client;
@@ -90,9 +88,9 @@ public class RootPresenter {
 			}
 		});
 		roomCollectionListListView.setCellFactory((o) -> {
-			ListItemView listItemView = new ListItemView();
-			listItemView.getView();
-			return (ListItemPresenter) listItemView.getPresenter();
+			RoomCollectionListItemView roomCollectionListItemView = new RoomCollectionListItemView();
+			roomCollectionListItemView.getView();
+			return (RoomCollectionListItemPresenter) roomCollectionListItemView.getPresenter();
 		});
 
 
