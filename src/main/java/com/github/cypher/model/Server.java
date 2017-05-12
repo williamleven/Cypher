@@ -1,6 +1,6 @@
 package com.github.cypher.model;
 
-import com.github.cypher.sdk.Room;
+import com.github.cypher.model.Room;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
