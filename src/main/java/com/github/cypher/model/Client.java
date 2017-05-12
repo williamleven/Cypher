@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.github.cypher.model.Util.extractServer;
 
@@ -26,9 +27,10 @@ public class Client implements Updatable {
 	private final ObservableList<RoomCollection> roomCollections = FXCollections.observableArrayList();
 
 	// Servers
-	private final ObservableList<Server> servers = FXCollections.observableArrayList();
+	private final ObservableList<Server> servers =
+		FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
-	private final Map<String, User> users = new HashMap<>();
+	private final Map<String, User> users = new ConcurrentHashMap<>();
 
 	// Personal messages
 	private final PMCollection pmCollection = new PMCollection();
