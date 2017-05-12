@@ -440,10 +440,15 @@ public class MatrixApiLayer implements ApiLayer {
 		//Build request URL.
 		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.MEDIA_DOWNLOAD, new Object[] {mediaUrl.getHost(),mediaUrl.getPath().replaceFirst("/", "")}, null);
 
-		// Setup the connection
-		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-		conn.setRequestMethod("GET");
-
-		return conn.getInputStream();
+		HttpURLConnection conn = null;
+		try {
+			// Setup the connection
+			conn = (HttpURLConnection)url.openConnection();
+			conn.setRequestMethod("GET");
+			return conn.getInputStream();
+		} catch (IOException e) {
+			Util.handleRestfulHTTPException(conn);
+			return null;
+		}
 	}
 }
