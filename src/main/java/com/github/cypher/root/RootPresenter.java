@@ -11,17 +11,14 @@ import com.github.cypher.root.roomcollection.RoomCollectionView;
 import com.github.cypher.root.roomcollectionlistitem.ListItemPresenter;
 import com.github.cypher.root.roomcollectionlistitem.ListItemView;
 import com.github.cypher.root.settings.SettingsView;
-import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
-import org.kordamp.ikonli.javafx.FontIcon;
 
 import javax.inject.Inject;
 import java.io.IOException;
