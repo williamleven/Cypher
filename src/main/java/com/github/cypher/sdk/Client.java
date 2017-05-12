@@ -14,6 +14,7 @@ import javafx.collections.ObservableMap;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class takes an ApiLayer object and parses
@@ -26,7 +27,7 @@ public class Client {
 
 	private final String settingsNamespace;
 
-	private Map<String, User> users = new HashMap<>();
+	private Map<String, User> users = new ConcurrentHashMap<>();
 
 	private ObservableMap<String, String> accountData =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
