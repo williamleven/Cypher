@@ -6,6 +6,7 @@ import com.github.cypher.root.roomcollection.directory.DirectoryView;
 import com.github.cypher.root.roomcollection.room.RoomView;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
@@ -20,6 +21,9 @@ public class RoomCollectionPresenter {
 
 	@FXML
 	private StackPane rightSideStackPane;
+
+	@FXML
+	private ListView roomList;
 
 	@FXML
 	private void initialize() {

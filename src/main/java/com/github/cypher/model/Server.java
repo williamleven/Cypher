@@ -14,6 +14,15 @@ public class Server implements RoomCollection {
 	public Server(String server) {
 		//TODO
 	}
+
+	String getAddress() {
+		return null;
+	}
+
+	@Override
+	public void addRoom(Room room) {
+
+	}
 	public Server(){
 
 	}

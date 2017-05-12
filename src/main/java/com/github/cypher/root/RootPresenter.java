@@ -1,20 +1,25 @@
 package com.github.cypher.root;
 
+import com.github.cypher.DebugLogger;
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.RoomCollection;
+import com.github.cypher.root.login.LoginView;
 import com.github.cypher.root.roomcollection.RoomCollectionView;
 import com.github.cypher.root.roomcollectionlistitem.ListItemPresenter;
 import com.github.cypher.root.roomcollectionlistitem.ListItemView;
 import com.github.cypher.root.settings.SettingsView;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
+import com.github.cypher.sdk.api.RestfulHTTPException;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
+import java.io.IOException;
 
 // Presenter for the root/main pane of the application
 public class RootPresenter {
@@ -25,6 +30,12 @@ public class RootPresenter {
 	@Inject
 	private Settings settings;
 
+	@Inject
+	private Executor executor;
+
+	@FXML
+	private StackPane mainStackPane;
+
 	@FXML
 	private StackPane rightSideStackPane;
 
@@ -34,10 +45,26 @@ public class RootPresenter {
 	private static final double ROOM_COLLECTION_LIST_CELL_HEIGHT =60;
 	private static final double ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM =5;
 
+
 	@FXML
 	private void initialize() {
+		Parent loginPane = new LoginView().getView();
+		mainStackPane.getChildren().add(loginPane);
 
 
+		// Hide/move login pane to back if user is already logged in.
+		// This happens if a valid session is available when the application is launched.
+		if (client.loggedIn.get()) {
+			loginPane.toBack();
+		}
+
+		client.loggedIn.addListener((observable, oldValue, newValue) -> {
+			if (newValue) {
+				loginPane.toBack();
+			} else {
+				loginPane.toFront();
+			}
+		});
 
 		Parent settingsPane = new SettingsView().getView();
 		rightSideStackPane.getChildren().add(settingsPane);
@@ -76,5 +103,23 @@ public class RootPresenter {
 	}
 
 	public void onAction(ActionEvent actionEvent) {
+	}
+
+	@FXML
+	private void logout() {
+		executor.handle(() -> {
+			try {
+				client.logout();
+				Platform.runLater(() -> client.loggedIn.setValue(false));
+			} catch (RestfulHTTPException e) {
+				if (DebugLogger.ENABLED) {
+					DebugLogger.log("RestfulHTTPException when trying to logout - " + e.getMessage());
+				}
+			} catch (IOException e) {
+				if (DebugLogger.ENABLED) {
+					DebugLogger.log("IOException when trying to logout - " + e.getMessage());
+				}
+			}
+		});
 	}
 }

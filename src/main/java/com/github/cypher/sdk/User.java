@@ -4,6 +4,8 @@ import com.github.cypher.DebugLogger;
 import com.github.cypher.sdk.api.ApiLayer;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.google.gson.JsonObject;
+import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
 
 import java.awt.*;
 import java.io.IOException;
@@ -20,12 +22,12 @@ public class User {
 	protected final ApiLayer api;
 
 	protected final String id;
-	protected String name = null;
-	protected URL avatarUrl = null;
-	protected Image avatar = null;
-	protected Presence presence = null;
-	protected Boolean isActive = null;
-	protected Long lastActiveAgo= null;
+	protected final StringProperty name               = new SimpleStringProperty(null);
+	protected final ObjectProperty<URL> avatarUrl     = new SimpleObjectProperty<>(null);
+	protected final ObjectProperty<Image> avatar      = new SimpleObjectProperty<>(null);
+	protected final ObjectProperty<Presence> presence = new SimpleObjectProperty<>(null);
+	protected final BooleanProperty isActive          = new SimpleBooleanProperty(false);
+	protected final LongProperty lastActiveAgo        = new SimpleLongProperty(0);
 
 	User(ApiLayer api, String id) {
 		this.api = api;
@@ -35,10 +37,10 @@ public class User {
 	User(ApiLayer api, String id, String name, URL avatarUrl, Boolean isActive, Long lastActiveAgo) {
 		this.api = api;
 		this.id = id;
-		this.name = name;
-		this.avatarUrl = avatarUrl;
-		this.isActive = isActive;
-		this.lastActiveAgo = lastActiveAgo;
+		this.name.set(name);
+		this.avatarUrl.set(avatarUrl);
+		this.isActive.set(isActive);
+		this.lastActiveAgo.set(lastActiveAgo);
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class User {
 		JsonObject profile = api.getUserProfile(id);
 
 		if(profile.has("displayname")) {
-			name = profile.get("displayname").getAsString();
+			name.set(profile.get("displayname").getAsString());
 		}
 
 		try {
@@ -60,10 +62,10 @@ public class User {
 				if(!avatarUrl.equals(newAvatarUrl)) {
 					// TODO: Get avatar image media
 				}
-				avatarUrl = newAvatarUrl;
+				avatarUrl.set(newAvatarUrl);
 			} else {
-				avatarUrl = null;
-				avatar = null;
+				avatarUrl.set(null);
+				avatar.set(null);
 			}
 		} catch(MalformedURLException e) {
 			DebugLogger.log(e);
@@ -78,20 +80,70 @@ public class User {
 			if(type.equals("m.presence") &&
 			   contentObject.has("presence")) {
 				String presenceString = contentObject.get("presence").getAsString();
-				presence = Presence.ONLINE;
+				presence.set(Presence.ONLINE);
 				if(presenceString.equals("offline")) {
-					presence = Presence.OFFLINE;
+					presence.set(Presence.OFFLINE);
 				} else if(presenceString.equals("unavailable")) {
-					presence = Presence.UNAVAILABLE;
+					presence.set(Presence.UNAVAILABLE);
 				}
 			}
 		}
 	}
 
+	public void addNameListener(ChangeListener<? super String> listener) {
+		name.addListener(listener);
+	}
+
+	public void removeNameListener(ChangeListener<? super String> listener) {
+		name.removeListener(listener);
+	}
+
+	public void addAvatarUrlListener(ChangeListener<? super URL> listener) {
+		avatarUrl.addListener(listener);
+	}
+
+	public void removeAvatarUrlListener(ChangeListener<? super URL> listener) {
+		avatarUrl.removeListener(listener);
+	}
+
+	public void addAvatarListener(ChangeListener<? super Image> listener) {
+		avatar.addListener(listener);
+	}
+
+	public void removeAvatarListener(ChangeListener<? super Image> listener) {
+		avatar.removeListener(listener);
+	}
+
+	public void addPresenceListener(ChangeListener<? super Presence> listener) {
+		presence.addListener(listener);
+	}
+
+	public void removePresenceListener(ChangeListener<? super Presence> listener) {
+		presence.removeListener(listener);
+	}
+
+	public void addIsActiveListener(ChangeListener<? super Boolean> listener) {
+		isActive.addListener(listener);
+	}
+
+	public void removeIsActiveListener(ChangeListener<? super Boolean> listener) {
+		isActive.removeListener(listener);
+	}
+
+	public void addLastActiveAgoListener(ChangeListener<? super Number> listener) {
+		lastActiveAgo.addListener(listener);
+	}
+
+	public void removeLastActiveAgoListener(ChangeListener<? super Number> listener) {
+		lastActiveAgo.removeListener(listener);
+	}
+
+
+
 	public String getId() { return id; }
-	public String getName() { return name; }
-	public URL getAvatarUrl() { return avatarUrl; }
-	public Image getAvatar() { return avatar; }
-	public boolean getIsActive() { return isActive; }
-	public long getLastActiveAgo() { return lastActiveAgo; }
+	public String getName() { return name.get(); }
+	public URL getAvatarUrl() { return avatarUrl.get(); }
+	public Image getAvatar() { return avatar.get(); }
+	public boolean getIsActive() { return isActive.get(); }
+	public long getLastActiveAgo() { return lastActiveAgo.get(); }
 }

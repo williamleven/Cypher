@@ -8,4 +8,8 @@ public class PMCollection implements RoomCollection {
 	public ObjectProperty<Image> getImageProperty() {
 		return null;
 	}
+	@Override
+	public void addRoom(Room room) {
+
+	}
 }
