@@ -95,7 +95,7 @@ public class Main extends Application {
 		Platform.setImplicitExit(false);
 
 		// Set image and status
-		systemTray.setImage(getClass().getResourceAsStream("/icon/small.gif"));
+		systemTray.setImage(getClass().getResourceAsStream("/icon.png"));
 		systemTray.setStatus("Cypher");
 
 		{ /* The "SHOW" menu item */

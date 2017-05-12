@@ -74,7 +74,7 @@
                     <include>**/*.css</include>
                     <include>**/*.css</include>
                     <include>**/*.properties</include>
-                    <include>**/*.gif</include>
+                    <include>**/*.png</include>
                 </includes>
             </resource>
         </resources>
