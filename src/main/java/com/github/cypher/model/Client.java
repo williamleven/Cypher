@@ -5,10 +5,10 @@ import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,9 +21,13 @@ public class Client implements Updatable {
 	private final Settings settings;
 	private final SessionManager sessionManager;
 
+	//RoomCollections
+	private final ObservableList<RoomCollection> roomCollections =
+			FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
+
 	// Servers
 	private final ObservableList<Server> servers =
-		FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
+			FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
 	private final Map<String, User> users = new ConcurrentHashMap<>();
 
@@ -67,6 +71,18 @@ public class Client implements Updatable {
 
 		updater = new Updater(500);
 		updater.add(this, 1);
+		roomCollections.add(pmCollection);
+		roomCollections.add(genCollection);
+		servers.addListener((ListChangeListener.Change<? extends Server> change) -> {
+			while(change.next()) {
+				if (change.wasAdded()) {
+					roomCollections.addAll(change.getAddedSubList());
+				}
+				if (change.wasRemoved()) {
+					roomCollections.removeAll(change.getRemoved());
+				}
+			}
+		});
 		updater.start();
 	}
 
@@ -124,6 +140,14 @@ public class Client implements Updatable {
 			sessionManager.saveSessionToDisk(sdkClient.getSession());
 		}
 		updater.interrupt();
+	}
+
+	public ObservableList<RoomCollection> getRoomCollections(){
+		return roomCollections;
+	}
+
+	public ObservableList<Server> getServers() {
+		return servers;
 	}
 
 	private void distributeRoom(Room room) {

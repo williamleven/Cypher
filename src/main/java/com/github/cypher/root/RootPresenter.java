@@ -1,17 +1,21 @@
 package com.github.cypher.root;
 
 import com.github.cypher.DebugLogger;
-import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
+import com.github.cypher.model.RoomCollection;
 import com.github.cypher.root.login.LoginPresenter;
 import com.github.cypher.root.login.LoginView;
 import com.github.cypher.root.roomcollection.RoomCollectionView;
+import com.github.cypher.root.roomcollectionlistitem.RoomCollectionListItemPresenter;
+import com.github.cypher.root.roomcollectionlistitem.RoomCollectionListItemView;
 import com.github.cypher.root.settings.SettingsView;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
@@ -25,9 +29,6 @@ public class RootPresenter {
 	private Client client;
 
 	@Inject
-	private Settings settings;
-
-	@Inject
 	private Executor executor;
 
 	@FXML
@@ -35,6 +36,12 @@ public class RootPresenter {
 
 	@FXML
 	private StackPane rightSideStackPane;
+
+	@FXML
+	private ListView<RoomCollection> roomCollectionListView;
+
+	private static final double ROOM_COLLECTION_LIST_CELL_HEIGHT =60;
+	private static final double ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM =5;
 
 
 	@FXML
@@ -76,11 +83,26 @@ public class RootPresenter {
 				roomCollectionPane.toFront();
 			}
 		});
+
+		roomCollectionListView.setItems(client.getRoomCollections());
+		roomCollectionListView.setCellFactory(listView -> {
+			RoomCollectionListItemView roomCollectionListItemView = new RoomCollectionListItemView();
+			roomCollectionListItemView.getView();
+			return (RoomCollectionListItemPresenter) roomCollectionListItemView.getPresenter();
+		});
+
+		updateRoomCollectionListHeight();
+		client.getRoomCollections().addListener((ListChangeListener.Change<? extends RoomCollection> change) -> updateRoomCollectionListHeight());
+
 	}
 
 	@FXML
 	private void toggleSettings() {
 		client.showSettings.set(!client.showSettings.get());
+	}
+
+	private void updateRoomCollectionListHeight() {
+		roomCollectionListView.setPrefHeight((ROOM_COLLECTION_LIST_CELL_HEIGHT + ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM) * client.getRoomCollections().size() );
 	}
 
 	@FXML
