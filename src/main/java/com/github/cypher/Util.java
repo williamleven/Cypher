@@ -2,7 +2,6 @@ package com.github.cypher;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.*;
@@ -43,22 +42,5 @@ public class Util {
 
 	static String decapitalize(String name) {
 		return name.substring(0, 1).toLowerCase() + name.substring(1);
-	}
-
-	static Image getIconImage() {
-		Image image = null;
-		try {
-			InputStream imageStream = Util.class.getResourceAsStream("/icon/small.gif");
-			image = ImageIO.read(imageStream);
-		} catch (IOException ex) {
-			DebugLogger.log(ex);
-		}
-		return image;
-	}
-
-	static MenuItem createMenuItem(String label, ActionListener listener) {
-		MenuItem item = new MenuItem(label);
-		item.addActionListener(listener);
-		return item;
 	}
 }

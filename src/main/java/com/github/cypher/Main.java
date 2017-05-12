@@ -6,14 +6,13 @@ import com.github.cypher.root.Executor;
 import com.github.cypher.root.RootView;
 import com.github.cypher.sdk.api.MatrixApiLayer;
 import com.github.cypher.sdk.api.MatrixMediaURLStreamHandlerFactory;
+import dorkbox.systemTray.*;
+import dorkbox.systemTray.SystemTray;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
@@ -78,10 +77,16 @@ public class Main extends Application {
 	}
 
 	private boolean useSyetemTray() {
-		return (SystemTray.isSupported() && settings.getExitToSystemTray());
+		return (java.awt.SystemTray.isSupported() && settings.getExitToSystemTray());
 	}
 
 	private void addTrayIcon(Stage primaryStage) {
+
+		// Load systemtray
+		SystemTray systemTray = SystemTray.get();
+		if (systemTray == null) {
+			throw new RuntimeException("Unable to load SystemTray!");
+		}
 
 		// Load labels from bundle
 		ResourceBundle labels = ResourceBundle.getBundle("com.github.cypher.labels", Locale.getDefault());
@@ -89,49 +94,30 @@ public class Main extends Application {
 		// Make sure application doesn't exit when main window is closed
 		Platform.setImplicitExit(false);
 
-		// Create the trayIcon
-		TrayIcon trayIcon = new TrayIcon(getIconImage(), capitalize(APPLICATION_NAME), new PopupMenu());
-		trayIcon.setImageAutoSize(true);
-
-		// Focus and show application on left click
-		trayIcon.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-
-				// Make sure left click
-				if (e.getButton() == 1) {
-					Platform.runLater(() -> {
-						primaryStage.show();
-						primaryStage.requestFocus();
-					});
-				}
-			}
-		});
+		// Set image and status
+		systemTray.setImage(getClass().getResourceAsStream("/icon/small.gif"));
+		systemTray.setStatus("Cypher");
 
 		{ /* The "SHOW" menu item */
-			MenuItem item = createMenuItem(labels.getString("show"), e -> {
+			MenuItem item = new MenuItem(labels.getString("show"), e -> {
 				Platform.runLater(() -> {
 					primaryStage.show();
 					primaryStage.requestFocus();
 				});
 			});
-			trayIcon.getPopupMenu().add(item);
+			item.setShortcut('o');
+			systemTray.getMenu().add(item);
 
 		}
 
 		{ /* The "EXIT" menu item */
-			MenuItem item = createMenuItem(labels.getString("exit"), e -> {
+			MenuItem item = new MenuItem(labels.getString("exit"), e -> {
 				exit();
 			});
-			trayIcon.getPopupMenu().add(item);
+			item.setShortcut('q');
+			systemTray.getMenu().add(item);
 		}
 
-		// Add trayIcon to tray
-		try {
-			SystemTray.getSystemTray().add(trayIcon);
-		} catch (AWTException e) {
-			DebugLogger.log(e);
-		}
 	}
 
 
