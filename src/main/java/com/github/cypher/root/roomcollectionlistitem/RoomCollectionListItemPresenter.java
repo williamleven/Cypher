@@ -6,7 +6,6 @@ import com.github.cypher.root.CustomListCell;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -15,7 +14,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import javax.inject.Inject;
 
 
-public class ListItemPresenter extends CustomListCell<RoomCollection> {
+public class RoomCollectionListItemPresenter extends CustomListCell<RoomCollection> {
 
 	@Inject
 	private Client client;
