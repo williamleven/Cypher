@@ -10,15 +10,13 @@ import javafx.scene.image.*;
 public class Member {
 
 
-	private ObjectProperty<Image> imageProperty= new SimpleObjectProperty();
+	private ObjectProperty<Image> imageProperty = new SimpleObjectProperty();
 
-	private StringProperty name = new SimpleStringProperty();
+	private final StringProperty name = new SimpleStringProperty();
 
-	public Member(String name){
+	public Member(String name) {
 		this.name.set(name);
 	}
-
-
 
 
 	public Image getImageProperty() {

@@ -12,8 +12,7 @@ import javafx.scene.layout.AnchorPane;
 
 import javax.inject.Inject;
 
-public class ListItemPresenter extends CustomListCell<Member>{
-
+public class ListItemPresenter extends CustomListCell<Member> {
 
 
 	@Inject
@@ -33,9 +32,6 @@ public class ListItemPresenter extends CustomListCell<Member>{
 
 
 	@FXML
-	private void initialize() {}
-
-	@FXML
 	private void hideRoomSettings() {
 		client.showRoomSettings.set(false);
 	}
@@ -53,6 +49,6 @@ public class ListItemPresenter extends CustomListCell<Member>{
 
 	@Override
 	protected void clearBindings() {
-
+		imageView.imageProperty().unbind();
 	}
 }

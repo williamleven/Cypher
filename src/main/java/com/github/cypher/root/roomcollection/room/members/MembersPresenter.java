@@ -28,15 +28,13 @@ public class MembersPresenter {
 
 
 	@FXML
-	private void initialize(){
+	private void initialize() {
 		listView.setCellFactory((o) -> {
 			ListItemView listItemView = new ListItemView();
 			listItemView.getView();
 			return (ListItemPresenter) listItemView.getPresenter();
 		});
 		listView.setItems(members);
-		members.add(new Member("Test1"));
-		members.add(new Member("Test1"));members.add(new Member("Test1"));members.add(new Member("Test1"));
 	}
 
 }
