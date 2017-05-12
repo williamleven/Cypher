@@ -8,6 +8,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.github.cypher.model.Util.extractServer;
 
 public class Client implements Updatable {
 
@@ -18,6 +22,8 @@ public class Client implements Updatable {
 
 	// Servers
 	private final ObservableList<Server> servers = FXCollections.observableArrayList();
+
+	private final Map<String, User> users = new HashMap<>();
 
 	// Personal messages
 	private final PMCollection pmCollection = new PMCollection();
@@ -37,6 +43,12 @@ public class Client implements Updatable {
 
 	public Client(com.github.cypher.sdk.Client c, Settings settings) {
 		sdkClient = c;
+
+		sdkClient.addJoinRoomsListener((change) -> {
+			if (change.wasAdded()) {
+				distributeRoom(new Room(change.getValueAdded()));
+			}
+		});
 		this.settings = settings;
 		sessionManager = new SessionManager();
 
@@ -76,6 +88,18 @@ public class Client implements Updatable {
 		}
 	}
 
+	public User getUser(String id) {
+		if(users.containsKey(id)) {
+			return users.get(id);
+		}
+
+		com.github.cypher.sdk.User sdkUser = sdkClient.getUser(id);
+
+		User user = new User(sdkUser);
+		users.put(id, user);
+		return user;
+	}
+
 	private void addServer(String server) {
 		//Todo
 		servers.add(new Server(server));
@@ -99,4 +123,34 @@ public class Client implements Updatable {
 		}
 		updater.interrupt();
 	}
+
+	private void distributeRoom(Room room) {
+		// Place in PM
+		if (isPmChat(room)) {
+			pmCollection.addRoom(room);
+		} else { // Place in servers
+			String mainServer = extractServer(room.getCanonicalAlias());
+			addServer(mainServer);
+			boolean placed = false;
+			for (String alias : room.getAliases()) {
+				for (Server server : servers) {
+					if (server.getAddress().equals(extractServer(alias))) {
+						server.addRoom(room);
+						placed = true;
+					}
+				}
+			}
+			// Place in General if not placed in any server
+			if (!placed) {
+				genCollection.addRoom(room);
+			}
+		}
+
+	}
+
+	private static boolean isPmChat(Room room) {
+		boolean hasName = (room.getName() != null && !room.getName().isEmpty());
+		return (room.getMemberCount() < 3 && !hasName);
+	}
+
 }

@@ -6,10 +6,10 @@ public class Event {
 	protected final ApiLayer api;
 
 	private final int originServerTs;
-	private final String sender;
+	private final User sender;
 	private final String eventId;
 
-	Event(ApiLayer api, int originServerTs, String sender, String eventId) {
+	Event(ApiLayer api, int originServerTs, User sender, String eventId) {
 		this.api = api;
 		this.originServerTs = originServerTs;
 		this.sender = sender;
@@ -17,6 +17,6 @@ public class Event {
 	}
 
 	public int getOriginServerTs() { return originServerTs; }
-	public String getSender() { return sender; }
+	public User getSender() { return sender; }
 	public String getEventId() { return eventId; }
 }
