@@ -42,9 +42,16 @@ public class Room {
 	private final StringProperty topic = new SimpleStringProperty(null);
 	private final ObjectProperty<URL> avatarUrl = new SimpleObjectProperty<>(null);
 	private final ObjectProperty<Image> avatar = new SimpleObjectProperty<>(null);
-	private ObservableMap<String, Event> events = new ObservableMapWrapper<>(new HashMap<>());
-	private ObservableMap<String, Member> members = new ObservableMapWrapper<>(new HashMap<>());
-	private final ObservableList<String> aliases = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
+
+	private ObservableMap<String, Event> events =
+		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
+
+	private ObservableMap<String, Member> members =
+		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
+
+	private final ObservableList<String> aliases =
+		FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
+
 	private final StringProperty canonicalAlias = new SimpleStringProperty();
 
 	Room(ApiLayer api, Client client, String id) {
