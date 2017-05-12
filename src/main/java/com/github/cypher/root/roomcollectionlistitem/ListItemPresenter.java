@@ -54,7 +54,6 @@ public class ListItemPresenter extends CustomListCell<RoomCollection> {
 		if (getModelComponent() instanceof Server) {
 			fontIcon.setIconColor(new Color(0,0,0,0));
 			imageView.imageProperty().bind(getModelComponent().getImageProperty());
-			getModelComponent().getImageProperty().setValue(new Image("file:../../../../../../../../../../Users/Feffe/Pictures/nichibros-11h.jpg"));
 		}
 		else if (getModelComponent() instanceof GeneralCollection || getModelComponent() instanceof PMCollection){
 			imageView.imageProperty().unbind();
