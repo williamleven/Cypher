@@ -7,12 +7,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sun.javafx.collections.ObservableMapWrapper;
+import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class takes an ApiLayer object and parses
@@ -25,16 +27,22 @@ public class Client {
 
 	private final String settingsNamespace;
 
-	private Map<String, User> users = new HashMap<>();
+	private Map<String, User> users = new ConcurrentHashMap<>();
 
-	private ObservableMap<String, String> accountData = new ObservableMapWrapper<>(new HashMap<>());
+	private ObservableMap<String, String> accountData =
+		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
 	public void addAccountDataListener   (MapChangeListener<String, String> listener) { accountData.addListener(listener);    }
 	public void removeAccountDataListener(MapChangeListener<String, String> listener) { accountData.removeListener(listener); }
 
-	private ObservableMap<String, Room> joinRooms   = new ObservableMapWrapper<>(new HashMap<>());
-	private ObservableMap<String, Room> inviteRooms = new ObservableMapWrapper<>(new HashMap<>());
-	private ObservableMap<String, Room> leaveRooms  = new ObservableMapWrapper<>(new HashMap<>());
+	private ObservableMap<String, Room> joinRooms =
+		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
+
+	private ObservableMap<String, Room> inviteRooms =
+		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
+
+	private ObservableMap<String, Room> leaveRooms =
+		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
 	public void addJoinRoomsListener     (MapChangeListener<String, Room> listener) { joinRooms.addListener(listener);      }
 	public void removeJoinRoomsListener  (MapChangeListener<String, Room> listener) { joinRooms.removeListener(listener);   }
