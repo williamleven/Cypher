@@ -43,25 +43,34 @@ public class ChatPresenter {
 
 	@FXML
 	private void onMessageBoxKeyPressed(KeyEvent event) {
-		if (((settings.getControlEnterToSendMessage() && event.isControlDown() && KeyCode.ENTER.equals(event.getCode()))
-			|| (!settings.getControlEnterToSendMessage() && !event.isShiftDown() && KeyCode.ENTER.equals(event.getCode())))
-			&& !messageBox.getText().equals("")) {
+		if(KeyCode.ENTER.equals(event.getCode())) {
 
-			Room room = client.selectedRoom.getValue();
-			if(room != null) {
-				try {
-					room.sendMessage(messageBox.getText());
-				} catch(RestfulHTTPException e) {
-					if(DebugLogger.ENABLED) {
-						DebugLogger.log("RestfulHTTPException when trying to send a message: " + e);
-					}
-				} catch(IOException e) {
-					if(DebugLogger.ENABLED) {
-						DebugLogger.log("IOException when trying to send a message: " + e);
+			if (((settings.getControlEnterToSendMessage() && event.isControlDown())
+			 || (!settings.getControlEnterToSendMessage() && !event.isShiftDown()))
+			 &&  !messageBox.getText().isEmpty()) {
+
+				Room room = client.selectedRoom.getValue();
+				if(room != null) {
+					try {
+						room.sendMessage(messageBox.getText());
+					} catch(RestfulHTTPException e) {
+						if(DebugLogger.ENABLED) {
+							DebugLogger.log("RestfulHTTPException when trying to send a message: " + e);
+						}
+					} catch(IOException e) {
+						if(DebugLogger.ENABLED) {
+							DebugLogger.log("IOException when trying to send a message: " + e);
+						}
 					}
 				}
+				messageBox.clear();
+
+			} else if(event.isShiftDown()) {
+				messageBox.insertText(
+						messageBox.getCaretPosition(),
+						"\n"
+				);
 			}
-			messageBox.clear();
 		}
 	}
 }
