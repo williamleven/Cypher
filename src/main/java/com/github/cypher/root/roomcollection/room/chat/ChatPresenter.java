@@ -43,9 +43,9 @@ public class ChatPresenter {
 
 	@FXML
 	private void onMessageBoxKeyPressed(KeyEvent event) {
-		if(event.isControlDown() &&
-		   KeyCode.ENTER.equals(event.getCode()) &&
-		   !messageBox.getText().equals("")) {
+		if (((settings.getControlEnterToSendMessage() && event.isControlDown() && KeyCode.ENTER.equals(event.getCode()))
+			|| (!settings.getControlEnterToSendMessage() && !event.isShiftDown() && KeyCode.ENTER.equals(event.getCode())))
+			&& !messageBox.getText().equals("")) {
 
 			Room room = client.selectedRoom.getValue();
 			if(room != null) {
@@ -61,7 +61,7 @@ public class ChatPresenter {
 					}
 				}
 			}
-			messageBox.setText("");
+			messageBox.clear();
 		}
 	}
 }
