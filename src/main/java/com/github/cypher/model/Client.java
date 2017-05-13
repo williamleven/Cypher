@@ -43,8 +43,7 @@ public class Client implements Updatable {
 	public final BooleanProperty showRoomSettings = new SimpleBooleanProperty(false);
 	// GeneralCollection is set as the default selected RoomCollection
 	public final ObjectProperty<RoomCollection> selectedRoomCollection = new SimpleObjectProperty<>(genCollection);
-	//TODO: Change selectedRoom from StringProperty to "RoomProperty"
-	public final StringProperty selectedRoom = new SimpleStringProperty();
+	public final ObjectProperty<Room> selectedRoom = new SimpleObjectProperty<>(null);
 	public final BooleanProperty showDirectory = new SimpleBooleanProperty(false);
 
 	public Client(com.github.cypher.sdk.Client c, Settings settings) {

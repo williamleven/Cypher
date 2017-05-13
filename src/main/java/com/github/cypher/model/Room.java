@@ -1,6 +1,7 @@
 package com.github.cypher.model;
 
 import com.github.cypher.DebugLogger;
+import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,6 +19,7 @@ public class Room {
 	private final StringProperty canonicalAlias;
 	private final IntegerProperty memberCount;
 	private final ObservableList<String> aliases;
+	private final com.github.cypher.sdk.Room sdkRoom;
 
 	public Room(com.github.cypher.sdk.Room sdkRoom) {
 		id = new SimpleStringProperty(sdkRoom.getId());
@@ -29,6 +31,7 @@ public class Room {
 		canonicalAlias = new SimpleStringProperty(sdkRoom.getCanonicalAlias());
 		memberCount = new SimpleIntegerProperty(sdkRoom.getMemberCount());
 		aliases = FXCollections.synchronizedObservableList(FXCollections.observableArrayList(sdkRoom.getAliases()));
+		this.sdkRoom = sdkRoom;
 
 		sdkRoom.addNameListener((observable, oldValue, newValue) -> {
 			name.set(newValue);
@@ -57,6 +60,10 @@ public class Room {
 		sdkRoom.addAliasesListener((change -> {
 			aliases.setAll(change.getList());
 		}));
+	}
+
+	public void sendMessage(String body) throws RestfulHTTPException, IOException {
+		sdkRoom.sendTextMessage(body);
 	}
 
 	private void updateAvatar(java.awt.Image image) {

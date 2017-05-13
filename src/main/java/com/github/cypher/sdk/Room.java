@@ -310,7 +310,7 @@ public class Room {
 	}
 
 	public String[] getAliases() {
-		return (String[]) aliases.toArray();
+		return aliases.toArray(new String[0]);
 	}
 
 	public String getCanonicalAlias() {
