@@ -19,6 +19,9 @@ public class ChatPresenter {
 	private ListView eventList;
 
 	@FXML
+	private TextArea messageBox;
+
+	@FXML
 	private void initialize() {
 	}
 
