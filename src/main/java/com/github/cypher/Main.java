@@ -77,7 +77,7 @@ public class Main extends Application {
 	}
 
 	private boolean useSyetemTray() {
-		return (java.awt.SystemTray.isSupported() && settings.getExitToSystemTray());
+		return ( SystemTray.get() != null && settings.getExitToSystemTray());
 	}
 
 	private void addTrayIcon(Stage primaryStage) {
