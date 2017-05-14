@@ -22,12 +22,10 @@ public class TOMLSettings implements Settings {
 	private static class SettingsData{
 		// All variables are initiated to default values
 		String languageTag = Locale.getDefault().toLanguageTag();
-		int SDKTimeout = 500; // In ms
-		int modelTickInterval = 500; // In ms
-
-		String languageTag = Locale.getDefault().toLanguageTag(); // Default Value
 		boolean saveSession = false;
 		boolean controlEnterToSendMessage = true;
+		int SDKTimeout = 500; // In ms
+		int modelTickInterval = 500; // In ms
 	}
 
 	TOMLSettings() {
@@ -126,6 +124,7 @@ public class TOMLSettings implements Settings {
 		save();
 	}
 
+	// Timeout is maximum time to poll in milliseconds before returning a request
 	@Override
 	public int getSDKTimeout() {
 		return settingsData.SDKTimeout;
@@ -137,6 +136,7 @@ public class TOMLSettings implements Settings {
 		save();
 	}
 
+	// The time between each tick in the model in ms
 	@Override
 	public int getModelTickInterval() {
 		return settingsData.modelTickInterval;

@@ -3,10 +3,15 @@ package com.github.cypher;
 import java.util.Locale;
 
 public interface Settings {
+	// Language setting
 	Locale getLanguage();
 	void setLanguage(Locale language);
+
+	// Save session ("keep me logged in") settings
 	boolean getSaveSession();
 	void setSaveSession(boolean saveSession);
+
+	// If control + enter should be used for sending messages (if false only enter is needed)
 	boolean getControlEnterToSendMessage();
 	void setControlEnterToSendMessage(boolean controlEnterToSendMessage);
 
