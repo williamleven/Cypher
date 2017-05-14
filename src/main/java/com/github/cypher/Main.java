@@ -32,7 +32,6 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
 		Locale.setDefault(settings.getLanguage());
 		// Starts the Executors thread
 		executor.start();

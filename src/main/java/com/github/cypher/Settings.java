@@ -14,4 +14,8 @@ public interface Settings {
 	boolean getExitToSystemTray();
 
 	void setExitToSystemTray(boolean exitToSystemTray);
+
+	boolean getControlEnterToSendMessage();
+
+	void setControlEnterToSendMessage(boolean controlEnterToSendMessage);
 }
