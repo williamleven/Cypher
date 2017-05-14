@@ -2,8 +2,8 @@ package com.github.cypher;
 
 import com.airhacks.afterburner.injection.Injector;
 import com.github.cypher.model.Client;
-import com.github.cypher.root.Executor;
-import com.github.cypher.root.RootView;
+import com.github.cypher.gui.root.Executor;
+import com.github.cypher.gui.root.RootView;
 import com.github.cypher.sdk.api.MatrixApiLayer;
 import com.github.cypher.sdk.api.MatrixMediaURLStreamHandlerFactory;
 import javafx.application.Application;
@@ -23,7 +23,7 @@ public class Main extends Application {
 
 	private final Settings settings = new TOMLSettings();
 	private final Executor executor = new Executor();
-	private final Client client = new Client(new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings"), settings);
+	private final Client client = new Client((() -> new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings")), settings);
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {

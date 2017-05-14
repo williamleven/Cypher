@@ -1,7 +1,7 @@
 /*package com.github.cypher;
 
 import com.airhacks.afterburner.injection.Injector;
-import com.github.cypher.root.RootView;
+import RootView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.junit.Test;
