@@ -25,6 +25,9 @@ public class TOMLSettings implements Settings {
 		int SDKTimeout = 500; // In ms
 		int modelTickInterval = 500; // In ms
 
+		String languageTag = Locale.getDefault().toLanguageTag(); // Default Value
+		boolean saveSession = false;
+		boolean controlEnterToSendMessage = true;
 	}
 
 	TOMLSettings() {
@@ -88,11 +91,38 @@ public class TOMLSettings implements Settings {
 	}
 
 	// Language setting
+	@Override
 	public synchronized Locale getLanguage() {
 		return Locale.forLanguageTag(settingsData.languageTag);
 	}
+
+	@Override
 	public synchronized void setLanguage(Locale language) {
 		settingsData.languageTag = language.toLanguageTag();
+		save();
+	}
+
+	// Save session ("keep me logged in") settings
+	@Override
+	public synchronized boolean getSaveSession() {
+		return settingsData.saveSession;
+	}
+
+	@Override
+	public synchronized void setSaveSession(boolean saveSession) {
+		settingsData.saveSession = saveSession;
+		save();
+	}
+
+	// If control + enter should be used for sending messages (if false only enter is needed)
+	@Override
+	public boolean getControlEnterToSendMessage() {
+		return settingsData.controlEnterToSendMessage;
+	}
+
+	@Override
+	public void setControlEnterToSendMessage(boolean controlEnterToSendMessage) {
+		settingsData.controlEnterToSendMessage = controlEnterToSendMessage;
 		save();
 	}
 
