@@ -1,6 +1,7 @@
 package com.github.cypher.gui.root;
 
 import com.github.cypher.DebugLogger;
+import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.root.roomcollection.RoomCollectionView;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.RoomCollection;

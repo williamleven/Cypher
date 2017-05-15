@@ -1,6 +1,6 @@
 package com.github.cypher.root;
 
-import com.github.cypher.gui.root.Executor;
+import com.github.cypher.gui.Executor;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import org.junit.Test;

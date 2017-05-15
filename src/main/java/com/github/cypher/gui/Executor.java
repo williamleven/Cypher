@@ -1,4 +1,4 @@
-package com.github.cypher.gui.root;
+package com.github.cypher.gui;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;

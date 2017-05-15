@@ -1,6 +1,6 @@
 package com.github.cypher.gui.root.roomcollection.room.chat.messageitem;
 
-import com.github.cypher.gui.root.CustomListCell;
+import com.github.cypher.gui.CustomListCell;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Message;
 import javafx.beans.value.ChangeListener;
