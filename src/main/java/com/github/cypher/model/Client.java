@@ -4,12 +4,13 @@ import com.github.cypher.DebugLogger;
 import com.github.cypher.Settings;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;
-import javafx.application.Platform;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.Map;
@@ -92,7 +93,7 @@ public class Client implements Updatable {
 		showRoomSettings.set(false);
 		showRoomSettings.set(false);
 		// GeneralCollection is set as the default selected RoomCollection
-		selectedRoomCollection.set(genCollection);
+		selectedRoomCollection.set(pmCollection);
 		selectedRoom.set(null);
 		showDirectory.set(false);
 	}
@@ -162,13 +163,6 @@ public class Client implements Updatable {
 		//Todo
 	}
 
-	// TODO Better name for this method. Prob not needed
-	private void setInitialSDKData() {
-		for (com.github.cypher.sdk.Room sdkRoom : sdkClient.getJoinRooms().values()) {
-			distributeRoom(new Room(sdkRoom));
-		}
-	}
-
 	public void update() {
 		if (loggedIn.get()) { // Only temporary. A real thread lock is needed so this isn't accessed while sdk object changes!
 			try {
@@ -177,7 +171,6 @@ public class Client implements Updatable {
 				DebugLogger.log(e.getMessage());
 			}
 		}
-		//loggedIn.setValue(sdkClient.isLoggedIn());
 	}
 
 	public void exit() {

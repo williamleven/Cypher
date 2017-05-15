@@ -2,13 +2,13 @@ package com.github.cypher.gui.root;
 
 import com.github.cypher.DebugLogger;
 import com.github.cypher.gui.root.login.LoginPresenter;
+import com.github.cypher.gui.root.login.LoginView;
 import com.github.cypher.gui.root.roomcollection.RoomCollectionView;
 import com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemPresenter;
+import com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemView;
 import com.github.cypher.gui.root.settings.SettingsView;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.RoomCollection;
-import com.github.cypher.gui.root.login.LoginView;
-import com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemView;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -113,6 +113,8 @@ public class RootPresenter {
 			});
 		});
 		updateRoomCollectionListHeight();
+
+		roomCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> client.selectedRoomCollection.set(newValue));
 	}
 
 	@FXML
