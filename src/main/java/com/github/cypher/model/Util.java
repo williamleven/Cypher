@@ -19,4 +19,8 @@ public class Util {
 		//Todo
 		return true;
 	}
+
+	static String extractServer(String input) {
+		return input.split(":", 2)[1];
+	}
 }

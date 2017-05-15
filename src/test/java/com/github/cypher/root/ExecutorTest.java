@@ -20,14 +20,14 @@ public class ExecutorTest {
 			action1.set(true);
 		});
 		final BooleanProperty isSeparateThread = new SimpleBooleanProperty(false);
-		Thread testThread = Thread.currentThread();
+		long testThread = Thread.currentThread().getId();
 		executor.handle(() -> {
-			isSeparateThread.setValue(!Thread.currentThread().equals(testThread));
+			isSeparateThread.setValue(Thread.currentThread().getId() != testThread);
 		});
 
 		// Wait for action to be done
 		try {
-			Thread.sleep(5);
+			Thread.sleep(50);
 		} catch (InterruptedException e) {
 		}
 		executor.interrupt();

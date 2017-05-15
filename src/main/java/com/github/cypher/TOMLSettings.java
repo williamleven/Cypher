@@ -22,6 +22,7 @@ public class TOMLSettings implements Settings {
 	private static class SettingsData{
 		String languageTag = Locale.getDefault().toLanguageTag(); // Default Value
 		boolean saveSession = false;
+		boolean controlEnterToSendMessage = true;
 	}
 
 	TOMLSettings() {
@@ -96,7 +97,7 @@ public class TOMLSettings implements Settings {
 		save();
 	}
 
-	//Save session ("keep me logged in") settings
+	// Save session ("keep me logged in") settings
 	@Override
 	public synchronized boolean getSaveSession() {
 		return settingsData.saveSession;
@@ -105,6 +106,18 @@ public class TOMLSettings implements Settings {
 	@Override
 	public synchronized void setSaveSession(boolean saveSession) {
 		settingsData.saveSession = saveSession;
+		save();
+	}
+
+	// If control + enter should be used for sending messages (if false only enter is needed)
+	@Override
+	public boolean getControlEnterToSendMessage() {
+		return settingsData.controlEnterToSendMessage;
+	}
+
+	@Override
+	public void setControlEnterToSendMessage(boolean controlEnterToSendMessage) {
+		settingsData.controlEnterToSendMessage = controlEnterToSendMessage;
 		save();
 	}
 }
