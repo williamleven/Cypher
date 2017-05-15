@@ -2,8 +2,8 @@ package com.github.cypher;
 
 import com.airhacks.afterburner.injection.Injector;
 import com.github.cypher.model.Client;
-import com.github.cypher.root.Executor;
-import com.github.cypher.root.RootView;
+import com.github.cypher.gui.Executor;
+import com.github.cypher.gui.root.RootView;
 import com.github.cypher.sdk.api.MatrixApiLayer;
 import com.github.cypher.sdk.api.MatrixMediaURLStreamHandlerFactory;
 import dorkbox.systemTray.*;
