@@ -3,7 +3,6 @@ package com.github.cypher.root.roomcollection.room.members;
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Member;
-import com.github.cypher.model.Server;
 import com.github.cypher.root.roomcollection.room.members.listitem.ListItemPresenter;
 import com.github.cypher.root.roomcollection.room.members.listitem.ListItemView;
 import javafx.collections.FXCollections;
@@ -23,8 +22,9 @@ public class MembersPresenter {
 	private Settings settings;
 
 	@FXML
-	private ListView listView;
-	private final ObservableList<Member> members = FXCollections.observableArrayList();
+	private ListView<Member> listView;
+
+	private final ObservableList<Member> members = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
 
 	@FXML

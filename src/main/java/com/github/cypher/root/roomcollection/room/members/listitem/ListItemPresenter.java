@@ -50,5 +50,6 @@ public class ListItemPresenter extends CustomListCell<Member> {
 	@Override
 	protected void clearBindings() {
 		imageView.imageProperty().unbind();
+		label.textProperty().unbind();
 	}
 }
