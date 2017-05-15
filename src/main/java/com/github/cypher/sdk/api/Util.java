@@ -81,17 +81,14 @@ class Util {
 			writer.close();
 		}
 
-		JsonElement json;
+		JsonElement json = null;
 		try {
 			try {
 				// Retrieve Data
 				JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
 				json = new JsonParser().parse(reader);
 			} catch(IOException e) {
-				// Try to throw additional json error data
-				JsonReader errorReader = new JsonReader(new InputStreamReader(conn.getErrorStream()));
-				json = new JsonParser().parse(errorReader);
-				throw new RestfulHTTPException(conn.getResponseCode(), json.getAsJsonObject());
+				handleRestfulHTTPException(conn);
 			}
 		} catch(IllegalStateException e) {
 			return null;
@@ -99,6 +96,13 @@ class Util {
 
 		// Return response
 		return json;
+	}
+
+	static void handleRestfulHTTPException(HttpURLConnection conn) throws RestfulHTTPException, IOException {
+		// Try to throw additional json error data
+		JsonReader errorReader = new JsonReader(new InputStreamReader(conn.getErrorStream()));
+		JsonElement json = new JsonParser().parse(errorReader);
+		throw new RestfulHTTPException(conn.getResponseCode(), json.getAsJsonObject());
 	}
 
 	static JsonElement makeJsonPostRequest(URL url, JsonObject data) throws RestfulHTTPException, IOException {
