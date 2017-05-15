@@ -11,7 +11,7 @@ import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
 
-public class AddServerPanelPresenter {
+public class AddServerPanePresenter {
 
 	@Inject
 	private Client client;

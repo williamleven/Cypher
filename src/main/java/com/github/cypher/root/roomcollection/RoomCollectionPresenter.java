@@ -2,6 +2,7 @@ package com.github.cypher.root.roomcollection;
 
 import com.github.cypher.Settings;
 import com.github.cypher.model.*;
+import com.github.cypher.root.addserverpanel.AddServerPaneView;
 import com.github.cypher.root.roomcollection.directory.DirectoryView;
 import com.github.cypher.root.roomcollection.room.RoomView;
 import javafx.fxml.FXML;
@@ -29,6 +30,8 @@ public class RoomCollectionPresenter {
 	private void initialize() {
 		Parent directoryPane = new DirectoryView().getView();
 		rightSideStackPane.getChildren().add(directoryPane);
+		Parent addServerPane = new AddServerPaneView().getView();
+		rightSideStackPane.getChildren().add(addServerPane);
 		Parent roomPane = new RoomView().getView();
 		rightSideStackPane.getChildren().add(roomPane);
 

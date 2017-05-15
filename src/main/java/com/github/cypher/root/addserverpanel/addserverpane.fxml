@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.addserverpanel.AddServerPanelPresenter">
+<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.addserverpanel.AddServerPanePresenter">
    <children>
       <Label alignment="CENTER" focusTraversable="false" text="Add Server" />
       <TextField fx:id="serverUrlField" focusTraversable="false" promptText="ex. matrix.org" />
