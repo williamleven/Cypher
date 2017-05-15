@@ -11,7 +11,9 @@ import com.github.cypher.gui.root.login.LoginView;
 import com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemView;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -84,16 +86,33 @@ public class RootPresenter {
 			}
 		});
 
-		roomCollectionListView.setItems(client.getRoomCollections());
+		// List that mirrors client.getRoomCollections() that is necessary to support multithreaded access to client.getRoomCollections()
+		ObservableList<RoomCollection> backendListForView =
+				FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
+		backendListForView.addAll(client.getRoomCollections());
+
 		roomCollectionListView.setCellFactory(listView -> {
 			RoomCollectionListItemView roomCollectionListItemView = new RoomCollectionListItemView();
 			roomCollectionListItemView.getView();
 			return (RoomCollectionListItemPresenter) roomCollectionListItemView.getPresenter();
 		});
 
-		updateRoomCollectionListHeight();
-		client.getRoomCollections().addListener((ListChangeListener.Change<? extends RoomCollection> change) -> updateRoomCollectionListHeight());
+		roomCollectionListView.setItems(backendListForView);
 
+		client.getRoomCollections().addListener((ListChangeListener.Change<? extends RoomCollection> change) -> {
+			Platform.runLater(() -> {
+				while (change.next()) {
+					if (change.wasAdded()) {
+						backendListForView.addAll(change.getAddedSubList());
+					}
+					if (change.wasRemoved()) {
+						backendListForView.removeAll(change.getRemoved());
+					}
+				}
+				updateRoomCollectionListHeight();
+			});
+		});
+		updateRoomCollectionListHeight();
 	}
 
 	@FXML

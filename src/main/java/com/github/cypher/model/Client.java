@@ -74,7 +74,6 @@ public class Client implements Updatable {
 		updater.add(this, 1);
 		updater.start();
 		addListeners();
-
 	}
 
 	private void initialize() {
@@ -85,7 +84,6 @@ public class Client implements Updatable {
 		roomCollections.clear();
 		roomCollections.add(pmCollection);
 		roomCollections.add(genCollection);
-
 
 		servers.clear();
 		users.clear();
@@ -172,7 +170,7 @@ public class Client implements Updatable {
 	}
 
 	public void update() {
-		if (loggedIn.get()) {
+		if (loggedIn.get()) { // Only temporary. A real thread lock is needed so this isn't accessed while sdk object changes!
 			try {
 				sdkClient.update(settings.getSDKTimeout());
 			} catch (RestfulHTTPException | IOException e) {
