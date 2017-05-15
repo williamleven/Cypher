@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<AnchorPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" maxHeight="99999.0" maxWidth="99999" minHeight="400.0" minWidth="500.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollection.room.chat.ChatPresenter">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="500.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.root.roomcollection.room.chat.ChatPresenter">
    <children>
       <Label layoutX="14.0" layoutY="14.0" styleClass="h2" text="Room Name" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="52.0" AnchorPane.topAnchor="14.0" />
       <Button layoutX="947.0" layoutY="15.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#showRoomSettings" prefHeight="34.0" prefWidth="34.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
@@ -21,7 +21,7 @@
             <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="22" />
          </graphic></Button>
       <Label layoutX="14.0" layoutY="50.0" styleClass="h5" text="Room Topic" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="50.0" />
-      <TextArea layoutX="50.0" layoutY="156.0" prefColumnCount="0" prefRowCount="2" promptText="Write message here..." AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-      <ListView layoutX="14.0" layoutY="76.0" prefHeight="247.0" prefWidth="472.0" AnchorPane.bottomAnchor="77.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="76.0" />
+      <TextArea fx:id="messageBox" layoutX="50.0" layoutY="156.0" onKeyPressed="#onMessageBoxKeyPressed" prefColumnCount="0" prefRowCount="2" promptText="%messageBoxPrompt" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+      <ListView fx:id="eventList" focusTraversable="false" layoutX="14.0" layoutY="76.0" AnchorPane.bottomAnchor="77.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="76.0" />
    </children>
 </AnchorPane>

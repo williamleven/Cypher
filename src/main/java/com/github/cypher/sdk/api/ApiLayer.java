@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -21,6 +22,18 @@ import java.net.URL;
  * @see <a href="https://matrix.org/docs/api/client-server/">matrix.org</a>
  */
 public interface ApiLayer {
+
+	/**
+	 * Gets the session
+	 * @return Session
+	 */
+	Session getSession();
+
+	/**
+	 * Sets the session
+	 * @param session Session
+	 */
+	void setSession(Session session);
 
 	/**
 	 * Synchronise the client's state and receive new messages.
@@ -43,13 +56,25 @@ public interface ApiLayer {
 	JsonObject getPublicRooms(String server) throws RestfulHTTPException, IOException;
 
 	/**
-	 * Authenticates the user and crates a new session
+	 * Authenticates the user and creates a new session.
 	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Session_management/post_matrix_client_r0_login">matrix.org</a>
 	 * @param username Username
 	 * @param password Password
 	 * @param homeserver A homeserver to connect trough (e.g. example.org:8448 or matrix.org)
 	 */
 	void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException;
+
+	/**
+	 * Invalidates the current session.
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Session32management/post_matrix_client_r0_logout">matrix.org</a>
+	 */
+	void logout() throws RestfulHTTPException, IOException;
+
+	/**
+	 * Use a refresh token to create a new Session
+	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Session32management/post_matrix_client_r0_tokenrefresh">matrix.org</a>
+	 */
+	void refreshToken() throws RestfulHTTPException, IOException;
 
 	/**
 	 * This API returns a list of message and state events for a room. It uses pagination query parameters to paginate history in the room.
@@ -202,4 +227,14 @@ public interface ApiLayer {
 	 * @return Valid Json response containing the Room ID.
 	 */
 	JsonObject get3Pid() throws RestfulHTTPException, IOException;
+
+	/**
+	 * Download a file
+	 * @param mediaUrl The URL for the media content (e.g. "mxc://matrix.org/wefh34uihSDRGhw34")
+	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Media/get_matrix_media_r0_download_serverName_mediaId">matrix.org</a>
+	 * @return An InputStream from which the media content can be read
+	 * @throws RestfulHTTPException
+	 * @throws IOException
+	 */
+	InputStream getMediaContent(URL mediaUrl) throws RestfulHTTPException, IOException;
 }

@@ -5,6 +5,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +28,16 @@ public class MatrixApiLayer implements ApiLayer {
 
 	private Session session;
 
+	@Override
+	public Session getSession() {
+		return session;
+	}
+
+	@Override
+	public void setSession(Session session) {
+		this.session = session;
+	}
+
 	/**
 	 * Creates a MatrixApiLayer with a session.
 	 *
@@ -40,7 +52,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	/**
-	 * Crates a new MatrixApiLayer without a session.
+	 * Creates a new MatrixApiLayer without a session.
 	 *
 	 * <p> Use {@link #login(String username, String password, String homeserver)} to create a session.
 	 */
@@ -67,6 +79,72 @@ public class MatrixApiLayer implements ApiLayer {
 
 		// Set Session
 		this.session = new Session(response);
+	}
+
+	@Override
+	public void refreshToken() throws RestfulHTTPException, IOException {
+		// Only run if session is set
+		if (session == null) {
+			return;
+		}
+
+		// Only run if refreshToken is available
+		if (session.getRefreshToken() == null) {
+			throw new IOException("Refresh token not available");
+		}
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.TOKEN_REFRESH, null, null);
+
+		// Build request body
+		JsonObject request = new JsonObject();
+		request.addProperty("refresh_token", session.getRefreshToken());
+
+		// Send Request
+		JsonObject response = Util.makeJsonPostRequest(url, request).getAsJsonObject();
+
+		// Check if response is valid
+		if (response.has("access_token")) {
+
+			// If refresh token is available, use it
+			String refreshToken = null;
+			if (response.has("refresh_token")) {
+				refreshToken = response.get("refresh_token").getAsString();
+			}
+
+			// Create new session object
+			session = new Session(
+				session.getUserId(),
+				response.get("access_token").getAsString(),
+				refreshToken,
+				session.getHomeServer(),
+				session.getDeviceId(),
+				0
+			);
+		} else {
+			// Something went wrong, force re-login
+			session = null;
+		}
+	}
+  
+	public void logout() throws RestfulHTTPException, IOException {
+		// Only run if the session is set
+		if (session == null) {
+			return;
+		}
+
+		// Build parameter Map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("access_token", session.getAccessToken());
+
+		// Build URL
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.LOGOUT, null, parameters);
+
+		// Send request
+		JsonObject response = Util.makeJsonPostRequest(url, null).getAsJsonObject();
+
+		// Null session
+		this.session = null;
 	}
 
 	@Override
@@ -355,8 +433,22 @@ public class MatrixApiLayer implements ApiLayer {
 
 		//Send request URL.
 		return  Util.makeJsonGetRequest(url).getAsJsonObject();
-
-
 	}
 
+	@Override
+	public InputStream getMediaContent(URL mediaUrl) throws RestfulHTTPException, IOException {
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.MEDIA_DOWNLOAD, new Object[] {mediaUrl.getHost(),mediaUrl.getPath().replaceFirst("/", "")}, null);
+
+		HttpURLConnection conn = null;
+		try {
+			// Setup the connection
+			conn = (HttpURLConnection)url.openConnection();
+			conn.setRequestMethod("GET");
+			return conn.getInputStream();
+		} catch (IOException e) {
+			Util.handleRestfulHTTPException(conn);
+			return null;
+		}
+	}
 }

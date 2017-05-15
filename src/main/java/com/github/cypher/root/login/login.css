@@ -1,0 +1,8 @@
+AnchorPane {
+    -fx-background-color: rgba(0,0,0,0.7);
+}
+
+CheckBox {
+    -fx-text-fill: white;
+}
+
