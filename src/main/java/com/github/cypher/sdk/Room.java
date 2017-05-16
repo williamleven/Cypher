@@ -43,6 +43,7 @@ public class Room {
 	private final StringProperty topic = new SimpleStringProperty(null);
 	private final ObjectProperty<URL> avatarUrl = new SimpleObjectProperty<>(null);
 	private final ObjectProperty<Image> avatar = new SimpleObjectProperty<>(null);
+	private final ObjectProperty<PermissionTable> permissions = new SimpleObjectProperty<>(null);
 
 	private ObservableMap<String, Event> events =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
@@ -162,6 +163,9 @@ public class Room {
 				parseAliasesEvent(content);
 			} else if (eventType.equals("m.room.canonical_alias")) {
 				parseCanonicalAlias(content);
+			} else if (eventType.equals("m.room.power_levels")) {
+				parsePowerLevelsEvent(content);
+				addPropertyChangeEvent(originServerTs, sender, eventId, age, "power_levels", permissions.getValue());
 			}
 		}
 	}
@@ -250,6 +254,23 @@ public class Room {
 					eventId,
 					new MemberEvent(api, originServerTs, sender, eventId, age, memberId, membership)
 			);
+		}
+	}
+
+	private void parsePowerLevelsEvent(JsonObject data) throws IOException {
+		this.permissions.set(new PermissionTable(data));
+
+		if(data.has("users") &&
+		   data.get("users").isJsonObject()) {
+
+			for(Map.Entry<String, JsonElement> userPowerEntry : data.get("users").getAsJsonObject().entrySet()) {
+
+				String userId = userPowerEntry.getKey();
+				if(members.containsKey(userId)) {
+					Member member = members.get(userId);
+					member.privilegeProperty().setValue(userPowerEntry.getValue().getAsInt());
+				}
+			}
 		}
 	}
 
