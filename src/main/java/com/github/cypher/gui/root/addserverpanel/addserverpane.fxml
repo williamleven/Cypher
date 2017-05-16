@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="background-low-opacity-pane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.addserverpanel.AddServerPanePresenter">
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.addserverpanel.AddServerPanePresenter">
    <children>
       <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#clickBackground" />
       <StackPane alignment="TOP_RIGHT" maxHeight="150.0" maxWidth="200.0">
