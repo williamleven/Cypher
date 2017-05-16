@@ -282,39 +282,18 @@ public class Room {
 	/**
 	 * @return A valid room ID (e.g. "!cURbafjkfsMDVwdRDQ:matrix.org")
 	 */
-	public String getId() {
-		return this.id;
-	}
+	public String getId()        { return this.id; }
+	public String getName()      { return name.get(); }
+	public String getTopic()     { return topic.get(); }
+	public URL    getAvatarUrl() { return avatarUrl.get(); }
+	public Image  getAvatar()    { return avatar.get(); }
 
-	public String getName() {
-		return name.get();
-	}
+	public Map<String, Event> getEvents() { return new HashMap<>(events); }
+	public int getEventCount() { return events.size(); }
 
-	public String getTopic() {
-		return topic.get();
-	}
+	public Map<String, Member> getMembers() { return new HashMap<>(members); }
+	public int getMemberCount() { return members.size(); }
 
-	public URL getAvatarUrl() {
-		return avatarUrl.get();
-	}
-
-	public Image getAvatar() {
-		return avatar.get();
-	}
-
-	public Map<String, Member> getMembers() {
-		return new HashMap<>(members);
-	}
-
-	public int getMemberCount() {
-		return members.size();
-	}
-
-	public String[] getAliases() {
-		return aliases.toArray(new String[0]);
-	}
-
-	public String getCanonicalAlias() {
-		return canonicalAlias.get();
-	}
+	public String[] getAliases() { return aliases.toArray(new String[0]); }
+	public String getCanonicalAlias() { return canonicalAlias.get(); }
 }
