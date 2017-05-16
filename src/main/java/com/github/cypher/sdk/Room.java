@@ -148,7 +148,7 @@ public class Room {
 			if (eventType.equals("m.room.message")) {
 				parseMessageEvent(originServerTs, sender, eventId, age, content);
 			} else if (eventType.equals("m.room.member")) {
-				parseMemberEvent(event, content);
+				parseMemberEvent(event, originServerTs, sender, eventId, age, content);
 			} else if (eventType.equals("m.room.name")) {
 				parseNameData(content);
 			} else if (eventType.equals("m.room.topic")) {
@@ -218,7 +218,7 @@ public class Room {
 		               );
 	}
 
-	private void parseMemberEvent(JsonObject event, JsonObject content) {
+	private void parseMemberEvent(JsonObject event, int originServerTs, String senderId, String eventId, int age, JsonObject content) {
 		if (content.has("membership") &&
 		    event.has("state_key")) {
 			String memberId = event.get("state_key").getAsString();
@@ -236,6 +236,13 @@ public class Room {
 			} else if (members.containsKey(memberId)) {
 				members.remove(memberId);
 			}
+
+			// Add membership event to the log
+			User sender = client.getUser(senderId);
+			events.put(
+					eventId,
+					new MemberEvent(api, originServerTs, sender, eventId, age, memberId, membership)
+			);
 		}
 	}
 
