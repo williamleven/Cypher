@@ -93,33 +93,35 @@ public class Room {
 		canonicalAlias.removeListener(listener);
 	}
 
-	void update(JsonObject data) throws IOException{
+	void update(JsonObject data) throws RestfulHTTPException, IOException {
 		parseNameData(data);
 
 		parseTopicData(data);
 
 		parseAvatarUrlData(data);
 
-		parseTimelineData(data);
+		parseEvents("timeline", data);
+
+		parseEvents("state", data);
 	}
 
-	private void parseTimelineData(JsonObject data) {
-		if (data.has("timeline") &&
-		    data.get("timeline").isJsonObject()) {
-			JsonObject timeline = data.get("timeline").getAsJsonObject();
+	private void parseEvents(String category, JsonObject data) throws RestfulHTTPException, IOException {
+		if (data.has(category) &&
+		    data.get(category).isJsonObject()) {
+			JsonObject timeline = data.get(category).getAsJsonObject();
 			if (timeline.has("events") &&
 			    timeline.get("events").isJsonArray()) {
 				JsonArray events = timeline.get("events").getAsJsonArray();
 				for (JsonElement eventElement : events) {
 					if (eventElement.isJsonObject()) {
-						parseTimelineEventData(eventElement.getAsJsonObject());
+						parseEventData(eventElement.getAsJsonObject());
 					}
 				}
 			}
 		}
 	}
 
-	private void parseTimelineEventData(JsonObject event) {
+	private void parseEventData(JsonObject event) throws RestfulHTTPException, IOException {
 		if (event.has("type") &&
 		    event.has("origin_server_ts") &&
 		    event.has("sender") &&
@@ -147,6 +149,12 @@ public class Room {
 				parseMessageEvent(originServerTs, sender, eventId, age, content);
 			} else if (eventType.equals("m.room.member")) {
 				parseMemberEvent(event, content);
+			} else if (eventType.equals("m.room.name")) {
+				parseNameData(content);
+			} else if (eventType.equals("m.room.topic")) {
+				parseTopicData(content);
+			} else if (eventType.equals("m.room.avatar")) {
+				parseAvatarUrlData(content);
 			} else if (eventType.equals("m.room.aliases")) {
 				parseAliasesEvent(content);
 			} else if (eventType.equals("m.room.canonical_alias")) {
@@ -187,7 +195,7 @@ public class Room {
 		}
 	}
 
-	private void parseAvatarUrlData(JsonObject data) throws IOException {
+	private void parseAvatarUrlData(JsonObject data) throws RestfulHTTPException, IOException {
 		if (data.has("avatar_url")) {
 			try {
 				URL newAvatarUrl = new URL(data.get("avatar_url").getAsString());
