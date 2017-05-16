@@ -6,24 +6,43 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 
 import javax.inject.Inject;
+import java.io.IOException;
 
 public class AddServerPanePresenter {
 
-	public TextField serverUrlField;
+
 	@Inject
 	private Client client;
 
 	@Inject
 	private Settings settings;
 
+	@FXML
+	public TextField serverUrlField;
+	@FXML
+	public Text inputValidationFeedback;
 
 	@FXML
 	private void initialize() {
 	}
 	private void exitPane(){
 		client.showAddServersPanel.setValue(false);
+		serverUrlField.setText("");
+		inputValidationFeedback.setText("");
+	}
+	private void addSubmission() {
+		try {
+			client.add(serverUrlField.getText().toString());
+			exitPane();
+
+		}catch (IOException e){
+			inputValidationFeedback.setText(e.getMessage());
+			inputValidationFeedback.setWrappingWidth(150);
+		}
+
 
 	}
 
@@ -31,8 +50,8 @@ public class AddServerPanePresenter {
 		exitPane();
 	}
 
-	public void clickSubmitButton(ActionEvent actionEvent) {
-
+	public void clickSubmitButton(ActionEvent actionEvent) throws IOException {
+		addSubmission();
 	}
 
 	public void clickPanel(MouseEvent mouseEvent) {

@@ -96,13 +96,15 @@ public class Client implements Updatable {
 	}
 
 	// Add roomcollection, room or private chat
-	public void add(String input) {
+	public void add(String input) throws IOException {
 		if (Util.isHomeserver(input)) {
 			addServer(input);
 		} else if (Util.isRoomLabel(input)) {
 			addRoom(input);
 		} else if (Util.isUser(input)) {
 			addUser(input);
+		} else {
+			throw new IOException("String is neither a server, room or user id/alias.");
 		}
 	}
 
