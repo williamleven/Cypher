@@ -43,6 +43,7 @@ public class Room {
 	private final StringProperty topic = new SimpleStringProperty(null);
 	private final ObjectProperty<URL> avatarUrl = new SimpleObjectProperty<>(null);
 	private final ObjectProperty<Image> avatar = new SimpleObjectProperty<>(null);
+	private final ObjectProperty<PermissionTable> permissions = new SimpleObjectProperty<>(null);
 
 	private ObservableMap<String, Event> events =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
@@ -93,33 +94,35 @@ public class Room {
 		canonicalAlias.removeListener(listener);
 	}
 
-	void update(JsonObject data) throws IOException{
+	void update(JsonObject data) throws RestfulHTTPException, IOException {
 		parseNameData(data);
 
 		parseTopicData(data);
 
 		parseAvatarUrlData(data);
 
-		parseTimelineData(data);
+		parseEvents("timeline", data);
+
+		parseEvents("state", data);
 	}
 
-	private void parseTimelineData(JsonObject data) {
-		if (data.has("timeline") &&
-		    data.get("timeline").isJsonObject()) {
-			JsonObject timeline = data.get("timeline").getAsJsonObject();
+	private void parseEvents(String category, JsonObject data) throws RestfulHTTPException, IOException {
+		if (data.has(category) &&
+		    data.get(category).isJsonObject()) {
+			JsonObject timeline = data.get(category).getAsJsonObject();
 			if (timeline.has("events") &&
 			    timeline.get("events").isJsonArray()) {
 				JsonArray events = timeline.get("events").getAsJsonArray();
 				for (JsonElement eventElement : events) {
 					if (eventElement.isJsonObject()) {
-						parseTimelineEventData(eventElement.getAsJsonObject());
+						parseEventData(eventElement.getAsJsonObject());
 					}
 				}
 			}
 		}
 	}
 
-	private void parseTimelineEventData(JsonObject event) {
+	private void parseEventData(JsonObject event) throws RestfulHTTPException, IOException {
 		if (event.has("type") &&
 		    event.has("origin_server_ts") &&
 		    event.has("sender") &&
@@ -130,16 +133,39 @@ public class Room {
 			String sender = event.get("sender").getAsString();
 			String eventId = event.get("event_id").getAsString();
 			String eventType = event.get("type").getAsString();
+			int age = 0;
+
+			if(event.has("unsigned") &&
+			   event.get("unsigned").isJsonObject()) {
+				JsonObject unsigned = event.get("unsigned").getAsJsonObject();
+
+				if(unsigned.has("age")) {
+					age = unsigned.get("age").getAsInt();
+				}
+			}
+
 			JsonObject content = event.get("content").getAsJsonObject();
 
 			if (eventType.equals("m.room.message")) {
-				parseMessageEvent(originServerTs, sender, eventId, content);
+				parseMessageEvent(originServerTs, sender, eventId, age, content);
 			} else if (eventType.equals("m.room.member")) {
-				parseMemberEvent(event, content);
+				parseMemberEvent(event, originServerTs, sender, eventId, age, content);
+			} else if (eventType.equals("m.room.name")) {
+				parseNameData(content);
+				addPropertyChangeEvent(originServerTs, sender, eventId, age, "name", name.getValue());
+			} else if (eventType.equals("m.room.topic")) {
+				parseTopicData(content);
+				addPropertyChangeEvent(originServerTs, sender, eventId, age, "topic", topic.getValue());
+			} else if (eventType.equals("m.room.avatar")) {
+				parseAvatarUrlData(content);
+				addPropertyChangeEvent(originServerTs, sender, eventId, age, "avatar_url", avatarUrl.getValue());
 			} else if (eventType.equals("m.room.aliases")) {
 				parseAliasesEvent(content);
 			} else if (eventType.equals("m.room.canonical_alias")) {
 				parseCanonicalAlias(content);
+			} else if (eventType.equals("m.room.power_levels")) {
+				parsePowerLevelsEvent(content);
+				addPropertyChangeEvent(originServerTs, sender, eventId, age, "power_levels", permissions.getValue());
 			}
 		}
 	}
@@ -176,30 +202,34 @@ public class Room {
 		}
 	}
 
-	private void parseAvatarUrlData(JsonObject data) throws IOException {
-		if (data.has("avatar_url")) {
-			try {
-				URL newAvatarUrl = new URL(data.get("avatar_url").getAsString());
-				if (!newAvatarUrl.equals(avatarUrl)) {
-					avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
+	private void parseAvatarUrlData(JsonObject data) throws RestfulHTTPException, IOException {
+		for(String key : new String[] {"url", "avatar_url"}) {
+			if (data.has(key)) {
+				try {
+					URL newAvatarUrl = new URL(data.get(key).getAsString());
+					if (!newAvatarUrl.equals(avatarUrl.getValue())) {
+						avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
+						this.avatarUrl.set(newAvatarUrl);
+					}
+				} catch (MalformedURLException e) {
+					if (DebugLogger.ENABLED) {
+						DebugLogger.log(e);
+					}
 				}
-			} catch (MalformedURLException e) {
-				if (DebugLogger.ENABLED) {
-					DebugLogger.log(e);
-				}
+				break;
 			}
 		}
 	}
 
-	private void parseMessageEvent(int originServerTs, String sender, String eventId, JsonObject content) {
+	private void parseMessageEvent(int originServerTs, String sender, String eventId, int age, JsonObject content) {
 		User author = client.getUser(sender);
 		this.events.put(
 			eventId,
-			new Message(api, originServerTs, author, eventId, content)
+			new Message(api, originServerTs, author, eventId, age, content)
 		               );
 	}
 
-	private void parseMemberEvent(JsonObject event, JsonObject content) {
+	private void parseMemberEvent(JsonObject event, int originServerTs, String senderId, String eventId, int age, JsonObject content) {
 		if (content.has("membership") &&
 		    event.has("state_key")) {
 			String memberId = event.get("state_key").getAsString();
@@ -217,7 +247,39 @@ public class Room {
 			} else if (members.containsKey(memberId)) {
 				members.remove(memberId);
 			}
+
+			// Add membership event to the log
+			User sender = client.getUser(senderId);
+			events.put(
+					eventId,
+					new MemberEvent(api, originServerTs, sender, eventId, age, memberId, membership)
+			);
 		}
+	}
+
+	private void parsePowerLevelsEvent(JsonObject data) throws IOException {
+		this.permissions.set(new PermissionTable(data));
+
+		if(data.has("users") &&
+		   data.get("users").isJsonObject()) {
+
+			for(Map.Entry<String, JsonElement> userPowerEntry : data.get("users").getAsJsonObject().entrySet()) {
+
+				String userId = userPowerEntry.getKey();
+				if(members.containsKey(userId)) {
+					Member member = members.get(userId);
+					member.privilegeProperty().setValue(userPowerEntry.getValue().getAsInt());
+				}
+			}
+		}
+	}
+
+	private <T> void addPropertyChangeEvent(int originServerTs, String senderId, String eventId, int age, String property, T value) {
+		User sender = client.getUser(senderId);
+		events.put(
+				eventId,
+				new PropertyChangeEvent<>(api, originServerTs, sender, eventId, age, property, value)
+		);
 	}
 
 	/**

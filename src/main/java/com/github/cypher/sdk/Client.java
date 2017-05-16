@@ -212,7 +212,7 @@ public class Client {
 		}
 	}
 
-	private void parseRoomEvents(JsonObject syncData) throws IOException {
+	private void parseRoomEvents(JsonObject syncData) throws RestfulHTTPException, IOException {
 		if(syncData.has("rooms") &&
 				syncData.get("rooms").isJsonObject()) {
 
