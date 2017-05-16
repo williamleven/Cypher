@@ -25,7 +25,7 @@ public class Client implements Updatable {
 
 	private com.github.cypher.sdk.Client sdkClient;
 
-	private final Updater updater;
+	private Updater updater;
 	private final Settings settings;
 	private final SessionManager sessionManager;
 
@@ -56,7 +56,6 @@ public class Client implements Updatable {
 	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory, Settings settings) {
 		this.sdkClientFactory = sdkClientFactory;
 		this.settings = settings;
-		updater = new Updater(settings.getModelTickInterval());
 
 		initialize();
 
@@ -70,10 +69,9 @@ public class Client implements Updatable {
 				// No guarantee that the session is valid. setSession doesn't throw an exception if the session is invalid.
 				sdkClient.setSession(session);
 				loggedIn.setValue(true);
+				startNewUpdater();
 			}
 		}
-		updater.add(this, 1);
-		updater.start();
 		addListeners();
 	}
 
@@ -117,12 +115,34 @@ public class Client implements Updatable {
 		});
 	}
 
+	private void startNewUpdater() {
+		updater = new Updater(settings.getModelTickInterval());
+		updater.add(this, 1);
+		updater.start();
+	}
+
 	public void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
 		sdkClient.login(username, password, homeserver);
+		startNewUpdater();
 	}
 
 	public void logout() throws RestfulHTTPException, IOException {
-		sdkClient.logout();
+		updater.endGracefully();
+		try {
+			updater.join();
+			updater = null;
+		} catch (InterruptedException e) {
+			if (DebugLogger.ENABLED) {
+				DebugLogger.log("InterruptedException when joining updater thread - " + e.getMessage());
+				throw new RuntimeException("");
+			}
+		}
+		try {
+			sdkClient.logout();
+		} catch (RestfulHTTPException | IOException e) {
+			startNewUpdater();
+			throw e;
+		}
 		sessionManager.deleteSessionFromDisk();
 		initialize();
 	}
@@ -164,12 +184,10 @@ public class Client implements Updatable {
 	}
 
 	public void update() {
-		if (loggedIn.get()) { // Only temporary. A real thread lock is needed so this isn't accessed while sdk object changes!
-			try {
-				sdkClient.update(settings.getSDKTimeout());
-			} catch (RestfulHTTPException | IOException e) {
-				DebugLogger.log(e.getMessage());
-			}
+		try {
+			sdkClient.update(settings.getSDKTimeout());
+		} catch (RestfulHTTPException | IOException e) {
+			DebugLogger.log(e.getMessage());
 		}
 	}
 
@@ -177,7 +195,9 @@ public class Client implements Updatable {
 		if (settings.getSaveSession()) {
 			sessionManager.saveSessionToDisk(sdkClient.getSession());
 		}
-		updater.interrupt();
+		if (updater != null) {
+			updater.interrupt();
+		}
 	}
 
 	public ObservableList<RoomCollection> getRoomCollections(){

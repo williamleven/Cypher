@@ -10,6 +10,8 @@ class Updater extends Thread {
 	// The value (Integer) represents the "tick interval". I.e. the Updatable will be notified every {i}'th tic (where i is the value of the Integer)
 	private Map<Updatable, Integer> watching = new ConcurrentHashMap<>(10);
 
+	private volatile boolean stopping = false;
+
 	// The time between each tic in ms
 	private final int interval;
 
@@ -20,7 +22,7 @@ class Updater extends Thread {
 	// Tic loop
 	@Override
 	public void run() {
-		for (int i = 1; !Thread.interrupted() ; i++) {
+		for (int i = 1; !Thread.interrupted() && !stopping ; i++) {
 			// Notify all Updatable classes
 			for (Map.Entry<Updatable, Integer> entry : watching.entrySet()) {
 				if (i % entry.getValue() == 0) {
@@ -45,5 +47,9 @@ class Updater extends Thread {
 	// Remove a listener
 	public void remove(Updatable u) {
 		watching.remove(u);
+	}
+
+	public void endGracefully() {
+		stopping = true;
 	}
 }

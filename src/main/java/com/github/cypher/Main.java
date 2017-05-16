@@ -6,7 +6,7 @@ import com.github.cypher.gui.root.RootView;
 import com.github.cypher.model.Client;
 import com.github.cypher.sdk.api.MatrixApiLayer;
 import com.github.cypher.sdk.api.MatrixMediaURLStreamHandlerFactory;
-import dorkbox.systemTray.*;
+import dorkbox.systemTray.MenuItem;
 import dorkbox.systemTray.SystemTray;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -99,21 +99,16 @@ public class Main extends Application {
 		systemTray.setStatus("Cypher");
 
 		{ /* The "SHOW" menu item */
-			MenuItem item = new MenuItem(labels.getString("show"), e -> {
-				Platform.runLater(() -> {
-					primaryStage.show();
-					primaryStage.requestFocus();
-				});
-			});
+			MenuItem item = new MenuItem(labels.getString("show"), e -> Platform.runLater(() -> {
+				primaryStage.show();
+				primaryStage.requestFocus();
+			}));
 			item.setShortcut('o');
 			systemTray.getMenu().add(item);
-
 		}
 
 		{ /* The "EXIT" menu item */
-			MenuItem item = new MenuItem(labels.getString("exit"), e -> {
-				exit();
-			});
+			MenuItem item = new MenuItem(labels.getString("exit"), e -> exit());
 			item.setShortcut('q');
 			systemTray.getMenu().add(item);
 		}
