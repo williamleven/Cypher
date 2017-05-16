@@ -43,6 +43,7 @@ public class RootPresenter {
 	@FXML
 	private ListView<RoomCollection> roomCollectionListView;
 
+
 	private static final double ROOM_COLLECTION_LIST_CELL_HEIGHT =60;
 	private static final double ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM =5;
 
@@ -74,10 +75,24 @@ public class RootPresenter {
 			}
 		}));
 
+
 		Parent settingsPane = new SettingsView().getView();
 		rightSideStackPane.getChildren().add(settingsPane);
 		Parent roomCollectionPane = new RoomCollectionView().getView();
 		rightSideStackPane.getChildren().add(roomCollectionPane);
+		Parent addServerPane = new AddServerPaneView().getView();
+		mainStackPane.getChildren().add(addServerPane);
+		addServerPane.toBack();
+
+
+		client.showAddServersPanel.addListener((observable, oldValue, newValue) ->{
+			if (newValue){
+				addServerPane.toFront();
+			}
+			else{
+				addServerPane.toBack();
+			}
+		});
 
 		client.showSettings.addListener((observable, oldValue, newValue) -> {
 			if (newValue) {
@@ -126,12 +141,9 @@ public class RootPresenter {
 		});
 	}
 	private void goToAddServerPane(){
-		Parent addServerPane = new AddServerPaneView().getView();
-		if (!mainStackPane.getChildren().contains(addServerPane)){
-			mainStackPane.getChildren().add(addServerPane);
-		}
-		addServerPane.toFront();
+		client.showAddServersPanel.setValue(true);
 	}
+
 
 	public void addButtonClick(ActionEvent actionEvent) {
 		goToAddServerPane();

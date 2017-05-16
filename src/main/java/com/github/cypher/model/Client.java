@@ -45,6 +45,7 @@ public class Client implements Updatable {
 	public final ObjectProperty<RoomCollection> selectedRoomCollection = new SimpleObjectProperty<>(genCollection);
 	public final ObjectProperty<Room> selectedRoom = new SimpleObjectProperty<>(null);
 	public final BooleanProperty showDirectory = new SimpleBooleanProperty(false);
+	public final BooleanProperty showAddServersPanel = new SimpleBooleanProperty(false);
 
 	public Client(com.github.cypher.sdk.Client c, Settings settings) {
 		sdkClient = c;
