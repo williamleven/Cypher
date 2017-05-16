@@ -2,6 +2,7 @@ package com.github.cypher.gui.root;
 
 import com.github.cypher.DebugLogger;
 import com.github.cypher.gui.Executor;
+import com.github.cypher.gui.root.addserverpanel.AddServerPaneView;
 import com.github.cypher.gui.root.roomcollection.RoomCollectionView;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.RoomCollection;
@@ -13,6 +14,7 @@ import com.github.cypher.gui.root.settings.SettingsView;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -122,5 +124,16 @@ public class RootPresenter {
 				}
 			}
 		});
+	}
+	private void goToAddServerPane(){
+		Parent addServerPane = new AddServerPaneView().getView();
+		if (!mainStackPane.getChildren().contains(addServerPane)){
+			mainStackPane.getChildren().add(addServerPane);
+		}
+		addServerPane.toFront();
+	}
+
+	public void addButtonClick(ActionEvent actionEvent) {
+		goToAddServerPane();
 	}
 }

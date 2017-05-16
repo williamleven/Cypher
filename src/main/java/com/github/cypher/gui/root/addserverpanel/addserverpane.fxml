@@ -1,15 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.addserverpanel.AddServerPanePresenter">
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="background-low-opacity-pane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.addserverpanel.AddServerPanePresenter">
    <children>
-      <Label alignment="CENTER" focusTraversable="false" text="Add Server" />
-      <TextField fx:id="serverUrlField" focusTraversable="false" promptText="ex. matrix.org" />
-      <Button alignment="CENTER" focusTraversable="false" mnemonicParsing="false" text="Button" />
+      <VBox alignment="TOP_CENTER" maxHeight="200.0" maxWidth="200.0" StackPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" focusTraversable="false" text="Add Server">
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
+            </Label>
+            <TextField fx:id="serverUrlField" focusTraversable="false" promptText="ex. matrix.org">
+               <VBox.margin>
+                  <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+               </VBox.margin>
+            </TextField>
+            <Button alignment="CENTER" focusTraversable="false" mnemonicParsing="false" text="Button">
+               <styleClass>
+                  <String fx:value="btn" />
+                  <String fx:value="btn-info" />
+                  <String fx:value="image-btn" />
+               </styleClass>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+         <styleClass>
+            <String fx:value="foreground-high-opacity-panel" />
+            <String fx:value="panel-primary" />
+            <String fx:value="panel" />
+         </styleClass>
+      </VBox>
    </children>
-</VBox>
+</StackPane>

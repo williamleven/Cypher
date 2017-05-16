@@ -22,7 +22,7 @@
                                     <Insets />
                                 </VBox.margin>
                             </ListView>
-                            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0">
+                            <Button mnemonicParsing="false" onAction="#addButtonClick" prefHeight="60.0" prefWidth="60.0">
                                 <styleClass>
                                     <String fx:value="btn" />
                                     <String fx:value="btn-info" />
