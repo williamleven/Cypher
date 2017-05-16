@@ -196,16 +196,20 @@ public class Room {
 	}
 
 	private void parseAvatarUrlData(JsonObject data) throws RestfulHTTPException, IOException {
-		if (data.has("avatar_url")) {
-			try {
-				URL newAvatarUrl = new URL(data.get("avatar_url").getAsString());
-				if (!newAvatarUrl.equals(avatarUrl)) {
-					avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
+		for(String key : new String[] {"url", "avatar_url"}) {
+			if (data.has(key)) {
+				try {
+					URL newAvatarUrl = new URL(data.get(key).getAsString());
+					if (!newAvatarUrl.equals(avatarUrl.getValue())) {
+						avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
+						this.avatarUrl.set(newAvatarUrl);
+					}
+				} catch (MalformedURLException e) {
+					if (DebugLogger.ENABLED) {
+						DebugLogger.log(e);
+					}
 				}
-			} catch (MalformedURLException e) {
-				if (DebugLogger.ENABLED) {
-					DebugLogger.log(e);
-				}
+				break;
 			}
 		}
 	}
