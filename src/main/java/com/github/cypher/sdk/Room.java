@@ -130,10 +130,21 @@ public class Room {
 			String sender = event.get("sender").getAsString();
 			String eventId = event.get("event_id").getAsString();
 			String eventType = event.get("type").getAsString();
+			int age = 0;
+
+			if(event.has("unsigned") &&
+			   event.get("unsigned").isJsonObject()) {
+				JsonObject unsigned = event.get("unsigned").getAsJsonObject();
+
+				if(unsigned.has("age")) {
+					age = unsigned.get("age").getAsInt();
+				}
+			}
+
 			JsonObject content = event.get("content").getAsJsonObject();
 
 			if (eventType.equals("m.room.message")) {
-				parseMessageEvent(originServerTs, sender, eventId, content);
+				parseMessageEvent(originServerTs, sender, eventId, age, content);
 			} else if (eventType.equals("m.room.member")) {
 				parseMemberEvent(event, content);
 			} else if (eventType.equals("m.room.aliases")) {
@@ -191,11 +202,11 @@ public class Room {
 		}
 	}
 
-	private void parseMessageEvent(int originServerTs, String sender, String eventId, JsonObject content) {
+	private void parseMessageEvent(int originServerTs, String sender, String eventId, int age, JsonObject content) {
 		User author = client.getUser(sender);
 		this.events.put(
 			eventId,
-			new Message(api, originServerTs, author, eventId, content)
+			new Message(api, originServerTs, author, eventId, age, content)
 		               );
 	}
 
