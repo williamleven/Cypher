@@ -76,8 +76,6 @@ public class Client implements Updatable {
 	}
 
 	private void initialize() {
-		sdkClient = sdkClientFactory.get();
-
 		pmCollection = new PMCollection();
 		genCollection = new GeneralCollection();
 		roomCollections.clear();
@@ -86,6 +84,13 @@ public class Client implements Updatable {
 
 		servers.clear();
 		users.clear();
+
+		sdkClient = sdkClientFactory.get();
+		sdkClient.addJoinRoomsListener((change) -> {
+			if (change.wasAdded()) {
+				distributeRoom(new Room(change.getValueAdded()));
+			}
+		});
 
 		loggedIn.set(false);
 		showRoomSettings.set(false);
@@ -105,12 +110,6 @@ public class Client implements Updatable {
 				if (change.wasRemoved()) {
 					roomCollections.removeAll(change.getRemoved());
 				}
-			}
-		});
-
-		sdkClient.addJoinRoomsListener((change) -> {
-			if (change.wasAdded()) {
-				distributeRoom(new Room(change.getValueAdded()));
 			}
 		});
 	}
