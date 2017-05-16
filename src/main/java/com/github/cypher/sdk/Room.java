@@ -151,10 +151,13 @@ public class Room {
 				parseMemberEvent(event, originServerTs, sender, eventId, age, content);
 			} else if (eventType.equals("m.room.name")) {
 				parseNameData(content);
+				addPropertyChangeEvent(originServerTs, sender, eventId, age, "name", name.getValue());
 			} else if (eventType.equals("m.room.topic")) {
 				parseTopicData(content);
+				addPropertyChangeEvent(originServerTs, sender, eventId, age, "topic", topic.getValue());
 			} else if (eventType.equals("m.room.avatar")) {
 				parseAvatarUrlData(content);
+				addPropertyChangeEvent(originServerTs, sender, eventId, age, "avatar_url", avatarUrl.getValue());
 			} else if (eventType.equals("m.room.aliases")) {
 				parseAliasesEvent(content);
 			} else if (eventType.equals("m.room.canonical_alias")) {
@@ -248,6 +251,14 @@ public class Room {
 					new MemberEvent(api, originServerTs, sender, eventId, age, memberId, membership)
 			);
 		}
+	}
+
+	private <T> void addPropertyChangeEvent(int originServerTs, String senderId, String eventId, int age, String property, T value) {
+		User sender = client.getUser(senderId);
+		events.put(
+				eventId,
+				new PropertyChangeEvent<>(api, originServerTs, sender, eventId, age, property, value)
+		);
 	}
 
 	/**
