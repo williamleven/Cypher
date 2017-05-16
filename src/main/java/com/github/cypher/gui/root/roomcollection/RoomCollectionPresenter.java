@@ -4,15 +4,12 @@ import com.github.cypher.Settings;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
 import com.github.cypher.gui.root.roomcollection.directory.DirectoryView;
 import com.github.cypher.gui.root.roomcollection.room.RoomView;
-import com.github.cypher.gui.root.roomcollection.roomitem.RoomItemPresenter;
-import com.github.cypher.gui.root.roomcollection.roomitem.RoomItemView;
+import com.github.cypher.gui.root.roomcollection.roomlistitem.RoomListItemPresenter;
+import com.github.cypher.gui.root.roomcollection.roomlistitem.RoomListItemView;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Room;
 import com.github.cypher.model.RoomCollection;
 import javafx.application.Platform;
-import com.github.cypher.model.*;
-import com.github.cypher.gui.root.roomcollection.directory.DirectoryView;
-import com.github.cypher.gui.root.roomcollection.room.RoomView;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.ListView;
@@ -76,9 +73,9 @@ public class RoomCollectionPresenter {
 		backendListForView = new FXThreadedObservableListWrapper<>(roomCollection.getRoomsProperty());
 
 		roomListView.setCellFactory(listView -> {
-			RoomItemView roomItemView = new RoomItemView();
-			roomItemView.getView();
-			return (RoomItemPresenter) roomItemView.getPresenter();
+			RoomListItemView roomListItemView = new RoomListItemView();
+			roomListItemView.getView();
+			return (RoomListItemPresenter) roomListItemView.getPresenter();
 		});
 
 		Platform.runLater(() -> roomListView.setItems(backendListForView.getList()));
