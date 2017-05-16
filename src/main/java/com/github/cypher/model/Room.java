@@ -1,7 +1,6 @@
 package com.github.cypher.model;
 
 import com.github.cypher.DebugLogger;
-import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -62,8 +61,12 @@ public class Room {
 		}));
 	}
 
-	public void sendMessage(String body) throws RestfulHTTPException, IOException {
-		sdkRoom.sendTextMessage(body);
+	public void sendMessage(String body) throws SdkException {
+		try {
+			sdkRoom.sendTextMessage(body);
+		}catch(Exception ex){
+			throw new SdkException(ex);
+		}
 	}
 
 	private void updateAvatar(java.awt.Image image) {

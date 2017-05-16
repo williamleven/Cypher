@@ -4,7 +4,7 @@ import com.github.cypher.DebugLogger;
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Room;
-import com.github.cypher.sdk.api.RestfulHTTPException;
+import com.github.cypher.model.SdkException;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -12,7 +12,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
-import java.io.IOException;
 
 public class ChatPresenter {
 
@@ -53,13 +52,9 @@ public class ChatPresenter {
 				if(room != null) {
 					try {
 						room.sendMessage(messageBox.getText());
-					} catch(RestfulHTTPException e) {
+					} catch(SdkException e) {
 						if(DebugLogger.ENABLED) {
-							DebugLogger.log("RestfulHTTPException when trying to send a message: " + e);
-						}
-					} catch(IOException e) {
-						if(DebugLogger.ENABLED) {
-							DebugLogger.log("IOException when trying to send a message: " + e);
+							DebugLogger.log("SdkException when trying to send a message: " + e);
 						}
 					}
 				}

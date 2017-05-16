@@ -10,7 +10,7 @@ import com.github.cypher.gui.root.login.LoginView;
 import com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemPresenter;
 import com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemView;
 import com.github.cypher.gui.root.settings.SettingsView;
-import com.github.cypher.sdk.api.RestfulHTTPException;
+import com.github.cypher.model.SdkException;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -20,7 +20,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.Iterator;
 
 // Presenter for the root/main pane of the application
@@ -112,13 +111,9 @@ public class RootPresenter {
 			try {
 				client.logout();
 				client.loggedIn.setValue(false);
-			} catch (RestfulHTTPException e) {
+			} catch (SdkException e) {
 				if (DebugLogger.ENABLED) {
-					DebugLogger.log("RestfulHTTPException when trying to logout - " + e.getMessage());
-				}
-			} catch (IOException e) {
-				if (DebugLogger.ENABLED) {
-					DebugLogger.log("IOException when trying to logout - " + e.getMessage());
+					DebugLogger.log("SdkException when trying to logout - " + e.getMessage());
 				}
 			}
 		});
