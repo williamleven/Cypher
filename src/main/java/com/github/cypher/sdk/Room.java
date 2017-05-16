@@ -36,7 +36,7 @@ import java.util.Map;
  */
 public class Room {
 	private final ApiLayer api;
-	private final Client client;
+	private final Repository<User> userRepository;
 
 	private final String id;
 	private final StringProperty name = new SimpleStringProperty(null);
@@ -55,9 +55,9 @@ public class Room {
 
 	private final StringProperty canonicalAlias = new SimpleStringProperty();
 
-	Room(ApiLayer api, Client client, String id) {
+	Room(ApiLayer api, Repository<User> userRepository, String id) {
 		this.api = api;
-		this.client = client;
+		this.userRepository = userRepository;
 		this.id = id;
 	}
 
@@ -192,7 +192,7 @@ public class Room {
 	}
 
 	private void parseMessageEvent(int originServerTs, String sender, String eventId, JsonObject content) {
-		User author = client.getUser(sender);
+		User author = userRepository.get(sender);
 		this.events.put(
 			eventId,
 			new Message(api, originServerTs, author, eventId, content)
@@ -205,7 +205,7 @@ public class Room {
 			String memberId = event.get("state_key").getAsString();
 			String membership = content.get("membership").getAsString();
 
-			User user = client.getUser(memberId);
+			User user = userRepository.get(memberId);
 
 			if (membership.equals("join")) {
 				if (!members.containsKey(memberId)) {

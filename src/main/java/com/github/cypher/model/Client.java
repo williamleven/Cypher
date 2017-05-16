@@ -29,7 +29,7 @@ public class Client implements Updatable {
 	private final ObservableList<Server> servers =
 			FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
-	private final Map<String, User> users = new ConcurrentHashMap<>();
+	private final Repository<User> userRepository;
 
 	// Personal messages
 	private final PMCollection pmCollection = new PMCollection();
@@ -48,6 +48,11 @@ public class Client implements Updatable {
 
 	public Client(com.github.cypher.sdk.Client c, Settings settings) {
 		sdkClient = c;
+
+		userRepository = new Repository<>((String id) -> {
+			return new User(sdkClient.getUser(id));
+		});
+
 
 		sdkClient.addJoinRoomsListener((change) -> {
 			if (change.wasAdded()) {
@@ -106,15 +111,7 @@ public class Client implements Updatable {
 	}
 
 	public User getUser(String id) {
-		if(users.containsKey(id)) {
-			return users.get(id);
-		}
-
-		com.github.cypher.sdk.User sdkUser = sdkClient.getUser(id);
-
-		User user = new User(sdkUser);
-		users.put(id, user);
-		return user;
+		return userRepository.get(id);
 	}
 
 	private void addServer(String server) {

@@ -11,8 +11,9 @@ import java.io.IOException;
 public class RoomTest {
 
 	private ApiMock api = new ApiMock();
-	private Client client = new Client(api, "ex.example.test");
-	private Room room = new Room(api, client, "!zion:matrix.org");
+	private Room room = new Room(api, new Repository<User>((String id) -> {
+		return new User(api, id);
+	}), "!zion:matrix.org");
 
 	@Test
 	public void update() {
