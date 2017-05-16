@@ -51,7 +51,6 @@ abstract public class CustomListCell<T> extends ListCell<T> {
 			}else{
 				updateBindings();
 			}
-
 		}
 	}
 

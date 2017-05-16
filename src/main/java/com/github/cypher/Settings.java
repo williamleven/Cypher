@@ -11,6 +11,9 @@ public interface Settings {
 	boolean getSaveSession();
 	void setSaveSession(boolean saveSession);
 
+	boolean getExitToSystemTray();
+	void setExitToSystemTray(boolean exitToSystemTray);
+
 	// If control + enter should be used for sending messages (if false only enter is needed)
 	boolean getControlEnterToSendMessage();
 	void setControlEnterToSendMessage(boolean controlEnterToSendMessage);

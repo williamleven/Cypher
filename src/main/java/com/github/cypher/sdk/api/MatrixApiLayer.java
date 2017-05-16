@@ -5,6 +5,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -431,8 +433,22 @@ public class MatrixApiLayer implements ApiLayer {
 
 		//Send request URL.
 		return  Util.makeJsonGetRequest(url).getAsJsonObject();
-
-
 	}
 
+	@Override
+	public InputStream getMediaContent(URL mediaUrl) throws RestfulHTTPException, IOException {
+		//Build request URL.
+		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.MEDIA_DOWNLOAD, new Object[] {mediaUrl.getHost(),mediaUrl.getPath().replaceFirst("/", "")}, null);
+
+		HttpURLConnection conn = null;
+		try {
+			// Setup the connection
+			conn = (HttpURLConnection)url.openConnection();
+			conn.setRequestMethod("GET");
+			return conn.getInputStream();
+		} catch (IOException e) {
+			Util.handleRestfulHTTPException(conn);
+			return null;
+		}
+	}
 }
