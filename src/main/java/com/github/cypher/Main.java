@@ -5,7 +5,6 @@ import com.github.cypher.model.Client;
 import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.root.RootView;
 import com.github.cypher.sdk.api.MatrixApiLayer;
-import com.github.cypher.sdk.api.MatrixMediaURLStreamHandlerFactory;
 import dorkbox.systemTray.*;
 import dorkbox.systemTray.SystemTray;
 import javafx.application.Application;
@@ -35,7 +34,7 @@ public class Main extends Application {
 		Locale.setDefault(settings.getLanguage());
 		// Starts the Executors thread
 		executor.start();
-		URL.setURLStreamHandlerFactory(new MatrixMediaURLStreamHandlerFactory());
+		URL.setURLStreamHandlerFactory(new com.github.cypher.sdk.api.Util.MatrixMediaURLStreamHandlerFactory());
 
 		// Dependency injection with afterburner.fx
 		//
