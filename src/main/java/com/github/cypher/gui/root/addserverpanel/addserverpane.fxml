@@ -17,14 +17,14 @@
       <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#clickBackground" />
       <StackPane alignment="TOP_RIGHT" maxHeight="150.0" maxWidth="200.0">
          <children>
-            <VBox alignment="TOP_CENTER" maxHeight="200.0" maxWidth="200.0" onMouseClicked="#clickPanel" StackPane.alignment="CENTER">
+            <VBox alignment="TOP_CENTER" maxHeight="200.0" maxWidth="200.0" StackPane.alignment="CENTER">
                <children>
                   <Label alignment="CENTER" focusTraversable="false" text="Add Server">
                      <VBox.margin>
                         <Insets top="15.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="serverUrlField" focusTraversable="false" promptText="ex. matrix.org">
+                  <TextField fx:id="serverUrlField" focusTraversable="false" onAction="#enterPressed" promptText="ex. matrix.org">
                      <VBox.margin>
                         <Insets left="25.0" right="25.0" top="25.0" />
                      </VBox.margin>

@@ -24,7 +24,7 @@ public class AddServerPanePresenter {
 	public TextField serverUrlField;
 	@FXML
 	public Text inputValidationFeedback;
-	
+
 	private void exitPane(){
 		client.showAddServersPanel.setValue(false);
 		serverUrlField.setText("");
@@ -32,7 +32,7 @@ public class AddServerPanePresenter {
 	}
 	private void addSubmission() {
 		try {
-			client.add(serverUrlField.getText().toString());
+			client.add(serverUrlField.getText());
 			exitPane();
 
 		}catch (IOException e){
@@ -53,5 +53,9 @@ public class AddServerPanePresenter {
 
 	public void clickExit(ActionEvent mouseEvent) {
 		exitPane();
+	}
+
+	public void enterPressed(ActionEvent actionEvent) {
+		addSubmission();
 	}
 }
