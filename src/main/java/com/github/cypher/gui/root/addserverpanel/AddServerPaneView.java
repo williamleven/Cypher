@@ -1,4 +1,4 @@
-package com.github.cypher.root.addserverpanel;
+package com.github.cypher.gui.root.addserverpanel;
 
 import com.airhacks.afterburner.views.FXMLView;
 
