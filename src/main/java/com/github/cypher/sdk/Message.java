@@ -2,13 +2,19 @@ package com.github.cypher.sdk;
 
 import com.github.cypher.sdk.api.ApiLayer;
 import com.google.gson.JsonObject;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class Message extends Event {
 	private final StringProperty body = new SimpleStringProperty("");
 	private final StringProperty type = new SimpleStringProperty("");
+	private final ObjectProperty<URL> url      = new SimpleObjectProperty<>(null);
 	private final StringProperty formattedBody = new SimpleStringProperty(null);
 	private final StringProperty formatType    = new SimpleStringProperty(null);
 
@@ -19,6 +25,14 @@ public class Message extends Event {
 		}
 		if(content.has("msgtype")) {
 			this.type.set(content.get("msgtype").getAsString());
+		}
+
+		if(content.has("url")) {
+			try {
+				this.url.set(new URL(content.get("url").getAsString()));
+			} catch(MalformedURLException e) {
+				e.printStackTrace();
+			}
 		}
 
 		if(content.has("format") &&
@@ -44,6 +58,14 @@ public class Message extends Event {
 		type.removeListener(listener);
 	}
 
+	public void addUrlListener(ChangeListener<? super URL> listener) {
+		url.addListener(listener);
+	}
+
+	public void removeUrlListener(ChangeListener<? super URL> listener) {
+		url.removeListener(listener);
+	}
+
 	public void addFormattedBodyListener(ChangeListener<? super String> listener) {
 		formattedBody.addListener(listener);
 	}
@@ -62,6 +84,7 @@ public class Message extends Event {
 
 	public String getBody() { return body.get(); }
 	public String getType() { return type.get(); }
+	public URL    getUrl()  { return url.get();  }
 	public String getFormattedBody() { return formattedBody.get(); }
 	public String getFormatType() { return formatType.get(); }
 }
