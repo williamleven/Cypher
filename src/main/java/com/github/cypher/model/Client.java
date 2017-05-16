@@ -65,7 +65,7 @@ public class Client implements Updatable {
 		// Loads the session file from the disk if it exists.
 		if (sessionManager.savedSessionExists()) {
 			Session session = sessionManager.loadSessionFromDisk();
-			// If not session exists SessionManager::loadSession returns null
+			// If session doesn't exists SessionManager::loadSession returns null
 			if (session != null) {
 				// No guarantee that the session is valid. setSession doesn't throw an exception if the session is invalid.
 				sdkClient.setSession(session);

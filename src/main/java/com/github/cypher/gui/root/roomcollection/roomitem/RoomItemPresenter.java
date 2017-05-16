@@ -1,7 +1,7 @@
 package com.github.cypher.gui.root.roomcollection.roomitem;
 
+import com.github.cypher.gui.CustomListCell;
 import com.github.cypher.model.Room;
-import com.github.cypher.gui.root.CustomListCell;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;

@@ -1,4 +1,4 @@
-package com.github.cypher.gui.root;
+package com.github.cypher.gui;
 
 import javafx.scene.Node;
 import javafx.scene.control.ListCell;

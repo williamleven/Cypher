@@ -1,6 +1,6 @@
 package com.github.cypher.gui.root.roomcollection.room.chat.messageitem;
 
-import com.github.cypher.gui.root.CustomListCell;
+import com.github.cypher.gui.CustomListCell;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Message;
 import javafx.beans.value.ChangeListener;
@@ -16,6 +16,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
+
 import javax.inject.Inject;
 import java.util.LinkedList;
 import java.util.List;

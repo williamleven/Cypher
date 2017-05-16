@@ -2,8 +2,8 @@ package com.github.cypher.gui.root.login;
 
 import com.github.cypher.DebugLogger;
 import com.github.cypher.Settings;
+import com.github.cypher.gui.Executor;
 import com.github.cypher.model.Client;
-import com.github.cypher.gui.root.Executor;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;

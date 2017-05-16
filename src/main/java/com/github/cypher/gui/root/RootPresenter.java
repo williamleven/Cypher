@@ -1,6 +1,8 @@
 package com.github.cypher.gui.root;
 
 import com.github.cypher.DebugLogger;
+import com.github.cypher.gui.Executor;
+import com.github.cypher.gui.FXThreadedObservableListWrapper;
 import com.github.cypher.gui.root.login.LoginPresenter;
 import com.github.cypher.gui.root.login.LoginView;
 import com.github.cypher.gui.root.roomcollection.RoomCollectionView;
@@ -97,22 +99,12 @@ public class RootPresenter {
 			return (RoomCollectionListItemPresenter) roomCollectionListItemView.getPresenter();
 		});
 
-		roomCollectionListView.setItems(backendListForView);
+		roomCollectionListView.setItems(new FXThreadedObservableListWrapper<RoomCollection>(client.getRoomCollections()).getList());
 
-		client.getRoomCollections().addListener((ListChangeListener.Change<? extends RoomCollection> change) -> {
-			Platform.runLater(() -> {
-				while (change.next()) {
-					if (change.wasAdded()) {
-						backendListForView.addAll(change.getAddedSubList());
-					}
-					if (change.wasRemoved()) {
-						backendListForView.removeAll(change.getRemoved());
-					}
-				}
-				updateRoomCollectionListHeight();
-			});
-		});
 		updateRoomCollectionListHeight();
+		client.getRoomCollections().addListener((ListChangeListener.Change<? extends RoomCollection> change) -> {
+			Platform.runLater(this::updateRoomCollectionListHeight);
+		});
 
 		roomCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> client.selectedRoomCollection.set(newValue));
 	}
