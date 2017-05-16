@@ -1,6 +1,5 @@
 package com.github.cypher.sdk.api;
 
-import com.github.cypher.DebugLogger;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -55,8 +54,8 @@ public class Util {
 			// Format as URL and return
 			return new URL(builder.toString());
 		} catch(UnsupportedEncodingException e) {
-			DebugLogger.log(builder.toString());
-			DebugLogger.log(e);
+			System.out.println(builder.toString());
+			System.out.println(e);
 			return null;
 		}
 	}

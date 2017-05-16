@@ -1,8 +1,6 @@
 package com.github.cypher.sdk;
 
-import com.github.cypher.sdk.api.ApiLayer;
-import com.github.cypher.sdk.api.RestfulHTTPException;
-import com.github.cypher.sdk.api.Session;
+import com.github.cypher.sdk.api.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

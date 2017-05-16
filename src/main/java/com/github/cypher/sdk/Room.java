@@ -1,8 +1,6 @@
 package com.github.cypher.sdk;
 
-import com.github.cypher.DebugLogger;
-import com.github.cypher.sdk.api.ApiLayer;
-import com.github.cypher.sdk.api.RestfulHTTPException;
+import com.github.cypher.sdk.api.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -20,7 +18,6 @@ import javafx.collections.ObservableMap;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -178,15 +175,9 @@ public class Room {
 
 	private void parseAvatarUrlData(JsonObject data) throws IOException {
 		if (data.has("avatar_url")) {
-			try {
-				URL newAvatarUrl = new URL(data.get("avatar_url").getAsString());
-				if (!newAvatarUrl.equals(avatarUrl)) {
-					avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
-				}
-			} catch (MalformedURLException e) {
-				if (DebugLogger.ENABLED) {
-					DebugLogger.log(e);
-				}
+			URL newAvatarUrl = new URL(data.get("avatar_url").getAsString());
+			if (!newAvatarUrl.equals(avatarUrl)) {
+				avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
 			}
 		}
 	}
