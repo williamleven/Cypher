@@ -112,7 +112,7 @@ public class Client {
 	 * @throws IOException
 	 */
 	public void update(int timeout) throws RestfulHTTPException, IOException {
-		JsonObject syncData = api.sync(null, lastSyncMarker, lastSyncMarker == null, User.Presence.ONLINE, timeout);
+		JsonObject syncData = api.sync(null, lastSyncMarker, lastSyncMarker == null, ApiLayer.Presence.ONLINE, timeout);
 
 		if(syncData.has("next_batch")) {
 			lastSyncMarker = syncData.get("next_batch").getAsString();

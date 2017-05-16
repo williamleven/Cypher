@@ -17,7 +17,7 @@ public class ApiMock implements ApiLayer {
 	boolean textMessageSent = false;
 
 	@Override
-	public JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence, int timeout) throws RestfulHTTPException, IOException {
+	public JsonObject sync(String filter, String since, boolean fullState, Presence setPresence, int timeout) throws RestfulHTTPException, IOException {
 		JsonObject data = new JsonObject();
 
 		// Emulate since token handeling
