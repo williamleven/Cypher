@@ -12,7 +12,6 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
@@ -23,7 +22,7 @@ import static com.github.cypher.Util.*;
 
 public class Main extends Application {
 	public static final String APPLICATION_NAME = "Cypher";
-	public static final String USER_DATA_DIRECTORY = getUserDataDirectoryPath(); //The path to the folder where settings, credentials etc are saved.
+	public static final String USER_DATA_DIRECTORY = getUserDataDirectoryPath(APPLICATION_NAME); //The path to the folder where settings, credentials etc are saved.
 
 	private final Settings settings = new TOMLSettings();
 	private final Executor executor = new Executor();
@@ -121,15 +120,6 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
-	}
-
-	// Creates the user data folder path
-	private static String getUserDataDirectoryPath() {
-		if (System.getenv("APPDATA") != null) { // Windows style
-			return System.getenv("APPDATA") + File.separator + capitalize(APPLICATION_NAME);
-		} else { //Unix style
-			return System.getProperty("user.home") + File.separator + "." + decapitalize(APPLICATION_NAME);
-		}
 	}
 
 	private void exit() {
