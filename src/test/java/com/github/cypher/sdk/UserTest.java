@@ -24,12 +24,6 @@ public class UserTest {
 			user.getName(),
 			"Morpheus"
 		);
-
-		Assert.assertEquals(
-			"User object did not parse avatar url",
-			user.getAvatarUrl(),
-			new URL("mxc://matrix.org/7hdf98j8d0qwe")
-		);
 	}
 
 	@Test

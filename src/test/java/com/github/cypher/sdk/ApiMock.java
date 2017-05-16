@@ -7,6 +7,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -153,7 +154,6 @@ public class ApiMock implements ApiLayer {
 	public JsonObject getUserProfile(String userId) throws RestfulHTTPException, IOException {
 		JsonObject response = new JsonObject();
 		response.addProperty("displayname", "Morpheus");
-		response.addProperty("avatar_url", "mxc://matrix.org/7hdf98j8d0qwe");
 		return response;
 	}
 
@@ -267,6 +267,11 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public JsonObject get3Pid() throws RestfulHTTPException, IOException {
+		return null;
+	}
+
+	@Override
+	public InputStream getMediaContent(URL mediaUrl) throws RestfulHTTPException, IOException {
 		return null;
 	}
 }
