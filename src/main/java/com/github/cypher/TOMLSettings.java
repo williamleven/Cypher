@@ -19,9 +19,10 @@ public class TOMLSettings implements Settings {
 	private final SettingsData settingsData;
 
 	// Class representing all settings
-	private static class SettingsData{
+	private static class SettingsData {
 		String languageTag = Locale.getDefault().toLanguageTag(); // Default Value
 		boolean saveSession = false;
+		boolean exitToSystemTray = true;
 		boolean controlEnterToSendMessage = true;
 	}
 
@@ -31,7 +32,7 @@ public class TOMLSettings implements Settings {
 		save();
 	}
 
-	private static File createOrLoadFile(){
+	private static File createOrLoadFile() {
 		try {
 			// Create folder if it doesn't exist
 			new File(USER_DATA_DIRECTORY).mkdir();
@@ -44,7 +45,7 @@ public class TOMLSettings implements Settings {
 
 			return file;
 
-		}catch (IOException e) {
+		} catch (IOException e) {
 			DebugLogger.log("Could not create settings file");
 			return null;
 		}
@@ -57,7 +58,7 @@ public class TOMLSettings implements Settings {
 				DebugLogger.log("Reading settings from: " + settingsFile);
 			}
 			return new Toml().read(settingsFile).to(SettingsData.class);
-		}else{
+		} else {
 			if (DebugLogger.ENABLED) {
 				DebugLogger.log("Could not access settings file, defaults will be loaded.");
 			}
@@ -67,7 +68,7 @@ public class TOMLSettings implements Settings {
 
 	private synchronized void save() {
 		// Make sure settingsFile is set before saving settings
-		if (settingsFile != null){
+		if (settingsFile != null) {
 			try {
 				new TomlWriter().write(settingsData, settingsFile);
 				if (DebugLogger.ENABLED) {
@@ -78,8 +79,8 @@ public class TOMLSettings implements Settings {
 					DebugLogger.log("Could not access settings file, settings won't be saved.");
 				}
 			}
-		}else{
-			if (DebugLogger.ENABLED){
+		} else {
+			if (DebugLogger.ENABLED) {
 				DebugLogger.log("Could not access settings file, settings won't be saved.");
 			}
 		}
@@ -106,6 +107,17 @@ public class TOMLSettings implements Settings {
 	@Override
 	public synchronized void setSaveSession(boolean saveSession) {
 		settingsData.saveSession = saveSession;
+		save();
+	}
+
+	@Override
+	public synchronized boolean getExitToSystemTray() {
+		return settingsData.exitToSystemTray;
+	}
+
+	@Override
+	public synchronized void setExitToSystemTray(boolean exitToSystemTray) {
+		settingsData.exitToSystemTray = exitToSystemTray;
 		save();
 	}
 

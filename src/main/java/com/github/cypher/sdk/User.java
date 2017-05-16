@@ -145,6 +145,7 @@ public class User {
 	public String getName() { return name.get(); }
 	public URL getAvatarUrl() { return avatarUrl.get(); }
 	public Image getAvatar() { return avatar.get(); }
+	public Presence getPresence() { return presence.get(); }
 	public boolean getIsActive() { return isActive.get(); }
 	public long getLastActiveAgo() { return lastActiveAgo.get(); }
 }

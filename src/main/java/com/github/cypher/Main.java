@@ -2,10 +2,12 @@ package com.github.cypher;
 
 import com.airhacks.afterburner.injection.Injector;
 import com.github.cypher.model.Client;
-import com.github.cypher.root.Executor;
-import com.github.cypher.root.RootView;
+import com.github.cypher.gui.Executor;
+import com.github.cypher.gui.root.RootView;
 import com.github.cypher.sdk.api.MatrixApiLayer;
 import com.github.cypher.sdk.api.MatrixMediaURLStreamHandlerFactory;
+import dorkbox.systemTray.*;
+import dorkbox.systemTray.SystemTray;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -16,6 +18,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
+
+import static com.github.cypher.Util.*;
 
 public class Main extends Application {
 	public static final String APPLICATION_NAME = "Cypher";
@@ -54,13 +59,66 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setMinWidth(1100);
 		primaryStage.setMinHeight(500);
+
+		// Only hide close the main window if system tray is enabled and supported.
 		primaryStage.setOnCloseRequest(event -> {
-			client.exit();
-			Platform.exit();
-			System.exit(0);
+			if (useSyetemTray()) {
+				primaryStage.close();
+			} else {
+				exit();
+			}
 		});
+		if (useSyetemTray()) {
+			addTrayIcon(primaryStage);
+		}
+
 		primaryStage.show();
 	}
+
+	private boolean useSyetemTray() {
+		return ( SystemTray.get() != null && settings.getExitToSystemTray());
+	}
+
+	private void addTrayIcon(Stage primaryStage) {
+
+		// Load systemtray
+		SystemTray systemTray = SystemTray.get();
+		if (systemTray == null) {
+			throw new RuntimeException("Unable to load SystemTray!");
+		}
+
+		// Load labels from bundle
+		ResourceBundle labels = ResourceBundle.getBundle("com.github.cypher.labels", Locale.getDefault());
+
+		// Make sure application doesn't exit when main window is closed
+		Platform.setImplicitExit(false);
+
+		// Set image and status
+		systemTray.setImage(getClass().getResourceAsStream("/icon.png"));
+		systemTray.setStatus("Cypher");
+
+		{ /* The "SHOW" menu item */
+			MenuItem item = new MenuItem(labels.getString("show"), e -> {
+				Platform.runLater(() -> {
+					primaryStage.show();
+					primaryStage.requestFocus();
+				});
+			});
+			item.setShortcut('o');
+			systemTray.getMenu().add(item);
+
+		}
+
+		{ /* The "EXIT" menu item */
+			MenuItem item = new MenuItem(labels.getString("exit"), e -> {
+				exit();
+			});
+			item.setShortcut('q');
+			systemTray.getMenu().add(item);
+		}
+
+	}
+
 
 	public static void main(String[] args) {
 		launch(args);
@@ -75,11 +133,9 @@ public class Main extends Application {
 		}
 	}
 
-	// Utility methods
-	private static String capitalize(String name){
-		return name.substring(0, 1).toUpperCase() + name.substring(1);
-	}
-	private static String decapitalize(String name){
-		return name.substring(0, 1).toLowerCase() + name.substring(1);
+	private void exit() {
+		client.exit();
+		Platform.exit();
+		System.exit(0);
 	}
 }
