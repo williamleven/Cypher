@@ -37,7 +37,6 @@ public class Room {
 		memberCount = new SimpleIntegerProperty(sdkRoom.getMemberCount());
 		aliases = FXCollections.synchronizedObservableList(FXCollections.observableArrayList(sdkRoom.getAliases()));
 		events = FXCollections.synchronizedObservableMap(FXCollections.emptyObservableMap());
-		addAllEventsFromSdk();
 		this.sdkRoom = sdkRoom;
 
 		sdkRoom.addNameListener((observable, oldValue, newValue) -> {
@@ -94,7 +93,7 @@ public class Room {
 			}
 		}
 	}
-
+	//Might be used if caching is implemented.
 	private void addAllEventsFromSdk() {
 		for (com.github.cypher.sdk.Event event : sdkRoom.getEvents().values()) {
 			if (!events.containsKey(event.getEventId())) {
