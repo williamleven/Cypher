@@ -47,10 +47,6 @@ public class MessageItemPresenter extends CustomListCell<Message> {
 		}
 	};
 
-	@FXML
-	private void initialize() {
-	}
-
 	@Override
 	protected Node getRoot() {
 		return root;
