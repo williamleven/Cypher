@@ -1,6 +1,5 @@
 package com.github.cypher.gui.root;
 
-import com.github.cypher.DebugLogger;
 import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.root.addserverpanel.AddServerPaneView;
 import com.github.cypher.gui.root.roomcollection.RoomCollectionView;
@@ -134,9 +133,7 @@ public class RootPresenter {
 				client.logout();
 				client.loggedIn.setValue(false);
 			} catch (SdkException e) {
-				if (DebugLogger.ENABLED) {
-					DebugLogger.log("SdkException when trying to logout - " + e.getMessage());
-				}
+				System.out.printf("SdkException when trying to logout - %s\n", e.getMessage());
 			}
 		});
 	}

@@ -1,6 +1,5 @@
 package com.github.cypher.model;
 
-import com.github.cypher.DebugLogger;
 import com.github.cypher.Settings;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;
@@ -138,10 +137,8 @@ public class Client implements Updatable {
 			updater.join();
 			updater = null;
 		} catch (InterruptedException e) {
-			if (DebugLogger.ENABLED) {
-				DebugLogger.log("InterruptedException when joining updater thread - " + e.getMessage());
-				throw new RuntimeException("InterruptedException when joining updater thread - " + e.getMessage());
-			}
+			System.out.printf("InterruptedException when joining updater thread - %s\n", e.getMessage());
+			throw new RuntimeException("InterruptedException when joining updater thread - " + e.getMessage());
 		}
 		try {
 			sdkClient.logout();
@@ -186,7 +183,7 @@ public class Client implements Updatable {
 		try {
 			sdkClient.update(settings.getSDKTimeout());
 		} catch (RestfulHTTPException | IOException e) {
-			DebugLogger.log(e.getMessage());
+			System.out.printf("%s\n", e.getMessage());
 		}
 	}
 
