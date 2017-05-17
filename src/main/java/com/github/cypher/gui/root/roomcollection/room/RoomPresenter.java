@@ -1,10 +1,13 @@
 package com.github.cypher.gui.root.roomcollection.room;
 
 import com.github.cypher.Settings;
+import com.github.cypher.ToggleEvent;
 import com.github.cypher.gui.root.roomcollection.room.chat.ChatView;
 import com.github.cypher.gui.root.roomcollection.room.chatextra.ChatExtraView;
 import com.github.cypher.gui.root.roomcollection.room.settings.SettingsView;
 import com.github.cypher.model.Client;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
@@ -21,9 +24,11 @@ public class RoomPresenter {
 	@Inject
 	private Settings settings;
 
+	@Inject
+	private EventBus eventBus;
+
 	@FXML
 	private StackPane mainStackPane;
-
 
 	@FXML
 	private HBox chatRoot;
@@ -34,32 +39,41 @@ public class RoomPresenter {
 	@FXML
 	private AnchorPane chatExtra;
 
+	private Parent settingsPane;
+	private boolean showRoomSettings;
+
 	@FXML
 	private void initialize() {
+		eventBus.register(this);
 
 		ChatView chatView = new ChatView();
 		chat.getChildren().add(chatView.getView());
 		ChatExtraView chatExtraView = new ChatExtraView();
 		chatExtra.getChildren().add(chatExtraView.getView());
 
-		Parent settingsPane = new SettingsView().getView();
+		settingsPane = new SettingsView().getView();
 		mainStackPane.getChildren().add(settingsPane);
 
 		chatRoot.toFront();
 
-		client.selectedRoom.addListener(((observable, oldValue, newValue) -> {
-			// If a new room is selected the RoomSettings view is hidden.
-			if (oldValue != null && newValue != null && oldValue != newValue) {
-				client.showRoomSettings.set(false);
-			}
-		}));
+		showRoomSettings = false;
+	}
 
-		client.showRoomSettings.addListener((observable, oldValue, newValue) -> {
-			if (newValue) {
-				settingsPane.toFront();
+	@Subscribe
+	public void toggleRoomSettings(ToggleEvent e) {
+		if (e == ToggleEvent.SHOW_ROOM_SETTINGS && !showRoomSettings) {
+			settingsPane.toFront();
+			showRoomSettings = true;
+		} else if (e == ToggleEvent.HIDE_ROOM_SETTINGS && showRoomSettings) {
+			settingsPane.toBack();
+			showRoomSettings = false;
+		} else if (e == ToggleEvent.TOGGLE_ROOM_SETTINGS) {
+			if (showRoomSettings) {
+				settingsPane.toBack();
 			} else {
-				chatRoot.toFront();
+				settingsPane.toFront();
 			}
-		});
+			showRoomSettings = !showRoomSettings;
+		}
 	}
 }

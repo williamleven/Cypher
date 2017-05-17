@@ -2,8 +2,10 @@ package com.github.cypher.model;
 
 import com.github.cypher.DebugLogger;
 import com.github.cypher.Settings;
+import com.github.cypher.ToggleEvent;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;
+import com.google.common.eventbus.EventBus;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -25,6 +27,7 @@ public class Client implements Updatable {
 
 	private Updater updater;
 	private final Settings settings;
+	private final EventBus eventBus;
 	private final SessionManager sessionManager;
 
 	//RoomCollections
@@ -43,17 +46,15 @@ public class Client implements Updatable {
 	// General chatrooms
 	private GeneralCollection genCollection;
 
-	// Properties
-	public final BooleanProperty loggedIn = new SimpleBooleanProperty();
-	//public final BooleanProperty showSettings = new SimpleBooleanProperty();
-	public final BooleanProperty showRoomSettings = new SimpleBooleanProperty();
+	private boolean loggedIn;
 	public final ObjectProperty<RoomCollection> selectedRoomCollection = new SimpleObjectProperty<>();
 	public final ObjectProperty<Room> selectedRoom = new SimpleObjectProperty<>();
 	public final BooleanProperty showDirectory = new SimpleBooleanProperty();
 
-	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory, Settings settings) {
+	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory, Settings settings, EventBus eventBus) {
 		this.sdkClientFactory = sdkClientFactory;
 		this.settings = settings;
+		this.eventBus = eventBus;
 
 		initialize();
 
@@ -66,7 +67,7 @@ public class Client implements Updatable {
 			if (session != null) {
 				// No guarantee that the session is valid. setSession doesn't throw an exception if the session is invalid.
 				sdkClient.setSession(session);
-				loggedIn.setValue(true);
+				loggedIn = true;
 				startNewUpdater();
 			}
 		}
@@ -93,8 +94,7 @@ public class Client implements Updatable {
 			}
 		});
 
-		loggedIn.set(false);
-		showRoomSettings.set(false);
+		loggedIn = false;
 		// GeneralCollection is set as the default selected RoomCollection
 		selectedRoomCollection.set(pmCollection);
 		selectedRoom.set(null);
@@ -123,6 +123,8 @@ public class Client implements Updatable {
 	public void login(String username, String password, String homeserver) throws SdkException{
 		try {
 			sdkClient.login(username, password, homeserver);
+			loggedIn = true;
+			eventBus.post(ToggleEvent.LOGIN);
 			startNewUpdater();
 		}catch(RestfulHTTPException | IOException ex){
 			throw new SdkException(ex);
@@ -143,6 +145,7 @@ public class Client implements Updatable {
 		try {
 			sdkClient.logout();
 			sessionManager.deleteSessionFromDisk();
+			eventBus.post(ToggleEvent.LOGOUT);
 			initialize();
 		}catch(RestfulHTTPException | IOException ex){
 			throw new SdkException(ex);
@@ -224,6 +227,10 @@ public class Client implements Updatable {
 			}
 		}
 
+	}
+
+	public boolean isLoggedIn() {
+		return loggedIn;
 	}
 
 	private static boolean isPmChat(Room room) {

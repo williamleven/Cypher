@@ -61,28 +61,11 @@ public class RootPresenter {
 
 		// Only load login pane if user is not already logged in
 		// User might already be logged in if a valid session is available when the application is launched
-		if (!client.loggedIn.get()) {
+		if (!client.isLoggedIn()) {
 			LoginView loginPane = new LoginView();
 			loginPane.getView().setUserData(loginPane.getPresenter());
 			mainStackPane.getChildren().add(loginPane.getView());
 		}
-
-		client.loggedIn.addListener((observable, oldValue, newValue) -> Platform.runLater(() -> {
-			if (newValue) {
-				// Iterators are used instead of for-each loop as the node is removed from inside the loop
-				for (Iterator<Node> iter = mainStackPane.getChildren().iterator(); iter.hasNext(); ) {
-					Node child = iter.next();
-					if (child.getUserData() != null && child.getUserData() instanceof LoginPresenter) {
-						((LoginPresenter) child.getUserData()).deinitialize();
-						iter.remove();
-					}
-				}
-			} else {
-				LoginView loginPane = new LoginView();
-				loginPane.getView().setUserData(loginPane.getPresenter());
-				mainStackPane.getChildren().add(loginPane.getView());
-			}
-		}));
 
 		settingsPane = new SettingsView().getView();
 		rightSideStackPane.getChildren().add(settingsPane);
@@ -110,11 +93,11 @@ public class RootPresenter {
 	}
 
 	@Subscribe
-	public void switchpanes(ToggleEvent e){
-		if (e == ToggleEvent.SHOW_SETTINGS){
+	public void toggleSettingsPane(ToggleEvent e){
+		if (e == ToggleEvent.SHOW_SETTINGS && !showSettings){
 			settingsPane.toFront();
 			showSettings = true;
-		}else if (e == ToggleEvent.HIDE_SETTINGS){
+		}else if (e == ToggleEvent.HIDE_SETTINGS && showSettings){
 			settingsPane.toBack();
 			showSettings = false;
 		}else if (e == ToggleEvent.TOGGLE_SETTINGS){
@@ -125,6 +108,26 @@ public class RootPresenter {
 			}
 			showSettings = !showSettings;
 		}
+	}
+
+	@Subscribe
+	public void handleLogin(ToggleEvent e) {
+		Platform.runLater(() -> {
+			if (e == ToggleEvent.LOGIN) {
+				// Iterators are used instead of for-each loop as the node is removed from inside the loop
+				for (Iterator<Node> iter = mainStackPane.getChildren().iterator(); iter.hasNext(); ) {
+					Node child = iter.next();
+					if (child.getUserData() != null && child.getUserData() instanceof LoginPresenter) {
+						((LoginPresenter) child.getUserData()).deinitialize();
+						iter.remove();
+					}
+				}
+			} else if (e == ToggleEvent.LOGOUT) {
+				LoginView loginPane = new LoginView();
+				loginPane.getView().setUserData(loginPane.getPresenter());
+				mainStackPane.getChildren().add(loginPane.getView());
+			}
+		});
 	}
 
 	@FXML
@@ -141,7 +144,6 @@ public class RootPresenter {
 		executor.handle(() -> {
 			try {
 				client.logout();
-				client.loggedIn.setValue(false);
 			} catch (SdkException e) {
 				if (DebugLogger.ENABLED) {
 					DebugLogger.log("SdkException when trying to logout - " + e.getMessage());

@@ -2,9 +2,11 @@ package com.github.cypher.gui.root.roomcollection.room.chat;
 
 import com.github.cypher.DebugLogger;
 import com.github.cypher.Settings;
+import com.github.cypher.ToggleEvent;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Room;
 import com.github.cypher.model.SdkException;
+import com.google.common.eventbus.EventBus;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -21,6 +23,9 @@ public class ChatPresenter {
 
 	@Inject
 	private Settings settings;
+
+	@Inject
+	private EventBus eventBus;
 
 	@FXML
 	private ListView eventListView;
@@ -44,7 +49,7 @@ public class ChatPresenter {
 
 	@FXML
 	private void showRoomSettings() {
-		client.showRoomSettings.set(true);
+		eventBus.post(ToggleEvent.SHOW_ROOM_SETTINGS);
 	}
 
 	@FXML
