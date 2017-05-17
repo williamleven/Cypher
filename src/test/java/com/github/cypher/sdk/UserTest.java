@@ -1,7 +1,7 @@
 package com.github.cypher.sdk;
 
-import com.github.cypher.sdk.api.MatrixMediaURLStreamHandlerFactory;
 import com.github.cypher.sdk.api.RestfulHTTPException;
+import com.github.cypher.sdk.api.Util;
 import com.google.gson.JsonObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,7 +16,7 @@ public class UserTest {
 	@Test
 	public void update() throws RestfulHTTPException, IOException {
 		// Required to make URL class accept mxc:// protocol
-		URL.setURLStreamHandlerFactory(new MatrixMediaURLStreamHandlerFactory());
+		URL.setURLStreamHandlerFactory(new Util.MatrixMediaURLStreamHandlerFactory());
 
 		user.update();
 		Assert.assertEquals(

@@ -1,6 +1,5 @@
 package com.github.cypher.sdk.api;
 
-import com.github.cypher.DebugLogger;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -9,17 +8,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.net.*;
 import java.text.MessageFormat;
 import java.util.Map;
 
 /*
 	Provides utils for the ApiLayer
  */
-class Util {
+public class Util {
 
 	/*
 		Build a URL with a specified set of parameters
@@ -58,8 +54,8 @@ class Util {
 			// Format as URL and return
 			return new URL(builder.toString());
 		} catch(UnsupportedEncodingException e) {
-			DebugLogger.log(builder.toString());
-			DebugLogger.log(e);
+			System.out.println(builder.toString());
+			System.out.println(e);
 			return null;
 		}
 	}
@@ -118,5 +114,32 @@ class Util {
 	}
 	static JsonElement makeJsonDeleteRequest(URL url, JsonObject data) throws RestfulHTTPException, IOException{
 		return makeRequest(url,"DELETE", data);
+	}
+
+	/*
+	  These classes allows for use of the mxc:// custom url schema used by the Matrix protocol
+	*/
+	public static class MatrixMediaURLStreamHandlerFactory implements URLStreamHandlerFactory {
+		@Override
+		public URLStreamHandler createURLStreamHandler(String protocol) {
+			if ("mxc".equals(protocol)) {
+				return new MatrixMediaURLStreamHandler();
+			}
+			return null;
+		}
+	}
+	public static class MatrixMediaURLStreamHandler extends URLStreamHandler {
+		@Override
+		protected URLConnection openConnection(URL url) throws IOException {
+			return new MatrixMediaURLConnection(url);
+		}
+	}
+	public static class MatrixMediaURLConnection extends URLConnection {
+		protected MatrixMediaURLConnection(URL url) {
+			super(url);
+		}
+
+		@Override
+		public void connect() throws IOException {}
 	}
 }

@@ -1,8 +1,6 @@
 package com.github.cypher.sdk;
 
-import com.github.cypher.DebugLogger;
-import com.github.cypher.sdk.api.ApiLayer;
-import com.github.cypher.sdk.api.RestfulHTTPException;
+import com.github.cypher.sdk.api.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -20,7 +18,6 @@ import javafx.collections.ObservableMap;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +33,7 @@ import java.util.Map;
  */
 public class Room {
 	private final ApiLayer api;
-	private final Client client;
+	private final Repository<User> userRepository;
 
 	private final String id;
 	private final StringProperty name = new SimpleStringProperty(null);
@@ -56,9 +53,9 @@ public class Room {
 
 	private final StringProperty canonicalAlias = new SimpleStringProperty();
 
-	Room(ApiLayer api, Client client, String id) {
+	Room(ApiLayer api, Repository<User> userRepository, String id) {
 		this.api = api;
-		this.client = client;
+		this.userRepository = userRepository;
 		this.id = id;
 	}
 
@@ -202,27 +199,23 @@ public class Room {
 		}
 	}
 
+
 	private void parseAvatarUrlData(JsonObject data) throws RestfulHTTPException, IOException {
 		for(String key : new String[] {"url", "avatar_url"}) {
 			if (data.has(key)) {
-				try {
-					URL newAvatarUrl = new URL(data.get(key).getAsString());
-					if (!newAvatarUrl.equals(avatarUrl.getValue())) {
-						avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
-						this.avatarUrl.set(newAvatarUrl);
-					}
-				} catch (MalformedURLException e) {
-					if (DebugLogger.ENABLED) {
-						DebugLogger.log(e);
-					}
+				URL newAvatarUrl = new URL(data.get(key).getAsString());
+				if (!newAvatarUrl.equals(avatarUrl.getValue())) {
+					avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
+					this.avatarUrl.set(newAvatarUrl);
 				}
 				break;
 			}
 		}
 	}
 
+
 	private void parseMessageEvent(int originServerTs, String sender, String eventId, int age, JsonObject content) {
-		User author = client.getUser(sender);
+		User author = userRepository.get(sender);
 		this.events.put(
 			eventId,
 			new Message(api, originServerTs, author, eventId, age, content)
@@ -235,7 +228,7 @@ public class Room {
 			String memberId = event.get("state_key").getAsString();
 			String membership = content.get("membership").getAsString();
 
-			User user = client.getUser(memberId);
+			User user = userRepository.get(memberId);
 
 			if (membership.equals("join")) {
 				if (!members.containsKey(memberId)) {
@@ -249,7 +242,7 @@ public class Room {
 			}
 
 			// Add membership event to the log
-			User sender = client.getUser(senderId);
+			User sender = userRepository.get(senderId);
 			events.put(
 					eventId,
 					new MemberEvent(api, originServerTs, sender, eventId, age, memberId, membership)
@@ -275,7 +268,7 @@ public class Room {
 	}
 
 	private <T> void addPropertyChangeEvent(int originServerTs, String senderId, String eventId, int age, String property, T value) {
-		User sender = client.getUser(senderId);
+		User sender = userRepository.get(senderId);
 		events.put(
 				eventId,
 				new PropertyChangeEvent<>(api, originServerTs, sender, eventId, age, property, value)

@@ -13,8 +13,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import static com.github.cypher.model.Util.extractServer;
@@ -37,7 +35,7 @@ public class Client implements Updatable {
 	private final ObservableList<Server> servers =
 			FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
-	private final Map<String, User> users = new ConcurrentHashMap<>();
+	private Repository<User> userRepository;
 
 	// Personal messages
 	private PMCollection pmCollection;
@@ -83,7 +81,10 @@ public class Client implements Updatable {
 		roomCollections.add(genCollection);
 
 		servers.clear();
-		users.clear();
+
+		userRepository = new Repository<>((String id) -> {
+			return new User(sdkClient.getUser(id));
+		});
 
 		sdkClient = sdkClientFactory.get();
 		sdkClient.addJoinRoomsListener((change) -> {
@@ -120,12 +121,16 @@ public class Client implements Updatable {
 		updater.start();
 	}
 
-	public void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
-		sdkClient.login(username, password, homeserver);
-		startNewUpdater();
+	public void login(String username, String password, String homeserver) throws SdkException{
+		try {
+			sdkClient.login(username, password, homeserver);
+			startNewUpdater();
+		}catch(RestfulHTTPException | IOException ex){
+			throw new SdkException(ex);
+		}
 	}
 
-	public void logout() throws RestfulHTTPException, IOException {
+	public void logout() throws SdkException{
 		updater.endGracefully();
 		try {
 			updater.join();
@@ -133,17 +138,16 @@ public class Client implements Updatable {
 		} catch (InterruptedException e) {
 			if (DebugLogger.ENABLED) {
 				DebugLogger.log("InterruptedException when joining updater thread - " + e.getMessage());
-				throw new RuntimeException("");
+				throw new RuntimeException("InterruptedException when joining updater thread - " + e.getMessage());
 			}
 		}
 		try {
 			sdkClient.logout();
-		} catch (RestfulHTTPException | IOException e) {
-			startNewUpdater();
-			throw e;
+			sessionManager.deleteSessionFromDisk();
+			initialize();
+		}catch(RestfulHTTPException | IOException ex){
+			throw new SdkException(ex);
 		}
-		sessionManager.deleteSessionFromDisk();
-		initialize();
 	}
 
 	// Add roomcollection, room or private chat
@@ -158,15 +162,7 @@ public class Client implements Updatable {
 	}
 
 	public User getUser(String id) {
-		if(users.containsKey(id)) {
-			return users.get(id);
-		}
-
-		com.github.cypher.sdk.User sdkUser = sdkClient.getUser(id);
-
-		User user = new User(sdkUser);
-		users.put(id, user);
-		return user;
+		return userRepository.get(id);
 	}
 
 	private void addServer(String server) {

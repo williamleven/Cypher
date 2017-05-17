@@ -1,8 +1,6 @@
 package com.github.cypher.sdk;
 
-import com.github.cypher.sdk.api.ApiLayer;
-import com.github.cypher.sdk.api.RestfulHTTPException;
-import com.github.cypher.sdk.api.Session;
+import com.github.cypher.sdk.api.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -14,7 +12,6 @@ import javafx.collections.ObservableMap;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class takes an ApiLayer object and parses
@@ -27,7 +24,9 @@ public class Client {
 
 	private final String settingsNamespace;
 
-	private Map<String, User> users = new ConcurrentHashMap<>();
+	private Repository<User> users = new Repository<>((String id) -> {
+		return new User(api, id);
+	});
 
 	private ObservableMap<String, String> accountData =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
@@ -60,32 +59,21 @@ public class Client {
 		this.settingsNamespace = settingsNamespace;
 	}
 
-	/**
-	 * This object returns an existing User object if possible,
-	 * otherwise it creates and caches a new one.
-	 * @param userId The unique ID of the user (e.g. "@morpheus:matrix.org")
-	 * @return A User object
-	 */
-	public User getUser(String userId) {
-		if(users.containsKey(userId)) {
-			return users.get(userId);
-		}
-		User user = new User(api, userId);
-		users.put(userId, user);
-		return user;
-	}
-
 	private Room getOrCreateRoom(Map<String, Room> map, String roomId) {
 		if(map.containsKey(roomId)) {
 			return map.get(roomId);
 		}
-		Room room = new Room(api, this, roomId);
+		Room room = new Room(api, users, roomId);
 		map.put(roomId, room);
 		return room;
 	}
 
 	public Session getSession() {
 		return  api.getSession();
+	}
+
+	public User getUser(String id){
+		return this.users.get(id);
 	}
 
 	public void setSession(Session session) {
@@ -122,7 +110,7 @@ public class Client {
 	 * @throws IOException
 	 */
 	public void update(int timeout) throws RestfulHTTPException, IOException {
-		JsonObject syncData = api.sync(null, lastSyncMarker, lastSyncMarker == null, User.Presence.ONLINE, timeout);
+		JsonObject syncData = api.sync(null, lastSyncMarker, lastSyncMarker == null, ApiLayer.Presence.ONLINE, timeout);
 
 		if(syncData.has("next_batch")) {
 			lastSyncMarker = syncData.get("next_batch").getAsString();
@@ -178,7 +166,7 @@ public class Client {
 					JsonObject roomData = roomElement.getAsJsonObject();
 					if(roomData.has("room_id")) {
 						String roomId = roomData.get("room_id").getAsString();
-						Room room = new Room(api, this, roomId);
+						Room room = new Room(api, users, roomId);
 						room.update(roomData);
 						listedRooms.put(roomId, room);
 					}
@@ -204,7 +192,7 @@ public class Client {
 				for(JsonElement eventElement : presenceEvents) {
 					JsonObject eventObject = eventElement.getAsJsonObject();
 					if(eventObject.has("sender")) {
-						User user = getUser(eventObject.get("sender").getAsString());
+						User user = users.get(eventObject.get("sender").getAsString());
 						user.update(eventObject);
 					}
 				}

@@ -85,4 +85,11 @@ public class RestfulHTTPException extends HTTPException {
 			return Integer.toString(super.getStatusCode());
 		}
 	}
+
+	/**
+	 * Returns the errorcode
+	 */
+	public String getErrorCode(){
+		return this.errorCode;
+	}
 }
