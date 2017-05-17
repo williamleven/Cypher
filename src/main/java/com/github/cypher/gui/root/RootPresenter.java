@@ -2,18 +2,20 @@ package com.github.cypher.gui.root;
 
 import com.github.cypher.DebugLogger;
 import com.github.cypher.gui.Executor;
+import com.github.cypher.gui.root.addserverpanel.AddServerPaneView;
+import com.github.cypher.gui.root.roomcollection.RoomCollectionView;
+import com.github.cypher.model.Client;
+import com.github.cypher.model.RoomCollection;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
 import com.github.cypher.gui.root.login.LoginPresenter;
 import com.github.cypher.gui.root.login.LoginView;
-import com.github.cypher.gui.root.roomcollection.RoomCollectionView;
 import com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemPresenter;
 import com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemView;
 import com.github.cypher.gui.root.settings.SettingsView;
 import com.github.cypher.model.SdkException;
-import com.github.cypher.model.Client;
-import com.github.cypher.model.RoomCollection;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -40,6 +42,7 @@ public class RootPresenter {
 
 	@FXML
 	private ListView<RoomCollection> roomCollectionListView;
+
 
 	private static final double ROOM_COLLECTION_LIST_CELL_HEIGHT =60;
 	private static final double ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM =5;
@@ -72,10 +75,24 @@ public class RootPresenter {
 			}
 		}));
 
+
 		Parent settingsPane = new SettingsView().getView();
 		rightSideStackPane.getChildren().add(settingsPane);
 		Parent roomCollectionPane = new RoomCollectionView().getView();
 		rightSideStackPane.getChildren().add(roomCollectionPane);
+		Parent addServerPane = new AddServerPaneView().getView();
+		mainStackPane.getChildren().add(addServerPane);
+		addServerPane.toBack();
+
+
+		client.showAddServersPanel.addListener((observable, oldValue, newValue) ->{
+			if (newValue){
+				addServerPane.toFront();
+			}
+			else{
+				addServerPane.toBack();
+			}
+		});
 
 		client.showSettings.addListener((observable, oldValue, newValue) -> {
 			if (newValue) {
@@ -122,5 +139,13 @@ public class RootPresenter {
 				}
 			}
 		});
+	}
+	private void goToAddServerPane(){
+		client.showAddServersPanel.setValue(true);
+	}
+
+
+	public void addButtonClick(ActionEvent actionEvent) {
+		goToAddServerPane();
 	}
 }

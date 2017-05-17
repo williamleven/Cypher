@@ -44,12 +44,14 @@ public class Client implements Updatable {
 	private GeneralCollection genCollection;
 
 	// Properties
-	public final BooleanProperty loggedIn = new SimpleBooleanProperty();
-	public final BooleanProperty showSettings = new SimpleBooleanProperty();
-	public final BooleanProperty showRoomSettings = new SimpleBooleanProperty();
-	public final ObjectProperty<RoomCollection> selectedRoomCollection = new SimpleObjectProperty<>();
-	public final ObjectProperty<Room> selectedRoom = new SimpleObjectProperty<>();
-	public final BooleanProperty showDirectory = new SimpleBooleanProperty();
+	public final BooleanProperty loggedIn = new SimpleBooleanProperty(false);
+	public final BooleanProperty showSettings = new SimpleBooleanProperty(false);
+	public final BooleanProperty showRoomSettings = new SimpleBooleanProperty(false);
+	// GeneralCollection is set as the default selected RoomCollection
+	public final ObjectProperty<RoomCollection> selectedRoomCollection = new SimpleObjectProperty<>(genCollection);
+	public final ObjectProperty<Room> selectedRoom = new SimpleObjectProperty<>(null);
+	public final BooleanProperty showDirectory = new SimpleBooleanProperty(false);
+	public final BooleanProperty showAddServersPanel = new SimpleBooleanProperty(false);
 
 	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory, Settings settings) {
 		this.sdkClientFactory = sdkClientFactory;
@@ -151,13 +153,15 @@ public class Client implements Updatable {
 	}
 
 	// Add roomcollection, room or private chat
-	public void add(String input) {
+	public void add(String input) throws IOException {
 		if (Util.isHomeserver(input)) {
 			addServer(input);
 		} else if (Util.isRoomLabel(input)) {
 			addRoom(input);
 		} else if (Util.isUser(input)) {
 			addUser(input);
+		} else {
+			throw new IOException("String is neither a server, room or user id/alias.");
 		}
 	}
 
