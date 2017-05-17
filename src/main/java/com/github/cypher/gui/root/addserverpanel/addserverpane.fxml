@@ -19,7 +19,7 @@
          <children>
             <VBox alignment="TOP_CENTER" maxHeight="200.0" maxWidth="200.0" StackPane.alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" focusTraversable="false" text="Add Chat">
+                  <Label alignment="CENTER" focusTraversable="false" text="Add">
                      <VBox.margin>
                         <Insets top="15.0" />
                      </VBox.margin>
