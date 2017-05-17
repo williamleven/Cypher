@@ -23,7 +23,11 @@
                      <VBox.margin>
                         <Insets top="15.0" />
                      </VBox.margin>
+                     <font>
+                        <Font size="25.0" />
+                     </font>
                   </Label>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Server, room or user." />
                   <TextField fx:id="serverUrlField" focusTraversable="false" onAction="#enterPressed" promptText="ex. matrix.org">
                      <VBox.margin>
                         <Insets left="25.0" right="25.0" top="25.0" />
