@@ -1,0 +1,51 @@
+package com.github.cypher.gui.root.addserverpane;
+
+import com.github.cypher.Settings;
+import com.github.cypher.ToggleEvent;
+import com.github.cypher.model.Client;
+import com.google.common.eventbus.EventBus;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
+
+import javax.inject.Inject;
+import java.io.IOException;
+
+public class AddServerPanePresenter {
+
+
+	@Inject
+	private Client client;
+
+	@Inject
+	private Settings settings;
+
+	@Inject
+	private EventBus eventBus;
+
+	@FXML
+	public TextField serverUrlField;
+	@FXML
+	public Text inputValidationFeedback;
+
+	@FXML
+	public void submit(ActionEvent actionEvent) throws IOException {
+		try {
+			client.add(serverUrlField.getText());
+			exitPane();
+
+		} catch (IOException e) {
+			inputValidationFeedback.setText(e.getMessage());
+			inputValidationFeedback.setWrappingWidth(150);
+		}
+	}
+
+	@FXML
+	private void exitPane() {
+		eventBus.post(ToggleEvent.HIDE_ADD_SERVER);
+		serverUrlField.clear();
+		inputValidationFeedback.setText("");
+	}
+
+}

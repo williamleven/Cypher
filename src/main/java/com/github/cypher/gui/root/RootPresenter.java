@@ -3,19 +3,17 @@ package com.github.cypher.gui.root;
 import com.github.cypher.DebugLogger;
 import com.github.cypher.ToggleEvent;
 import com.github.cypher.gui.Executor;
-import com.github.cypher.gui.root.addserverpanel.AddServerPaneView;
-import com.github.cypher.gui.root.roomcollection.RoomCollectionView;
-import com.github.cypher.model.Client;
-import com.github.cypher.model.RoomCollection;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
+import com.github.cypher.gui.root.addserverpane.AddServerPaneView;
 import com.github.cypher.gui.root.login.LoginPresenter;
 import com.github.cypher.gui.root.login.LoginView;
+import com.github.cypher.gui.root.roomcollection.RoomCollectionView;
 import com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemPresenter;
 import com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemView;
 import com.github.cypher.gui.root.settings.SettingsView;
-import com.github.cypher.model.SdkException;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.RoomCollection;
+import com.github.cypher.model.SdkException;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
@@ -57,6 +55,8 @@ public class RootPresenter {
 	private Parent settingsPane;
 	private boolean showSettings;
 	private Parent roomCollectionPane;
+	private Parent addServerPane;
+	private boolean showAddServer;
 
 
 	@FXML
@@ -73,21 +73,13 @@ public class RootPresenter {
 
 		settingsPane = new SettingsView().getView();
 		rightSideStackPane.getChildren().add(settingsPane);
+		showSettings = false;
 		roomCollectionPane = new RoomCollectionView().getView();
 		rightSideStackPane.getChildren().add(roomCollectionPane);
-		Parent addServerPane = new AddServerPaneView().getView();
+		addServerPane = new AddServerPaneView().getView();
 		mainStackPane.getChildren().add(addServerPane);
+		showAddServer = false;
 		addServerPane.toBack();
-
-
-		client.showAddServersPanel.addListener((observable, oldValue, newValue) ->{
-			if (newValue){
-				addServerPane.toFront();
-			}
-			else{
-				addServerPane.toBack();
-			}
-		});
 
 		roomCollectionListView.setCellFactory(listView -> {
 			RoomCollectionListItemView roomCollectionListItemView = new RoomCollectionListItemView();
@@ -134,6 +126,26 @@ public class RootPresenter {
 	}
 
 	@Subscribe
+	public void toggleAddServerPane(ToggleEvent e) {
+		Platform.runLater(() -> {
+			if (e == ToggleEvent.SHOW_ADD_SERVER && !showAddServer) {
+				addServerPane.toFront();
+				showAddServer = true;
+			} else if (e == ToggleEvent.HIDE_ADD_SERVER && showAddServer) {
+				addServerPane.toBack();
+				showAddServer = false;
+			} else if (e == ToggleEvent.TOGGLE_ADD_SERVER) {
+				if (showSettings) {
+					addServerPane.toBack();
+				} else {
+					addServerPane.toFront();
+				}
+				showAddServer = !showAddServer;
+			}
+		});
+	}
+
+	@Subscribe
 	public void handleLogin(ToggleEvent e) {
 		Platform.runLater(() -> {
 			if (e == ToggleEvent.LOGIN) {
@@ -174,12 +186,9 @@ public class RootPresenter {
 			}
 		});
 	}
-	private void goToAddServerPane(){
-		client.showAddServersPanel.setValue(true);
-	}
 
-
-	public void addButtonClick(ActionEvent actionEvent) {
-		goToAddServerPane();
+	@FXML
+	public void onAddButtonAction(ActionEvent actionEvent) {
+		eventBus.post(ToggleEvent.SHOW_ADD_SERVER);
 	}
 }

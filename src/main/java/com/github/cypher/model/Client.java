@@ -8,8 +8,6 @@ import com.github.cypher.sdk.api.Session;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -49,7 +47,6 @@ public class Client implements Updatable {
 	private boolean loggedIn;
 	private RoomCollection selectedRoomCollection;
 	private Room selectedRoom;
-	public final BooleanProperty showAddServersPanel = new SimpleBooleanProperty(false);
 
 	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory, Settings settings, EventBus eventBus) {
 		this.sdkClientFactory = sdkClientFactory;
