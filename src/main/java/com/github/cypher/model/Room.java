@@ -21,7 +21,7 @@ public class Room {
 	private final StringProperty canonicalAlias;
 	private final IntegerProperty memberCount;
 	private final ObservableList<String> aliases;
-	private final ObservableMap<String, Event> events;
+	private final ObservableList<Event> events;
 	private final com.github.cypher.sdk.Room sdkRoom;
 	private final Client client;
 
@@ -36,7 +36,7 @@ public class Room {
 		canonicalAlias = new SimpleStringProperty(sdkRoom.getCanonicalAlias());
 		memberCount = new SimpleIntegerProperty(sdkRoom.getMemberCount());
 		aliases = FXCollections.synchronizedObservableList(FXCollections.observableArrayList(sdkRoom.getAliases()));
-		events = FXCollections.synchronizedObservableMap(FXCollections.emptyObservableMap());
+		events = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 		this.sdkRoom = sdkRoom;
 
 		sdkRoom.addNameListener((observable, oldValue, newValue) -> {
@@ -68,7 +68,7 @@ public class Room {
 		}));
 		sdkRoom.addEventListener((change -> {
 			if (change.getValueAdded() instanceof com.github.cypher.sdk.Message) {
-				events.put(change.getKey(), new Message(client, (com.github.cypher.sdk.Message) change.getValueAdded()));
+				events.add(new Message(client, (com.github.cypher.sdk.Message) change.getValueAdded()));
 			}
 
 		}));
@@ -90,15 +90,6 @@ public class Room {
 		} catch (IOException e) {
 			if (DebugLogger.ENABLED) {
 				DebugLogger.log("IOException when converting user avatar image: " + e);
-			}
-		}
-	}
-	//Might be used if caching is implemented.
-	private void addAllEventsFromSdk() {
-		for (com.github.cypher.sdk.Event event : sdkRoom.getEvents().values()) {
-			if (!events.containsKey(event.getEventId())) {
-				events.put(event.getEventId(), new Event(client, event));
-
 			}
 		}
 	}
@@ -167,7 +158,7 @@ public class Room {
 		return aliases;
 	}
 
-	public ObservableMap<String, Event> getEvents() {
+	public ObservableList<Event> getEvents() {
 		return events;
 	}
 }
