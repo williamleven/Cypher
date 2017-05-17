@@ -1,4 +1,4 @@
-package com.github.cypher.gui.root.addserverpane;
+package com.github.cypher.gui.root.adddialog;
 
 import com.github.cypher.Settings;
 import com.github.cypher.ToggleEvent;
@@ -12,7 +12,7 @@ import javafx.scene.text.Text;
 import javax.inject.Inject;
 import java.io.IOException;
 
-public class AddServerPanePresenter {
+public class AddDialogPresenter {
 
 
 	@Inject
@@ -43,7 +43,7 @@ public class AddServerPanePresenter {
 
 	@FXML
 	private void exitPane() {
-		eventBus.post(ToggleEvent.HIDE_ADD_SERVER);
+		eventBus.post(ToggleEvent.HIDE_ADD_DIALOG);
 		serverUrlField.clear();
 		inputValidationFeedback.setText("");
 	}

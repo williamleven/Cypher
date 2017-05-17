@@ -4,7 +4,7 @@ import com.github.cypher.DebugLogger;
 import com.github.cypher.ToggleEvent;
 import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
-import com.github.cypher.gui.root.addserverpane.AddServerPaneView;
+import com.github.cypher.gui.root.adddialog.AddDialogView;
 import com.github.cypher.gui.root.login.LoginPresenter;
 import com.github.cypher.gui.root.login.LoginView;
 import com.github.cypher.gui.root.roomcollection.RoomCollectionView;
@@ -55,8 +55,8 @@ public class RootPresenter {
 	private Parent settingsPane;
 	private boolean showSettings;
 	private Parent roomCollectionPane;
-	private Parent addServerPane;
-	private boolean showAddServer;
+	private Parent addDialogPane;
+	private boolean showAddDialog;
 
 
 	@FXML
@@ -76,10 +76,10 @@ public class RootPresenter {
 		showSettings = false;
 		roomCollectionPane = new RoomCollectionView().getView();
 		rightSideStackPane.getChildren().add(roomCollectionPane);
-		addServerPane = new AddServerPaneView().getView();
-		mainStackPane.getChildren().add(addServerPane);
-		showAddServer = false;
-		addServerPane.toBack();
+		addDialogPane = new AddDialogView().getView();
+		mainStackPane.getChildren().add(addDialogPane);
+		showAddDialog = false;
+		addDialogPane.toBack();
 
 		roomCollectionListView.setCellFactory(listView -> {
 			RoomCollectionListItemView roomCollectionListItemView = new RoomCollectionListItemView();
@@ -126,21 +126,21 @@ public class RootPresenter {
 	}
 
 	@Subscribe
-	public void toggleAddServerPane(ToggleEvent e) {
+	public void toggleAddDialogPane(ToggleEvent e) {
 		Platform.runLater(() -> {
-			if (e == ToggleEvent.SHOW_ADD_SERVER && !showAddServer) {
-				addServerPane.toFront();
-				showAddServer = true;
-			} else if (e == ToggleEvent.HIDE_ADD_SERVER && showAddServer) {
-				addServerPane.toBack();
-				showAddServer = false;
-			} else if (e == ToggleEvent.TOGGLE_ADD_SERVER) {
+			if (e == ToggleEvent.SHOW_ADD_DIALOG && !showAddDialog) {
+				addDialogPane.toFront();
+				showAddDialog = true;
+			} else if (e == ToggleEvent.HIDE_ADD_DIALOG && showAddDialog) {
+				addDialogPane.toBack();
+				showAddDialog = false;
+			} else if (e == ToggleEvent.TOGGLE_ADD_DIALOG) {
 				if (showSettings) {
-					addServerPane.toBack();
+					addDialogPane.toBack();
 				} else {
-					addServerPane.toFront();
+					addDialogPane.toFront();
 				}
-				showAddServer = !showAddServer;
+				showAddDialog = !showAddDialog;
 			}
 		});
 	}
@@ -189,6 +189,6 @@ public class RootPresenter {
 
 	@FXML
 	public void onAddButtonAction(ActionEvent actionEvent) {
-		eventBus.post(ToggleEvent.SHOW_ADD_SERVER);
+		eventBus.post(ToggleEvent.SHOW_ADD_DIALOG);
 	}
 }
