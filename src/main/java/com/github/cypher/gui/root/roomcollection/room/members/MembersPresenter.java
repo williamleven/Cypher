@@ -1,10 +1,10 @@
-package com.github.cypher.root.roomcollection.room.members;
+package com.github.cypher.gui.root.roomcollection.room.members;
 
 import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Member;
-import com.github.cypher.root.roomcollection.room.members.listitem.ListItemPresenter;
-import com.github.cypher.root.roomcollection.room.members.listitem.ListItemView;
+import com.github.cypher.gui.root.roomcollection.room.members.listitem.ListItemPresenter;
+import com.github.cypher.gui.root.roomcollection.room.members.listitem.ListItemView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

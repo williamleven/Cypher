@@ -4,7 +4,7 @@ import com.github.cypher.Settings;
 import com.github.cypher.gui.root.roomcollection.room.chat.ChatView;
 import com.github.cypher.gui.root.roomcollection.room.settings.SettingsView;
 import com.github.cypher.model.Client;
-import com.github.cypher.root.roomcollection.room.members.MembersView;
+import com.github.cypher.gui.root.roomcollection.room.members.MembersView;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;

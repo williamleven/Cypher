@@ -1,4 +1,4 @@
-package com.github.cypher.root.roomcollection.room.members;
+package com.github.cypher.gui.root.roomcollection.room.members;
 
 import com.airhacks.afterburner.views.FXMLView;
 
