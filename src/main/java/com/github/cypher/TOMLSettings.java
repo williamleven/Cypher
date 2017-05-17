@@ -20,9 +20,13 @@ public class TOMLSettings implements Settings {
 
 	// Class representing all settings
 	private static class SettingsData{
-		String languageTag = Locale.getDefault().toLanguageTag(); // Default Value
+		// All variables are initiated to default values
+		String languageTag = Locale.getDefault().toLanguageTag();
 		boolean saveSession = false;
+		boolean useSystemTray = true;
 		boolean controlEnterToSendMessage = true;
+		int SDKTimeout = 30000; // In ms
+		int modelTickInterval = 500; // In ms
 	}
 
 	TOMLSettings() {
@@ -31,7 +35,7 @@ public class TOMLSettings implements Settings {
 		save();
 	}
 
-	private static File createOrLoadFile(){
+	private static File createOrLoadFile() {
 		try {
 			// Create folder if it doesn't exist
 			new File(USER_DATA_DIRECTORY).mkdir();
@@ -44,7 +48,7 @@ public class TOMLSettings implements Settings {
 
 			return file;
 
-		}catch (IOException e) {
+		} catch (IOException e) {
 			DebugLogger.log("Could not create settings file");
 			return null;
 		}
@@ -57,7 +61,7 @@ public class TOMLSettings implements Settings {
 				DebugLogger.log("Reading settings from: " + settingsFile);
 			}
 			return new Toml().read(settingsFile).to(SettingsData.class);
-		}else{
+		} else {
 			if (DebugLogger.ENABLED) {
 				DebugLogger.log("Could not access settings file, defaults will be loaded.");
 			}
@@ -67,7 +71,7 @@ public class TOMLSettings implements Settings {
 
 	private synchronized void save() {
 		// Make sure settingsFile is set before saving settings
-		if (settingsFile != null){
+		if (settingsFile != null) {
 			try {
 				new TomlWriter().write(settingsData, settingsFile);
 				if (DebugLogger.ENABLED) {
@@ -78,8 +82,8 @@ public class TOMLSettings implements Settings {
 					DebugLogger.log("Could not access settings file, settings won't be saved.");
 				}
 			}
-		}else{
-			if (DebugLogger.ENABLED){
+		} else {
+			if (DebugLogger.ENABLED) {
 				DebugLogger.log("Could not access settings file, settings won't be saved.");
 			}
 		}
@@ -109,15 +113,50 @@ public class TOMLSettings implements Settings {
 		save();
 	}
 
+	@Override
+	public synchronized boolean setUseSystemTray() {
+		return settingsData.useSystemTray;
+	}
+
+	@Override
+	public synchronized void setUseSystemTray(boolean useSystemTray) {
+		settingsData.useSystemTray = useSystemTray;
+		save();
+	}
+
 	// If control + enter should be used for sending messages (if false only enter is needed)
 	@Override
-	public boolean getControlEnterToSendMessage() {
+	public synchronized boolean getControlEnterToSendMessage() {
 		return settingsData.controlEnterToSendMessage;
 	}
 
 	@Override
-	public void setControlEnterToSendMessage(boolean controlEnterToSendMessage) {
+	public synchronized void setControlEnterToSendMessage(boolean controlEnterToSendMessage) {
 		settingsData.controlEnterToSendMessage = controlEnterToSendMessage;
+		save();
+	}
+
+	// Timeout is maximum time to poll in milliseconds before returning a request
+	@Override
+	public synchronized int getSDKTimeout() {
+		return settingsData.SDKTimeout;
+	}
+
+	@Override
+	public synchronized void setSDKTimeout(int timeout) {
+		settingsData.SDKTimeout = timeout;
+		save();
+	}
+
+	// The time between each tick in the model in ms
+	@Override
+	public synchronized int getModelTickInterval() {
+		return settingsData.modelTickInterval;
+	}
+
+	@Override
+	public synchronized void setModelTickInterval(int interval) {
+		settingsData.modelTickInterval = interval;
 		save();
 	}
 }

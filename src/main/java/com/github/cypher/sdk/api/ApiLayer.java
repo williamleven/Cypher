@@ -1,6 +1,5 @@
 package com.github.cypher.sdk.api;
 
-import com.github.cypher.sdk.User;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -24,6 +23,11 @@ import java.net.URL;
 public interface ApiLayer {
 
 	/**
+	 * Represents presence states of a user
+	 */
+	enum Presence{ONLINE, OFFLINE, UNAVAILABLE};
+
+	/**
 	 * Gets the session
 	 * @return Session
 	 */
@@ -45,7 +49,7 @@ public interface ApiLayer {
 	 * @param timeout The maximum time to poll in milliseconds before returning this request
 	 * @return Valid Json response
 	 */
-	JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence, int timeout) throws RestfulHTTPException, IOException;
+	JsonObject sync(String filter, String since, boolean fullState, Presence setPresence, int timeout) throws RestfulHTTPException, IOException;
 
 	/**
 	 * Lists the public rooms on the server.
