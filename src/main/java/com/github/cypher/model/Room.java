@@ -1,10 +1,12 @@
 package com.github.cypher.model;
 
 import com.github.cypher.DebugLogger;
+import com.github.cypher.sdk.*;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
@@ -19,9 +21,12 @@ public class Room {
 	private final StringProperty canonicalAlias;
 	private final IntegerProperty memberCount;
 	private final ObservableList<String> aliases;
+	private final ObservableMap<String, Event> events;
 	private final com.github.cypher.sdk.Room sdkRoom;
+	private final Client client;
 
-	public Room(com.github.cypher.sdk.Room sdkRoom) {
+	public Room(Client client, com.github.cypher.sdk.Room sdkRoom) {
+		this.client = client;
 		id = new SimpleStringProperty(sdkRoom.getId());
 		name = new SimpleStringProperty(sdkRoom.getName());
 		topic = new SimpleStringProperty(sdkRoom.getTopic());
@@ -31,6 +36,8 @@ public class Room {
 		canonicalAlias = new SimpleStringProperty(sdkRoom.getCanonicalAlias());
 		memberCount = new SimpleIntegerProperty(sdkRoom.getMemberCount());
 		aliases = FXCollections.synchronizedObservableList(FXCollections.observableArrayList(sdkRoom.getAliases()));
+		events = FXCollections.synchronizedObservableMap(FXCollections.emptyObservableMap());
+		addAllEventsFromSdk();
 		this.sdkRoom = sdkRoom;
 
 		sdkRoom.addNameListener((observable, oldValue, newValue) -> {
@@ -60,6 +67,12 @@ public class Room {
 		sdkRoom.addAliasesListener((change -> {
 			aliases.setAll(change.getList());
 		}));
+		sdkRoom.addEventListener((change -> {
+			if (change.getValueAdded() instanceof com.github.cypher.sdk.Message) {
+				events.put(change.getKey(), new Message(client, (com.github.cypher.sdk.Message) change.getValueAdded()));
+			}
+
+		}));
 	}
 
 	public void sendMessage(String body) throws SdkException {
@@ -73,11 +86,20 @@ public class Room {
 	private void updateAvatar(java.awt.Image image) {
 		try {
 			this.avatar.set(
-				image == null ? null : com.github.cypher.Util.createImage(image)
+					image == null ? null : com.github.cypher.Util.createImage(image)
 			);
 		} catch (IOException e) {
 			if (DebugLogger.ENABLED) {
 				DebugLogger.log("IOException when converting user avatar image: " + e);
+			}
+		}
+	}
+
+	private void addAllEventsFromSdk() {
+		for (com.github.cypher.sdk.Event event : sdkRoom.getEvents().values()) {
+			if (!events.containsKey(event.getEventId())) {
+				events.put(event.getEventId(), new Event(client, event));
+
 			}
 		}
 	}
@@ -144,5 +166,9 @@ public class Room {
 
 	public ObservableList<String> aliasesList() {
 		return aliases;
+	}
+
+	public ObservableMap<String, Event> getEvents() {
+		return events;
 	}
 }

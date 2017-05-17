@@ -3,13 +3,14 @@ package com.github.cypher.model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Message {
+public class Message extends Event {
 	private final Client client;
 	private final User           author;
 	private final StringProperty body;
 	private final StringProperty formattedBody;
 
 	public Message(Client client, com.github.cypher.sdk.Message sdkMessage) {
+		super(client, sdkMessage);
 		this.client = client;
 		this.author = client.getUser(sdkMessage.getSender().getId());
 		this.body = new SimpleStringProperty(sdkMessage.getBody());

@@ -89,7 +89,7 @@ public class Client implements Updatable {
 		sdkClient = sdkClientFactory.get();
 		sdkClient.addJoinRoomsListener((change) -> {
 			if (change.wasAdded()) {
-				distributeRoom(new Room(change.getValueAdded()));
+				distributeRoom(new Room(this,change.getValueAdded()));
 			}
 		});
 
