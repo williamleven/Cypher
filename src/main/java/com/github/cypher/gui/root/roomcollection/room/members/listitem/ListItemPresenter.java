@@ -1,9 +1,11 @@
 package com.github.cypher.gui.root.roomcollection.room.members.listitem;
 
 import com.github.cypher.Settings;
+import com.github.cypher.ToggleEvent;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Member;
 import com.github.cypher.gui.CustomListCell;
+import com.google.common.eventbus.EventBus;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -21,6 +23,9 @@ public class ListItemPresenter extends CustomListCell<Member> {
 	@Inject
 	private Settings settings;
 
+	@Inject
+	private EventBus eventBus;
+
 	@FXML
 	public AnchorPane root;
 
@@ -33,7 +38,7 @@ public class ListItemPresenter extends CustomListCell<Member> {
 
 	@FXML
 	private void hideRoomSettings() {
-		client.showRoomSettings.set(false);
+		eventBus.post(ToggleEvent.HIDE_ROOM_SETTINGS);
 	}
 
 	@Override
