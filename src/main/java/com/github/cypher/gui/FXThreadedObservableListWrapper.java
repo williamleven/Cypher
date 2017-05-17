@@ -31,6 +31,7 @@ public class FXThreadedObservableListWrapper<T> {
 		sourceList.addListener(sourceListListener);
 	}
 
+	// Returns the delegatedList which is supposed to be used in eg. ListView::setItems
 	public ObservableList<T> getList(){
 		return delegatedList;
 	}
