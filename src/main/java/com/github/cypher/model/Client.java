@@ -1,23 +1,29 @@
 package com.github.cypher.model;
 
+import com.github.cypher.DebugLogger;
 import com.github.cypher.Settings;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 import static com.github.cypher.model.Util.extractServer;
 
 public class Client implements Updatable {
 
-	private final Updater updater;
-	private final com.github.cypher.sdk.Client sdkClient;
+	private final Supplier<com.github.cypher.sdk.Client> sdkClientFactory;
+
+	private com.github.cypher.sdk.Client sdkClient;
+
+	private Updater updater;
 	private final Settings settings;
 	private final SessionManager sessionManager;
 
@@ -29,13 +35,13 @@ public class Client implements Updatable {
 	private final ObservableList<Server> servers =
 			FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
-	private final Map<String, User> users = new ConcurrentHashMap<>();
+	private Repository<User> userRepository;
 
 	// Personal messages
-	private final PMCollection pmCollection = new PMCollection();
+	private PMCollection pmCollection;
 
 	// General chatrooms
-	private final GeneralCollection genCollection = new GeneralCollection();
+	private GeneralCollection genCollection;
 
 	// Properties
 	public final BooleanProperty loggedIn = new SimpleBooleanProperty(false);
@@ -47,32 +53,58 @@ public class Client implements Updatable {
 	public final BooleanProperty showDirectory = new SimpleBooleanProperty(false);
 	public final BooleanProperty showAddServersPanel = new SimpleBooleanProperty(false);
 
-	public Client(com.github.cypher.sdk.Client c, Settings settings) {
-		sdkClient = c;
-
-		sdkClient.addJoinRoomsListener((change) -> {
-			if (change.wasAdded()) {
-				distributeRoom(new Room(change.getValueAdded()));
-			}
-		});
+	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory, Settings settings) {
+		this.sdkClientFactory = sdkClientFactory;
 		this.settings = settings;
+
+		initialize();
+
 		sessionManager = new SessionManager();
 
 		// Loads the session file from the disk if it exists.
 		if (sessionManager.savedSessionExists()) {
 			Session session = sessionManager.loadSessionFromDisk();
-			// If not session exists SessionManager::loadSession returns null
+			// If session doesn't exists SessionManager::loadSession returns null
 			if (session != null) {
 				// No guarantee that the session is valid. setSession doesn't throw an exception if the session is invalid.
 				sdkClient.setSession(session);
 				loggedIn.setValue(true);
+				startNewUpdater();
 			}
 		}
+		addListeners();
+	}
 
-		updater = new Updater(500);
-		updater.add(this, 1);
+	private void initialize() {
+		pmCollection = new PMCollection();
+		genCollection = new GeneralCollection();
+		roomCollections.clear();
 		roomCollections.add(pmCollection);
 		roomCollections.add(genCollection);
+
+		servers.clear();
+
+		userRepository = new Repository<>((String id) -> {
+			return new User(sdkClient.getUser(id));
+		});
+
+		sdkClient = sdkClientFactory.get();
+		sdkClient.addJoinRoomsListener((change) -> {
+			if (change.wasAdded()) {
+				distributeRoom(new Room(change.getValueAdded()));
+			}
+		});
+
+		loggedIn.set(false);
+		showSettings.set(false);
+		showRoomSettings.set(false);
+		// GeneralCollection is set as the default selected RoomCollection
+		selectedRoomCollection.set(pmCollection);
+		selectedRoom.set(null);
+		showDirectory.set(false);
+	}
+
+	private void addListeners() {
 		servers.addListener((ListChangeListener.Change<? extends Server> change) -> {
 			while(change.next()) {
 				if (change.wasAdded()) {
@@ -83,16 +115,41 @@ public class Client implements Updatable {
 				}
 			}
 		});
+	}
+
+	private void startNewUpdater() {
+		updater = new Updater(settings.getModelTickInterval());
+		updater.add(this, 1);
 		updater.start();
 	}
 
-	public void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
-		sdkClient.login(username, password, homeserver);
+	public void login(String username, String password, String homeserver) throws SdkException{
+		try {
+			sdkClient.login(username, password, homeserver);
+			startNewUpdater();
+		}catch(RestfulHTTPException | IOException ex){
+			throw new SdkException(ex);
+		}
 	}
 
-	public void logout() throws RestfulHTTPException, IOException {
-		sdkClient.logout();
-		sessionManager.deleteSessionFromDisk();
+	public void logout() throws SdkException{
+		updater.endGracefully();
+		try {
+			updater.join();
+			updater = null;
+		} catch (InterruptedException e) {
+			if (DebugLogger.ENABLED) {
+				DebugLogger.log("InterruptedException when joining updater thread - " + e.getMessage());
+				throw new RuntimeException("InterruptedException when joining updater thread - " + e.getMessage());
+			}
+		}
+		try {
+			sdkClient.logout();
+			sessionManager.deleteSessionFromDisk();
+			initialize();
+		}catch(RestfulHTTPException | IOException ex){
+			throw new SdkException(ex);
+		}
 	}
 
 	// Add roomcollection, room or private chat
@@ -109,15 +166,7 @@ public class Client implements Updatable {
 	}
 
 	public User getUser(String id) {
-		if(users.containsKey(id)) {
-			return users.get(id);
-		}
-
-		com.github.cypher.sdk.User sdkUser = sdkClient.getUser(id);
-
-		User user = new User(sdkUser);
-		users.put(id, user);
-		return user;
+		return userRepository.get(id);
 	}
 
 	private void addServer(String server) {
@@ -134,14 +183,20 @@ public class Client implements Updatable {
 	}
 
 	public void update() {
-		//isLoggedIn.setValue(sdkClient.isLoggedIn());
+		try {
+			sdkClient.update(settings.getSDKTimeout());
+		} catch (RestfulHTTPException | IOException e) {
+			DebugLogger.log(e.getMessage());
+		}
 	}
 
 	public void exit() {
 		if (settings.getSaveSession()) {
 			sessionManager.saveSessionToDisk(sdkClient.getSession());
 		}
-		updater.interrupt();
+		if (updater != null) {
+			updater.interrupt();
+		}
 	}
 
 	public ObservableList<RoomCollection> getRoomCollections(){
@@ -180,5 +235,4 @@ public class Client implements Updatable {
 		boolean hasName = (room.getName() != null && !room.getName().isEmpty());
 		return (room.getMemberCount() < 3 && !hasName);
 	}
-
 }

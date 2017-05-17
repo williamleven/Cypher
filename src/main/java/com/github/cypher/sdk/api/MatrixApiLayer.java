@@ -1,6 +1,5 @@
 package com.github.cypher.sdk.api;
 
-import com.github.cypher.sdk.User;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -148,7 +147,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public JsonObject sync(String filter, String since, boolean fullState, User.Presence setPresence, int timeout) throws RestfulHTTPException, IOException{
+	public JsonObject sync(String filter, String since, boolean fullState, Presence setPresence, int timeout) throws RestfulHTTPException, IOException{
 
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
@@ -159,7 +158,7 @@ public class MatrixApiLayer implements ApiLayer {
 			parameters.put("since", since);
 		}
 		if(setPresence != null) {
-			parameters.put("set_presence", setPresence == User.Presence.ONLINE ? "online" : "offline");
+			parameters.put("set_presence", setPresence == Presence.ONLINE ? "online" : "offline");
 		}
 		if(fullState) {
 			parameters.put("full_state", "true");

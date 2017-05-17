@@ -1,8 +1,6 @@
 package com.github.cypher.sdk;
 
-import com.github.cypher.DebugLogger;
-import com.github.cypher.sdk.api.ApiLayer;
-import com.github.cypher.sdk.api.RestfulHTTPException;
+import com.github.cypher.sdk.api.*;
 import com.google.gson.JsonObject;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
@@ -57,19 +55,15 @@ public class User {
 			name.set(profile.get("displayname").getAsString());
 		}
 
-		try {
-			if(profile.has("avatar_url")) {
-				URL newAvatarUrl = new URL(profile.get("avatar_url").getAsString());
-				if(!newAvatarUrl.equals(avatarUrl)) {
-					avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
-				}
-				avatarUrl.set(newAvatarUrl);
-			} else {
-				avatarUrl.set(null);
-				avatar.set(null);
+		if(profile.has("avatar_url")) {
+			URL newAvatarUrl = new URL(profile.get("avatar_url").getAsString());
+			if(!newAvatarUrl.equals(avatarUrl)) {
+				avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
 			}
-		} catch(MalformedURLException e) {
-			DebugLogger.log(e);
+			avatarUrl.set(newAvatarUrl);
+		} else {
+			avatarUrl.set(null);
+			avatar.set(null);
 		}
 	}
 

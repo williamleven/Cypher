@@ -19,11 +19,14 @@ public class TOMLSettings implements Settings {
 	private final SettingsData settingsData;
 
 	// Class representing all settings
-	private static class SettingsData {
-		String languageTag = Locale.getDefault().toLanguageTag(); // Default Value
+	private static class SettingsData{
+		// All variables are initiated to default values
+		String languageTag = Locale.getDefault().toLanguageTag();
 		boolean saveSession = false;
-		boolean exitToSystemTray = true;
+		boolean useSystemTray = true;
 		boolean controlEnterToSendMessage = true;
+		int SDKTimeout = 30000; // In ms
+		int modelTickInterval = 500; // In ms
 	}
 
 	TOMLSettings() {
@@ -111,25 +114,49 @@ public class TOMLSettings implements Settings {
 	}
 
 	@Override
-	public synchronized boolean getExitToSystemTray() {
-		return settingsData.exitToSystemTray;
+	public synchronized boolean setUseSystemTray() {
+		return settingsData.useSystemTray;
 	}
 
 	@Override
-	public synchronized void setExitToSystemTray(boolean exitToSystemTray) {
-		settingsData.exitToSystemTray = exitToSystemTray;
+	public synchronized void setUseSystemTray(boolean useSystemTray) {
+		settingsData.useSystemTray = useSystemTray;
 		save();
 	}
 
 	// If control + enter should be used for sending messages (if false only enter is needed)
 	@Override
-	public boolean getControlEnterToSendMessage() {
+	public synchronized boolean getControlEnterToSendMessage() {
 		return settingsData.controlEnterToSendMessage;
 	}
 
 	@Override
-	public void setControlEnterToSendMessage(boolean controlEnterToSendMessage) {
+	public synchronized void setControlEnterToSendMessage(boolean controlEnterToSendMessage) {
 		settingsData.controlEnterToSendMessage = controlEnterToSendMessage;
+		save();
+	}
+
+	// Timeout is maximum time to poll in milliseconds before returning a request
+	@Override
+	public synchronized int getSDKTimeout() {
+		return settingsData.SDKTimeout;
+	}
+
+	@Override
+	public synchronized void setSDKTimeout(int timeout) {
+		settingsData.SDKTimeout = timeout;
+		save();
+	}
+
+	// The time between each tick in the model in ms
+	@Override
+	public synchronized int getModelTickInterval() {
+		return settingsData.modelTickInterval;
+	}
+
+	@Override
+	public synchronized void setModelTickInterval(int interval) {
+		settingsData.modelTickInterval = interval;
 		save();
 	}
 }

@@ -6,12 +6,13 @@ import com.github.cypher.gui.root.addserverpanel.AddServerPaneView;
 import com.github.cypher.gui.root.roomcollection.RoomCollectionView;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.RoomCollection;
+import com.github.cypher.gui.FXThreadedObservableListWrapper;
 import com.github.cypher.gui.root.login.LoginPresenter;
 import com.github.cypher.gui.root.login.LoginView;
 import com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemPresenter;
 import com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemView;
 import com.github.cypher.gui.root.settings.SettingsView;
-import com.github.cypher.sdk.api.RestfulHTTPException;
+import com.github.cypher.model.SdkException;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
@@ -22,7 +23,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.Iterator;
 
 // Presenter for the root/main pane of the application
@@ -102,16 +102,20 @@ public class RootPresenter {
 			}
 		});
 
-		roomCollectionListView.setItems(client.getRoomCollections());
 		roomCollectionListView.setCellFactory(listView -> {
 			RoomCollectionListItemView roomCollectionListItemView = new RoomCollectionListItemView();
 			roomCollectionListItemView.getView();
 			return (RoomCollectionListItemPresenter) roomCollectionListItemView.getPresenter();
 		});
 
-		updateRoomCollectionListHeight();
-		client.getRoomCollections().addListener((ListChangeListener.Change<? extends RoomCollection> change) -> updateRoomCollectionListHeight());
+		roomCollectionListView.setItems(new FXThreadedObservableListWrapper<RoomCollection>(client.getRoomCollections()).getList());
 
+		updateRoomCollectionListHeight();
+		client.getRoomCollections().addListener((ListChangeListener.Change<? extends RoomCollection> change) -> {
+			Platform.runLater(this::updateRoomCollectionListHeight);
+		});
+
+		roomCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> client.selectedRoomCollection.set(newValue));
 	}
 
 	@FXML
@@ -129,13 +133,9 @@ public class RootPresenter {
 			try {
 				client.logout();
 				client.loggedIn.setValue(false);
-			} catch (RestfulHTTPException e) {
+			} catch (SdkException e) {
 				if (DebugLogger.ENABLED) {
-					DebugLogger.log("RestfulHTTPException when trying to logout - " + e.getMessage());
-				}
-			} catch (IOException e) {
-				if (DebugLogger.ENABLED) {
-					DebugLogger.log("IOException when trying to logout - " + e.getMessage());
+					DebugLogger.log("SdkException when trying to logout - " + e.getMessage());
 				}
 			}
 		});
