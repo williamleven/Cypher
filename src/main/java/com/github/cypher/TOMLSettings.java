@@ -25,7 +25,7 @@ public class TOMLSettings implements Settings {
 		boolean saveSession = false;
 		boolean exitToSystemTray = true;
 		boolean controlEnterToSendMessage = true;
-		int SDKTimeout = 500; // In ms
+		int SDKTimeout = 30000; // In ms
 		int modelTickInterval = 500; // In ms
 	}
 
