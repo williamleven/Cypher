@@ -147,6 +147,31 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
+	public void register(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
+		// Only run if session isn't already set
+		if (session != null){
+			return;
+		}
+
+		// Build URL
+		URL url = Util.UrlBuilder(homeserver, Endpoint.REGISTER, null, null);
+
+		// Build request body
+		JsonObject request  = new JsonObject();
+		request.addProperty("password", password);
+		if(username != null) {
+			request.addProperty("username", username);
+		}
+
+		// Send Request
+		JsonObject response = Util.makeJsonPostRequest(url, request).getAsJsonObject();
+
+		// Set Session
+		this.session = new Session(response);
+	}
+
+
+	@Override
 	public JsonObject sync(String filter, String since, boolean fullState, Presence setPresence, int timeout) throws RestfulHTTPException, IOException{
 
 		// Build parameter Map

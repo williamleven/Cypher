@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebView;
 
 import javax.inject.Inject;
@@ -38,7 +40,25 @@ public class LoginPresenter {
 	private CheckBox rememberMeCheckBox;
 
 	@FXML
+	private TextField registrationUsernameField;
+
+	@FXML
+	private PasswordField registrationPasswordField;
+
+	@FXML
+	private TextField registrationHomeserverField;
+
+	@FXML
+	private CheckBox registrationRememberMeCheckBox;
+
+	@FXML
 	private WebView webView;
+
+	@FXML
+	private AnchorPane loginPane;
+
+	@FXML
+	private AnchorPane registerPane;
 
 	@FXML
 	public void initialize() {
@@ -54,6 +74,19 @@ public class LoginPresenter {
 	}
 
 	@FXML
+	private void switchPanes() {
+		if(loginPane.isVisible()) {
+			registerPane.setVisible(true);
+			registerPane.toFront();
+			loginPane.setVisible(false);
+		} else {
+			loginPane.setVisible(true);
+			loginPane.toFront();
+			registerPane.setVisible(false);
+		}
+	}
+
+	@FXML
 	private void login() {
 		if (usernameField.getText() != null && passwordField.getText() != null && homeserverField.getText() != null) {
 			executor.handle(() -> {
@@ -61,6 +94,23 @@ public class LoginPresenter {
 					client.login(usernameField.getText(), passwordField.getText(), homeserverField.getText());
 					client.loggedIn.set(true);
 					settings.setSaveSession(rememberMeCheckBox.isSelected());
+				} catch (SdkException e) {
+					if (DebugLogger.ENABLED) {
+						DebugLogger.log("SdkException when trying to login - " + e.getMessage());
+					}
+				}
+			});
+		}
+	}
+
+	@FXML
+	private void register() {
+		if (registrationUsernameField.getText() != null && registrationPasswordField.getText() != null && registrationHomeserverField.getText() != null) {
+			executor.handle(() -> {
+				try {
+					client.register(registrationUsernameField.getText(), registrationPasswordField.getText(), registrationHomeserverField.getText());
+					client.loggedIn.set(true);
+					settings.setSaveSession(registrationRememberMeCheckBox.isSelected());
 				} catch (SdkException e) {
 					if (DebugLogger.ENABLED) {
 						DebugLogger.log("SdkException when trying to login - " + e.getMessage());
