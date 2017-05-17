@@ -9,7 +9,6 @@ import com.github.cypher.model.SdkException;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -46,6 +45,13 @@ public class ChatPresenter {
 		Platform.runLater(() -> {
 			messageBox.setDisable(e == null);
 		});
+	}
+
+	@Subscribe
+	private void handleLoginStateChange(ToggleEvent e) {
+		if (e == ToggleEvent.LOGOUT) {
+			messageBox.setDisable(true);
+		}
 	}
 
 	@FXML

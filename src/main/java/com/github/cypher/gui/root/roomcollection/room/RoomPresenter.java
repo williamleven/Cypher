@@ -3,11 +3,11 @@ package com.github.cypher.gui.root.roomcollection.room;
 import com.github.cypher.Settings;
 import com.github.cypher.ToggleEvent;
 import com.github.cypher.gui.root.roomcollection.room.chat.ChatView;
+import com.github.cypher.gui.root.roomcollection.room.members.MembersView;
 import com.github.cypher.gui.root.roomcollection.room.settings.SettingsView;
 import com.github.cypher.model.Client;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import com.github.cypher.gui.root.roomcollection.room.members.MembersView;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
@@ -55,13 +55,12 @@ public class RoomPresenter {
 		settingsPane = new SettingsView().getView();
 		mainStackPane.getChildren().add(settingsPane);
 
-		chatRoot.toFront();
-
+		settingsPane.toBack();
 		showRoomSettings = false;
 	}
 
 	@Subscribe
-	public void toggleRoomSettings(ToggleEvent e) {
+	private void toggleRoomSettings(ToggleEvent e) {
 		if (e == ToggleEvent.SHOW_ROOM_SETTINGS && !showRoomSettings) {
 			settingsPane.toFront();
 			showRoomSettings = true;
@@ -75,6 +74,14 @@ public class RoomPresenter {
 				settingsPane.toFront();
 			}
 			showRoomSettings = !showRoomSettings;
+		}
+	}
+
+	@Subscribe
+	private void handleLoginStateChange(ToggleEvent e) {
+		if (e == ToggleEvent.LOGOUT) {
+			showRoomSettings = false;
+			settingsPane.toBack();
 		}
 	}
 }

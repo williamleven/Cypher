@@ -87,7 +87,7 @@ public class RootPresenter {
 			return (RoomCollectionListItemPresenter) roomCollectionListItemView.getPresenter();
 		});
 
-		roomCollectionListView.setItems(new FXThreadedObservableListWrapper<RoomCollection>(client.getRoomCollections()).getList());
+		roomCollectionListView.setItems(new FXThreadedObservableListWrapper<>(client.getRoomCollections()).getList());
 
 		updateRoomCollectionListHeight();
 		client.getRoomCollections().addListener((ListChangeListener.Change<? extends RoomCollection> change) -> {
@@ -96,7 +96,7 @@ public class RootPresenter {
 
 
 		roomCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			if ( newValue != null) {
+			if (newValue != null) {
 				eventBus.post(ToggleEvent.HIDE_SETTINGS);
 				eventBus.post(ToggleEvent.HIDE_ROOM_SETTINGS);
 				eventBus.post(newValue);
@@ -106,7 +106,7 @@ public class RootPresenter {
 	}
 
 	@Subscribe
-	public void toggleSettingsPane(ToggleEvent e){
+	private void toggleSettingsPane(ToggleEvent e){
 		Platform.runLater(()-> {
 			if (e == ToggleEvent.SHOW_SETTINGS && !showSettings){
 				settingsPane.toFront();
@@ -126,7 +126,7 @@ public class RootPresenter {
 	}
 
 	@Subscribe
-	public void toggleAddDialogPane(ToggleEvent e) {
+	private void toggleAddDialogPane(ToggleEvent e) {
 		Platform.runLater(() -> {
 			if (e == ToggleEvent.SHOW_ADD_DIALOG && !showAddDialog) {
 				addDialogPane.toFront();
@@ -146,7 +146,7 @@ public class RootPresenter {
 	}
 
 	@Subscribe
-	public void handleLogin(ToggleEvent e) {
+	private void handleLoginStateChanged(ToggleEvent e) {
 		Platform.runLater(() -> {
 			if (e == ToggleEvent.LOGIN) {
 				// Iterators are used instead of for-each loop as the node is removed from inside the loop
@@ -161,6 +161,12 @@ public class RootPresenter {
 				LoginView loginPane = new LoginView();
 				loginPane.getView().setUserData(loginPane.getPresenter());
 				mainStackPane.getChildren().add(loginPane.getView());
+
+				// Reset presenter to default values
+				settingsPane.toBack();
+				showSettings = false;
+				addDialogPane.toBack();
+				showAddDialog = false;
 			}
 		});
 	}

@@ -96,6 +96,14 @@ public class RoomCollectionPresenter {
 	}
 
 	@Subscribe
+	private void handleLoginStateChange(ToggleEvent e) {
+		if (e == ToggleEvent.LOGOUT) {
+			showDirectory = false;
+			directoryPane.toBack();
+		}
+	}
+
+	@Subscribe
 	private void toggleDirectory(ToggleEvent e) {
 		Platform.runLater(()-> {
 			if (e == ToggleEvent.SHOW_DIRECTORY && !showDirectory){
