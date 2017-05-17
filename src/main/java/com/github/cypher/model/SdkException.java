@@ -2,7 +2,7 @@ package com.github.cypher.model;
 
 import com.github.cypher.sdk.api.RestfulHTTPException;
 
-public class SdkException extends RuntimeException{
+public class SdkException extends Exception{
 
 	private final Type type;
 	private final Exception inner;
