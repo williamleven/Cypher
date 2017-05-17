@@ -42,7 +42,7 @@ public class UpdaterTest {
 			c3.reset();
 			u.add(1, c1);
 			u.add(2, c2);
-			u.add(3, c1);
+			u.add(3, c3);
 
 			// Start the updater
 			u.start();
