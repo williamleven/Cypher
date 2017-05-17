@@ -13,9 +13,7 @@ import com.github.cypher.model.Client;
 import com.github.cypher.model.RoomCollection;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -87,11 +85,6 @@ public class RootPresenter {
 				roomCollectionPane.toFront();
 			}
 		});
-
-		// List that mirrors client.getRoomCollections() that is necessary to support multithreaded access to client.getRoomCollections()
-		ObservableList<RoomCollection> backendListForView =
-				FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
-		backendListForView.addAll(client.getRoomCollections());
 
 		roomCollectionListView.setCellFactory(listView -> {
 			RoomCollectionListItemView roomCollectionListItemView = new RoomCollectionListItemView();

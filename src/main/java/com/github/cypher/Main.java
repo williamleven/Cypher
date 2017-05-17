@@ -43,7 +43,7 @@ public class Main extends Application {
 		// key is name of injected variable & value is injected object
 
 		Map<String, Object> customProperties = new HashMap<>();
-		customProperties.put("client", client); // This corresponds to the line @Inject Integer n1; in the Presenter
+		customProperties.put("client", client); // This corresponds to the line @Inject Client client; in the Presenters
 		customProperties.put("settings", settings);
 		customProperties.put("executor", executor);
 		Injector.setConfigurationSource(customProperties::get);
@@ -99,20 +99,23 @@ public class Main extends Application {
 		systemTray.setStatus("Cypher");
 
 		{ /* The "SHOW" menu item */
-			MenuItem item = new MenuItem(labels.getString("show"), e -> Platform.runLater(() -> {
-				primaryStage.show();
-				primaryStage.requestFocus();
-			}));
+			MenuItem item = new MenuItem(labels.getString("show"), e -> {
+				Platform.runLater(() -> {
+					primaryStage.show();
+					primaryStage.requestFocus();
+				});
+			});
 			item.setShortcut('o');
 			systemTray.getMenu().add(item);
 		}
 
 		{ /* The "EXIT" menu item */
-			MenuItem item = new MenuItem(labels.getString("exit"), e -> exit());
+			MenuItem item = new MenuItem(labels.getString("exit"), e -> {
+				exit();
+			});
 			item.setShortcut('q');
 			systemTray.getMenu().add(item);
 		}
-
 	}
 
 
