@@ -2,12 +2,13 @@ package com.github.cypher.model;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 
 public class Server implements RoomCollection {
-	private ObjectProperty<Image> imageProperty = new SimpleObjectProperty<>();
-	ObservableList<Room> rooms;
+	private final ObjectProperty<Image> imageProperty = new SimpleObjectProperty<>();
+	private final ObservableList<Room> rooms = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
 
 	public Server(String server) {
@@ -19,8 +20,13 @@ public class Server implements RoomCollection {
 	}
 
 	@Override
-	public void addRoom(Room room) {
+	public ObservableList<Room> getRoomsProperty() {
+		return rooms;
+	}
 
+	@Override
+	public void addRoom(Room room) {
+		rooms.add(room);
 	}
 
 	@Override

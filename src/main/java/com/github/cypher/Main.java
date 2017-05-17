@@ -1,12 +1,12 @@
 package com.github.cypher;
 
 import com.airhacks.afterburner.injection.Injector;
-import com.github.cypher.model.Client;
 import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.root.RootView;
+import com.github.cypher.model.Client;
 import com.github.cypher.sdk.api.MatrixApiLayer;
 import com.github.cypher.sdk.api.MatrixMediaURLStreamHandlerFactory;
-import dorkbox.systemTray.*;
+import dorkbox.systemTray.MenuItem;
 import dorkbox.systemTray.SystemTray;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -21,7 +21,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import static com.github.cypher.Util.*;
+import static com.github.cypher.Util.capitalize;
+import static com.github.cypher.Util.decapitalize;
 
 public class Main extends Application {
 	public static final String APPLICATION_NAME = "Cypher";
@@ -29,7 +30,7 @@ public class Main extends Application {
 
 	private final Settings settings = new TOMLSettings();
 	private final Executor executor = new Executor();
-	private final Client client = new Client(new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings"), settings);
+	private final Client client = new Client((() -> new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings")), settings);
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -43,7 +44,7 @@ public class Main extends Application {
 		// key is name of injected variable & value is injected object
 
 		Map<String, Object> customProperties = new HashMap<>();
-		customProperties.put("client", client); // This corresponds to the line @Inject Integer n1; in the Presenter
+		customProperties.put("client", client); // This corresponds to the line @Inject Client client; in the Presenters
 		customProperties.put("settings", settings);
 		customProperties.put("executor", executor);
 		Injector.setConfigurationSource(customProperties::get);
@@ -108,7 +109,6 @@ public class Main extends Application {
 			});
 			item.setShortcut('o');
 			systemTray.getMenu().add(item);
-
 		}
 
 		{ /* The "EXIT" menu item */
@@ -118,7 +118,6 @@ public class Main extends Application {
 			item.setShortcut('q');
 			systemTray.getMenu().add(item);
 		}
-
 	}
 
 
