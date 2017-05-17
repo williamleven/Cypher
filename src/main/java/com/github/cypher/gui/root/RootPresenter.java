@@ -1,6 +1,7 @@
 package com.github.cypher.gui.root;
 
 import com.github.cypher.DebugLogger;
+import com.github.cypher.ToggleEvent;
 import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
 import com.github.cypher.gui.root.login.LoginPresenter;
@@ -12,6 +13,8 @@ import com.github.cypher.gui.root.settings.SettingsView;
 import com.github.cypher.model.SdkException;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.RoomCollection;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -32,6 +35,9 @@ public class RootPresenter {
 	@Inject
 	private Executor executor;
 
+	@Inject
+	private EventBus eventBus;
+
 	@FXML
 	private StackPane mainStackPane;
 
@@ -44,9 +50,15 @@ public class RootPresenter {
 	private static final double ROOM_COLLECTION_LIST_CELL_HEIGHT =60;
 	private static final double ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM =5;
 
+	private Parent settingsPane;
+	private boolean showSettings;
+	private Parent roomCollectionPane;
+
 
 	@FXML
 	private void initialize() {
+		eventBus.register(this);
+
 		// Only load login pane if user is not already logged in
 		// User might already be logged in if a valid session is available when the application is launched
 		if (!client.loggedIn.get()) {
@@ -72,18 +84,10 @@ public class RootPresenter {
 			}
 		}));
 
-		Parent settingsPane = new SettingsView().getView();
+		settingsPane = new SettingsView().getView();
 		rightSideStackPane.getChildren().add(settingsPane);
-		Parent roomCollectionPane = new RoomCollectionView().getView();
+		roomCollectionPane = new RoomCollectionView().getView();
 		rightSideStackPane.getChildren().add(roomCollectionPane);
-
-		client.showSettings.addListener((observable, oldValue, newValue) -> {
-			if (newValue) {
-				settingsPane.toFront();
-			} else {
-				roomCollectionPane.toFront();
-			}
-		});
 
 		roomCollectionListView.setCellFactory(listView -> {
 			RoomCollectionListItemView roomCollectionListItemView = new RoomCollectionListItemView();
@@ -98,12 +102,34 @@ public class RootPresenter {
 			Platform.runLater(this::updateRoomCollectionListHeight);
 		});
 
-		roomCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> client.selectedRoomCollection.set(newValue));
+		roomCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			eventBus.post(ToggleEvent.HIDE_SETTINGS);
+			client.selectedRoomCollection.set(newValue);
+		});
+
+	}
+
+	@Subscribe
+	public void switchpanes(ToggleEvent e){
+		if (e == ToggleEvent.SHOW_SETTINGS){
+			settingsPane.toFront();
+			showSettings = true;
+		}else if (e == ToggleEvent.HIDE_SETTINGS){
+			settingsPane.toBack();
+			showSettings = false;
+		}else if (e == ToggleEvent.TOGGLE_SETTINGS){
+			if (showSettings){
+				settingsPane.toBack();
+			}else{
+				settingsPane.toFront();
+			}
+			showSettings = !showSettings;
+		}
 	}
 
 	@FXML
 	private void toggleSettings() {
-		client.showSettings.set(!client.showSettings.get());
+		eventBus.post(ToggleEvent.TOGGLE_SETTINGS);
 	}
 
 	private void updateRoomCollectionListHeight() {

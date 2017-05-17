@@ -1,9 +1,11 @@
 package com.github.cypher.gui.root.roomcollectionlistitem;
 
 import com.github.cypher.Settings;
+import com.github.cypher.ToggleEvent;
 import com.github.cypher.gui.CustomListCell;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.RoomCollection;
+import com.google.common.eventbus.EventBus;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
@@ -24,15 +26,6 @@ public class RoomCollectionListItemPresenter extends CustomListCell<RoomCollecti
 	private StackPane root;
 	@FXML
 	private ImageView imageView;
-
-	@FXML
-	private void initialize() {
-	}
-
-	@FXML
-	private void toggleSettings() {
-		client.showSettings.set(!client.showSettings.get());
-	}
 
 	@Override
 	protected Node getRoot() {

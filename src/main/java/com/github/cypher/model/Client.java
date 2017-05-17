@@ -45,7 +45,7 @@ public class Client implements Updatable {
 
 	// Properties
 	public final BooleanProperty loggedIn = new SimpleBooleanProperty();
-	public final BooleanProperty showSettings = new SimpleBooleanProperty();
+	//public final BooleanProperty showSettings = new SimpleBooleanProperty();
 	public final BooleanProperty showRoomSettings = new SimpleBooleanProperty();
 	public final ObjectProperty<RoomCollection> selectedRoomCollection = new SimpleObjectProperty<>();
 	public final ObjectProperty<Room> selectedRoom = new SimpleObjectProperty<>();
@@ -94,7 +94,6 @@ public class Client implements Updatable {
 		});
 
 		loggedIn.set(false);
-		showSettings.set(false);
 		showRoomSettings.set(false);
 		// GeneralCollection is set as the default selected RoomCollection
 		selectedRoomCollection.set(pmCollection);
