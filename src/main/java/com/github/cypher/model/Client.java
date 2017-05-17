@@ -6,10 +6,10 @@ import com.github.cypher.ToggleEvent;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -47,14 +47,16 @@ public class Client implements Updatable {
 	private GeneralCollection genCollection;
 
 	private boolean loggedIn;
-	public final ObjectProperty<RoomCollection> selectedRoomCollection = new SimpleObjectProperty<>();
-	public final ObjectProperty<Room> selectedRoom = new SimpleObjectProperty<>();
+	private RoomCollection selectedRoomCollection;
+	private Room selectedRoom;
+	//public final ObjectProperty<Room> selectedRoom = new SimpleObjectProperty<>();
 	public final BooleanProperty showDirectory = new SimpleBooleanProperty();
 
 	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory, Settings settings, EventBus eventBus) {
 		this.sdkClientFactory = sdkClientFactory;
 		this.settings = settings;
 		this.eventBus = eventBus;
+		eventBus.register(this);
 
 		initialize();
 
@@ -80,6 +82,8 @@ public class Client implements Updatable {
 		roomCollections.clear();
 		roomCollections.add(pmCollection);
 		roomCollections.add(genCollection);
+		selectedRoomCollection = pmCollection;
+		eventBus.post(selectedRoomCollection);
 
 		servers.clear();
 
@@ -95,9 +99,7 @@ public class Client implements Updatable {
 		});
 
 		loggedIn = false;
-		// GeneralCollection is set as the default selected RoomCollection
-		selectedRoomCollection.set(pmCollection);
-		selectedRoom.set(null);
+		selectedRoom = null;
 		showDirectory.set(false);
 	}
 
@@ -236,5 +238,29 @@ public class Client implements Updatable {
 	private static boolean isPmChat(Room room) {
 		boolean hasName = (room.getName() != null && !room.getName().isEmpty());
 		return (room.getMemberCount() < 3 && !hasName);
+	}
+
+	public RoomCollection getSelectedRoomCollection(){
+		return selectedRoomCollection;
+	}
+
+	public Room getSelectedRoom(){
+		return selectedRoom;
+	}
+
+	@Subscribe
+	public void RoomCollectionChanged(RoomCollection e){
+		Platform.runLater(() -> {
+			this.selectedRoomCollection = e;
+			DebugLogger.log("Selected room collection changed");
+		});
+	}
+
+	@Subscribe
+	public void RoomChanged(Room e){
+		Platform.runLater(() -> {
+			this.selectedRoom = e;
+			DebugLogger.log("Selected room changed");
+		});
 	}
 }

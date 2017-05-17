@@ -7,7 +7,9 @@ import com.github.cypher.model.Client;
 import com.github.cypher.model.Room;
 import com.github.cypher.model.SdkException;
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -35,15 +37,14 @@ public class ChatPresenter {
 
 	@FXML
 	private void initialize() {
-		messageBox.setDisable(client.selectedRoom.getValue() == null);
-		client.selectedRoom.addListener((observable, oldValue, newValue) -> {
-			messageBox.setDisable(newValue == null);
-		});
+		eventBus.register(this);
+		messageBox.setDisable(client.getSelectedRoom() == null);
+	}
 
-		client.selectedRoom.addListener((observable, oldValue, newValue) -> {
-			Platform.runLater(() -> {
-				//eventListView.setItems(newValue.);
-			});
+	@Subscribe
+	private void selectedRoomChanged(Room e){
+		Platform.runLater(() -> {
+			messageBox.setDisable(e == null);
 		});
 	}
 
@@ -60,7 +61,7 @@ public class ChatPresenter {
 			 || (!settings.getControlEnterToSendMessage() && !event.isShiftDown()))
 			 &&  !messageBox.getText().isEmpty()) {
 
-				Room room = client.selectedRoom.getValue();
+				Room room = client.getSelectedRoom();
 				if(room != null) {
 					try {
 						room.sendMessage(messageBox.getText());

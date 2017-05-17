@@ -85,29 +85,35 @@ public class RootPresenter {
 			Platform.runLater(this::updateRoomCollectionListHeight);
 		});
 
+
 		roomCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			eventBus.post(ToggleEvent.HIDE_SETTINGS);
-			client.selectedRoomCollection.set(newValue);
+			if ( newValue != null) {
+				eventBus.post(ToggleEvent.HIDE_SETTINGS);
+				eventBus.post(ToggleEvent.HIDE_ROOM_SETTINGS);
+				eventBus.post(newValue);
+			}
 		});
 
 	}
 
 	@Subscribe
 	public void toggleSettingsPane(ToggleEvent e){
-		if (e == ToggleEvent.SHOW_SETTINGS && !showSettings){
-			settingsPane.toFront();
-			showSettings = true;
-		}else if (e == ToggleEvent.HIDE_SETTINGS && showSettings){
-			settingsPane.toBack();
-			showSettings = false;
-		}else if (e == ToggleEvent.TOGGLE_SETTINGS){
-			if (showSettings){
-				settingsPane.toBack();
-			}else{
+		Platform.runLater(()-> {
+			if (e == ToggleEvent.SHOW_SETTINGS && !showSettings){
 				settingsPane.toFront();
+				showSettings = true;
+			}else if (e == ToggleEvent.HIDE_SETTINGS && showSettings){
+				settingsPane.toBack();
+				showSettings = false;
+			}else if (e == ToggleEvent.TOGGLE_SETTINGS){
+				if (showSettings){
+					settingsPane.toBack();
+				}else{
+					settingsPane.toFront();
+				}
+				showSettings = !showSettings;
 			}
-			showSettings = !showSettings;
-		}
+		});
 	}
 
 	@Subscribe
