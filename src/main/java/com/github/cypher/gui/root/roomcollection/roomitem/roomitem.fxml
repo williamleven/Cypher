@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.Group?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<AnchorPane fx:id="root" focusTraversable="true" prefHeight="100.0" prefWidth="184.0" styleClass="room-item" stylesheets="@roomlistitem.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.roomlistitem.RoomListItemPresenter">
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.SVGPath?>
+
+<AnchorPane fx:id="root" focusTraversable="true" prefHeight="100.0" prefWidth="184.0" styleClass="room-item" stylesheets="@roomitem.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.roomitem.RoomItemPresenter">
    <children>
       <Label fx:id="name" alignment="CENTER" focusTraversable="false" layoutX="14.0" layoutY="-1.0" prefHeight="44.0" prefWidth="118.0" styleClass="h5" text="&lt;name&gt;" wrapText="true" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="52.0" AnchorPane.topAnchor="4.0" />
-      <TextArea fx:id="topic" editable="false" focusTraversable="false" layoutX="14.0" layoutY="38.0" styleClass="topic-area" stylesheets="@roomlistitem.css" text="&lt;topic&gt;" wrapText="true" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
+      <TextArea fx:id="topic" editable="false" focusTraversable="false" layoutX="14.0" layoutY="38.0" styleClass="topic-area" stylesheets="@roomitem.css" text="&lt;topic&gt;" wrapText="true" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
       <Group AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="3.0">
          <children>
             <ImageView fx:id="avatar" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="room-item-avatar" />

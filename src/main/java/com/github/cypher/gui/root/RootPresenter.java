@@ -2,16 +2,15 @@ package com.github.cypher.gui.root;
 
 import com.github.cypher.DebugLogger;
 import com.github.cypher.gui.Executor;
-import com.github.cypher.gui.FXThreadedObservableListWrapper;
+import com.github.cypher.gui.root.roomcollection.RoomCollectionView;
+import com.github.cypher.model.Client;
+import com.github.cypher.model.RoomCollection;
 import com.github.cypher.gui.root.login.LoginPresenter;
 import com.github.cypher.gui.root.login.LoginView;
-import com.github.cypher.gui.root.roomcollection.RoomCollectionView;
 import com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemPresenter;
 import com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemView;
 import com.github.cypher.gui.root.settings.SettingsView;
 import com.github.cypher.model.SdkException;
-import com.github.cypher.model.Client;
-import com.github.cypher.model.RoomCollection;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -85,20 +84,16 @@ public class RootPresenter {
 			}
 		});
 
+		roomCollectionListView.setItems(client.getRoomCollections());
 		roomCollectionListView.setCellFactory(listView -> {
 			RoomCollectionListItemView roomCollectionListItemView = new RoomCollectionListItemView();
 			roomCollectionListItemView.getView();
 			return (RoomCollectionListItemPresenter) roomCollectionListItemView.getPresenter();
 		});
 
-		roomCollectionListView.setItems(new FXThreadedObservableListWrapper<RoomCollection>(client.getRoomCollections()).getList());
-
 		updateRoomCollectionListHeight();
-		client.getRoomCollections().addListener((ListChangeListener.Change<? extends RoomCollection> change) -> {
-			Platform.runLater(this::updateRoomCollectionListHeight);
-		});
+		client.getRoomCollections().addListener((ListChangeListener.Change<? extends RoomCollection> change) -> updateRoomCollectionListHeight());
 
-		roomCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> client.selectedRoomCollection.set(newValue));
 	}
 
 	@FXML

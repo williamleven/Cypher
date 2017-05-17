@@ -1,4 +1,4 @@
-package com.github.cypher.gui.root.roomcollection.roomlistitem;
+package com.github.cypher.gui.root.roomcollection.roomitem;
 
 import com.github.cypher.gui.CustomListCell;
 import com.github.cypher.model.Room;
@@ -9,7 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
-public class RoomListItemPresenter extends CustomListCell<Room> {
+public class RoomItemPresenter extends CustomListCell<Room> {
 
 	@FXML
 	private AnchorPane root;
