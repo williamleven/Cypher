@@ -49,8 +49,6 @@ public class Client implements Updatable {
 	private boolean loggedIn;
 	private RoomCollection selectedRoomCollection;
 	private Room selectedRoom;
-	//public final ObjectProperty<Room> selectedRoom = new SimpleObjectProperty<>();
-	public final BooleanProperty showDirectory = new SimpleBooleanProperty();
 
 	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory, Settings settings, EventBus eventBus) {
 		this.sdkClientFactory = sdkClientFactory;
@@ -100,7 +98,6 @@ public class Client implements Updatable {
 
 		loggedIn = false;
 		selectedRoom = null;
-		showDirectory.set(false);
 	}
 
 	private void addListeners() {

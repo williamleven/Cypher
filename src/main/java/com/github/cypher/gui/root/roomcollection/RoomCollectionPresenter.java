@@ -37,14 +37,18 @@ public class RoomCollectionPresenter {
 	@FXML
 	private ListView<Room> roomListView;
 
+	private Parent directoryPane;
+	private boolean showDirectory;
+	private Parent roomPane;
+
 	private FXThreadedObservableListWrapper<Room> backendListForView;
 
 	@FXML
 	private void initialize() {
 		eventBus.register(this);
-		Parent directoryPane = new DirectoryView().getView();
+		directoryPane = new DirectoryView().getView();
 		rightSideStackPane.getChildren().add(directoryPane);
-		Parent roomPane = new RoomView().getView();
+		roomPane = new RoomView().getView();
 		rightSideStackPane.getChildren().add(roomPane);
 
 		roomCollectionChanged(client.getSelectedRoomCollection());
@@ -57,14 +61,7 @@ public class RoomCollectionPresenter {
 				roomListView.getSelectionModel().selectFirst();
 			}
 		});
-
-		client.showDirectory.addListener((observable, oldValue, newValue) -> {
-			if (newValue) {
-				directoryPane.toFront();
-			} else {
-				roomPane.toFront();
-			}
-		});
+		showDirectory = false;
 	}
 
 	// In the future if separate fxml/views/presenters exists for Server/PMCollection/GeneralCollection
@@ -96,11 +93,30 @@ public class RoomCollectionPresenter {
 
 			}*/
 		});
+	}
 
+	@Subscribe
+	private void toggleDirectory(ToggleEvent e) {
+		Platform.runLater(()-> {
+			if (e == ToggleEvent.SHOW_DIRECTORY && !showDirectory){
+				directoryPane.toFront();
+				showDirectory = true;
+			}else if (e == ToggleEvent.HIDE_DIRECTORY && showDirectory){
+				directoryPane.toBack();
+				showDirectory = false;
+			}else if (e == ToggleEvent.TOGGLE_DIRECTORY){
+				if (showDirectory){
+					directoryPane.toBack();
+				}else{
+					directoryPane.toFront();
+				}
+				showDirectory = !showDirectory;
+			}
+		});
 	}
 
 	@FXML
-	private void showDirectory() {
-		client.showDirectory.set(true);
+	private void onShowDirectoryClick() {
+		eventBus.post(ToggleEvent.TOGGLE_DIRECTORY);
 	}
 }
