@@ -1,11 +1,14 @@
 package com.github.cypher.model;
 
 import com.github.cypher.Settings;
+import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+
+import java.io.IOException;
 
 import static com.github.cypher.model.Util.extractServer;
 
@@ -88,7 +91,7 @@ public class Client implements Updatable {
 	public void login(String username, String password, String homeserver) throws SdkException{
 		try {
 			sdkClient.login(username, password, homeserver);
-		}catch(Exception ex){
+		}catch(RestfulHTTPException | IOException ex){
 			throw new SdkException(ex);
 		}
 	}
@@ -96,7 +99,7 @@ public class Client implements Updatable {
 	public void logout() throws SdkException{
 		try {
 			sdkClient.logout();
-		}catch(Exception ex){
+		}catch(RestfulHTTPException | IOException ex){
 			throw new SdkException(ex);
 		}
 		sessionManager.deleteSessionFromDisk();

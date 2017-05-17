@@ -1,6 +1,7 @@
 package com.github.cypher.model;
 
 import com.github.cypher.DebugLogger;
+import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -64,7 +65,7 @@ public class Room {
 	public void sendMessage(String body) throws SdkException {
 		try {
 			sdkRoom.sendTextMessage(body);
-		}catch(Exception ex){
+		}catch(RestfulHTTPException | IOException ex){
 			throw new SdkException(ex);
 		}
 	}
