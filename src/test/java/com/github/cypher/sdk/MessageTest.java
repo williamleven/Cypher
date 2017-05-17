@@ -15,7 +15,7 @@ public class MessageTest {
 		content.addProperty("msgtype", "TestType");
 
 		// Create message
-		Message m = new Message(null, 0, null, null, content);
+		Message m = new Message(null, 0, null, null, 0, content);
 
 		// Make sure json was processed
 		Assert.assertEquals("Message contructor failed to read body", "TestBody", m.getBody());

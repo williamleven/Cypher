@@ -10,6 +10,7 @@ import dorkbox.systemTray.SystemTray;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -54,6 +55,7 @@ public class Main extends Application {
 		scene.getStylesheets().add("bootstrapfx.css");
 
 		primaryStage.setTitle("Cypher");
+		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
 		primaryStage.setScene(scene);
 		primaryStage.setMinWidth(1100);
 		primaryStage.setMinHeight(500);
