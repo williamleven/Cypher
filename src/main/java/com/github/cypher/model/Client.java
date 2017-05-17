@@ -93,7 +93,7 @@ public class Client implements Updatable {
 		});
 
 		loggedIn.set(false);
-		showRoomSettings.set(false);
+		showSettings.set(false);
 		showRoomSettings.set(false);
 		// GeneralCollection is set as the default selected RoomCollection
 		selectedRoomCollection.set(pmCollection);
