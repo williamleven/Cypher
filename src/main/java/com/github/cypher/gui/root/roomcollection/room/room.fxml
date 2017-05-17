@@ -1,15 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 
 <StackPane fx:id="mainStackPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.room.RoomPresenter" >
     <children>
         <HBox fx:id="chatRoot">
             <children>
                 <AnchorPane fx:id="chat" HBox.hgrow="ALWAYS" />
-                <AnchorPane fx:id="chatExtra"/>
+                  <TabPane focusTraversable="false"  prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab text="Members">
+                        <content>
+                          <AnchorPane fx:id="members" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                        </content>
+                      </Tab>
+                      <Tab text="Files">
+                        <content>
+                          <AnchorPane fx:id="files" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                        </content>
+                      </Tab>
+                        <Tab text="Notifications">
+                           <content>
+                              <AnchorPane fx:id="notififications" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                           </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
             </children>
         </HBox>
     </children>

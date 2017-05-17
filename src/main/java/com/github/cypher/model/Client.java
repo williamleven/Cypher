@@ -49,6 +49,7 @@ public class Client implements Updatable {
 	private boolean loggedIn;
 	private RoomCollection selectedRoomCollection;
 	private Room selectedRoom;
+	public final BooleanProperty showAddServersPanel = new SimpleBooleanProperty(false);
 
 	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory, Settings settings, EventBus eventBus) {
 		this.sdkClientFactory = sdkClientFactory;
@@ -152,13 +153,15 @@ public class Client implements Updatable {
 	}
 
 	// Add roomcollection, room or private chat
-	public void add(String input) {
+	public void add(String input) throws IOException {
 		if (Util.isHomeserver(input)) {
 			addServer(input);
 		} else if (Util.isRoomLabel(input)) {
 			addRoom(input);
 		} else if (Util.isUser(input)) {
 			addUser(input);
+		} else {
+			throw new IOException("String is neither a server, room or user id/alias.");
 		}
 	}
 

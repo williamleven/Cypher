@@ -1,0 +1,6 @@
+AnchorPane{
+    -fx-background-color: rgba(0,0,0,0.7);
+}
+.exit-button{
+    -fx-background-color: rgba(0,0,0,0);
+}
