@@ -16,6 +16,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
+
 import javax.inject.Inject;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,10 +46,6 @@ public class MessageItemPresenter extends CustomListCell<Message> {
 			generateTextObjects(newValue);
 		}
 	};
-
-	@FXML
-	private void initialize() {
-	}
 
 	@Override
 	protected Node getRoot() {

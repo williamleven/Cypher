@@ -5,6 +5,7 @@ import com.github.cypher.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Room;
 import com.github.cypher.model.SdkException;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -22,7 +23,7 @@ public class ChatPresenter {
 	private Settings settings;
 
 	@FXML
-	private ListView eventList;
+	private ListView eventListView;
 
 	@FXML
 	private TextArea messageBox;
@@ -32,6 +33,12 @@ public class ChatPresenter {
 		messageBox.setDisable(client.selectedRoom.getValue() == null);
 		client.selectedRoom.addListener((observable, oldValue, newValue) -> {
 			messageBox.setDisable(newValue == null);
+		});
+
+		client.selectedRoom.addListener((observable, oldValue, newValue) -> {
+			Platform.runLater(() -> {
+				//eventListView.setItems(newValue.);
+			});
 		});
 	}
 
