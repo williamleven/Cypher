@@ -26,8 +26,8 @@ import static com.github.cypher.Util.getUserDataDirectoryPath;
 
 
 public class Main extends Application {
-	public static final String APPLICATION_NAME = "Cypher";
-	public static final String USER_DATA_DIRECTORY = getUserDataDirectoryPath(APPLICATION_NAME); //The path to the folder where settings, credentials etc are saved.
+	private static final String APPLICATION_NAME = "Cypher";
+	private static final String USER_DATA_DIRECTORY = getUserDataDirectoryPath(APPLICATION_NAME); //The path to the folder where settings, credentials etc are saved.
 
 	private final Settings settings = new TOMLSettings(USER_DATA_DIRECTORY);
 	private final Executor executor = new Executor();
@@ -35,7 +35,8 @@ public class Main extends Application {
 	private final Client client = new Client((
 			() -> new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings")),
 			settings,
-			eventBus
+			eventBus,
+			USER_DATA_DIRECTORY
 			);
 
 	@Override

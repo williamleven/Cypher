@@ -47,7 +47,11 @@ public class Client {
 	private RoomCollection selectedRoomCollection;
 	private Room selectedRoom;
 
-	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory, Settings settings, EventBus eventBus) {
+	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory,
+				  Settings settings,
+				  EventBus eventBus,
+				  String userDataDirectory) {
+
 		this.sdkClientFactory = sdkClientFactory;
 		this.settings = settings;
 		this.eventBus = eventBus;
@@ -55,7 +59,7 @@ public class Client {
 
 		initialize();
 
-		sessionManager = new SessionManager();
+		sessionManager = new SessionManager(userDataDirectory);
 
 		// Loads the session file from the disk if it exists.
 		if (sessionManager.savedSessionExists()) {
