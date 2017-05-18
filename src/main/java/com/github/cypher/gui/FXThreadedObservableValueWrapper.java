@@ -12,7 +12,7 @@ public class FXThreadedObservableValueWrapper<T> implements ObservableValue<T>{
 
 	private final ObservableValue<? extends T> inner;
 
-	private final List<ChangeListener<T>> listeners = new LinkedList<>();
+	private final List<ChangeListener<? super T>> listeners = new LinkedList<>();
 
 	private final List<InvalidationListener> invalidationListeners = new LinkedList<>();
 
@@ -26,13 +26,13 @@ public class FXThreadedObservableValueWrapper<T> implements ObservableValue<T>{
 	}
 
 	@Override
-	public synchronized void addListener(ChangeListener changeListener) {
+	public synchronized void addListener(ChangeListener<? super T> changeListener) {
 		// If first listener start listening to inner value
 		if (listeners.isEmpty()) {
 			changeListenerObject = (observable, oldValue, newValue) -> {
 					Platform.runLater(() -> {
 						synchronized (this) {
-							for (ChangeListener<T> l : listeners) {
+							for (ChangeListener<? super T> l : listeners) {
 								l.changed(observable, oldValue, newValue);
 							}
 						}
