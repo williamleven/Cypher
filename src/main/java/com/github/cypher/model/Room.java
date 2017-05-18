@@ -1,9 +1,11 @@
 package com.github.cypher.model;
 
 import com.github.cypher.sdk.api.RestfulHTTPException;
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
@@ -20,13 +22,16 @@ public class Room {
 	private final ObservableList<Member> members;
 	private final IntegerProperty memberCount;
 	private final ObservableList<String> aliases;
+	private final ObservableList<Event> events;
 	private final com.github.cypher.sdk.Room sdkRoom;
 	private final User activeUser;
 	
 
-	Room(com.github.cypher.sdk.Room sdkRoom, User activeUser) {
+	Room(Client client, com.github.cypher.sdk.Room sdkRoom, User activeUser) {
+
 		id = new SimpleStringProperty(sdkRoom.getId());
 		name = new SimpleStringProperty(sdkRoom.getName());
+
 		topic = new SimpleStringProperty(sdkRoom.getTopic());
 		avatarUrl = new SimpleObjectProperty<>(sdkRoom.getAvatarUrl());
 		avatar = new SimpleObjectProperty<>(null);
@@ -39,6 +44,7 @@ public class Room {
 
 		memberCount = new SimpleIntegerProperty(sdkRoom.getMemberCount());
 		aliases = FXCollections.synchronizedObservableList(FXCollections.observableArrayList(sdkRoom.getAliases()));
+		events = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 		this.sdkRoom = sdkRoom;
 		this.activeUser = activeUser;
 
@@ -82,6 +88,15 @@ public class Room {
 		sdkRoom.addAliasesListener((change -> {
 			aliases.setAll(change.getList());
 		}));
+
+		sdkRoom.addEventListener((change -> {
+			if (change.wasAdded()) {
+				com.github.cypher.sdk.Event event = change.getValueAdded();
+				if(event instanceof com.github.cypher.sdk.Message) {
+					events.add(new Message(client, (com.github.cypher.sdk.Message)event));
+				}
+			}
+		}));
 	}
 
 	public void sendMessage(String body) throws SdkException {
@@ -95,7 +110,7 @@ public class Room {
 	private void updateAvatar(java.awt.Image image) {
 		try {
 			this.avatar.set(
-				image == null ? null : Util.createImage(image)
+					image == null ? null : Util.createImage(image)
 			);
 		} catch (IOException e) {
 			System.out.printf("IOException when converting user avatar image: %s\n", e);
@@ -173,5 +188,9 @@ public class Room {
 
 	public ObservableList<String> aliasesList() {
 		return aliases;
+	}
+
+	public ObservableList<Event> getEvents() {
+		return events;
 	}
 }

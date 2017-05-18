@@ -93,7 +93,7 @@ public class Client {
 		sdkClient = sdkClientFactory.get();
 		sdkClient.addJoinRoomsListener((change) -> {
 			if (change.wasAdded()) {
-				distributeRoom(new Room(change.getValueAdded(), getActiveUser()));
+				distributeRoom(new Room(this, change.getValueAdded(), getActiveUser()));
 			}
 		});
 
