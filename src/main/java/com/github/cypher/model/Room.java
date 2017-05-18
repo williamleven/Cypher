@@ -3,6 +3,7 @@ package com.github.cypher.model;
 import com.github.cypher.DebugLogger;
 import com.github.cypher.sdk.*;
 import com.github.cypher.sdk.api.RestfulHTTPException;
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,6 +30,7 @@ public class Room {
 		this.client = client;
 		id = new SimpleStringProperty(sdkRoom.getId());
 		name = new SimpleStringProperty(sdkRoom.getName());
+
 		topic = new SimpleStringProperty(sdkRoom.getTopic());
 		avatarUrl = new SimpleObjectProperty<>(sdkRoom.getAvatarUrl());
 		avatar = new SimpleObjectProperty<>(null);
@@ -40,7 +42,7 @@ public class Room {
 		this.sdkRoom = sdkRoom;
 
 		sdkRoom.addNameListener((observable, oldValue, newValue) -> {
-			name.set(newValue);
+			Platform.runLater(() -> name.set(newValue));
 		});
 
 		sdkRoom.addTopicListener((observable, oldValue, newValue) -> {
@@ -66,11 +68,14 @@ public class Room {
 		sdkRoom.addAliasesListener((change -> {
 			aliases.setAll(change.getList());
 		}));
-		sdkRoom.addEventListener((change -> {
-			if (change.getValueAdded() instanceof com.github.cypher.sdk.Message) {
-				events.add(new Message(client, (com.github.cypher.sdk.Message) change.getValueAdded()));
-			}
 
+		sdkRoom.addEventListener((change -> {
+			if (change.wasAdded()) {
+				com.github.cypher.sdk.Event event = change.getValueAdded();
+				if(event instanceof com.github.cypher.sdk.Message) {
+					events.add(new Message(client, (com.github.cypher.sdk.Message)event));
+				}
+			}
 		}));
 	}
 
