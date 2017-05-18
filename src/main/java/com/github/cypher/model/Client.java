@@ -1,6 +1,6 @@
 package com.github.cypher.model;
 
-import com.github.cypher.ToggleEvent;
+import com.github.cypher.eventbus.ToggleEvent;
 import com.github.cypher.settings.Settings;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;

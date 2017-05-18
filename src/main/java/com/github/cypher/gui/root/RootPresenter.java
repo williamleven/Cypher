@@ -1,7 +1,7 @@
 package com.github.cypher.gui.root;
 
 
-import com.github.cypher.ToggleEvent;
+import com.github.cypher.eventbus.ToggleEvent;
 import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
 import com.github.cypher.gui.root.adddialog.AddDialogView;

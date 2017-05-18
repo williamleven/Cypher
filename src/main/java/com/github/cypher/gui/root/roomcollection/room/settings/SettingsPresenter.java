@@ -1,6 +1,6 @@
 package com.github.cypher.gui.root.roomcollection.room.settings;
 
-import com.github.cypher.ToggleEvent;
+import com.github.cypher.eventbus.ToggleEvent;
 import com.github.cypher.settings.Settings;
 import com.github.cypher.model.Client;
 import com.google.common.eventbus.EventBus;

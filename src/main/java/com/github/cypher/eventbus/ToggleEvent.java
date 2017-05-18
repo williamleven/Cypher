@@ -1,4 +1,4 @@
-package com.github.cypher;
+package com.github.cypher.eventbus;
 
 public enum ToggleEvent {
 	HIDE_SETTINGS,
