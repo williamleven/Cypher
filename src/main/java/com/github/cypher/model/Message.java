@@ -8,7 +8,7 @@ public class Message extends Event {
 	private final StringProperty body;
 	private final StringProperty formattedBody;
 
-	public Message(Client client, com.github.cypher.sdk.Message sdkMessage) {
+	Message(Client client, com.github.cypher.sdk.Message sdkMessage) {
 		super(client, sdkMessage);
 		this.client = client;
 		this.body = new SimpleStringProperty(sdkMessage.getBody());

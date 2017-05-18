@@ -11,6 +11,8 @@ public class PMCollection implements RoomCollection {
 	private final ObjectProperty<Image> imageProperty = new SimpleObjectProperty<>(PM_COLLECTION_IMAGE); // Should this maybe be generated on first request instead?
 	private final ObservableList<Room> rooms = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
+	PMCollection(){}
+
 	@Override
 	public ObservableList<Room> getRoomsProperty() {
 		return rooms;

@@ -27,7 +27,7 @@ public class Room {
 	private final com.github.cypher.sdk.Room sdkRoom;
 	private final Client client;
 
-	public Room(Client client, com.github.cypher.sdk.Room sdkRoom) {
+	Room(Client client, com.github.cypher.sdk.Room sdkRoom) {
 		this.client = client;
 		id = new SimpleStringProperty(sdkRoom.getId());
 		name = new SimpleStringProperty(sdkRoom.getName());
