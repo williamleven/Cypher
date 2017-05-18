@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.Optional;
 
 public class Room {
 	private final StringProperty id;
@@ -16,6 +18,7 @@ public class Room {
 	private final ObjectProperty<URL> avatarUrl;
 	private final ObjectProperty<Image> avatar;
 	private final StringProperty canonicalAlias;
+	private final ObservableList<Member> members;
 	private final IntegerProperty memberCount;
 	private final ObservableList<String> aliases;
 	private final com.github.cypher.sdk.Room sdkRoom;
@@ -28,6 +31,11 @@ public class Room {
 		avatar = new SimpleObjectProperty<>(null);
 		updateAvatar(sdkRoom.getAvatar());
 		canonicalAlias = new SimpleStringProperty(sdkRoom.getCanonicalAlias());
+		members = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
+		for (com.github.cypher.sdk.Member sdkMember : sdkRoom.getMembers()) {
+			members.add(new Member(sdkMember));
+		}
+
 		memberCount = new SimpleIntegerProperty(sdkRoom.getMemberCount());
 		aliases = FXCollections.synchronizedObservableList(FXCollections.observableArrayList(sdkRoom.getAliases()));
 		this.sdkRoom = sdkRoom;
@@ -53,7 +61,20 @@ public class Room {
 		});
 
 		sdkRoom.addMemberListener(change -> {
-			memberCount.set(change.getMap().size());
+			while (change.next()) {
+				if (change.wasAdded()) {
+					for (com.github.cypher.sdk.Member sdkMember : change.getAddedSubList()) {
+						members.add(new Member(sdkMember));
+					}
+				}
+				if (change.wasRemoved()) {
+					for (com.github.cypher.sdk.Member sdkMember : change.getRemoved()) {
+						Optional<Member> optionalMember =  members.stream().filter(m -> sdkMember.getUser().getId().equals(m.getUser().getId())).findAny();
+						members.remove(optionalMember.get());
+					}
+				}
+			}
+			memberCount.set(change.getList().size());
 		});
 
 		sdkRoom.addAliasesListener((change -> {
@@ -125,6 +146,10 @@ public class Room {
 
 	public StringProperty canonicalAliasProperty() {
 		return canonicalAlias;
+	}
+
+	public ObservableList<Member> getMembersProperty() {
+		return members;
 	}
 
 	public int getMemberCount() {

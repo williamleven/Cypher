@@ -1,4 +1,4 @@
-package com.github.cypher.gui.root.roomcollection.room.members.listitem;
+package com.github.cypher.gui.root.roomcollection.room.memberlistitem;
 
 import com.github.cypher.eventbus.ToggleEvent;
 import com.github.cypher.gui.FXThreadedObservableValueWrapper;
@@ -15,7 +15,7 @@ import javafx.scene.layout.AnchorPane;
 
 import javax.inject.Inject;
 
-public class ListItemPresenter extends CustomListCell<Member> {
+public class MemberListItemPresenter extends CustomListCell<Member> {
 
 
 	@Inject

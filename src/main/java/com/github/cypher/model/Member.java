@@ -8,16 +8,16 @@ import javafx.scene.image.*;
 
 
 public class Member {
-
+	private final User user;
 
 	private ObjectProperty<Image> imageProperty = new SimpleObjectProperty();
 
 	private final StringProperty name = new SimpleStringProperty();
 
-	public Member(String name) {
-		this.name.set(name);
+	Member(com.github.cypher.sdk.Member sdkMember) {
+		this.name.set(sdkMember.getUser().getName());
+		this.user = new User(sdkMember.getUser());
 	}
-
 
 	public Image getImageProperty() {
 		return imageProperty.get();
@@ -25,6 +25,10 @@ public class Member {
 
 	public ObjectProperty<Image> imagePropertyProperty() {
 		return imageProperty;
+	}
+
+	public User getUser() {
+		return user;
 	}
 
 	public StringProperty getName() {
