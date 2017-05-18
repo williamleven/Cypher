@@ -1,6 +1,7 @@
 package com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem;
 
 import com.github.cypher.gui.CustomListCell;
+import com.github.cypher.gui.FXThreadedObservableValueWrapper;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Event;
 import com.github.cypher.model.Message;
@@ -59,13 +60,13 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 
 		if(event instanceof Message) {
 			Message message = (Message)event;
-			author.textProperty().bind(message.getSender().nameProperty());
+			author.textProperty().bind(new FXThreadedObservableValueWrapper<>(message.getSender().nameProperty()));
 
 			if(message.getFormattedBody() != null && !message.getFormattedBody().equals("")) {
 				formatted = true;
-				message.formattedBodyProperty().addListener(bodyChangeListener);
+				new FXThreadedObservableValueWrapper<>(message.formattedBodyProperty()).addListener(bodyChangeListener);
 			} else {
-				message.bodyProperty().addListener(bodyChangeListener);
+				new FXThreadedObservableValueWrapper<>(message.bodyProperty()).addListener(bodyChangeListener);
 			}
 
 			if(formatted) {
@@ -77,7 +78,7 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 			} else {
 				generateTextObjects(message.getBody());
 			}
-			avatar.imageProperty().bind(message.getSender().avatarProperty());
+			avatar.imageProperty().bind(new FXThreadedObservableValueWrapper<>(message.getSender().avatarProperty()));
 		}
 	}
 

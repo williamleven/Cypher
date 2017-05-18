@@ -1,7 +1,9 @@
 package com.github.cypher.gui.root.roomcollection.room.chat;
 
 import com.github.cypher.DebugLogger;
-import com.github.cypher.Settings;
+import com.github.cypher.gui.FXThreadedObservableListWrapper;
+import com.github.cypher.gui.FXThreadedObservableValueWrapper;
+import com.github.cypher.settings.Settings;
 import com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem.EventListItemPresenter;
 import com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem.EventListItemView;
 import com.github.cypher.model.Client;
@@ -39,10 +41,13 @@ public class ChatPresenter {
 			return (EventListItemPresenter)view.getPresenter();
 		});
 
-		client.selectedRoom.addListener((observable, oldValue, newValue) -> {
+		new FXThreadedObservableValueWrapper<>(client.selectedRoom).addListener((observable, oldValue, newValue) -> {
 			messageBox.setDisable(newValue == null);
 			if(newValue != null) {
-				eventListView.setItems(newValue.getEvents());
+				FXThreadedObservableListWrapper<Event> eventList =
+						new FXThreadedObservableListWrapper<>(newValue.getEvents());
+
+				eventListView.setItems(eventList.getList());
 			} else {
 				eventListView.setItems(null);
 			}

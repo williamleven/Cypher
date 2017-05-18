@@ -39,7 +39,7 @@ public class User {
 	private void updateAvatar(java.awt.Image image) {
 		try {
 			this.avatar.set(
-					image == null ? null : com.github.cypher.Util.createImage(image)
+					image == null ? null : Util.createImage(image)
 			);
 		} catch(IOException e) {
 			if(DebugLogger.ENABLED) {

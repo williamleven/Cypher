@@ -1,6 +1,7 @@
 package com.github.cypher.gui.root.roomcollection.roomlistitem;
 
 import com.github.cypher.gui.CustomListCell;
+import com.github.cypher.gui.FXThreadedObservableValueWrapper;
 import com.github.cypher.model.Room;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -33,9 +34,9 @@ public class RoomListItemPresenter extends CustomListCell<Room> {
 	protected void updateBindings() {
 		Room room = getModelComponent();
 
-		name.textProperty().bind(room.nameProperty());
-		avatar.imageProperty().bind(room.avatarProperty());
-		topic.textProperty().bind(room.topicProperty());
+		name.textProperty().bind(new FXThreadedObservableValueWrapper<>(room.nameProperty()));
+		avatar.imageProperty().bind(new FXThreadedObservableValueWrapper<>(room.avatarProperty()));
+		topic.textProperty().bind(new FXThreadedObservableValueWrapper<>(room.topicProperty()));
 	}
 
 	@Override

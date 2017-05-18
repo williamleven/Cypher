@@ -1,10 +1,10 @@
 package com.github.cypher.gui.root.roomcollection.room;
 
-import com.github.cypher.Settings;
+import com.github.cypher.settings.Settings;
 import com.github.cypher.gui.root.roomcollection.room.chat.ChatView;
-import com.github.cypher.gui.root.roomcollection.room.chatextra.ChatExtraView;
 import com.github.cypher.gui.root.roomcollection.room.settings.SettingsView;
 import com.github.cypher.model.Client;
+import com.github.cypher.gui.root.roomcollection.room.members.MembersView;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
@@ -32,15 +32,15 @@ public class RoomPresenter {
 	private AnchorPane chat;
 
 	@FXML
-	private AnchorPane chatExtra;
+	private AnchorPane members;
 
 	@FXML
 	private void initialize() {
 
 		ChatView chatView = new ChatView();
 		chat.getChildren().add(chatView.getView());
-		ChatExtraView chatExtraView = new ChatExtraView();
-		chatExtra.getChildren().add(chatExtraView.getView());
+		MembersView membersView = new MembersView();
+		members.getChildren().add(membersView.getView());
 
 		Parent settingsPane = new SettingsView().getView();
 		mainStackPane.getChildren().add(settingsPane);

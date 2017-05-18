@@ -1,7 +1,7 @@
 package com.github.cypher.model;
 
 import com.github.cypher.DebugLogger;
-import com.github.cypher.Settings;
+import com.github.cypher.settings.Settings;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;
 import javafx.beans.property.BooleanProperty;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 import static com.github.cypher.model.Util.extractServer;
 
-public class Client implements Updatable {
+public class Client {
 
 	private final Supplier<com.github.cypher.sdk.Client> sdkClientFactory;
 
@@ -44,12 +44,14 @@ public class Client implements Updatable {
 	private GeneralCollection genCollection;
 
 	// Properties
-	public final BooleanProperty loggedIn = new SimpleBooleanProperty();
-	public final BooleanProperty showSettings = new SimpleBooleanProperty();
-	public final BooleanProperty showRoomSettings = new SimpleBooleanProperty();
-	public final ObjectProperty<RoomCollection> selectedRoomCollection = new SimpleObjectProperty<>();
-	public final ObjectProperty<Room> selectedRoom = new SimpleObjectProperty<>();
-	public final BooleanProperty showDirectory = new SimpleBooleanProperty();
+	public final BooleanProperty loggedIn = new SimpleBooleanProperty(false);
+	public final BooleanProperty showSettings = new SimpleBooleanProperty(false);
+	public final BooleanProperty showRoomSettings = new SimpleBooleanProperty(false);
+	// GeneralCollection is set as the default selected RoomCollection
+	public final ObjectProperty<RoomCollection> selectedRoomCollection = new SimpleObjectProperty<>(genCollection);
+	public final ObjectProperty<Room> selectedRoom = new SimpleObjectProperty<>(null);
+	public final BooleanProperty showDirectory = new SimpleBooleanProperty(false);
+	public final BooleanProperty showAddServersPanel = new SimpleBooleanProperty(false);
 
 	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory, Settings settings) {
 		this.sdkClientFactory = sdkClientFactory;
@@ -117,7 +119,13 @@ public class Client implements Updatable {
 
 	private void startNewUpdater() {
 		updater = new Updater(settings.getModelTickInterval());
-		updater.add(this, 1);
+		updater.add(1, () -> {
+			try {
+				sdkClient.update(settings.getSDKTimeout());
+			} catch (RestfulHTTPException | IOException e) {
+				DebugLogger.log(e.getMessage());
+			}
+		});
 		updater.start();
 	}
 
@@ -151,13 +159,15 @@ public class Client implements Updatable {
 	}
 
 	// Add roomcollection, room or private chat
-	public void add(String input) {
+	public void add(String input) throws IOException {
 		if (Util.isHomeserver(input)) {
 			addServer(input);
 		} else if (Util.isRoomLabel(input)) {
 			addRoom(input);
 		} else if (Util.isUser(input)) {
 			addUser(input);
+		} else {
+			throw new IOException("String is neither a server, room or user id/alias.");
 		}
 	}
 
@@ -176,14 +186,6 @@ public class Client implements Updatable {
 
 	private void addUser(String user) {
 		//Todo
-	}
-
-	public void update() {
-		try {
-			sdkClient.update(settings.getSDKTimeout());
-		} catch (RestfulHTTPException | IOException e) {
-			DebugLogger.log(e.getMessage());
-		}
 	}
 
 	public void exit() {
