@@ -8,6 +8,8 @@ import javafx.beans.value.ObservableValue;
 import java.util.LinkedList;
 import java.util.List;
 
+// Wraps an ObservableValue to support binding directly to JavaFX GUI elements
+// while editing the underlying list from another thread.
 public class FXThreadedObservableValueWrapper<T> implements ObservableValue<T>{
 
 	private final ObservableValue<? extends T> inner;
