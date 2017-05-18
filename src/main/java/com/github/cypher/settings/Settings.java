@@ -1,4 +1,4 @@
-package com.github.cypher;
+package com.github.cypher.settings;
 
 import java.util.Locale;
 
