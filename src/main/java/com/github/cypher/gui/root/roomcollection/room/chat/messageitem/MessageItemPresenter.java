@@ -1,6 +1,7 @@
 package com.github.cypher.gui.root.roomcollection.room.chat.messageitem;
 
 import com.github.cypher.gui.CustomListCell;
+import com.github.cypher.gui.FXThreadedObservableValueWrapper;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Message;
 import javafx.beans.value.ChangeListener;
@@ -8,6 +9,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -55,13 +57,13 @@ public class MessageItemPresenter extends CustomListCell<Message> {
 	@Override
 	protected void updateBindings() {
 		Message message = getModelComponent();
-		author.textProperty().bind(message.getAuthor().nameProperty());
+		author.textProperty().bind(new FXThreadedObservableValueWrapper<>(message.getAuthor().nameProperty()));
 
 		if(message.getFormattedBody() != null) {
 			formatted = true;
-			message.formattedBodyProperty().addListener(bodyChangeListener);
+			new FXThreadedObservableValueWrapper<>(message.formattedBodyProperty()).addListener(bodyChangeListener);
 		} else {
-			message.bodyProperty().addListener(bodyChangeListener);
+			new FXThreadedObservableValueWrapper<>(message.bodyProperty()).addListener(bodyChangeListener);
 		}
 
 		if(formatted) {
@@ -69,7 +71,7 @@ public class MessageItemPresenter extends CustomListCell<Message> {
 		} else {
 			generateTextObjects(message.getBody());
 		}
-		avatar.imageProperty().bind(message.getAuthor().avatarProperty());
+		avatar.imageProperty().bind(new FXThreadedObservableValueWrapper<>(message.getAuthor().avatarProperty()));
 	}
 
 	@Override

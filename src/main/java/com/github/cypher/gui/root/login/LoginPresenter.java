@@ -1,6 +1,6 @@
 package com.github.cypher.gui.root.login;
 
-import com.github.cypher.Settings;
+import com.github.cypher.settings.Settings;
 import com.github.cypher.gui.Executor;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.SdkException;

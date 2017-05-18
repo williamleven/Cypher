@@ -1,4 +1,4 @@
-package com.github.cypher;
+package com.github.cypher.settings;
 
 import com.moandjiezana.toml.Toml;
 import com.moandjiezana.toml.TomlWriter;
@@ -6,8 +6,6 @@ import com.moandjiezana.toml.TomlWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
-
-import static com.github.cypher.Main.USER_DATA_DIRECTORY;
 
 public class TOMLSettings implements Settings {
 
@@ -17,6 +15,7 @@ public class TOMLSettings implements Settings {
 	// Instance variables
 	private final File settingsFile;
 	private final SettingsData settingsData;
+	private final String userDataDirectory;
 
 	// Class representing all settings
 	private static class SettingsData{
@@ -29,19 +28,20 @@ public class TOMLSettings implements Settings {
 		int modelTickInterval = 500; // In ms
 	}
 
-	TOMLSettings() {
+	public TOMLSettings(String userDataDirectory) {
+		this.userDataDirectory = userDataDirectory;
 		settingsFile = createOrLoadFile();
 		settingsData = load(settingsFile);
 		save();
 	}
 
-	private static File createOrLoadFile() {
+	private File createOrLoadFile() {
 		try {
 			// Create folder if it doesn't exist
-			new File(USER_DATA_DIRECTORY).mkdir();
+			new File(userDataDirectory).mkdir();
 
 			// Load File
-			File file = new File(USER_DATA_DIRECTORY + File.separator + FILE_NAME);
+			File file = new File(userDataDirectory + File.separator + FILE_NAME);
 
 			// Create file if it doesn't exist
 			file.createNewFile();

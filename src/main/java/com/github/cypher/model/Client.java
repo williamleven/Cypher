@@ -1,6 +1,6 @@
 package com.github.cypher.model;
 
-import com.github.cypher.Settings;
+import com.github.cypher.settings.Settings;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;
 import javafx.beans.property.BooleanProperty;
@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 import static com.github.cypher.model.Util.extractServer;
 
-public class Client implements Updatable {
+public class Client {
 
 	private final Supplier<com.github.cypher.sdk.Client> sdkClientFactory;
 
@@ -118,7 +118,13 @@ public class Client implements Updatable {
 
 	private void startNewUpdater() {
 		updater = new Updater(settings.getModelTickInterval());
-		updater.add(this, 1);
+		updater.add(1, () -> {
+			try {
+				sdkClient.update(settings.getSDKTimeout());
+			} catch (RestfulHTTPException | IOException e) {
+				System.out.printf("%s\n", e.getMessage());
+			}
+		});
 		updater.start();
 	}
 
@@ -179,13 +185,6 @@ public class Client implements Updatable {
 		//Todo
 	}
 
-	public void update() {
-		try {
-			sdkClient.update(settings.getSDKTimeout());
-		} catch (RestfulHTTPException | IOException e) {
-			System.out.printf("%s\n", e.getMessage());
-		}
-	}
 
 	public void exit() {
 		if (settings.getSaveSession()) {
