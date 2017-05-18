@@ -19,6 +19,7 @@ import javafx.collections.ObservableMap;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -91,7 +92,7 @@ public class Room {
 		canonicalAlias.removeListener(listener);
 	}
 
-	void update(JsonObject data) throws RestfulHTTPException, IOException {
+	void update(JsonObject data) {
 		parseNameData(data);
 
 		parseTopicData(data);
@@ -103,7 +104,7 @@ public class Room {
 		parseEvents("state", data);
 	}
 
-	private void parseEvents(String category, JsonObject data) throws RestfulHTTPException, IOException {
+	private void parseEvents(String category, JsonObject data) {
 		if (data.has(category) &&
 		    data.get(category).isJsonObject()) {
 			JsonObject timeline = data.get(category).getAsJsonObject();
@@ -119,7 +120,7 @@ public class Room {
 		}
 	}
 
-	private void parseEventData(JsonObject event) throws RestfulHTTPException, IOException {
+	private void parseEventData(JsonObject event) {
 		if (event.has("type") &&
 		    event.has("origin_server_ts") &&
 		    event.has("sender") &&
@@ -200,15 +201,20 @@ public class Room {
 	}
 
 
-	private void parseAvatarUrlData(JsonObject data) throws RestfulHTTPException, IOException {
+	private void parseAvatarUrlData(JsonObject data) {
 		for(String key : new String[] {"url", "avatar_url"}) {
 			if (data.has(key)) {
-				URL newAvatarUrl = new URL(data.get(key).getAsString());
-				if (!newAvatarUrl.equals(avatarUrl.getValue())) {
-					avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
-					this.avatarUrl.set(newAvatarUrl);
+				try {
+					URL newAvatarUrl = new URL(data.get(key).getAsString());
+					if (!newAvatarUrl.equals(avatarUrl.getValue())) {
+						avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
+						this.avatarUrl.set(newAvatarUrl);
+					}
+					break;
+				} catch(IOException e) {
+					avatar.set(null);
+					avatarUrl.set(null);
 				}
-				break;
 			}
 		}
 	}
@@ -229,11 +235,7 @@ public class Room {
 			String membership = content.get("membership").getAsString();
 
 			User user = userRepository.get(memberId);
-			try {
-				user.update(event);
-			}catch (IOException e){
-
-			}
+			user.update(event);
 
 			if (membership.equals("join")) {
 				if (members.stream().noneMatch(m -> m.getUser().getId().equals(memberId))) {
@@ -253,8 +255,10 @@ public class Room {
 		}
 	}
 
-	private void parsePowerLevelsEvent(JsonObject data) throws IOException {
-		this.permissions.set(new PermissionTable(data));
+	private void parsePowerLevelsEvent(JsonObject data) {
+		try {
+			this.permissions.set(new PermissionTable(data));
+		} catch(IOException e) {}
 
 		if(data.has("users") &&
 		   data.get("users").isJsonObject()) {

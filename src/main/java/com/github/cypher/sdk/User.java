@@ -59,7 +59,7 @@ public class User {
 		//setAvatar(profile);
 	}
 
-	void update(JsonObject data) throws IOException {
+	void update(JsonObject data) {
 		if(data.has("type") &&
 		   data.has("content")) {
 			String type = data.get("type").getAsString();
@@ -87,24 +87,22 @@ public class User {
 
 	}
 
-	private void setAvatar(JsonObject contentObject) throws RestfulHTTPException, IOException {
-		if(contentObject.has("avatar_url")) {
-			if (contentObject.get("avatar_url").isJsonPrimitive()){
-				try {
-					URL newAvatarUrl = new URL(contentObject.get("avatar_url").getAsString());
-					if(!newAvatarUrl.equals(avatarUrl)) {
-						avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
-					}
-					avatarUrl.set(newAvatarUrl);
-				}catch (MalformedURLException e){
-
+	private void setAvatar(JsonObject contentObject) {
+		if(contentObject.has("avatar_url") &&
+		   contentObject.get("avatar_url").isJsonPrimitive()) {
+			try {
+				URL newAvatarUrl = new URL(contentObject.get("avatar_url").getAsString());
+				if(!newAvatarUrl.equals(avatarUrl)) {
+					avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
 				}
+				avatarUrl.set(newAvatarUrl);
+			} catch (IOException e) {
+				avatar.set(null);
+				avatarUrl.set(null);
 			}
-
-
 		} else {
-			avatarUrl.set(null);
 			avatar.set(null);
+			avatarUrl.set(null);
 		}
 }
 

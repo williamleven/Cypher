@@ -193,11 +193,7 @@ public class Client {
 					JsonObject eventObject = eventElement.getAsJsonObject();
 					if(eventObject.has("sender")) {
 						User user = users.get(eventObject.get("sender").getAsString());
-						try {
-							user.update(eventObject);
-						}catch (IOException e){
-
-						}
+						user.update(eventObject);
 					}
 				}
 			}
