@@ -4,6 +4,7 @@ import com.github.cypher.sdk.api.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.sun.javafx.collections.ObservableListWrapper;
 import com.sun.javafx.collections.ObservableMapWrapper;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -19,9 +20,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 /**
  * This class contains the metadata of a Matrix chat room,
@@ -45,8 +45,8 @@ public class Room {
 	private ObservableMap<String, Event> events =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
-	private ObservableMap<String, Member> members =
-		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
+	private ObservableList<Member> members =
+		FXCollections.synchronizedObservableList(new ObservableListWrapper<Member>(new ArrayList<>()));
 
 	private final ObservableList<String> aliases =
 		FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
@@ -67,11 +67,11 @@ public class Room {
 		events.removeListener(listener);
 	}
 
-	public void addMemberListener(MapChangeListener<String, Member> listener) {
+	public void addMemberListener(ListChangeListener<Member> listener) {
 		members.addListener(listener);
 	}
 
-	public void removeMemberListener(MapChangeListener<String, Member> listener) {
+	public void removeMemberListener(ListChangeListener<Member> listener) {
 		members.removeListener(listener);
 	}
 
@@ -231,14 +231,12 @@ public class Room {
 			User user = userRepository.get(memberId);
 
 			if (membership.equals("join")) {
-				if (!members.containsKey(memberId)) {
-					members.put(
-						memberId,
-						new Member(user)
-					           );
+				if (members.stream().noneMatch(m -> m.getUser().getId().equals(memberId))) {
+					members.add(new Member(user));
 				}
-			} else if (members.containsKey(memberId)) {
-				members.remove(memberId);
+			} else if (membership.equals("leave")) {
+				Optional<Member> optionalMember = members.stream().filter(m -> m.getUser().getId().equals(memberId)).findAny();
+				optionalMember.ifPresent(member -> members.remove(member));
 			}
 
 			// Add membership event to the log
@@ -257,12 +255,9 @@ public class Room {
 		   data.get("users").isJsonObject()) {
 
 			for(Map.Entry<String, JsonElement> userPowerEntry : data.get("users").getAsJsonObject().entrySet()) {
-
-				String userId = userPowerEntry.getKey();
-				if(members.containsKey(userId)) {
-					Member member = members.get(userId);
-					member.privilegeProperty().setValue(userPowerEntry.getValue().getAsInt());
-				}
+				String memberId = userPowerEntry.getKey();
+				Optional<Member> optionalMember = members.stream().filter(m -> m.getUser().getId().equals(memberId)).findAny();
+				optionalMember.ifPresent(member -> member.privilegeProperty().setValue(userPowerEntry.getValue().getAsInt()));
 			}
 		}
 	}
@@ -341,12 +336,12 @@ public class Room {
 	public String getName()      { return name.get(); }
 	public String getTopic()     { return topic.get(); }
 	public URL    getAvatarUrl() { return avatarUrl.get(); }
-	public Image  getAvatar()    { return avatar.get(); }
+	public Image getAvatar()    { return avatar.get(); }
 
 	public Map<String, Event> getEvents() { return new HashMap<>(events); }
 	public int getEventCount() { return events.size(); }
 
-	public Map<String, Member> getMembers() { return new HashMap<>(members); }
+	public List<Member> getMembers() { return new ArrayList<>(members); }
 	public int getMemberCount() { return members.size(); }
 
 	public String[] getAliases() { return aliases.toArray(new String[0]); }
