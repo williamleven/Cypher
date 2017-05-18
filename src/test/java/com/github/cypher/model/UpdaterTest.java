@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 public class UpdaterTest {
 
-	public class Counter implements Updatable {
+	public class Counter implements Updater.Updatable{
 
 		private int counter = 0;
 
@@ -40,9 +40,9 @@ public class UpdaterTest {
 			c1.reset();
 			c2.reset();
 			c3.reset();
-			u.add(c1, 1);
-			u.add(c2, 2);
-			u.add(c3, 1);
+			u.add(1, c1);
+			u.add(2, c2);
+			u.add(3, c3);
 
 			// Start the updater
 			u.start();

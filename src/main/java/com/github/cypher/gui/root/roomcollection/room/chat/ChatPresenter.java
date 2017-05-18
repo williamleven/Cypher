@@ -1,8 +1,8 @@
 package com.github.cypher.gui.root.roomcollection.room.chat;
 
-import com.github.cypher.DebugLogger;
-import com.github.cypher.Settings;
+
 import com.github.cypher.ToggleEvent;
+import com.github.cypher.settings.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Room;
 import com.github.cypher.model.SdkException;
@@ -72,9 +72,7 @@ public class ChatPresenter {
 					try {
 						room.sendMessage(messageBox.getText());
 					} catch(SdkException e) {
-						if(DebugLogger.ENABLED) {
-							DebugLogger.log("SdkException when trying to send a message: " + e);
-						}
+						System.out.printf("SdkException when trying to send a message: %s\n", e);
 					}
 				}
 				messageBox.clear();

@@ -1,6 +1,5 @@
 package com.github.cypher.model;
 
-import com.github.cypher.DebugLogger;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -73,12 +72,10 @@ public class Room {
 	private void updateAvatar(java.awt.Image image) {
 		try {
 			this.avatar.set(
-				image == null ? null : com.github.cypher.Util.createImage(image)
+				image == null ? null : Util.createImage(image)
 			);
 		} catch (IOException e) {
-			if (DebugLogger.ENABLED) {
-				DebugLogger.log("IOException when converting user avatar image: " + e);
-			}
+			System.out.printf("IOException when converting user avatar image: %s\n", e);
 		}
 	}
 

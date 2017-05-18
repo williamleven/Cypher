@@ -1,7 +1,7 @@
 package com.github.cypher.gui.root.roomcollection;
 
-import com.github.cypher.Settings;
 import com.github.cypher.ToggleEvent;
+import com.github.cypher.settings.Settings;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
 import com.github.cypher.gui.root.roomcollection.directory.DirectoryView;
 import com.github.cypher.gui.root.roomcollection.room.RoomView;

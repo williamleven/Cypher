@@ -1,6 +1,6 @@
 package com.github.cypher.gui.root;
 
-import com.github.cypher.DebugLogger;
+
 import com.github.cypher.ToggleEvent;
 import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
@@ -186,9 +186,7 @@ public class RootPresenter {
 			try {
 				client.logout();
 			} catch (SdkException e) {
-				if (DebugLogger.ENABLED) {
-					DebugLogger.log("SdkException when trying to logout - " + e.getMessage());
-				}
+				System.out.printf("SdkException when trying to logout - %s\n", e.getMessage());
 			}
 		});
 	}

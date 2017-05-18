@@ -6,6 +6,8 @@ import com.github.cypher.gui.root.RootView;
 import com.github.cypher.model.Client;
 import com.github.cypher.sdk.api.MatrixApiLayer;
 import com.google.common.eventbus.EventBus;
+import com.github.cypher.settings.Settings;
+import com.github.cypher.settings.TOMLSettings;
 import dorkbox.systemTray.MenuItem;
 import dorkbox.systemTray.SystemTray;
 import javafx.application.Application;
@@ -27,7 +29,7 @@ public class Main extends Application {
 	public static final String APPLICATION_NAME = "Cypher";
 	public static final String USER_DATA_DIRECTORY = getUserDataDirectoryPath(APPLICATION_NAME); //The path to the folder where settings, credentials etc are saved.
 
-	private final Settings settings = new TOMLSettings();
+	private final Settings settings = new TOMLSettings(USER_DATA_DIRECTORY);
 	private final Executor executor = new Executor();
 	private final EventBus eventBus = new EventBus();
 	private final Client client = new Client((

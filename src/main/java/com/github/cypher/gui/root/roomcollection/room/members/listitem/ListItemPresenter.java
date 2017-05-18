@@ -1,7 +1,8 @@
 package com.github.cypher.gui.root.roomcollection.room.members.listitem;
 
-import com.github.cypher.Settings;
 import com.github.cypher.ToggleEvent;
+import com.github.cypher.gui.FXThreadedObservableValueWrapper;
+import com.github.cypher.settings.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Member;
 import com.github.cypher.gui.CustomListCell;
@@ -48,8 +49,8 @@ public class ListItemPresenter extends CustomListCell<Member> {
 
 	@Override
 	protected void updateBindings() {
-		imageView.imageProperty().bind(getModelComponent().imagePropertyProperty());
-		label.textProperty().bind(getModelComponent().getName());
+		imageView.imageProperty().bind(new FXThreadedObservableValueWrapper<>(getModelComponent().imagePropertyProperty()));
+		label.textProperty().bind(new FXThreadedObservableValueWrapper<>(getModelComponent().getName()));
 	}
 
 	@Override
