@@ -1,6 +1,6 @@
 package com.github.cypher.gui.root.roomcollectionlistitem;
 
-import com.github.cypher.Settings;
+import com.github.cypher.settings.Settings;
 import com.github.cypher.gui.CustomListCell;
 import com.github.cypher.gui.FXThreadedObservableValueWrapper;
 import com.github.cypher.model.Client;

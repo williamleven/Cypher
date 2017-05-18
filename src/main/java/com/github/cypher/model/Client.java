@@ -1,7 +1,7 @@
 package com.github.cypher.model;
 
 import com.github.cypher.DebugLogger;
-import com.github.cypher.Settings;
+import com.github.cypher.settings.Settings;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;
 import javafx.beans.property.BooleanProperty;
