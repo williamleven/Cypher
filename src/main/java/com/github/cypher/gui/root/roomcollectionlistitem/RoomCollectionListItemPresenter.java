@@ -2,6 +2,7 @@ package com.github.cypher.gui.root.roomcollectionlistitem;
 
 import com.github.cypher.settings.Settings;
 import com.github.cypher.gui.CustomListCell;
+import com.github.cypher.gui.FXThreadedObservableValueWrapper;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.RoomCollection;
 import javafx.fxml.FXML;
@@ -41,7 +42,7 @@ public class RoomCollectionListItemPresenter extends CustomListCell<RoomCollecti
 
 	@Override
 	protected void updateBindings() {
-		imageView.imageProperty().bind(getModelComponent().getImageProperty());
+		imageView.imageProperty().bind(new FXThreadedObservableValueWrapper<>(getModelComponent().getImageProperty()));
 	}
 
 	@Override
