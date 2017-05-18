@@ -93,12 +93,16 @@ public class Client {
 		sdkClient = sdkClientFactory.get();
 		sdkClient.addJoinRoomsListener((change) -> {
 			if (change.wasAdded()) {
-				distributeRoom(new Room(change.getValueAdded()));
+				distributeRoom(new Room(change.getValueAdded(), getActiveUser()));
 			}
 		});
 
 		loggedIn = false;
 		selectedRoom = null;
+	}
+
+	public User getActiveUser(){
+		return getUser(sdkClient.getActiveUser().getId());
 	}
 
 	private void addListeners() {
@@ -206,11 +210,13 @@ public class Client {
 
 	private void distributeRoom(Room room) {
 		// Place in PM
-		if (isPmChat(room)) {
+		if (room.isPmChat()) {
 			pmCollection.addRoom(room);
 		} else { // Place in servers
-			String mainServer = extractServer(room.getCanonicalAlias());
-			addServer(mainServer);
+			if (room.getCanonicalAlias() != null){
+				String mainServer = extractServer(room.getCanonicalAlias());
+				addServer(mainServer);
+			}
 			boolean placed = false;
 			for (String alias : room.getAliases()) {
 				for (Server server : servers) {
@@ -230,11 +236,6 @@ public class Client {
 
 	public boolean isLoggedIn() {
 		return loggedIn;
-	}
-
-	private static boolean isPmChat(Room room) {
-		boolean hasName = (room.getName() != null && !room.getName().isEmpty());
-		return (room.getMemberCount() < 3 && !hasName);
 	}
 
 	public RoomCollection getSelectedRoomCollection(){

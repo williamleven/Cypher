@@ -8,7 +8,6 @@ import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.Optional;
 
 public class Room {
@@ -22,8 +21,9 @@ public class Room {
 	private final IntegerProperty memberCount;
 	private final ObservableList<String> aliases;
 	private final com.github.cypher.sdk.Room sdkRoom;
+	private final User activeUser;
 
-	public Room(com.github.cypher.sdk.Room sdkRoom) {
+	public Room(com.github.cypher.sdk.Room sdkRoom, User activeUser) {
 		id = new SimpleStringProperty(sdkRoom.getId());
 		name = new SimpleStringProperty(sdkRoom.getName());
 		topic = new SimpleStringProperty(sdkRoom.getTopic());
@@ -39,6 +39,7 @@ public class Room {
 		memberCount = new SimpleIntegerProperty(sdkRoom.getMemberCount());
 		aliases = FXCollections.synchronizedObservableList(FXCollections.observableArrayList(sdkRoom.getAliases()));
 		this.sdkRoom = sdkRoom;
+		this.activeUser = activeUser;
 
 		sdkRoom.addNameListener((observable, oldValue, newValue) -> {
 			name.set(newValue);
@@ -98,6 +99,11 @@ public class Room {
 		} catch (IOException e) {
 			System.out.printf("IOException when converting user avatar image: %s\n", e);
 		}
+	}
+
+	public boolean isPmChat() {
+		boolean hasName = (name.get() != null && !name.get().isEmpty());
+		return (this.getMemberCount() == 2 && !hasName);
 	}
 
 	public String getId() {
