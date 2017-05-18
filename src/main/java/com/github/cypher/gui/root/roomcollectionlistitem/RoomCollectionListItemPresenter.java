@@ -26,15 +26,6 @@ public class RoomCollectionListItemPresenter extends CustomListCell<RoomCollecti
 	@FXML
 	private ImageView imageView;
 
-	@FXML
-	private void initialize() {
-	}
-
-	@FXML
-	private void toggleSettings() {
-		client.showSettings.set(!client.showSettings.get());
-	}
-
 	@Override
 	protected Node getRoot() {
 		return root;

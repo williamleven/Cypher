@@ -1,12 +1,12 @@
 package com.github.cypher.model;
 
+import com.github.cypher.eventbus.ToggleEvent;
 import com.github.cypher.settings.Settings;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -24,6 +24,7 @@ public class Client {
 
 	private Updater updater;
 	private final Settings settings;
+	private final EventBus eventBus;
 	private final SessionManager sessionManager;
 
 	//RoomCollections
@@ -42,19 +43,15 @@ public class Client {
 	// General chatrooms
 	private GeneralCollection genCollection;
 
-	// Properties
-	public final BooleanProperty loggedIn = new SimpleBooleanProperty(false);
-	public final BooleanProperty showSettings = new SimpleBooleanProperty(false);
-	public final BooleanProperty showRoomSettings = new SimpleBooleanProperty(false);
-	// GeneralCollection is set as the default selected RoomCollection
-	public final ObjectProperty<RoomCollection> selectedRoomCollection = new SimpleObjectProperty<>(genCollection);
-	public final ObjectProperty<Room> selectedRoom = new SimpleObjectProperty<>(null);
-	public final BooleanProperty showDirectory = new SimpleBooleanProperty(false);
-	public final BooleanProperty showAddServersPanel = new SimpleBooleanProperty(false);
+	private boolean loggedIn;
+	private RoomCollection selectedRoomCollection;
+	private Room selectedRoom;
 
-	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory, Settings settings) {
+	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory, Settings settings, EventBus eventBus) {
 		this.sdkClientFactory = sdkClientFactory;
 		this.settings = settings;
+		this.eventBus = eventBus;
+		eventBus.register(this);
 
 		initialize();
 
@@ -67,7 +64,7 @@ public class Client {
 			if (session != null) {
 				// No guarantee that the session is valid. setSession doesn't throw an exception if the session is invalid.
 				sdkClient.setSession(session);
-				loggedIn.setValue(true);
+				loggedIn = true;
 				startNewUpdater();
 			}
 		}
@@ -80,6 +77,8 @@ public class Client {
 		roomCollections.clear();
 		roomCollections.add(pmCollection);
 		roomCollections.add(genCollection);
+		selectedRoomCollection = pmCollection;
+		eventBus.post(selectedRoomCollection);
 
 		servers.clear();
 
@@ -94,13 +93,8 @@ public class Client {
 			}
 		});
 
-		loggedIn.set(false);
-		showSettings.set(false);
-		showRoomSettings.set(false);
-		// GeneralCollection is set as the default selected RoomCollection
-		selectedRoomCollection.set(pmCollection);
-		selectedRoom.set(null);
-		showDirectory.set(false);
+		loggedIn = false;
+		selectedRoom = null;
 	}
 
 	private void addListeners() {
@@ -131,6 +125,8 @@ public class Client {
 	public void login(String username, String password, String homeserver) throws SdkException{
 		try {
 			sdkClient.login(username, password, homeserver);
+			loggedIn = true;
+			eventBus.post(ToggleEvent.LOGIN);
 			startNewUpdater();
 		}catch(RestfulHTTPException | IOException ex){
 			throw new SdkException(ex);
@@ -149,6 +145,7 @@ public class Client {
 		try {
 			sdkClient.logout();
 			sessionManager.deleteSessionFromDisk();
+			eventBus.post(ToggleEvent.LOGOUT);
 			initialize();
 		}catch(RestfulHTTPException | IOException ex){
 			throw new SdkException(ex);
@@ -227,8 +224,36 @@ public class Client {
 
 	}
 
+	public boolean isLoggedIn() {
+		return loggedIn;
+	}
+
 	private static boolean isPmChat(Room room) {
 		boolean hasName = (room.getName() != null && !room.getName().isEmpty());
 		return (room.getMemberCount() < 3 && !hasName);
+	}
+
+	public RoomCollection getSelectedRoomCollection(){
+		return selectedRoomCollection;
+	}
+
+	public Room getSelectedRoom(){
+		return selectedRoom;
+	}
+
+	@Subscribe
+	public void RoomCollectionChanged(RoomCollection e){
+		Platform.runLater(() -> {
+			this.selectedRoomCollection = e;
+			System.out.printf("Selected room collection changed\n");
+		});
+	}
+
+	@Subscribe
+	public void RoomChanged(Room e){
+		Platform.runLater(() -> {
+			this.selectedRoom = e;
+			System.out.printf("Selected room changed\n");
+		});
 	}
 }

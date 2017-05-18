@@ -58,7 +58,6 @@ public class LoginPresenter {
 			executor.handle(() -> {
 				try {
 					client.login(usernameField.getText(), passwordField.getText(), homeserverField.getText());
-					client.loggedIn.set(true);
 					settings.setSaveSession(rememberMeCheckBox.isSelected());
 				} catch (SdkException e) {
 					System.out.printf("SdkException when trying to login - &s\n", e.getMessage());

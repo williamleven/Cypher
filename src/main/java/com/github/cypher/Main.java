@@ -5,6 +5,7 @@ import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.root.RootView;
 import com.github.cypher.model.Client;
 import com.github.cypher.sdk.api.MatrixApiLayer;
+import com.google.common.eventbus.EventBus;
 import com.github.cypher.settings.Settings;
 import com.github.cypher.settings.TOMLSettings;
 import dorkbox.systemTray.MenuItem;
@@ -30,7 +31,12 @@ public class Main extends Application {
 
 	private final Settings settings = new TOMLSettings(USER_DATA_DIRECTORY);
 	private final Executor executor = new Executor();
-	private final Client client = new Client((() -> new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings")), settings);
+	private final EventBus eventBus = new EventBus();
+	private final Client client = new Client((
+			() -> new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings")),
+			settings,
+			eventBus
+			);
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -47,6 +53,7 @@ public class Main extends Application {
 		customProperties.put("client", client); // This corresponds to the line @Inject Client client; in the Presenters
 		customProperties.put("settings", settings);
 		customProperties.put("executor", executor);
+		customProperties.put("eventBus", eventBus);
 		Injector.setConfigurationSource(customProperties::get);
 
 

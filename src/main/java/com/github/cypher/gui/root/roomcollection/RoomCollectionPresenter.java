@@ -1,5 +1,6 @@
 package com.github.cypher.gui.root.roomcollection;
 
+import com.github.cypher.eventbus.ToggleEvent;
 import com.github.cypher.settings.Settings;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
 import com.github.cypher.gui.root.roomcollection.directory.DirectoryView;
@@ -9,6 +10,8 @@ import com.github.cypher.gui.root.roomcollection.roomlistitem.RoomListItemView;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Room;
 import com.github.cypher.model.RoomCollection;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -25,40 +28,40 @@ public class RoomCollectionPresenter {
 	@Inject
 	private Settings settings;
 
+	@Inject
+	private EventBus eventBus;
+
 	@FXML
 	private StackPane rightSideStackPane;
 
 	@FXML
 	private ListView<Room> roomListView;
 
+	private Parent directoryPane;
+	private boolean showDirectory;
+	private Parent roomPane;
+
 	private FXThreadedObservableListWrapper<Room> backendListForView;
 
 	@FXML
 	private void initialize() {
-		Parent directoryPane = new DirectoryView().getView();
+		eventBus.register(this);
+		directoryPane = new DirectoryView().getView();
 		rightSideStackPane.getChildren().add(directoryPane);
-		Parent roomPane = new RoomView().getView();
+		roomPane = new RoomView().getView();
 		rightSideStackPane.getChildren().add(roomPane);
 
-		roomCollectionChanged(client.selectedRoomCollection.get());
-		client.selectedRoomCollection.addListener((observable, oldValue, newValue) -> {
-			// If a new RoomCollection is selected the directory view is hidden.
-			if (oldValue != null && newValue != null && oldValue != newValue) {
-				client.showDirectory.set(false);
-			}
+		roomCollectionChanged(client.getSelectedRoomCollection());
 
-			roomCollectionChanged(newValue);
-		});
-
-		roomListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> client.selectedRoom.set(newValue));
-
-		client.showDirectory.addListener((observable, oldValue, newValue) -> {
-			if (newValue) {
-				directoryPane.toFront();
-			} else {
-				roomPane.toFront();
+		roomListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue != null) {
+				eventBus.post(newValue);
+				eventBus.post(ToggleEvent.HIDE_ROOM_SETTINGS);
+			}else {
+				roomListView.getSelectionModel().selectFirst();
 			}
 		});
+		showDirectory = false;
 	}
 
 	// In the future if separate fxml/views/presenters exists for Server/PMCollection/GeneralCollection
@@ -66,31 +69,62 @@ public class RoomCollectionPresenter {
 	//
 	// Currently while only RoomCollection exists buttons are just enabled and disabled depending on which kind of
 	// RoomCollection is currently shown.
+	@Subscribe
 	private void roomCollectionChanged(RoomCollection roomCollection) {
-		if (backendListForView != null) {
-			backendListForView.dispose();
-		}
-		backendListForView = new FXThreadedObservableListWrapper<>(roomCollection.getRoomsProperty());
+		Platform.runLater(()->{
+			if (backendListForView != null) {
+				backendListForView.dispose();
+			}
+			backendListForView = new FXThreadedObservableListWrapper<>(roomCollection.getRoomsProperty());
 
-		roomListView.setCellFactory(listView -> {
-			RoomListItemView roomListItemView = new RoomListItemView();
-			roomListItemView.getView();
-			return (RoomListItemPresenter) roomListItemView.getPresenter();
+			roomListView.setCellFactory(listView -> {
+				RoomListItemView roomListItemView = new RoomListItemView();
+				roomListItemView.getView();
+				return (RoomListItemPresenter) roomListItemView.getPresenter();
+			});
+
+			roomListView.setItems(backendListForView.getList());
+
+			/*if (roomCollection instanceof Server) {
+
+			} else if (roomCollection instanceof PMCollection) {
+
+			} else if (roomCollection instanceof GeneralCollection) {
+
+			}*/
 		});
+	}
 
-		Platform.runLater(() -> roomListView.setItems(backendListForView.getList()));
+	@Subscribe
+	private void handleLoginStateChange(ToggleEvent e) {
+		if (e == ToggleEvent.LOGOUT) {
+			showDirectory = false;
+			directoryPane.toBack();
+		}
+	}
 
-		/*if (roomCollection instanceof Server) {
-
-		} else if (roomCollection instanceof PMCollection) {
-
-		} else if (roomCollection instanceof GeneralCollection) {
-
-		}*/
+	@Subscribe
+	private void toggleDirectory(ToggleEvent e) {
+		Platform.runLater(()-> {
+			if (e == ToggleEvent.SHOW_DIRECTORY && !showDirectory){
+				directoryPane.toFront();
+				showDirectory = true;
+			}else if (e == ToggleEvent.HIDE_DIRECTORY && showDirectory){
+				directoryPane.toBack();
+				showDirectory = false;
+			}else if (e == ToggleEvent.TOGGLE_DIRECTORY){
+				if (showDirectory){
+					directoryPane.toBack();
+				}else{
+					directoryPane.toFront();
+				}
+				showDirectory = !showDirectory;
+			}
+		});
 	}
 
 	@FXML
-	private void showDirectory() {
-		client.showDirectory.set(true);
+	private void onShowDirectoryClick() {
+		eventBus.post(ToggleEvent.TOGGLE_DIRECTORY);
 	}
 }

@@ -11,7 +11,7 @@
         <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="184.0">
             <children>
                 <Label layoutX="10.0" layoutY="10.0" prefHeight="27.0" prefWidth="180.0" styleClass="h3" text="Server Name" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-                <Button layoutX="156.0" layoutY="37.0" mnemonicParsing="false" onMouseClicked="#showDirectory" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="37.0">
+                <Button layoutX="156.0" layoutY="37.0" mnemonicParsing="false" onMouseClicked="#onShowDirectoryClick" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="37.0">
                     <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="btn-info" />
