@@ -11,4 +11,15 @@ public class Event {
 		sender = client.getUser(sdkEvent.getSender().getId());
 	}
 
+	public String getEventId() {
+		return eventId;
+	}
+
+	public long getOriginServerTimesStamp() {
+		return originServerTimesStamp;
+	}
+
+	public User getSender() {
+		return sender;
+	}
 }
