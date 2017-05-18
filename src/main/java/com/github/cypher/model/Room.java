@@ -27,7 +27,7 @@ public class Room {
 	private final User activeUser;
 	
 
-	Room(Client client, com.github.cypher.sdk.Room sdkRoom, User activeUser) {
+	Room(Repository<User> repo, com.github.cypher.sdk.Room sdkRoom, User activeUser) {
 
 		id = new SimpleStringProperty(sdkRoom.getId());
 		name = new SimpleStringProperty(sdkRoom.getName());
@@ -39,7 +39,7 @@ public class Room {
 		canonicalAlias = new SimpleStringProperty(sdkRoom.getCanonicalAlias());
 		members = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 		for (com.github.cypher.sdk.Member sdkMember : sdkRoom.getMembers()) {
-			members.add(new Member(sdkMember));
+			members.add(new Member(sdkMember, repo));
 		}
 
 		memberCount = new SimpleIntegerProperty(sdkRoom.getMemberCount());
@@ -72,7 +72,7 @@ public class Room {
 			while (change.next()) {
 				if (change.wasAdded()) {
 					for (com.github.cypher.sdk.Member sdkMember : change.getAddedSubList()) {
-						members.add(new Member(sdkMember));
+						members.add(new Member(sdkMember, repo));
 					}
 				}
 				if (change.wasRemoved()) {
@@ -93,7 +93,7 @@ public class Room {
 			if (change.wasAdded()) {
 				com.github.cypher.sdk.Event event = change.getValueAdded();
 				if(event instanceof com.github.cypher.sdk.Message) {
-					events.add(new Message(client, (com.github.cypher.sdk.Message)event));
+					events.add(new Message(repo, (com.github.cypher.sdk.Message)event));
 				}
 			}
 		}));

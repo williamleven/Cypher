@@ -4,13 +4,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Message extends Event {
-	private final Client client;
 	private final StringProperty body;
 	private final StringProperty formattedBody;
 
-	Message(Client client, com.github.cypher.sdk.Message sdkMessage) {
-		super(client, sdkMessage);
-		this.client = client;
+	Message(Repository<User> repo, com.github.cypher.sdk.Message sdkMessage) {
+		super(repo, sdkMessage);
 		this.body = new SimpleStringProperty(sdkMessage.getBody());
 		this.formattedBody = new SimpleStringProperty(sdkMessage.getFormattedBody());
 
