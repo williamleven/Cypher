@@ -35,11 +35,8 @@ public class UserTest {
 		JsonObject content = new JsonObject();
 		content.addProperty("presence", "offline");
 		data.add("content", content);
-		try {
-			user.update(data);
-		}catch (IOException e){
-			
-		}
+
+		user.update(data);
 
 		Assert.assertEquals("User object did not parse presence sync data", user.getPresence(), User.Presence.OFFLINE);
 	}
