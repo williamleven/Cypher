@@ -30,17 +30,16 @@ public class FXThreadedObservableValueWrapper<T> implements ObservableValue<T>{
 		// If first listener start listening to inner value
 		if (listeners.isEmpty()) {
 			changeListenerObject = (observable, oldValue, newValue) -> {
-				synchronized (this){
 					Platform.runLater(() -> {
-						for (ChangeListener<T> l : listeners){
-							l.changed(observable, oldValue, newValue);
+						synchronized (this) {
+							for (ChangeListener<T> l : listeners) {
+								l.changed(observable, oldValue, newValue);
+							}
 						}
 					});
-				}
 			};
 			inner.addListener(changeListenerObject);
 		}
-
 		listeners.add(changeListener);
 	}
 
@@ -65,14 +64,13 @@ public class FXThreadedObservableValueWrapper<T> implements ObservableValue<T>{
 		// If first listener start listening to inner value
 		if (invalidationListeners.isEmpty()){
 			invalidationListenerObject = (observable) -> {
-				synchronized (this){
 					Platform.runLater(() -> {
-						for (InvalidationListener listener :invalidationListeners){
-							listener.invalidated(this);
+						synchronized (this) {
+							for (InvalidationListener listener : invalidationListeners) {
+								listener.invalidated(this);
+							}
 						}
 					});
-				}
-
 			};
 			inner.addListener(invalidationListenerObject);
 		}
