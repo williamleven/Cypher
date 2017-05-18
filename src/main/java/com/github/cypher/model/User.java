@@ -1,6 +1,5 @@
 package com.github.cypher.model;
 
-import com.github.cypher.DebugLogger;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -42,9 +41,7 @@ public class User {
 					image == null ? null : Util.createImage(image)
 			);
 		} catch(IOException e) {
-			if(DebugLogger.ENABLED) {
-				DebugLogger.log("IOException when converting user avatar image: " + e);
-			}
+			System.out.printf("IOException when converting user avatar image: %s\n", e);
 		}
 	}
 

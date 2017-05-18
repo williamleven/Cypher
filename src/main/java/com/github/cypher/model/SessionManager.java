@@ -1,7 +1,5 @@
 package com.github.cypher.model;
 
-import com.github.cypher.DebugLogger;
-import com.github.cypher.Main;
 import com.github.cypher.sdk.api.Session;
 
 import java.io.*;
@@ -12,9 +10,14 @@ import java.nio.file.Paths;
 // Handles the loading and saving of the "last session" to enable auto-login / "keep me logged in"
 class SessionManager {
 	private static final String SESSION_FILE_NAME = "lastSession";
+	private final String userDataDirectory;
+
+	SessionManager(String userDataDirectory){
+		this.userDataDirectory = userDataDirectory;
+	}
 
 	public boolean savedSessionExists() {
-		Path lastSessionFilePath = Paths.get(Main.USER_DATA_DIRECTORY + File.separator + SESSION_FILE_NAME);
+		Path lastSessionFilePath = Paths.get(userDataDirectory + File.separator + SESSION_FILE_NAME);
 		return Files.exists(lastSessionFilePath) && Files.isRegularFile(lastSessionFilePath);
 	}
 
@@ -26,19 +29,15 @@ class SessionManager {
 		ObjectInputStream ois = null;
 
 		try {
-			fin = new FileInputStream(Main.USER_DATA_DIRECTORY + File.separator + SESSION_FILE_NAME);
+			fin = new FileInputStream(userDataDirectory + File.separator + SESSION_FILE_NAME);
 			ois = new ObjectInputStream(fin);
 			lastSession = (Session) ois.readObject();
 
-			if (DebugLogger.ENABLED) {
-				DebugLogger.log("last session file deserialized!");
-			}
+			System.out.printf("last session file deserialized!\n");
 
 		} catch (IOException ex) {
 			ex.printStackTrace();
-			if (DebugLogger.ENABLED) {
-				DebugLogger.log("last session file deserialization failed!");
-			}
+			System.out.printf("last session file deserialization failed!\n");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} finally {
@@ -64,9 +63,7 @@ class SessionManager {
 	// Session is saved to USER_DATA_DIRECTORY + File.separator + SESSION_FILE_NAME
 	public void saveSessionToDisk(Session session) {
 		if (session == null) {
-			if (DebugLogger.ENABLED) {
-				DebugLogger.log("Session not saved! Session parameter was null.");
-			}
+			System.out.printf("Session not saved! Session parameter was null.\n");
 			return;
 		}
 
@@ -74,19 +71,15 @@ class SessionManager {
 		ObjectOutputStream oos = null;
 
 		try {
-			fout = new FileOutputStream(Main.USER_DATA_DIRECTORY + File.separator + SESSION_FILE_NAME);
+			fout = new FileOutputStream(userDataDirectory + File.separator + SESSION_FILE_NAME);
 			oos = new ObjectOutputStream(fout);
 			oos.writeObject(session);
 
-			if (DebugLogger.ENABLED) {
-				DebugLogger.log("Session file serialized & saved!");
-			}
+			System.out.printf("Session file serialized & saved!\n");
 
 		} catch (IOException ex) {
 			ex.printStackTrace();
-			if (DebugLogger.ENABLED) {
-				DebugLogger.log("Session file serialization/saving failed!");
-			}
+			System.out.printf("Session file serialization/saving failed!\n");
 		} finally {
 			if (fout != null) {
 				try {
@@ -108,11 +101,9 @@ class SessionManager {
 	// Deletes the saved session (if it exists) from the disk. The path USER_DATA_DIRECTORY + File.separator + SESSION_FILE_NAME is used
 	public void deleteSessionFromDisk() {
 		try {
-			Files.deleteIfExists(Paths.get(Main.USER_DATA_DIRECTORY + File.separator + SESSION_FILE_NAME));
+			Files.deleteIfExists(Paths.get(userDataDirectory + File.separator + SESSION_FILE_NAME));
 		} catch (IOException e) {
-			if (DebugLogger.ENABLED) {
-				DebugLogger.log("Session file exists but deleting it failed!" + e.getMessage());
-			}
+			System.out.printf("Session file exists but deleting it failed! %s \n", e.getMessage());
 		}
 	}
 }

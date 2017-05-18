@@ -1,8 +1,8 @@
 package com.github.cypher.gui.root.roomcollection.room.chat;
 
-import com.github.cypher.DebugLogger;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
 import com.github.cypher.gui.FXThreadedObservableValueWrapper;
+import com.github.cypher.eventbus.ToggleEvent;
 import com.github.cypher.settings.Settings;
 import com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem.EventListItemPresenter;
 import com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem.EventListItemView;
@@ -10,6 +10,9 @@ import com.github.cypher.model.Client;
 import com.github.cypher.model.Event;
 import com.github.cypher.model.Room;
 import com.github.cypher.model.SdkException;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -26,37 +29,54 @@ public class ChatPresenter {
 	@Inject
 	private Settings settings;
 
+	@Inject
+	private EventBus eventBus;
+
 	@FXML
 	private ListView<Event> eventListView;
 
 	@FXML
 	private TextArea messageBox;
 
+	private FXThreadedObservableListWrapper<Event> backendListForEventView;
+
+
 	@FXML
 	private void initialize() {
-		messageBox.setDisable(client.selectedRoom.getValue() == null);
+		eventBus.register(this);
+		messageBox.setDisable(client.getSelectedRoom() == null);
+	}
 
-		eventListView.setCellFactory(listView -> {
-			EventListItemView view = new EventListItemView();
-			return (EventListItemPresenter)view.getPresenter();
-		});
+	@Subscribe
+	private void selectedRoomChanged(Room room){
+		Platform.runLater(() -> {
+			messageBox.setDisable(room == null);
 
-		new FXThreadedObservableValueWrapper<>(client.selectedRoom).addListener((observable, oldValue, newValue) -> {
-			messageBox.setDisable(newValue == null);
-			if(newValue != null) {
-				FXThreadedObservableListWrapper<Event> eventList =
-						new FXThreadedObservableListWrapper<>(newValue.getEvents());
-
-				eventListView.setItems(eventList.getList());
-			} else {
-				eventListView.setItems(null);
+			if (backendListForEventView != null) {
+				backendListForEventView.dispose();
 			}
+			backendListForEventView = new FXThreadedObservableListWrapper<>(room.getEvents());
+
+			eventListView.setCellFactory(listView -> {
+				EventListItemView memberListItemView = new EventListItemView();
+				memberListItemView.getView();
+				return (EventListItemPresenter)memberListItemView.getPresenter();
+			});
+
+			eventListView.setItems(backendListForEventView.getList());
 		});
+	}
+
+	@Subscribe
+	private void handleLoginStateChange(ToggleEvent e) {
+		if (e == ToggleEvent.LOGOUT) {
+			messageBox.setDisable(true);
+		}
 	}
 
 	@FXML
 	private void showRoomSettings() {
-		client.showRoomSettings.set(true);
+		eventBus.post(ToggleEvent.SHOW_ROOM_SETTINGS);
 	}
 
 	@FXML
@@ -67,14 +87,12 @@ public class ChatPresenter {
 			 || (!settings.getControlEnterToSendMessage() && !event.isShiftDown()))
 			 &&  !messageBox.getText().isEmpty()) {
 
-				Room room = client.selectedRoom.getValue();
+				Room room = client.getSelectedRoom();
 				if(room != null) {
 					try {
 						room.sendMessage(messageBox.getText());
 					} catch(SdkException e) {
-						if(DebugLogger.ENABLED) {
-							DebugLogger.log("SdkException when trying to send a message: " + e);
-						}
+						System.out.printf("SdkException when trying to send a message: %s\n", e);
 					}
 				}
 				messageBox.clear();

@@ -1,6 +1,5 @@
 package com.github.cypher.gui.root.login;
 
-import com.github.cypher.DebugLogger;
 import com.github.cypher.settings.Settings;
 import com.github.cypher.gui.Executor;
 import com.github.cypher.model.Client;
@@ -59,12 +58,9 @@ public class LoginPresenter {
 			executor.handle(() -> {
 				try {
 					client.login(usernameField.getText(), passwordField.getText(), homeserverField.getText());
-					client.loggedIn.set(true);
 					settings.setSaveSession(rememberMeCheckBox.isSelected());
 				} catch (SdkException e) {
-					if (DebugLogger.ENABLED) {
-						DebugLogger.log("SdkException when trying to login - " + e.getMessage());
-					}
+					System.out.printf("SdkException when trying to login - &s\n", e.getMessage());
 				}
 			});
 		}
