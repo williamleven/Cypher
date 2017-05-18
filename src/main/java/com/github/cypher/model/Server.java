@@ -45,6 +45,10 @@ public class Server implements RoomCollection {
 		}
 	}
 
+	public void removeRoom(Room room){
+		rooms.remove(room);
+	}
+
 	@Override
 	public Image getImage() {
 		return imageProperty.get();

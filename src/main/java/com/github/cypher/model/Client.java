@@ -177,9 +177,28 @@ public class Client {
 		return userRepository.get(id);
 	}
 
-	private void addServer(String server) {
-		//Todo
-		servers.add(new Server(server));
+	private void addServer(String serverAddress) {
+		for (Server server:servers){
+			if (server.getAddress().equals(serverAddress)){
+				return;
+			}
+		}
+
+		Server server = new Server(serverAddress);
+		servers.add(server);
+
+
+		for (Room room: genCollection.getRoomsProperty().toArray(new Room[genCollection.getRoomsProperty().size()])) {
+			distributeRoom(room);
+		}
+		for (Room room: pmCollection.getRoomsProperty().toArray(new Room[pmCollection.getRoomsProperty().size()])) {
+			distributeRoom(room);
+		}
+		for (Server s: servers){
+			for (Room room: s.getRoomsProperty().toArray(new Room[s.getRoomsProperty().size()])) {
+				distributeRoom(room);
+			}
+		}
 	}
 
 	private void addRoom(String room) {
@@ -209,6 +228,7 @@ public class Client {
 	}
 
 	private void distributeRoom(Room room) {
+		System.out.printf("Placing %40s %40s %25s\n", room, room.getName(), room.getCanonicalAlias());
 		// Place in PM
 		if (room.isPmChat()) {
 			pmCollection.addRoom(room);
@@ -218,13 +238,26 @@ public class Client {
 				addServer(mainServer);
 			}
 			boolean placed = false;
-			for (String alias : room.getAliases()) {
-				for (Server server : servers) {
-					if (server.getAddress().equals(extractServer(alias))) {
+			boolean firstServer = true;
+			for (Server server : servers) {
+				boolean placedHere = false;
+				for (String alias:room.aliasesList()) {
+					if (firstServer){
+						System.out.printf("Alias: %50s\n", alias);
+					}
+					if (server.getAddress().equals(extractServer(alias))){
+						pmCollection.removeRoom(room);
+						genCollection.removeRoom(room);
 						server.addRoom(room);
 						placed = true;
+						placedHere = true;
 					}
 				}
+
+				if (!placedHere){
+					server.removeRoom(room);
+				}
+				firstServer = false;
 			}
 			// Place in General if not placed in any server
 			if (!placed) {

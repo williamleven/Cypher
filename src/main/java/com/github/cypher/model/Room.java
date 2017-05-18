@@ -86,7 +86,14 @@ public class Room {
 		});
 
 		sdkRoom.addAliasesListener((change -> {
-			aliases.setAll(change.getList());
+			while (change.next()){
+				if (change.wasAdded()){
+					aliases.addAll(change.getAddedSubList());
+				}
+				if (change.wasRemoved()){
+					aliases.removeAll(change.getRemoved());
+				}
+			}
 		}));
 
 		sdkRoom.addEventListener((change -> {
