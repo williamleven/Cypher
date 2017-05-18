@@ -1,10 +1,14 @@
 package com.github.cypher.gui.root.roomcollection.room.chat;
 
-
+import com.github.cypher.gui.FXThreadedObservableListWrapper;
+import com.github.cypher.gui.FXThreadedObservableValueWrapper;
 import com.github.cypher.eventbus.ToggleEvent;
 import com.github.cypher.gui.FXThreadedObservableValueWrapper;
 import com.github.cypher.settings.Settings;
+import com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem.EventListItemPresenter;
+import com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem.EventListItemView;
 import com.github.cypher.model.Client;
+import com.github.cypher.model.Event;
 import com.github.cypher.model.Room;
 import com.github.cypher.model.SdkException;
 import com.google.common.eventbus.EventBus;
@@ -33,10 +37,13 @@ public class ChatPresenter {
 	private EventBus eventBus;
 
 	@FXML
-	private ListView eventListView;
+	private ListView<Event> eventListView;
 
 	@FXML
 	private TextArea messageBox;
+
+	private FXThreadedObservableListWrapper<Event> backendListForEventView;
+
 
 	@FXML
 	private Label roomName;
@@ -56,35 +63,47 @@ public class ChatPresenter {
 	}
 
 	@Subscribe
-	private void selectedRoomChanged(Room e){
+	private void selectedRoomChanged(Room room){
 		Platform.runLater(() -> {
 			messageBox.setDisable(false);
-			(new FXThreadedObservableValueWrapper<>(e.nameProperty())).addListener((invalidated) -> {
-				updateRoomName(e);
+			(new FXThreadedObservableValueWrapper<>(room.nameProperty())).addListener((invalidated) -> {
+				updateRoomName(room);
 			} );
 
-			(new FXThreadedObservableValueWrapper<>(e.topicProperty())).addListener((invalidated) -> {
-				updateTopicName(e);
+			(new FXThreadedObservableValueWrapper<>(room.topicProperty())).addListener((invalidated) -> {
+				updateTopicName(room);
 			} );
 
-			updateRoomName(e);
-			updateTopicName(e);
+			updateRoomName(room);
+			updateTopicName(room);
 
+			if (backendListForEventView != null) {
+				backendListForEventView.dispose();
+			}
+			backendListForEventView = new FXThreadedObservableListWrapper<>(room.getEvents());
+
+			eventListView.setCellFactory(listView -> {
+				EventListItemView memberListItemView = new EventListItemView();
+				memberListItemView.getView();
+				return (EventListItemPresenter)memberListItemView.getPresenter();
+			});
+
+			eventListView.setItems(backendListForEventView.getList());
 		});
 	}
 
-	private void updateRoomName(Room e){
-		if (e.getName() == null || e.getName().isEmpty()) {
+	private void updateRoomName(Room room){
+		if (room.getName() == null || room.getName().isEmpty()) {
 			roomName.textProperty().setValue(bundle.getString("name.default"));
 		}else{
-			roomName.textProperty().setValue(e.getName());
+			roomName.textProperty().setValue(room.getName());
 		}
 	}
-	private void updateTopicName(Room e){
-		if (e.getTopic() == null || e.getTopic().isEmpty()) {
+	private void updateTopicName(Room room){
+		if (room.getTopic() == null || room.getTopic().isEmpty()) {
 			roomTopic.textProperty().setValue(bundle.getString("topic.default"));
 		}else{
-			roomTopic.textProperty().setValue(e.getTopic());
+			roomTopic.textProperty().setValue(room.getTopic());
 		}
 	}
 
