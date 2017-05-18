@@ -103,7 +103,6 @@ public class ChatPresenter {
 	@FXML
 	private void onMessageBoxKeyPressed(KeyEvent event) {
 		if(KeyCode.ENTER.equals(event.getCode())) {
-
 			if (((settings.getControlEnterToSendMessage() && event.isControlDown())
 			 || (!settings.getControlEnterToSendMessage() && !event.isShiftDown()))
 			 &&  !messageBox.getText().isEmpty()) {
@@ -117,6 +116,7 @@ public class ChatPresenter {
 					}
 				}
 				messageBox.clear();
+				event.consume();
 
 			} else if(event.isShiftDown()) {
 				messageBox.insertText(
