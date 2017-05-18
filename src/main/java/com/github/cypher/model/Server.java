@@ -14,7 +14,7 @@ public class Server implements RoomCollection {
 	private final ObservableList<Room> rooms = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
 
-	public Server(String server) {
+	Server(String server) {
 		//TODO
 	}
 

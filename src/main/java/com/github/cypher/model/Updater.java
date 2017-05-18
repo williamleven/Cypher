@@ -21,7 +21,7 @@ class Updater extends Thread {
 		void update();
 	}
 
-	public Updater(int interval) {
+	Updater(int interval) {
 		this.interval = interval;
 	}
 
