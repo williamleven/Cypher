@@ -1,6 +1,6 @@
 package com.github.cypher.gui.root.roomcollection.room;
 
-import com.github.cypher.Settings;
+import com.github.cypher.settings.Settings;
 import com.github.cypher.gui.root.roomcollection.room.chat.ChatView;
 import com.github.cypher.gui.root.roomcollection.room.settings.SettingsView;
 import com.github.cypher.model.Client;

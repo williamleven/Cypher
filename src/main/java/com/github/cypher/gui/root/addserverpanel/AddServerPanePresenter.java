@@ -1,6 +1,6 @@
 package com.github.cypher.gui.root.addserverpanel;
 
-import com.github.cypher.Settings;
+import com.github.cypher.settings.Settings;
 import com.github.cypher.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

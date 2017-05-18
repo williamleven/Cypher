@@ -1,6 +1,6 @@
 package com.github.cypher.gui.root.roomcollection.room.members.listitem;
 
-import com.github.cypher.Settings;
+import com.github.cypher.settings.Settings;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Member;
 import com.github.cypher.gui.CustomListCell;
