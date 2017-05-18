@@ -4,7 +4,7 @@ import com.airhacks.afterburner.injection.Injector;
 import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.root.RootView;
 import com.github.cypher.model.Client;
-import com.github.cypher.sdk.api.MatrixApiLayer;
+import com.github.cypher.model.ModelFactory;
 import com.google.common.eventbus.EventBus;
 import com.github.cypher.settings.Settings;
 import com.github.cypher.settings.TOMLSettings;
@@ -28,16 +28,12 @@ import static com.github.cypher.Util.getUserDataDirectoryPath;
 public class Main extends Application {
 	private static final String APPLICATION_NAME = "Cypher";
 	private static final String USER_DATA_DIRECTORY = getUserDataDirectoryPath(APPLICATION_NAME); //The path to the folder where settings, credentials etc are saved.
+	private static final String SETTINGS_NAMESPACE = "com.github.cypher.settings";
 
 	private final Settings settings = new TOMLSettings(USER_DATA_DIRECTORY);
 	private final Executor executor = new Executor();
 	private final EventBus eventBus = new EventBus();
-	private final Client client = new Client((
-			() -> new com.github.cypher.sdk.Client(new MatrixApiLayer(), "com.github.cypher.settings")),
-			settings,
-			eventBus,
-			USER_DATA_DIRECTORY
-			);
+	private final Client client = ModelFactory.createClient(settings, eventBus, USER_DATA_DIRECTORY, SETTINGS_NAMESPACE);
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {

@@ -47,7 +47,7 @@ public class Client {
 	private RoomCollection selectedRoomCollection;
 	private Room selectedRoom;
 
-	public Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory,
+	Client(Supplier<com.github.cypher.sdk.Client> sdkClientFactory,
 				  Settings settings,
 				  EventBus eventBus,
 				  String userDataDirectory) {
