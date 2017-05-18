@@ -9,9 +9,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.jsoup.Jsoup;
@@ -48,6 +51,24 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 			generateTextObjects(newValue);
 		}
 	};
+
+	private static final int LIST_CELL_PADDING = 19;
+
+	public EventListItemPresenter() {
+		super.parentProperty().addListener((observable, oldParent, newParent) -> {
+			if(newParent != null) {
+				Parent recursiveParent = newParent;
+				while(recursiveParent != null && !(recursiveParent instanceof ListView)) {
+					recursiveParent = recursiveParent.getParent();
+				}
+				if(recursiveParent != null) {
+					root.maxWidthProperty().bind(((ListView)recursiveParent).widthProperty().subtract(LIST_CELL_PADDING));
+				}
+			} else {
+				root.maxWidthProperty().unbind();
+			}
+		});
+	}
 
 	@Override
 	protected Node getRoot() {
