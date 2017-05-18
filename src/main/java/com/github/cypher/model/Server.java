@@ -16,7 +16,7 @@ public class Server implements RoomCollection {
 	private final String address;
 
 
-	public Server(String address) {
+	Server(String address) {
 		this.address = address;
 		this.nameProperty.setValue(address);
 	}

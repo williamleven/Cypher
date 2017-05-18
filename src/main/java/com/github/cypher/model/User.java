@@ -15,7 +15,7 @@ public class User {
 	private final ObjectProperty<URL> avatarUrl;
 	private final ObjectProperty<Image> avatar;
 
-	public User(com.github.cypher.sdk.User sdkUser) {
+	User(com.github.cypher.sdk.User sdkUser) {
 		this.id = new SimpleStringProperty(sdkUser.getId());
 		this.name = new SimpleStringProperty(sdkUser.getName());
 		this.avatarUrl = new SimpleObjectProperty<>(sdkUser.getAvatarUrl());

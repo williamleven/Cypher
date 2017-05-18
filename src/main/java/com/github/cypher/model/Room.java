@@ -22,8 +22,9 @@ public class Room {
 	private final ObservableList<String> aliases;
 	private final com.github.cypher.sdk.Room sdkRoom;
 	private final User activeUser;
+	
 
-	public Room(com.github.cypher.sdk.Room sdkRoom, User activeUser) {
+	Room(com.github.cypher.sdk.Room sdkRoom, User activeUser) {
 		id = new SimpleStringProperty(sdkRoom.getId());
 		name = new SimpleStringProperty(sdkRoom.getName());
 		topic = new SimpleStringProperty(sdkRoom.getTopic());

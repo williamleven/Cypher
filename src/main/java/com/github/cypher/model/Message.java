@@ -9,7 +9,7 @@ public class Message {
 	private final StringProperty body;
 	private final StringProperty formattedBody;
 
-	public Message(Client client, com.github.cypher.sdk.Message sdkMessage) {
+	Message(Client client, com.github.cypher.sdk.Message sdkMessage) {
 		this.client = client;
 		this.author = client.getUser(sdkMessage.getSender().getId());
 		this.body = new SimpleStringProperty(sdkMessage.getBody());
