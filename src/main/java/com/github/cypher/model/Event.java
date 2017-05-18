@@ -5,7 +5,7 @@ public class Event {
 	private final long originServerTimesStamp;
 	private final User sender;
 
-	public Event(Client client,com.github.cypher.sdk.Event sdkEvent){
+	Event(Client client,com.github.cypher.sdk.Event sdkEvent){
 		eventId = sdkEvent.getEventId();
 		originServerTimesStamp = sdkEvent.getOriginServerTs();
 		sender = client.getUser(sdkEvent.getSender().getId());
