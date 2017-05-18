@@ -42,7 +42,7 @@ public class Room {
 		this.sdkRoom = sdkRoom;
 
 		sdkRoom.addNameListener((observable, oldValue, newValue) -> {
-			Platform.runLater(() -> name.set(newValue));
+			name.set(newValue);
 		});
 
 		sdkRoom.addTopicListener((observable, oldValue, newValue) -> {
