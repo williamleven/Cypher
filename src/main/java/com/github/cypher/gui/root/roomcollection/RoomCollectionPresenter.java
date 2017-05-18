@@ -1,26 +1,33 @@
 package com.github.cypher.gui.root.roomcollection;
 
 import com.github.cypher.eventbus.ToggleEvent;
+import com.github.cypher.gui.FXThreadedObservableValueWrapper;
+import com.github.cypher.model.*;
 import com.github.cypher.settings.Settings;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
 import com.github.cypher.gui.root.roomcollection.directory.DirectoryView;
 import com.github.cypher.gui.root.roomcollection.room.RoomView;
 import com.github.cypher.gui.root.roomcollection.roomlistitem.RoomListItemPresenter;
 import com.github.cypher.gui.root.roomcollection.roomlistitem.RoomListItemView;
-import com.github.cypher.model.Client;
-import com.github.cypher.model.Room;
-import com.github.cypher.model.RoomCollection;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class RoomCollectionPresenter {
+
+	private ResourceBundle bundle = ResourceBundle.getBundle(
+		"com.github.cypher.gui.root.roomcollection.roomcollection",
+		Locale.getDefault()
+	);
 
 	@Inject
 	private Client client;
@@ -36,6 +43,9 @@ public class RoomCollectionPresenter {
 
 	@FXML
 	private ListView<Room> roomListView;
+
+	@FXML
+	private Label serverName;
 
 	private Parent directoryPane;
 	private boolean showDirectory;
@@ -85,13 +95,18 @@ public class RoomCollectionPresenter {
 
 			roomListView.setItems(backendListForView.getList());
 
-			/*if (roomCollection instanceof Server) {
-
+			serverName.textProperty().unbind();
+			if (roomCollection instanceof Server) {
+				serverName.textProperty().bind(
+					new FXThreadedObservableValueWrapper<>(
+						((Server) roomCollection).nameProperty()
+					)
+				);
 			} else if (roomCollection instanceof PMCollection) {
-
+				serverName.textProperty().setValue(bundle.getString("pm"));
 			} else if (roomCollection instanceof GeneralCollection) {
-
-			}*/
+				serverName.textProperty().setValue(bundle.getString("general"));
+			}
 		});
 	}
 
