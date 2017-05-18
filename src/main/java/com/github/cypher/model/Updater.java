@@ -15,6 +15,12 @@ class Updater extends Thread {
 	// The time between each tic in ms
 	private final int interval;
 
+	interface Updatable {
+
+		// To be called continuously at a defined interval
+		void update();
+	}
+
 	public Updater(int interval) {
 		this.interval = interval;
 	}
@@ -40,7 +46,7 @@ class Updater extends Thread {
 	}
 
 	// Register a listener. The listener will be notified every {i}'th tic
-	public void add(Updatable u, Integer i) {
+	public void add(Integer i, Updatable u) {
 		watching.put(u, i);
 	}
 

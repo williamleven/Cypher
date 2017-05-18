@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 import static com.github.cypher.model.Util.extractServer;
 
-public class Client implements Updatable {
+public class Client {
 
 	private final Supplier<com.github.cypher.sdk.Client> sdkClientFactory;
 
@@ -119,7 +119,13 @@ public class Client implements Updatable {
 
 	private void startNewUpdater() {
 		updater = new Updater(settings.getModelTickInterval());
-		updater.add(this, 1);
+		updater.add(1, () -> {
+			try {
+				sdkClient.update(settings.getSDKTimeout());
+			} catch (RestfulHTTPException | IOException e) {
+				DebugLogger.log(e.getMessage());
+			}
+		});
 		updater.start();
 	}
 
@@ -180,14 +186,6 @@ public class Client implements Updatable {
 
 	private void addUser(String user) {
 		//Todo
-	}
-
-	public void update() {
-		try {
-			sdkClient.update(settings.getSDKTimeout());
-		} catch (RestfulHTTPException | IOException e) {
-			DebugLogger.log(e.getMessage());
-		}
 	}
 
 	public void exit() {
