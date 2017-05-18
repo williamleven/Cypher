@@ -18,14 +18,12 @@ public class FXThreadedObservableListWrapper<T> {
 		delegatedList.addAll(sourceList);
 		sourceListListener = ((ListChangeListener.Change<? extends T> change) -> {
 			Platform.runLater(() -> {
-				synchronized (change) {
-					while (change.next()) {
-						if (change.wasAdded()) {
-							delegatedList.addAll(change.getAddedSubList());
-						}
-						if (change.wasRemoved()) {
-							delegatedList.removeAll(change.getRemoved());
-						}
+				while (change.next()) {
+					if (change.wasAdded()) {
+						delegatedList.addAll(change.getAddedSubList());
+					}
+					if (change.wasRemoved()) {
+						delegatedList.removeAll(change.getRemoved());
 					}
 				}
 			});
