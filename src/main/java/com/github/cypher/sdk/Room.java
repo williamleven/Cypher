@@ -229,6 +229,11 @@ public class Room {
 			String membership = content.get("membership").getAsString();
 
 			User user = userRepository.get(memberId);
+			try {
+				user.update(event);
+			}catch (IOException e){
+
+			}
 
 			if (membership.equals("join")) {
 				if (!members.containsKey(memberId)) {
