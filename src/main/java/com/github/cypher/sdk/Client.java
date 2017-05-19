@@ -59,15 +59,6 @@ public class Client {
 		this.settingsNamespace = settingsNamespace;
 	}
 
-	private Room getOrCreateRoom(Map<String, Room> map, String roomId) {
-		if(map.containsKey(roomId)) {
-			return map.get(roomId);
-		}
-		Room room = new Room(api, users, roomId);
-		map.put(roomId, room);
-		return room;
-	}
-
 	public Session getSession() {
 		return  api.getSession();
 	}
@@ -184,6 +175,10 @@ public class Client {
 		// TODO
 	}
 
+	public User getActiveUser(){
+		return getUser(getSession().getUserId());
+	}
+
 	private void parsePresenceEvents(JsonObject syncData) {
 		if(syncData.has("presence")) {
 			JsonObject presenceData = syncData.get("presence").getAsJsonObject();
@@ -213,8 +208,15 @@ public class Client {
 					if(joinEventEntry.getValue().isJsonObject()) {
 						String roomId = joinEventEntry.getKey();
 						JsonObject joinEvent = joinEventEntry.getValue().getAsJsonObject();
-						Room room = getOrCreateRoom(joinRooms, roomId);
+						Room room;
+						if(joinRooms.containsKey(roomId)) {
+							room = joinRooms.get(roomId);
+						}else{
+							room = new Room(api, users, roomId);
+						}
 						room.update(joinEvent);
+						joinRooms.put(roomId, room);
+
 					}
 				}
 			}

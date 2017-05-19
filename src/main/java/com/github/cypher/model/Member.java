@@ -14,9 +14,9 @@ public class Member {
 
 	private final StringProperty name = new SimpleStringProperty();
 
-	Member(com.github.cypher.sdk.Member sdkMember) {
+	Member(com.github.cypher.sdk.Member sdkMember, Repository<User> repo) {
 		this.name.set(sdkMember.getUser().getName());
-		this.user = new User(sdkMember.getUser());
+		this.user = repo.get(sdkMember.getUser().getId());
 	}
 
 	public Image getImageProperty() {

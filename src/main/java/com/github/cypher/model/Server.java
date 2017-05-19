@@ -13,13 +13,16 @@ public class Server implements RoomCollection {
 	private final StringProperty nameProperty = new SimpleStringProperty();
 	private final ObservableList<Room> rooms = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
+	private final String address;
 
-	Server(String server) {
-		//TODO
+
+	Server(String address) {
+		this.address = address;
+		this.nameProperty.setValue(address);
 	}
 
 	public String getAddress() {
-		return null;
+		return address;
 	}
 
 	public String getName(){
@@ -37,7 +40,13 @@ public class Server implements RoomCollection {
 
 	@Override
 	public void addRoom(Room room) {
-		rooms.add(room);
+		if (!rooms.contains(room)){
+			rooms.add(room);
+		}
+	}
+
+	public void removeRoom(Room room){
+		rooms.remove(room);
 	}
 
 	@Override

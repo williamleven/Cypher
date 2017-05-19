@@ -7,11 +7,13 @@ import com.github.cypher.sdk.api.Session;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
+import java.util.Observable;
 import java.util.function.Supplier;
 
 import static com.github.cypher.model.Util.extractServer;
@@ -93,12 +95,18 @@ public class Client {
 		sdkClient = sdkClientFactory.get();
 		sdkClient.addJoinRoomsListener((change) -> {
 			if (change.wasAdded()) {
-				distributeRoom(new Room(this,change.getValueAdded()));
+				Room room = new Room(userRepository, change.getValueAdded(), getActiveUser());
+				room.aliasesList().addListener((InvalidationListener) (r) -> distributeRoom(room));
+				distributeRoom(room);
 			}
 		});
 
 		loggedIn = false;
 		selectedRoom = null;
+	}
+
+	public User getActiveUser(){
+		return getUser(sdkClient.getActiveUser().getId());
 	}
 
 	private void addListeners() {
@@ -173,9 +181,22 @@ public class Client {
 		return userRepository.get(id);
 	}
 
-	private void addServer(String server) {
-		//Todo
-		servers.add(new Server(server));
+	private void addServer(String serverAddress) {
+		for (Server server:servers){
+			if (server.getAddress().equals(serverAddress)){
+				return;
+			}
+		}
+
+		Server server = new Server(serverAddress);
+		servers.add(server);
+
+		// Redistrubute all rooms
+		for (RoomCollection roomCollection : roomCollections.toArray(new RoomCollection[roomCollections.size()])){
+			for (Room room: roomCollection.getRoomsProperty().toArray(new Room[roomCollection.getRoomsProperty().size()])) {
+				distributeRoom(room);
+			}
+		}
 	}
 
 	private void addRoom(String room) {
@@ -205,20 +226,36 @@ public class Client {
 	}
 
 	private void distributeRoom(Room room) {
+		//System.out.printf("Placing %40s %40s %25s\n", room, room.getName(), room.getCanonicalAlias());
 		// Place in PM
-		if (isPmChat(room)) {
+		if (room.isPmChat()) {
 			pmCollection.addRoom(room);
 		} else { // Place in servers
-			String mainServer = extractServer(room.getCanonicalAlias());
-			addServer(mainServer);
+			if (room.getCanonicalAlias() != null){
+				String mainServer = extractServer(room.getCanonicalAlias());
+				addServer(mainServer);
+			}
 			boolean placed = false;
-			for (String alias : room.getAliases()) {
-				for (Server server : servers) {
-					if (server.getAddress().equals(extractServer(alias))) {
+			boolean firstServer = true;
+			for (Server server : servers) {
+				boolean placedHere = false;
+				for (String alias:room.aliasesList()) {
+					if (firstServer){
+						//System.out.printf("Alias: %50s\n", alias);
+					}
+					if (server.getAddress().equals(extractServer(alias))){
+						pmCollection.removeRoom(room);
+						genCollection.removeRoom(room);
 						server.addRoom(room);
 						placed = true;
+						placedHere = true;
 					}
 				}
+
+				if (!placedHere){
+					server.removeRoom(room);
+				}
+				firstServer = false;
 			}
 			// Place in General if not placed in any server
 			if (!placed) {
@@ -230,11 +267,6 @@ public class Client {
 
 	public boolean isLoggedIn() {
 		return loggedIn;
-	}
-
-	private static boolean isPmChat(Room room) {
-		boolean hasName = (room.getName() != null && !room.getName().isEmpty());
-		return (room.getMemberCount() < 3 && !hasName);
 	}
 
 	public RoomCollection getSelectedRoomCollection(){
