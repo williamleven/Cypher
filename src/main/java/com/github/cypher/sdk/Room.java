@@ -188,7 +188,9 @@ public class Room {
 	}
 
 	private void parseCanonicalAlias(JsonObject content) {
-		if (content.has("alias")) {
+		if (content.has("alias") &&
+		    content.get("alias").isJsonPrimitive() &&
+		   !content.get("alias").getAsString().isEmpty()) {
 			canonicalAlias.setValue(content.get("alias").getAsString());
 		}
 	}
