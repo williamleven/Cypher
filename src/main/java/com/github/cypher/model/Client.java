@@ -44,6 +44,7 @@ public class Client {
 	private GeneralCollection genCollection;
 
 	private boolean loggedIn;
+	private boolean initalSyncDone;
 	private RoomCollection selectedRoomCollection;
 	private Room selectedRoom;
 
@@ -98,6 +99,7 @@ public class Client {
 		});
 
 		loggedIn = false;
+		initalSyncDone = false;
 		selectedRoom = null;
 	}
 
@@ -119,6 +121,10 @@ public class Client {
 		updater.add(1, () -> {
 			try {
 				sdkClient.update(settings.getSDKTimeout());
+				if (!initalSyncDone) {
+					initalSyncDone = true;
+					eventBus.post(ToggleEvent.HIDE_LOADING);
+				}
 			} catch (RestfulHTTPException | IOException e) {
 				System.out.printf("%s\n", e.getMessage());
 			}
@@ -131,6 +137,7 @@ public class Client {
 			sdkClient.login(username, password, homeserver);
 			loggedIn = true;
 			eventBus.post(ToggleEvent.LOGIN);
+			eventBus.post(ToggleEvent.SHOW_LOADING);
 			startNewUpdater();
 		}catch(RestfulHTTPException | IOException ex){
 			throw new SdkException(ex);
