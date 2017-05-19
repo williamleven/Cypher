@@ -29,7 +29,8 @@ public class Util {
 	}
 
 	static String extractServer(String input) {
-		return input.split(":", 2)[1];
+		String[] splitString = input.split(":", 2);
+		return splitString[splitString.length - 1];
 	}
 
 	/**
