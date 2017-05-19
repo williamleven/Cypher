@@ -4,8 +4,10 @@ import com.github.cypher.sdk.api.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.sun.javafx.collections.ObservableListWrapper;
 import com.sun.javafx.collections.ObservableMapWrapper;
 
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -18,10 +20,10 @@ import javafx.collections.ObservableMap;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 /**
  * This class contains the metadata of a Matrix chat room,
@@ -45,11 +47,14 @@ public class Room {
 	private ObservableMap<String, Event> events =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
-	private ObservableMap<String, Member> members =
-		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
+	private ObservableList<Member> members =
+		FXCollections.synchronizedObservableList(new ObservableListWrapper<Member>(new ArrayList<>()));
 
 	private final ObservableList<String> aliases =
 		FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
+
+	private final ObservableMap<String, ObservableList<String>> aliasLists =
+		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
 	private final StringProperty canonicalAlias = new SimpleStringProperty();
 
@@ -57,6 +62,18 @@ public class Room {
 		this.api = api;
 		this.userRepository = userRepository;
 		this.id = id;
+
+		// update the alias list
+		aliasLists.addListener((InvalidationListener) (invalidated) -> {
+			// get all aliases
+			java.util.List<String> list = new ArrayList<>();
+			for (ObservableList<String> a:aliasLists.values()){
+				list.addAll(a);
+			}
+
+			// set aliases
+			aliases.setAll(list);
+		});
 	}
 
 	public void addEventListener(MapChangeListener<String, Event> listener) {
@@ -67,11 +84,11 @@ public class Room {
 		events.removeListener(listener);
 	}
 
-	public void addMemberListener(MapChangeListener<String, Member> listener) {
+	public void addMemberListener(ListChangeListener<Member> listener) {
 		members.addListener(listener);
 	}
 
-	public void removeMemberListener(MapChangeListener<String, Member> listener) {
+	public void removeMemberListener(ListChangeListener<Member> listener) {
 		members.removeListener(listener);
 	}
 
@@ -91,7 +108,7 @@ public class Room {
 		canonicalAlias.removeListener(listener);
 	}
 
-	void update(JsonObject data) throws RestfulHTTPException, IOException {
+	void update(JsonObject data) {
 		parseNameData(data);
 
 		parseTopicData(data);
@@ -103,7 +120,7 @@ public class Room {
 		parseEvents("state", data);
 	}
 
-	private void parseEvents(String category, JsonObject data) throws RestfulHTTPException, IOException {
+	private void parseEvents(String category, JsonObject data) {
 		if (data.has(category) &&
 		    data.get(category).isJsonObject()) {
 			JsonObject timeline = data.get(category).getAsJsonObject();
@@ -119,7 +136,7 @@ public class Room {
 		}
 	}
 
-	private void parseEventData(JsonObject event) throws RestfulHTTPException, IOException {
+	private void parseEventData(JsonObject event) {
 		if (event.has("type") &&
 		    event.has("origin_server_ts") &&
 		    event.has("sender") &&
@@ -157,7 +174,10 @@ public class Room {
 				parseAvatarUrlData(content);
 				addPropertyChangeEvent(originServerTs, sender, eventId, age, "avatar_url", avatarUrl.getValue());
 			} else if (eventType.equals("m.room.aliases")) {
-				parseAliasesEvent(content);
+				if (event.has("state_key") &&
+					event.get("state_key").isJsonPrimitive()){
+					parseAliasesEvent(content, event.get("state_key").getAsString());
+				}
 			} else if (eventType.equals("m.room.canonical_alias")) {
 				parseCanonicalAlias(content);
 			} else if (eventType.equals("m.room.power_levels")) {
@@ -168,22 +188,30 @@ public class Room {
 	}
 
 	private void parseCanonicalAlias(JsonObject content) {
-		if (content.has("alias")) {
+		if (content.has("alias") &&
+		    content.get("alias").isJsonPrimitive() &&
+		   !content.get("alias").getAsString().isEmpty()) {
 			canonicalAlias.setValue(content.get("alias").getAsString());
 		}
 	}
 
-	private void parseAliasesEvent(JsonObject content) {
+	private void parseAliasesEvent(JsonObject content, String stateKey) {
 		if (content.has("aliases") &&
 		    content.get("aliases").isJsonArray()) {
 
 			JsonArray aliases = content.getAsJsonArray("aliases");
 
-			java.util.List<String> list = new ArrayList<String>();
+			ObservableList<String> list =
+				FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
+
 			for (JsonElement alias : aliases) {
 				list.add(alias.getAsString());
 			}
-			this.aliases.setAll(list);
+			if (list.size() == 0){
+				this.aliasLists.remove(stateKey);
+			}else{
+				this.aliasLists.put(stateKey, list);
+			}
 		}
 	}
 
@@ -200,15 +228,20 @@ public class Room {
 	}
 
 
-	private void parseAvatarUrlData(JsonObject data) throws RestfulHTTPException, IOException {
+	private void parseAvatarUrlData(JsonObject data) {
 		for(String key : new String[] {"url", "avatar_url"}) {
 			if (data.has(key)) {
-				URL newAvatarUrl = new URL(data.get(key).getAsString());
-				if (!newAvatarUrl.equals(avatarUrl.getValue())) {
-					avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
-					this.avatarUrl.set(newAvatarUrl);
+				try {
+					URL newAvatarUrl = new URL(data.get(key).getAsString());
+					if (!newAvatarUrl.equals(avatarUrl.getValue())) {
+						avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
+						this.avatarUrl.set(newAvatarUrl);
+					}
+					break;
+				} catch(IOException e) {
+					avatar.set(null);
+					avatarUrl.set(null);
 				}
-				break;
 			}
 		}
 	}
@@ -229,16 +262,15 @@ public class Room {
 			String membership = content.get("membership").getAsString();
 
 			User user = userRepository.get(memberId);
+			user.update(event);
 
 			if (membership.equals("join")) {
-				if (!members.containsKey(memberId)) {
-					members.put(
-						memberId,
-						new Member(user)
-					           );
+				if (members.stream().noneMatch(m -> m.getUser().getId().equals(memberId))) {
+					members.add(new Member(user));
 				}
-			} else if (members.containsKey(memberId)) {
-				members.remove(memberId);
+			} else if (membership.equals("leave")) {
+				Optional<Member> optionalMember = members.stream().filter(m -> m.getUser().getId().equals(memberId)).findAny();
+				optionalMember.ifPresent(member -> members.remove(member));
 			}
 
 			// Add membership event to the log
@@ -250,19 +282,18 @@ public class Room {
 		}
 	}
 
-	private void parsePowerLevelsEvent(JsonObject data) throws IOException {
-		this.permissions.set(new PermissionTable(data));
+	private void parsePowerLevelsEvent(JsonObject data) {
+		try {
+			this.permissions.set(new PermissionTable(data));
+		} catch(IOException e) {}
 
 		if(data.has("users") &&
 		   data.get("users").isJsonObject()) {
 
 			for(Map.Entry<String, JsonElement> userPowerEntry : data.get("users").getAsJsonObject().entrySet()) {
-
-				String userId = userPowerEntry.getKey();
-				if(members.containsKey(userId)) {
-					Member member = members.get(userId);
-					member.privilegeProperty().setValue(userPowerEntry.getValue().getAsInt());
-				}
+				String memberId = userPowerEntry.getKey();
+				Optional<Member> optionalMember = members.stream().filter(m -> m.getUser().getId().equals(memberId)).findAny();
+				optionalMember.ifPresent(member -> member.privilegeProperty().setValue(userPowerEntry.getValue().getAsInt()));
 			}
 		}
 	}
@@ -341,12 +372,12 @@ public class Room {
 	public String getName()      { return name.get(); }
 	public String getTopic()     { return topic.get(); }
 	public URL    getAvatarUrl() { return avatarUrl.get(); }
-	public Image  getAvatar()    { return avatar.get(); }
+	public Image getAvatar()    { return avatar.get(); }
 
 	public Map<String, Event> getEvents() { return new HashMap<>(events); }
 	public int getEventCount() { return events.size(); }
 
-	public Map<String, Member> getMembers() { return new HashMap<>(members); }
+	public List<Member> getMembers() { return new ArrayList<>(members); }
 	public int getMemberCount() { return members.size(); }
 
 	public String[] getAliases() { return aliases.toArray(new String[0]); }

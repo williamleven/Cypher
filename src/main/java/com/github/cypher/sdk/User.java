@@ -50,21 +50,13 @@ public class User {
 	 */
 	public void update() throws RestfulHTTPException, IOException {
 		JsonObject profile = api.getUserProfile(id);
-
 		if(profile.has("displayname")) {
-			name.set(profile.get("displayname").getAsString());
+			if (profile.get("displayname").isJsonPrimitive()){
+				name.set(profile.get("displayname").getAsString());
+			}
 		}
 
-		if(profile.has("avatar_url")) {
-			URL newAvatarUrl = new URL(profile.get("avatar_url").getAsString());
-			if(!newAvatarUrl.equals(avatarUrl)) {
-				avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
-			}
-			avatarUrl.set(newAvatarUrl);
-		} else {
-			avatarUrl.set(null);
-			avatar.set(null);
-		}
+		//setAvatar(profile);
 	}
 
 	void update(JsonObject data) {
@@ -82,8 +74,38 @@ public class User {
 					presence.set(Presence.UNAVAILABLE);
 				}
 			}
+			if (type.equals("m.room.member")){
+				if (contentObject.has("displayname")) {
+					if (contentObject.get("displayname").isJsonPrimitive()) {
+						name.set(contentObject.get("displayname").getAsString());
+					}
+				}
+				//setAvatar(contentObject);
+			}
+
 		}
+
 	}
+
+	private void setAvatar(JsonObject contentObject) {
+		if(contentObject.has("avatar_url") &&
+		   contentObject.get("avatar_url").isJsonPrimitive()) {
+			try {
+				URL newAvatarUrl = new URL(contentObject.get("avatar_url").getAsString());
+				if(!newAvatarUrl.equals(avatarUrl)) {
+					avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
+				}
+				avatarUrl.set(newAvatarUrl);
+			} catch (IOException e) {
+				avatar.set(null);
+				avatarUrl.set(null);
+			}
+		} else {
+			avatar.set(null);
+			avatarUrl.set(null);
+		}
+}
+
 
 	public void addNameListener(ChangeListener<? super String> listener) {
 		name.addListener(listener);

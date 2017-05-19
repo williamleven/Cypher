@@ -1,6 +1,5 @@
 package com.github.cypher.model;
 
-import com.github.cypher.DebugLogger;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -16,7 +15,7 @@ public class User {
 	private final ObjectProperty<URL> avatarUrl;
 	private final ObjectProperty<Image> avatar;
 
-	public User(com.github.cypher.sdk.User sdkUser) {
+	User(com.github.cypher.sdk.User sdkUser) {
 		this.id = new SimpleStringProperty(sdkUser.getId());
 		this.name = new SimpleStringProperty(sdkUser.getName());
 		this.avatarUrl = new SimpleObjectProperty<>(sdkUser.getAvatarUrl());
@@ -39,12 +38,10 @@ public class User {
 	private void updateAvatar(java.awt.Image image) {
 		try {
 			this.avatar.set(
-					image == null ? null : com.github.cypher.Util.createImage(image)
+					image == null ? null : Util.createImage(image)
 			);
 		} catch(IOException e) {
-			if(DebugLogger.ENABLED) {
-				DebugLogger.log("IOException when converting user avatar image: " + e);
-			}
+			System.out.printf("IOException when converting user avatar image: %s\n", e);
 		}
 	}
 

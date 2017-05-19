@@ -51,17 +51,14 @@ public class RoomTest {
 		timeline.add("events", events);
 		data.add("timeline", timeline);
 
-		try {
-			room.update(data);
-		} catch(IOException e) {
-			Assert.assertTrue("ApiMock should never throw an exception: " + e, false);
-		}
+		room.update(data);
+
 		Assert.assertEquals("Room failed to process name", "testName", room.getName());
 		Assert.assertEquals("Room failed to process topic", "testTopic", room.getTopic());
 
-		Assert.assertNotNull(
+		Assert.assertTrue(
 			"Room failed to process member event",
-			room.getMembers().get("@neo:matrix.org")
+			room.getMembers().stream().anyMatch(m -> m.getUser().getId().equals("@neo:matrix.org"))
 		);
 
 		Assert.assertNotNull(
