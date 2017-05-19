@@ -226,7 +226,7 @@ public class Client {
 	}
 
 	private void distributeRoom(Room room) {
-		System.out.printf("Placing %40s %40s %25s\n", room, room.getName(), room.getCanonicalAlias());
+		//System.out.printf("Placing %40s %40s %25s\n", room, room.getName(), room.getCanonicalAlias());
 		// Place in PM
 		if (room.isPmChat()) {
 			pmCollection.addRoom(room);
@@ -241,7 +241,7 @@ public class Client {
 				boolean placedHere = false;
 				for (String alias:room.aliasesList()) {
 					if (firstServer){
-						System.out.printf("Alias: %50s\n", alias);
+						//System.out.printf("Alias: %50s\n", alias);
 					}
 					if (server.getAddress().equals(extractServer(alias))){
 						pmCollection.removeRoom(room);
