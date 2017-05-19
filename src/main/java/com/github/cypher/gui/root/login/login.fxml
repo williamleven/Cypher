@@ -28,15 +28,15 @@
                               <Font size="18.0" />
                           </font>
                       </Label>
-                      <Button layoutX="130.0" layoutY="281.0" mnemonicParsing="false" onAction="#login" prefHeight="35.0" prefWidth="241.0" text="%login.button" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="125.0">
+                      <Button fx:id="loginButton" layoutX="130.0" layoutY="281.0" mnemonicParsing="false" onAction="#login" prefHeight="35.0" prefWidth="241.0" text="%login.button" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="125.0">
                           <styleClass>
                               <String fx:value="btn" />
                               <String fx:value="btn-primary" />
                           </styleClass>
                       </Button>
-                      <TextField fx:id="usernameField" layoutX="126.0" layoutY="115.0" prefHeight="25.0" prefWidth="248.0" promptText="%username" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="125.0" />
-                      <PasswordField fx:id="passwordField" layoutX="126.0" layoutY="161.0" prefHeight="25.0" prefWidth="248.0" promptText="%password" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="125.0" />
-                      <TextField fx:id="homeserverField" layoutX="127.0" layoutY="203.0" prefHeight="25.0" prefWidth="248.0" promptText="%homeserver" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="125.0" />
+                      <TextField fx:id="loginUsernameField" layoutX="126.0" layoutY="115.0" prefHeight="25.0" prefWidth="248.0" promptText="%username" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="125.0" />
+                      <PasswordField fx:id="loginPasswordField" layoutX="126.0" layoutY="161.0" prefHeight="25.0" prefWidth="248.0" promptText="%password" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="125.0" />
+                      <TextField fx:id="loginHomeserverField" layoutX="127.0" layoutY="203.0" prefHeight="25.0" prefWidth="248.0" promptText="%homeserver" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="125.0" />
                       <CheckBox fx:id="rememberMeCheckBox" layoutX="127.0" layoutY="245.0" mnemonicParsing="false" text="%rememberMe" AnchorPane.leftAnchor="125.0" />
                   <Label alignment="CENTER" layoutX="194.0" layoutY="325.0" onMouseClicked="#switchPanes" text="%login.to_register" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <font>
@@ -59,7 +59,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Button layoutX="130.0" layoutY="281.0" mnemonicParsing="false" onAction="#register" prefHeight="35.0" prefWidth="241.0" text="%register.button" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="125.0">
+                  <Button fx:id="registrationButton" layoutX="130.0" layoutY="281.0" mnemonicParsing="false" onAction="#register" prefHeight="35.0" prefWidth="241.0" text="%register.button" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="125.0">
                      <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="btn-primary" />

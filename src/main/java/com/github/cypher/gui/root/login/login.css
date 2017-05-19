@@ -6,3 +6,7 @@ CheckBox {
     -fx-text-fill: white;
 }
 
+Label {
+    -fx-text-fill: grey;
+}
+
