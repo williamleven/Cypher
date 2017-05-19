@@ -18,5 +18,8 @@ public enum ToggleEvent {
 	TOGGLE_ADD_DIALOG,
 
 	LOGIN,
-	LOGOUT
+	LOGOUT,
+
+	SHOW_LOADING,
+	HIDE_LOADING
 }
