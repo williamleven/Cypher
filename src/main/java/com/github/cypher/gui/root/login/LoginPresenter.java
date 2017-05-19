@@ -9,7 +9,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebView;
 
 import javax.inject.Inject;
@@ -27,13 +26,13 @@ public class LoginPresenter {
 	private Executor executor;
 
 	@FXML
-	private TextField usernameField;
+	private TextField loginUsernameField;
 
 	@FXML
-	private PasswordField passwordField;
+	private PasswordField loginPasswordField;
 
 	@FXML
-	private TextField homeserverField;
+	private TextField loginHomeserverField;
 
 	@FXML
 	private CheckBox rememberMeCheckBox;
@@ -87,10 +86,10 @@ public class LoginPresenter {
 
 	@FXML
 	private void login() {
-		if (usernameField.getText() != null && passwordField.getText() != null && homeserverField.getText() != null) {
+		if (!loginUsernameField.getText().isEmpty() && !loginPasswordField.getText().isEmpty() && !loginHomeserverField.getText().isEmpty()) {
 			executor.handle(() -> {
 				try {
-					client.login(usernameField.getText(), passwordField.getText(), homeserverField.getText());
+					client.login(loginUsernameField.getText(), loginPasswordField.getText(), loginHomeserverField.getText());
 					settings.setSaveSession(rememberMeCheckBox.isSelected());
 				} catch (SdkException e) {
 					System.out.printf("SdkException when trying to login - %s\n", e.getMessage());
@@ -101,7 +100,7 @@ public class LoginPresenter {
 
 	@FXML
 	private void register() {
-		if (registrationUsernameField.getText() != null && registrationPasswordField.getText() != null && registrationHomeserverField.getText() != null) {
+		if (!registrationUsernameField.getText().isEmpty() && !registrationPasswordField.getText().isEmpty() && !registrationHomeserverField.getText().isEmpty()) {
 			executor.handle(() -> {
 				try {
 					client.register(registrationUsernameField.getText(), registrationPasswordField.getText(), registrationHomeserverField.getText());
