@@ -12,6 +12,7 @@ enum Endpoint {
 	LOGIN             ("client/r0/login"),
 	TOKEN_REFRESH     ("client/r0/tokenrefresh"),
 	LOGOUT            ("client/r0/logout"),
+	REGISTER          ("client/r0/register"),
 	SYNC              ("client/r0/sync"),
 	USER_PROFILE      ("client/r0/profile/{0}"),             // {0} = userId
 	USER_AVATAR_URL   ("client/r0/profile/{0}/avatar_url"),  // {0} = userId

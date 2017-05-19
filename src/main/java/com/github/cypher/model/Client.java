@@ -171,6 +171,16 @@ public class Client {
 		}
 	}
 
+	public void register(String username, String password, String homeserver) throws SdkException {
+		try {
+			sdkClient.register(username, password, homeserver);
+			startNewUpdater();
+		}catch(RestfulHTTPException | IOException ex){
+			throw new SdkException(ex);
+		}
+	}
+
+
 	// Add roomcollection, room or private chat
 	public void add(String input) throws IOException {
 		if (Util.isHomeserver(input)) {

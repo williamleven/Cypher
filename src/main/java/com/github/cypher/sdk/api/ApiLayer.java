@@ -75,6 +75,13 @@ public interface ApiLayer {
 	void logout() throws RestfulHTTPException, IOException;
 
 	/**
+	 * Create a new account and a new session
+	 * @see <a href="http://matrix.org/docs/api/client-server/#!/Session32management/post_matrix_client_r0_logout">matrix.org</a>
+	 */
+	// TODO: support binding an email
+	void register(String username, String password, String homeserver) throws RestfulHTTPException, IOException;
+
+	/**
 	 * Use a refresh token to create a new Session
 	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Session32management/post_matrix_client_r0_tokenrefresh">matrix.org</a>
 	 */
