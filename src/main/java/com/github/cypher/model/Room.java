@@ -1,11 +1,9 @@
 package com.github.cypher.model;
 
 import com.github.cypher.sdk.api.RestfulHTTPException;
-import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
@@ -25,12 +23,13 @@ public class Room {
 	private final ObservableList<Event> events;
 	private final com.github.cypher.sdk.Room sdkRoom;
 	private final User activeUser;
-	
 
 	Room(Repository<User> repo, com.github.cypher.sdk.Room sdkRoom, User activeUser) {
+		this.sdkRoom = sdkRoom;
+		this.activeUser = activeUser;
 
 		id = new SimpleStringProperty(sdkRoom.getId());
-		name = new SimpleStringProperty(sdkRoom.getName());
+		name = new SimpleStringProperty();
 
 		topic = new SimpleStringProperty(sdkRoom.getTopic());
 		avatarUrl = new SimpleObjectProperty<>(sdkRoom.getAvatarUrl());
@@ -45,11 +44,12 @@ public class Room {
 		memberCount = new SimpleIntegerProperty(sdkRoom.getMemberCount());
 		aliases = FXCollections.synchronizedObservableList(FXCollections.observableArrayList(sdkRoom.getAliases()));
 		events = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
-		this.sdkRoom = sdkRoom;
-		this.activeUser = activeUser;
+
+
+		updateName();
 
 		sdkRoom.addNameListener((observable, oldValue, newValue) -> {
-			name.set(newValue);
+			updateName();
 		});
 
 		sdkRoom.addTopicListener((observable, oldValue, newValue) -> {
@@ -83,6 +83,7 @@ public class Room {
 				}
 			}
 			memberCount.set(change.getList().size());
+			updateName();
 		});
 
 		sdkRoom.addAliasesListener((change -> {
@@ -125,7 +126,7 @@ public class Room {
 	}
 
 	public boolean isPmChat() {
-		boolean hasName = (name.get() != null && !name.get().isEmpty());
+		boolean hasName = (sdkRoom.getName() != null && !sdkRoom.getName().isEmpty());
 		return (this.getMemberCount() == 2 && !hasName);
 	}
 
@@ -138,7 +139,7 @@ public class Room {
 	}
 
 	public String getName() {
-		return name.get();
+		return name.getValue();
 	}
 
 	public StringProperty nameProperty() {
@@ -199,5 +200,19 @@ public class Room {
 
 	public ObservableList<Event> getEvents() {
 		return events;
+	}
+
+	private void updateName(){
+		String newName = sdkRoom.getName();
+		if (isPmChat()){
+			for (Member member: members) {
+				if (member.getUser() != activeUser){
+					name.setValue(member.getName().getValue());
+					System.out.printf("In here: %s\n", member.getName().getValue());
+				}
+			}
+		}else{
+			name.setValue(newName);
+		}
 	}
 }
