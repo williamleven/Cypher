@@ -208,7 +208,6 @@ public class Room {
 			for (Member member: members) {
 				if (member.getUser() != activeUser){
 					name.setValue(member.getName().getValue());
-					System.out.printf("In here: %s\n", member.getName().getValue());
 				}
 			}
 		}else{

@@ -229,7 +229,15 @@ public class Client {
 		//System.out.printf("Placing %40s %40s %25s\n", room, room.getName(), room.getCanonicalAlias());
 		// Place in PM
 		if (room.isPmChat()) {
-			pmCollection.addRoom(room);
+
+			// Do not list the VOIP bot room
+			if (room.getMembersProperty().stream().noneMatch((member) ->
+				member.getUser().getId().equals(
+					"@fs_IUNsRXZndVVCRmFTcExJRk5FRTpyaWdlbC5ndXJneS5tZTo4NDQ4:matrix.org"
+				)
+			)){
+				pmCollection.addRoom(room);
+			}
 		} else { // Place in servers
 			if (room.getCanonicalAlias() != null){
 				String mainServer = extractServer(room.getCanonicalAlias());
