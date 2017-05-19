@@ -187,15 +187,9 @@ public class Client {
 		Server server = new Server(serverAddress);
 		servers.add(server);
 
-
-		for (Room room: genCollection.getRoomsProperty().toArray(new Room[genCollection.getRoomsProperty().size()])) {
-			distributeRoom(room);
-		}
-		for (Room room: pmCollection.getRoomsProperty().toArray(new Room[pmCollection.getRoomsProperty().size()])) {
-			distributeRoom(room);
-		}
-		for (Server s: servers){
-			for (Room room: s.getRoomsProperty().toArray(new Room[s.getRoomsProperty().size()])) {
+		// Redistrubute all rooms
+		for (RoomCollection roomCollection : roomCollections.toArray(new RoomCollection[roomCollections.size()])){
+			for (Room room: roomCollection.getRoomsProperty().toArray(new Room[roomCollection.getRoomsProperty().size()])) {
 				distributeRoom(room);
 			}
 		}
