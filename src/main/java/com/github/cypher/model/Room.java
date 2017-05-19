@@ -33,8 +33,7 @@ public class Room {
 
 		topic = new SimpleStringProperty(sdkRoom.getTopic());
 		avatarUrl = new SimpleObjectProperty<>(sdkRoom.getAvatarUrl());
-		avatar = new SimpleObjectProperty<>(null);
-		updateAvatar(sdkRoom.getAvatar());
+		avatar = new SimpleObjectProperty<>();
 		canonicalAlias = new SimpleStringProperty(sdkRoom.getCanonicalAlias());
 		members = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 		for (com.github.cypher.sdk.Member sdkMember : sdkRoom.getMembers()) {
@@ -47,9 +46,11 @@ public class Room {
 
 
 		updateName();
+		updateAvatar();
 
 		sdkRoom.addNameListener((observable, oldValue, newValue) -> {
 			updateName();
+			updateAvatar();
 		});
 
 		sdkRoom.addTopicListener((observable, oldValue, newValue) -> {
@@ -61,7 +62,7 @@ public class Room {
 		});
 
 		sdkRoom.addAvatarListener((observable, oldValue, newValue) -> {
-			updateAvatar(newValue);
+			updateAvatar();
 		});
 
 		sdkRoom.addCanonicalAliasListener((observable, oldValue, newValue) -> {
@@ -84,6 +85,7 @@ public class Room {
 			}
 			memberCount.set(change.getList().size());
 			updateName();
+			updateAvatar();
 		});
 
 		sdkRoom.addAliasesListener((change -> {
@@ -115,14 +117,24 @@ public class Room {
 		}
 	}
 
-	private void updateAvatar(java.awt.Image image) {
-		try {
-			this.avatar.set(
-					image == null ? null : Util.createImage(image)
-			);
-		} catch (IOException e) {
-			System.out.printf("IOException when converting user avatar image: %s\n", e);
+	private void updateAvatar() {
+		java.awt.Image newImage = sdkRoom.getAvatar();
+		if(newImage == null && isPmChat()){
+			for (Member member: members) {
+				if (member.getUser() != activeUser){
+					avatar.setValue(member.getUser().getAvatar());
+				}
+			}
+		}else{
+			try {
+				this.avatar.set(
+					newImage == null ? null : Util.createImage(newImage)
+				);
+			} catch (IOException e) {
+				System.out.printf("IOException when converting user avatar image: %s\n", e);
+			}
 		}
+
 	}
 
 	public boolean isPmChat() {
