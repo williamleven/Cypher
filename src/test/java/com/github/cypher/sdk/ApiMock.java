@@ -274,4 +274,9 @@ public class ApiMock implements ApiLayer {
 	public InputStream getMediaContent(URL mediaUrl) throws RestfulHTTPException, IOException {
 		return null;
 	}
+
+	@Override
+	public InputStream getMediaContentThumbnail(URL mediaUrl, int size) throws RestfulHTTPException, IOException {
+		return null;
+	}
 }
