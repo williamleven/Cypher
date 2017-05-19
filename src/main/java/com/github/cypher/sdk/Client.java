@@ -54,7 +54,7 @@ public class Client {
 	 * @see com.github.cypher.sdk.api.ApiLayer
 	 * @throws IOException
 	 */
-	public Client(ApiLayer api, String settingsNamespace) {
+	Client(ApiLayer api, String settingsNamespace) {
 		this.api = api;
 		this.settingsNamespace = settingsNamespace;
 	}
