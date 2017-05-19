@@ -96,6 +96,9 @@ public class Util {
 
 	static void handleRestfulHTTPException(HttpURLConnection conn) throws RestfulHTTPException, IOException {
 		// Try to throw additional json error data
+		if (conn.getErrorStream() == null){
+			throw new IOException("Connection failed");
+		}
 		JsonReader errorReader = new JsonReader(new InputStreamReader(conn.getErrorStream()));
 		JsonElement json = new JsonParser().parse(errorReader);
 		throw new RestfulHTTPException(conn.getResponseCode(), json.getAsJsonObject());
