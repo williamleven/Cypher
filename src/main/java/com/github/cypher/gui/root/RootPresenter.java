@@ -5,6 +5,7 @@ import com.github.cypher.eventbus.ToggleEvent;
 import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
 import com.github.cypher.gui.root.adddialog.AddDialogView;
+import com.github.cypher.gui.root.loading.LoadingView;
 import com.github.cypher.gui.root.login.LoginPresenter;
 import com.github.cypher.gui.root.login.LoginView;
 import com.github.cypher.gui.root.roomcollection.RoomCollectionView;
@@ -57,11 +58,15 @@ public class RootPresenter {
 	private Parent roomCollectionPane;
 	private Parent addDialogPane;
 	private boolean showAddDialog;
+	private Parent loadingPane;
 
 
 	@FXML
 	private void initialize() {
 		eventBus.register(this);
+
+		loadingPane = new LoadingView().getView();
+		mainStackPane.getChildren().add(loadingPane);
 
 		// Only load login pane if user is not already logged in
 		// User might already be logged in if a valid session is available when the application is launched
@@ -69,6 +74,8 @@ public class RootPresenter {
 			LoginView loginPane = new LoginView();
 			loginPane.getView().setUserData(loginPane.getPresenter());
 			mainStackPane.getChildren().add(loginPane.getView());
+		} else {
+			eventBus.post(ToggleEvent.SHOW_LOADING);
 		}
 
 		settingsPane = new SettingsView().getView();
@@ -103,6 +110,17 @@ public class RootPresenter {
 			}
 		});
 
+	}
+
+	@Subscribe
+	private void toggleLoadingScreen(ToggleEvent e) {
+		Platform.runLater(() -> {
+			if (e == ToggleEvent.SHOW_LOADING) {
+				loadingPane.toFront();
+			} else if (e == ToggleEvent.HIDE_LOADING) {
+				loadingPane.toBack();
+			}
+		});
 	}
 
 	@Subscribe

@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 
 public class PMCollection implements RoomCollection {
-	private static final Image PM_COLLECTION_IMAGE = new Image(GeneralCollection.class.getResourceAsStream("/images/fa-users-white-40.png"));
+	private static final Image PM_COLLECTION_IMAGE = new Image(GeneralCollection.class.getResourceAsStream("/images/fa-wechat-white-40.png"));
 	private final ObjectProperty<Image> imageProperty = new SimpleObjectProperty<>(PM_COLLECTION_IMAGE); // Should this maybe be generated on first request instead?
 	private final ObservableList<Room> rooms = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
@@ -20,7 +20,13 @@ public class PMCollection implements RoomCollection {
 
 	@Override
 	public void addRoom(Room room) {
-		rooms.add(room);
+		if (!rooms.contains(room)){
+			rooms.add(room);
+		}
+	}
+
+	public void removeRoom(Room room){
+		rooms.remove(room);
 	}
 
 	@Override

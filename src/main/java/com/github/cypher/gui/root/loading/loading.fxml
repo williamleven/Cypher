@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<StackPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.loading.LoadingPresenter">
+   <children>
+      <ImageView fx:id="imageView" StackPane.alignment="CENTER" fitHeight="150.0" fitWidth="288.0" layoutX="339.0" layoutY="302.0" pickOnBounds="true" preserveRatio="true">
+      </ImageView>
+   </children>
+</StackPane>

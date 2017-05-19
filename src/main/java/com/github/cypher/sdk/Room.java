@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.sun.javafx.collections.ObservableListWrapper;
 import com.sun.javafx.collections.ObservableMapWrapper;
 
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -52,12 +53,27 @@ public class Room {
 	private final ObservableList<String> aliases =
 		FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
+	private final ObservableMap<String, ObservableList<String>> aliasLists =
+		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
+
 	private final StringProperty canonicalAlias = new SimpleStringProperty();
 
 	Room(ApiLayer api, Repository<User> userRepository, String id) {
 		this.api = api;
 		this.userRepository = userRepository;
 		this.id = id;
+
+		// update the alias list
+		aliasLists.addListener((InvalidationListener) (invalidated) -> {
+			// get all aliases
+			java.util.List<String> list = new ArrayList<>();
+			for (ObservableList<String> a:aliasLists.values()){
+				list.addAll(a);
+			}
+
+			// set aliases
+			aliases.setAll(list);
+		});
 	}
 
 	public void addEventListener(MapChangeListener<String, Event> listener) {
@@ -158,7 +174,10 @@ public class Room {
 				parseAvatarUrlData(content);
 				addPropertyChangeEvent(originServerTs, sender, eventId, age, "avatar_url", avatarUrl.getValue());
 			} else if (eventType.equals("m.room.aliases")) {
-				parseAliasesEvent(content);
+				if (event.has("state_key") &&
+					event.get("state_key").isJsonPrimitive()){
+					parseAliasesEvent(content, event.get("state_key").getAsString());
+				}
 			} else if (eventType.equals("m.room.canonical_alias")) {
 				parseCanonicalAlias(content);
 			} else if (eventType.equals("m.room.power_levels")) {
@@ -169,22 +188,30 @@ public class Room {
 	}
 
 	private void parseCanonicalAlias(JsonObject content) {
-		if (content.has("alias")) {
+		if (content.has("alias") &&
+		    content.get("alias").isJsonPrimitive() &&
+		   !content.get("alias").getAsString().isEmpty()) {
 			canonicalAlias.setValue(content.get("alias").getAsString());
 		}
 	}
 
-	private void parseAliasesEvent(JsonObject content) {
+	private void parseAliasesEvent(JsonObject content, String stateKey) {
 		if (content.has("aliases") &&
 		    content.get("aliases").isJsonArray()) {
 
 			JsonArray aliases = content.getAsJsonArray("aliases");
 
-			java.util.List<String> list = new ArrayList<String>();
+			ObservableList<String> list =
+				FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
+
 			for (JsonElement alias : aliases) {
 				list.add(alias.getAsString());
 			}
-			this.aliases.setAll(list);
+			if (list.size() == 0){
+				this.aliasLists.remove(stateKey);
+			}else{
+				this.aliasLists.put(stateKey, list);
+			}
 		}
 	}
 

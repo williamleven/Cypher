@@ -12,24 +12,22 @@ public class Util {
 
 	// Check if sting could be a roomcollection
 	static boolean isHomeserver(String s) {
-		//Todo
-		return false;
+		return s.matches("^(https:\\/\\/|[a-zA-Z0-9-])([a-zA-Z0-9-]+\\.[a-zA-Z0-9]+)+(:[0-9]+)?$");
 	}
 
 	// Check if sting could be a room label
 	static boolean isRoomLabel(String s) {
-		//Todo
-		return false;
+		return s.matches("^(!|#)[a-zA-Z0-9_\\.-]+:([a-zA-Z0-9]+\\.[a-zA-Z0-9]+)+(:[0-9]+)?$");
 	}
 
 	// Check if sting could be a user
 	static boolean isUser(String s) {
-		//Todo
-		return false;
+		return s.matches("^(@|[a-zA-Z0-9_\\.-])[a-zA-Z0-9_\\.-]+:([a-zA-Z0-9]+\\.[a-zA-Z0-9]+)+(:[0-9]+)?$");
 	}
 
 	static String extractServer(String input) {
-		return input.split(":", 2)[1];
+		String[] splitString = input.split(":", 2);
+		return splitString[splitString.length - 1];
 	}
 
 	/**

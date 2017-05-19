@@ -54,18 +54,9 @@ public class Client {
 	 * @see com.github.cypher.sdk.api.ApiLayer
 	 * @throws IOException
 	 */
-	public Client(ApiLayer api, String settingsNamespace) {
+	Client(ApiLayer api, String settingsNamespace) {
 		this.api = api;
 		this.settingsNamespace = settingsNamespace;
-	}
-
-	private Room getOrCreateRoom(Map<String, Room> map, String roomId) {
-		if(map.containsKey(roomId)) {
-			return map.get(roomId);
-		}
-		Room room = new Room(api, users, roomId);
-		map.put(roomId, room);
-		return room;
 	}
 
 	public Session getSession() {
@@ -99,6 +90,17 @@ public class Client {
 	public void logout() throws RestfulHTTPException, IOException {
 		api.logout();
 	}
+
+	/**
+	 * Call ApiLayer.register(...)
+	 * @see com.github.cypher.sdk.api.ApiLayer#register(String, String, String)
+	 * @throws RestfulHTTPException
+	 * @throws IOException
+	 */
+	public void register(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
+		api.register(username, password, homeserver);
+	}
+
 
 	/**
 	 * Call ApiLayer.sync(...) and parse the returned data.
@@ -184,6 +186,10 @@ public class Client {
 		// TODO
 	}
 
+	public User getActiveUser(){
+		return getUser(getSession().getUserId());
+	}
+
 	private void parsePresenceEvents(JsonObject syncData) {
 		if(syncData.has("presence")) {
 			JsonObject presenceData = syncData.get("presence").getAsJsonObject();
@@ -213,8 +219,15 @@ public class Client {
 					if(joinEventEntry.getValue().isJsonObject()) {
 						String roomId = joinEventEntry.getKey();
 						JsonObject joinEvent = joinEventEntry.getValue().getAsJsonObject();
-						Room room = getOrCreateRoom(joinRooms, roomId);
+						Room room;
+						if(joinRooms.containsKey(roomId)) {
+							room = joinRooms.get(roomId);
+						}else{
+							room = new Room(api, users, roomId);
+						}
 						room.update(joinEvent);
+						joinRooms.put(roomId, room);
+
 					}
 				}
 			}

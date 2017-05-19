@@ -1,16 +1,13 @@
 package com.github.cypher.model;
 
 import com.github.cypher.sdk.api.RestfulHTTPException;
-import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.Optional;
 
 public class Room {
@@ -25,30 +22,35 @@ public class Room {
 	private final ObservableList<String> aliases;
 	private final ObservableList<Event> events;
 	private final com.github.cypher.sdk.Room sdkRoom;
-	private final Client client;
+	private final User activeUser;
 
-	Room(Client client, com.github.cypher.sdk.Room sdkRoom) {
-		this.client = client;
+	Room(Repository<User> repo, com.github.cypher.sdk.Room sdkRoom, User activeUser) {
+		this.sdkRoom = sdkRoom;
+		this.activeUser = activeUser;
+
 		id = new SimpleStringProperty(sdkRoom.getId());
-		name = new SimpleStringProperty(sdkRoom.getName());
+		name = new SimpleStringProperty();
 
 		topic = new SimpleStringProperty(sdkRoom.getTopic());
 		avatarUrl = new SimpleObjectProperty<>(sdkRoom.getAvatarUrl());
-		avatar = new SimpleObjectProperty<>(null);
-		updateAvatar(sdkRoom.getAvatar());
+		avatar = new SimpleObjectProperty<>();
 		canonicalAlias = new SimpleStringProperty(sdkRoom.getCanonicalAlias());
 		members = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 		for (com.github.cypher.sdk.Member sdkMember : sdkRoom.getMembers()) {
-			members.add(new Member(sdkMember));
+			members.add(new Member(sdkMember, repo));
 		}
 
 		memberCount = new SimpleIntegerProperty(sdkRoom.getMemberCount());
 		aliases = FXCollections.synchronizedObservableList(FXCollections.observableArrayList(sdkRoom.getAliases()));
 		events = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
-		this.sdkRoom = sdkRoom;
+
+
+		updateName();
+		updateAvatar();
 
 		sdkRoom.addNameListener((observable, oldValue, newValue) -> {
-			name.set(newValue);
+			updateName();
+			updateAvatar();
 		});
 
 		sdkRoom.addTopicListener((observable, oldValue, newValue) -> {
@@ -60,7 +62,7 @@ public class Room {
 		});
 
 		sdkRoom.addAvatarListener((observable, oldValue, newValue) -> {
-			updateAvatar(newValue);
+			updateAvatar();
 		});
 
 		sdkRoom.addCanonicalAliasListener((observable, oldValue, newValue) -> {
@@ -71,7 +73,7 @@ public class Room {
 			while (change.next()) {
 				if (change.wasAdded()) {
 					for (com.github.cypher.sdk.Member sdkMember : change.getAddedSubList()) {
-						members.add(new Member(sdkMember));
+						members.add(new Member(sdkMember, repo));
 					}
 				}
 				if (change.wasRemoved()) {
@@ -82,17 +84,26 @@ public class Room {
 				}
 			}
 			memberCount.set(change.getList().size());
+			updateName();
+			updateAvatar();
 		});
 
 		sdkRoom.addAliasesListener((change -> {
-			aliases.setAll(change.getList());
+			while (change.next()){
+				if (change.wasAdded()){
+					aliases.addAll(change.getAddedSubList());
+				}
+				if (change.wasRemoved()){
+					aliases.removeAll(change.getRemoved());
+				}
+			}
 		}));
 
 		sdkRoom.addEventListener((change -> {
 			if (change.wasAdded()) {
 				com.github.cypher.sdk.Event event = change.getValueAdded();
 				if(event instanceof com.github.cypher.sdk.Message) {
-					events.add(new Message(client, (com.github.cypher.sdk.Message)event));
+					events.add(new Message(repo, (com.github.cypher.sdk.Message)event));
 				}
 			}
 		}));
@@ -106,14 +117,29 @@ public class Room {
 		}
 	}
 
-	private void updateAvatar(java.awt.Image image) {
-		try {
-			this.avatar.set(
-					image == null ? null : Util.createImage(image)
-			);
-		} catch (IOException e) {
-			System.out.printf("IOException when converting user avatar image: %s\n", e);
+	private void updateAvatar() {
+		java.awt.Image newImage = sdkRoom.getAvatar();
+		if(newImage == null && isPmChat()){
+			for (Member member: members) {
+				if (member.getUser() != activeUser){
+					avatar.setValue(member.getUser().getAvatar());
+				}
+			}
+		}else{
+			try {
+				this.avatar.set(
+					newImage == null ? null : Util.createImage(newImage)
+				);
+			} catch (IOException e) {
+				System.out.printf("IOException when converting user avatar image: %s\n", e);
+			}
 		}
+
+	}
+
+	public boolean isPmChat() {
+		boolean hasName = (sdkRoom.getName() != null && !sdkRoom.getName().isEmpty());
+		return (this.getMemberCount() == 2 && !hasName);
 	}
 
 	public String getId() {
@@ -125,7 +151,7 @@ public class Room {
 	}
 
 	public String getName() {
-		return name.get();
+		return name.getValue();
 	}
 
 	public StringProperty nameProperty() {
@@ -186,5 +212,18 @@ public class Room {
 
 	public ObservableList<Event> getEvents() {
 		return events;
+	}
+
+	private void updateName(){
+		String newName = sdkRoom.getName();
+		if (isPmChat()){
+			for (Member member: members) {
+				if (member.getUser() != activeUser){
+					name.setValue(member.getName().getValue());
+				}
+			}
+		}else{
+			name.setValue(newName);
+		}
 	}
 }

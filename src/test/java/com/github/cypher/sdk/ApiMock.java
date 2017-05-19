@@ -141,6 +141,10 @@ public class ApiMock implements ApiLayer {
 	}
 
 	@Override
+	public void register(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
+	}
+
+	@Override
 	public JsonObject getRoomMessages(String roomId) throws RestfulHTTPException, IOException {
 		return null;
 	}
