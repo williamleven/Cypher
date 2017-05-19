@@ -7,11 +7,13 @@ import com.github.cypher.sdk.api.Session;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
+import java.util.Observable;
 import java.util.function.Supplier;
 
 import static com.github.cypher.model.Util.extractServer;
@@ -93,7 +95,9 @@ public class Client {
 		sdkClient = sdkClientFactory.get();
 		sdkClient.addJoinRoomsListener((change) -> {
 			if (change.wasAdded()) {
-				distributeRoom(new Room(userRepository, change.getValueAdded(), getActiveUser()));
+				Room room = new Room(userRepository, change.getValueAdded(), getActiveUser());
+				room.aliasesList().addListener((InvalidationListener) (r) -> distributeRoom(room));
+				distributeRoom(room);
 			}
 		});
 
