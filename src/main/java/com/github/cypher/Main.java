@@ -69,21 +69,21 @@ public class Main extends Application {
 
 		// Only hide close the main window if system tray is enabled and supported.
 		primaryStage.setOnCloseRequest(event -> {
-			if (useSyetemTray()) {
+			if (useSystemTray()) {
 				primaryStage.close();
 			} else {
 				exit();
 			}
 		});
-		if (useSyetemTray()) {
+		if (useSystemTray()) {
 			addTrayIcon(primaryStage);
 		}
 
 		primaryStage.show();
 	}
 
-	private boolean useSyetemTray() {
-		return (settings.setUseSystemTray() && SystemTray.get() != null);
+	private boolean useSystemTray() {
+		return (settings.getUseSystemTray() && SystemTray.get() != null);
 	}
 
 	private void addTrayIcon(Stage primaryStage) {
