@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<?import java.lang.String?>
-<StackPane fx:id="root" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" prefHeight="60.0" prefWidth="60.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemPresenter">
+<?import javafx.scene.layout.StackPane?>
 
-   <children>
-      <ImageView fx:id="imageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="NEVER">
+<StackPane fx:id="root" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" prefHeight="40.0" prefWidth="40.0" styleClass="box" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemPresenter">
+    <children>
+      <ImageView fx:id="imageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
       </ImageView>
    </children>
-   <styleClass>
-      <String fx:value="image-btn" />
-      <String fx:value="btn" />
-      <String fx:value="btn-info" />
-      <String fx:value="room-collection-cell" />
-   </styleClass>
 </StackPane>

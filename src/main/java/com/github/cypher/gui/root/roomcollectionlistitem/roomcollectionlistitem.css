@@ -1,3 +1,9 @@
-.room-collection-cell{
+.box{
     -fx-padding: 0px !important;
+    -fx-background-color: -fx-lighter;
+    -fx-background-radius: 10px;
+}
+
+.list-cell:selected .box {
+    -fx-background-color: -fx-soft-popup;
 }

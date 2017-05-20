@@ -1,54 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
+<?import java.lang.String?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import java.lang.*?>
+
 <StackPane fx:id="mainStackPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.RootPresenter">
     <children>
         <HBox>
             <children>
                 <AnchorPane minHeight="300.0" minWidth="-Infinity">
                     <children>
-                        <VBox layoutX="5.0" layoutY="14.0" AnchorPane.bottomAnchor="135.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="14.0">
-                            <ListView fx:id="roomCollectionListView" focusTraversable="false" prefHeight="0.0" prefWidth="76.0" styleClass="server-list">
-                                <VBox.margin>
-                                    <Insets />
-                                </VBox.margin>
-                            </ListView>
-                            <Button mnemonicParsing="false" onAction="#onAddButtonAction" prefHeight="60.0" prefWidth="60.0">
-                                <styleClass>
-                                    <String fx:value="btn" />
-                                    <String fx:value="btn-info" />
-                                    <String fx:value="image-btn" />
-                                </styleClass>
-                                <graphic>
-                                    <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="40" text="" />
-                                </graphic>
-                            </Button>
-                        </VBox>
-                        <Button layoutX="13.0" layoutY="370.0" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="60.0" style="-fx-min-width: 2px;" wrapText="true" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="21.0">
-                            <graphic>
-                                <FontIcon iconColor="WHITE" iconLiteral="fa-angle-left" iconSize="40" textAlignment="CENTER" />
-                            </graphic>
-                            <styleClass>
-                                <String fx:value="btn-info" />
-                                <String fx:value="btn" />
-                                <String fx:value="image-btn" />
-                            </styleClass>
-                        </Button>
-                        <Button layoutX="13.0" layoutY="443.0" mnemonicParsing="false" onAction="#toggleSettings" prefHeight="60.0" prefWidth="60.0" style="-fx-min-width: 2px;" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="21.0">
-                            <graphic>
-                                <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="40" textAlignment="CENTER" />
-                            </graphic>
-                            <styleClass>
-                                <String fx:value="btn-info" />
-                                <String fx:value="btn" />
-                                <String fx:value="image-btn" />
-                            </styleClass>
-                        </Button>
+                         <ListView fx:id="roomCollectionListView" focusTraversable="false" prefHeight="0.0" prefWidth="40.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                     <styleClass>
+                        <String fx:value="server-list" />
+                        <String fx:value="fancy-scroll" />
+                     </styleClass>
+                         </ListView>
+                  <VBox alignment="CENTER" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="5.0">
+                     <children>
+                                 <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="40" onMouseClicked="#openAddDialog" styleClass="clickable" text="" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0">
+                     <children>
+                                <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="40" onMouseClicked="#toggleSettings" styleClass="clickable" textAlignment="CENTER" />
+                     </children>
+                  </VBox>
+                  <Separator layoutX="-57.0" layoutY="199.0" styleClass="base-separator" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
                     </children>
                 </AnchorPane>
                 <StackPane fx:id="rightSideStackPane" HBox.hgrow="ALWAYS" />

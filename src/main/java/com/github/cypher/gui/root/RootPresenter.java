@@ -199,18 +199,7 @@ public class RootPresenter {
 	}
 
 	@FXML
-	private void logout() {
-		executor.handle(() -> {
-			try {
-				client.logout();
-			} catch (SdkException e) {
-				System.out.printf("SdkException when trying to logout - %s\n", e.getMessage());
-			}
-		});
-	}
-
-	@FXML
-	public void onAddButtonAction(ActionEvent actionEvent) {
+	public void openAddDialog() {
 		eventBus.post(ToggleEvent.SHOW_ADD_DIALOG);
 	}
 }
