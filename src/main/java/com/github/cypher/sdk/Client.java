@@ -107,7 +107,7 @@ public class Client {
 	 * <p>Presence-data is used to update the map of users: {@link #getUser(String)}</p>
 	 * <p>Join-data is used to update the map of rooms the user has joined: {@link #getJoinRooms()}.</p>
 	 * <p>All room maps are observable using the various add*RoomsListener(...) methods</p>
-	 * @see com.github.cypher.sdk.api.ApiLayer#sync(String, String, boolean, User.Presence, int)
+	 * @see com.github.cypher.sdk.api.ApiLayer#sync(String, String, boolean, ApiLayer.Presence, int)
 	 * @throws RestfulHTTPException
 	 * @throws IOException
 	 */
@@ -227,7 +227,6 @@ public class Client {
 						}
 						room.update(joinEvent);
 						joinRooms.put(roomId, room);
-
 					}
 				}
 			}
