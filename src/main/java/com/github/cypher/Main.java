@@ -5,9 +5,9 @@ import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.root.RootView;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.ModelFactory;
-import com.google.common.eventbus.EventBus;
 import com.github.cypher.settings.Settings;
 import com.github.cypher.settings.TOMLSettings;
+import com.google.common.eventbus.EventBus;
 import dorkbox.systemTray.MenuItem;
 import dorkbox.systemTray.SystemTray;
 import javafx.application.Application;
@@ -64,8 +64,8 @@ public class Main extends Application {
 		primaryStage.setTitle("Cypher");
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
 		primaryStage.setScene(scene);
-		primaryStage.setMinWidth(1100);
-		primaryStage.setMinHeight(500);
+		primaryStage.setMinWidth(780);
+		primaryStage.setMinHeight(425);
 
 		// Only hide close the main window if system tray is enabled and supported.
 		primaryStage.setOnCloseRequest(event -> {
