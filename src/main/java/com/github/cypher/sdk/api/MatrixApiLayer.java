@@ -211,11 +211,20 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public JsonObject getRoomMessages(String roomId) throws RestfulHTTPException, IOException {
-
+	public JsonObject getRoomMessages(String roomId, String from, String to, boolean backward, Integer limit) throws RestfulHTTPException, IOException {
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("access_token", session.getAccessToken());
+		if(from != null) {
+			parameters.put("from", from);
+		}
+		if(to != null) {
+			parameters.put("to", to);
+		}
+		if(limit != null) {
+			parameters.put("limit", limit.toString());
+		}
+		parameters.put("dir", backward ? "b" : "f");
 
 		// Build URL
 		URL url = Util.UrlBuilder(session.getHomeServer(), Endpoint.ROOM_MESSAGES, new Object[] {roomId}, parameters);
