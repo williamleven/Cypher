@@ -15,18 +15,18 @@
             <children>
                 <AnchorPane minHeight="300.0" minWidth="-Infinity">
                     <children>
-                         <ListView fx:id="roomCollectionListView" focusTraversable="false" prefHeight="0.0" prefWidth="40.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                         <ListView fx:id="roomCollectionListView" focusTraversable="false" prefHeight="0.0" prefWidth="49.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <styleClass>
                         <String fx:value="server-list" />
                         <String fx:value="fancy-scroll" />
                      </styleClass>
                          </ListView>
-                  <VBox alignment="CENTER" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="5.0">
+                  <VBox alignment="CENTER" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                      <children>
                                  <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="40" onMouseClicked="#openAddDialog" styleClass="clickable" text="" />
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0">
+                  <VBox alignment="CENTER" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                      <children>
                                 <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="40" onMouseClicked="#toggleSettings" styleClass="clickable" textAlignment="CENTER" />
                      </children>
