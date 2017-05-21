@@ -125,6 +125,10 @@ public class Client {
 		parseAccountDataEvents(syncData);
 	}
 
+	public void joinRoom(String roomIdorAlias) throws RestfulHTTPException, IOException{
+		api.postJoinRoomIdorAlias(roomIdorAlias, null);
+	}
+
 	/**
 	 * Get the rooms which the user has joined
 	 * @return A map of Room objects

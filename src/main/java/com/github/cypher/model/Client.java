@@ -217,7 +217,11 @@ public class Client {
 	}
 
 	private void addRoom(String room) {
-		//Todo
+		try {
+			sdkClient.joinRoom(room);
+		} catch (IOException e) {
+
+		}
 	}
 
 	private void addUser(String user) {

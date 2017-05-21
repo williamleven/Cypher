@@ -245,7 +245,7 @@ public class ApiMock implements ApiLayer {
 	}
 
 	@Override
-	public JsonObject postJoinRoom(String roomId, JsonObject thirdPartySigned) throws RestfulHTTPException, IOException {
+	public JsonObject postJoinRoomIdorAlias(String roomId, JsonObject thirdPartySigned) throws RestfulHTTPException, IOException {
 		return null;
 	}
 
