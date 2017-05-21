@@ -27,7 +27,7 @@ public class User {
 	protected final ObjectProperty<Presence> presence = new SimpleObjectProperty<>(null);
 	protected final BooleanProperty isActive          = new SimpleBooleanProperty(false);
 	protected final LongProperty lastActiveAgo        = new SimpleLongProperty(0);
-	private int avatarSize=0;
+	private int avatarSize=24;
 
 	User(ApiLayer api, String id) {
 		this.api = api;
@@ -81,7 +81,9 @@ public class User {
 						name.set(contentObject.get("displayname").getAsString());
 					}
 				}
-				setAvatar(contentObject);
+				if(avatar.getValue()==null) {
+					setAvatar(contentObject);
+				}
 			}
 
 		}
