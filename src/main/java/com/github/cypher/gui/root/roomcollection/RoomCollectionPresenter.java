@@ -1,14 +1,14 @@
 package com.github.cypher.gui.root.roomcollection;
 
 import com.github.cypher.eventbus.ToggleEvent;
-import com.github.cypher.gui.FXThreadedObservableValueWrapper;
-import com.github.cypher.model.*;
-import com.github.cypher.settings.Settings;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
+import com.github.cypher.gui.FXThreadedObservableValueWrapper;
 import com.github.cypher.gui.root.roomcollection.directory.DirectoryView;
 import com.github.cypher.gui.root.roomcollection.room.RoomView;
 import com.github.cypher.gui.root.roomcollection.roomlistitem.RoomListItemPresenter;
 import com.github.cypher.gui.root.roomcollection.roomlistitem.RoomListItemView;
+import com.github.cypher.model.*;
+import com.github.cypher.settings.Settings;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
@@ -67,8 +67,6 @@ public class RoomCollectionPresenter {
 			if (newValue != null) {
 				eventBus.post(newValue);
 				eventBus.post(ToggleEvent.HIDE_ROOM_SETTINGS);
-			}else {
-				roomListView.getSelectionModel().selectFirst();
 			}
 		});
 		showDirectory = false;
@@ -106,6 +104,15 @@ public class RoomCollectionPresenter {
 				serverName.textProperty().setValue(bundle.getString("pm"));
 			} else if (roomCollection instanceof GeneralCollection) {
 				serverName.textProperty().setValue(bundle.getString("general"));
+			}
+
+			// Handle room selection (selects the first room in the RoomCollection if the RoomCollection
+			// isn't empty and if the previously selected room isn't in the current RoomCollection)
+			if (roomCollection.getRoomsProperty().contains(client.getSelectedRoom())) {
+				roomListView.getSelectionModel().select(client.getSelectedRoom());
+			} else if (roomCollection.getRoomsProperty().size() > 0) {
+				eventBus.post(roomCollection.getRoomsProperty().get(0));
+				roomListView.getSelectionModel().select(0);
 			}
 		});
 	}
