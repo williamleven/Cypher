@@ -23,12 +23,20 @@
                          </ListView>
                   <VBox alignment="CENTER" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                      <children>
-                                 <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="40" onMouseClicked="#openAddDialog" styleClass="clickable" text="" />
+                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable">
+                           <children>
+                                       <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="40" onMouseClicked="#openAddDialog" text="" translateY="2.0" />
+                           </children>
+                        </VBox>
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                  <VBox alignment="CENTER" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                      <children>
-                                <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="40" onMouseClicked="#toggleSettings" styleClass="clickable" textAlignment="CENTER" />
+                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable">
+                           <children>
+                                      <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="40" onMouseClicked="#toggleSettings" textAlignment="CENTER" />
+                           </children>
+                        </VBox>
                      </children>
                   </VBox>
                   <Separator layoutX="-57.0" layoutY="199.0" styleClass="base-separator" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />

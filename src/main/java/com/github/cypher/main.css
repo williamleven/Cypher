@@ -42,3 +42,10 @@ AnchorPane {
 	-fx-background-color: -fx-lighter;
 
 }
+
+.clickable:hover {
+	-fx-background-color: -fx-popup;
+	-fx-border-width: 1, 1, 1, 1;
+	-fx-border-color: -fx-soft-popup;
+	-fx-cursor: hand;
+}
