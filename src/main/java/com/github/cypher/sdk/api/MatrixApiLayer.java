@@ -481,7 +481,7 @@ public class MatrixApiLayer implements ApiLayer {
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("height", String.valueOf(size));
 		parameters.put("width", String.valueOf(size));
-		parameters.put("method", "scale");
+		parameters.put("method", "crop");
 		URL url;
 
 
