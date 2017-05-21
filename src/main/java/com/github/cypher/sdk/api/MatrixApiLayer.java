@@ -490,7 +490,7 @@ public class MatrixApiLayer implements ApiLayer {
 			url = Util.UrlBuilder(session.getHomeServer(), Endpoint.MEDIA_THUMBNAIL, new Object[]{mediaUrl.getHost()+":"+mediaUrl.getPort(), mediaUrl.getPath().replaceFirst("/", "")}, parameters);
 		}
 		else {
-			url = Util.UrlBuilder(session.getHomeServer(), Endpoint.MEDIA_DOWNLOAD, new Object[]{mediaUrl.getHost(), mediaUrl.getPath().replaceFirst("/", "")}, parameters);
+			url = Util.UrlBuilder(session.getHomeServer(), Endpoint.MEDIA_THUMBNAIL, new Object[]{mediaUrl.getHost(), mediaUrl.getPath().replaceFirst("/", "")}, parameters);
 		}
 		HttpURLConnection conn = null;
 		try {
