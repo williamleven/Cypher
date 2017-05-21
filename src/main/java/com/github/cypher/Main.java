@@ -5,9 +5,9 @@ import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.root.RootView;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.ModelFactory;
-import com.google.common.eventbus.EventBus;
 import com.github.cypher.settings.Settings;
 import com.github.cypher.settings.TOMLSettings;
+import com.google.common.eventbus.EventBus;
 import dorkbox.systemTray.MenuItem;
 import dorkbox.systemTray.SystemTray;
 import javafx.application.Application;
@@ -95,7 +95,7 @@ public class Main extends Application {
 		}
 
 		// Load labels from bundle
-		ResourceBundle labels = ResourceBundle.getBundle("com.github.cypher.labels", Locale.getDefault());
+		ResourceBundle labels = ResourceBundle.getBundle("com.github.cypher.labels", settings.getLanguage());
 
 		// Make sure application doesn't exit when main window is closed
 		Platform.setImplicitExit(false);
