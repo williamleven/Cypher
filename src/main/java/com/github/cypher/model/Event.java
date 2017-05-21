@@ -2,12 +2,12 @@ package com.github.cypher.model;
 
 public class Event {
 	private final String eventId;
-	private final long originServerTimesStamp;
+	private final long originServerTimeStamp;
 	private final User sender;
 
 	Event(Repository<User> repo,com.github.cypher.sdk.Event sdkEvent){
 		eventId = sdkEvent.getEventId();
-		originServerTimesStamp = sdkEvent.getOriginServerTs();
+		originServerTimeStamp = sdkEvent.getOriginServerTs();
 		sender = repo.get(sdkEvent.getSender().getId());
 	}
 
@@ -15,8 +15,8 @@ public class Event {
 		return eventId;
 	}
 
-	public long getOriginServerTimesStamp() {
-		return originServerTimesStamp;
+	public long getOriginServerTimeStamp() {
+		return originServerTimeStamp;
 	}
 
 	public User getSender() {

@@ -96,7 +96,7 @@ public class User {
 					avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
 				}
 				avatarUrl.set(newAvatarUrl);
-			} catch (IOException e) {
+			} catch (RestfulHTTPException | IOException e) {
 				avatar.set(null);
 				avatarUrl.set(null);
 			}

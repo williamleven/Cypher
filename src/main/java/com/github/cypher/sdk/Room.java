@@ -44,6 +44,8 @@ public class Room {
 	private final ObjectProperty<Image> avatar = new SimpleObjectProperty<>(null);
 	private final ObjectProperty<PermissionTable> permissions = new SimpleObjectProperty<>(null);
 
+	private String earliestBatch = null;
+
 	private ObservableMap<String, Event> events =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
@@ -115,22 +117,70 @@ public class Room {
 
 		parseAvatarUrlData(data);
 
-		parseEvents("timeline", data);
+		parseTimelineEvents(data);
 
-		parseEvents("state", data);
+		parseStateEvents(data);
 	}
 
-	private void parseEvents(String category, JsonObject data) {
-		if (data.has(category) &&
-		    data.get(category).isJsonObject()) {
-			JsonObject timeline = data.get(category).getAsJsonObject();
-			if (timeline.has("events") &&
-			    timeline.get("events").isJsonArray()) {
-				JsonArray events = timeline.get("events").getAsJsonArray();
-				for (JsonElement eventElement : events) {
-					if (eventElement.isJsonObject()) {
-						parseEventData(eventElement.getAsJsonObject());
-					}
+	public void getEventHistory(Integer limit) throws RestfulHTTPException, IOException {
+		if(earliestBatch == null) {
+			throw new IOException("sdk.Room.getHistory(...) called before first sdk.Client.sync(...)");
+		}
+
+		JsonObject data = api.getRoomMessages(id, earliestBatch, null, true, limit);
+
+		if(data.has("end") &&
+		   data.get("end").isJsonPrimitive()) {
+
+			earliestBatch = data.get("end").getAsString();
+		} else {
+			throw new IOException("No pagination token was given by the server");
+		}
+
+		if(data.has("chunk") &&
+		   data.get("chunk").isJsonArray()) {
+
+			JsonArray chunk = data.get("chunk").getAsJsonArray();
+
+			for(JsonElement eventElement : chunk) {
+				if(eventElement.isJsonObject()) {
+					parseEventData(eventElement.getAsJsonObject());
+				}
+			}
+		}
+	}
+
+	private void parseTimelineEvents(JsonObject data) {
+		if (data.has("timeline") &&
+		    data.get("timeline").isJsonObject()) {
+			JsonObject timeline = data.get("timeline").getAsJsonObject();
+
+			if(earliestBatch == null &&
+			   timeline.has("prev_batch") &&
+			   timeline.get("prev_batch").isJsonPrimitive()) {
+
+				earliestBatch = timeline.get("prev_batch").getAsString();
+			}
+
+			parseEvents(timeline);
+		}
+	}
+
+	private void parseStateEvents(JsonObject data) {
+		if (data.has("state") &&
+		    data.get("state").isJsonObject()) {
+			JsonObject timeline = data.get("state").getAsJsonObject();
+			parseEvents(timeline);
+		}
+	}
+
+	private void parseEvents(JsonObject timeline) {
+		if (timeline.has("events") &&
+		    timeline.get("events").isJsonArray()) {
+			JsonArray events = timeline.get("events").getAsJsonArray();
+			for (JsonElement eventElement : events) {
+				if (eventElement.isJsonObject()) {
+					parseEventData(eventElement.getAsJsonObject());
 				}
 			}
 		}
@@ -238,7 +288,7 @@ public class Room {
 						this.avatarUrl.set(newAvatarUrl);
 					}
 					break;
-				} catch(IOException e) {
+				} catch(RestfulHTTPException | IOException e) {
 					avatar.set(null);
 					avatarUrl.set(null);
 				}
@@ -248,11 +298,13 @@ public class Room {
 
 
 	private void parseMessageEvent(int originServerTs, String sender, String eventId, int age, JsonObject content) {
-		User author = userRepository.get(sender);
-		this.events.put(
-			eventId,
-			new Message(api, originServerTs, author, eventId, age, content)
-		               );
+		if (!events.containsKey(eventId)){
+			User author = userRepository.get(sender);
+			this.events.put(
+					eventId,
+					new Message(api, originServerTs, author, eventId, age, content)
+			);
+		}
 	}
 
 	private void parseMemberEvent(JsonObject event, int originServerTs, String senderId, String eventId, int age, JsonObject content) {
@@ -274,11 +326,13 @@ public class Room {
 			}
 
 			// Add membership event to the log
-			User sender = userRepository.get(senderId);
-			events.put(
-					eventId,
-					new MemberEvent(api, originServerTs, sender, eventId, age, memberId, membership)
-			);
+			if(!events.containsKey(eventId)) {
+				User sender = userRepository.get(senderId);
+				events.put(
+						eventId,
+						new MemberEvent(api, originServerTs, sender, eventId, age, memberId, membership)
+				);
+			}
 		}
 	}
 
@@ -299,11 +353,14 @@ public class Room {
 	}
 
 	private <T> void addPropertyChangeEvent(int originServerTs, String senderId, String eventId, int age, String property, T value) {
-		User sender = userRepository.get(senderId);
-		events.put(
-				eventId,
-				new PropertyChangeEvent<>(api, originServerTs, sender, eventId, age, property, value)
-		);
+		if(!events.containsKey(eventId))
+		{
+			User sender = userRepository.get(senderId);
+			events.put(
+					eventId,
+					new PropertyChangeEvent<>(api, originServerTs, sender, eventId, age, property, value)
+			);
+		}
 	}
 
 	/**
