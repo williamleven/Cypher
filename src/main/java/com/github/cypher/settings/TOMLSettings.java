@@ -104,7 +104,7 @@ public class TOMLSettings implements Settings {
 	}
 
 	@Override
-	public synchronized boolean setUseSystemTray() {
+	public synchronized boolean getUseSystemTray() {
 		return settingsData.useSystemTray;
 	}
 

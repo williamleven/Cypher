@@ -229,8 +229,8 @@ public class Client {
 						}else{
 							room = new Room(api, users, roomId);
 						}
-						joinRooms.put(roomId, room);
 						room.update(joinEvent);
+						joinRooms.put(roomId, room);
 					}
 				}
 			}
