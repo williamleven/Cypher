@@ -24,7 +24,8 @@ public class Room {
 	private final com.github.cypher.sdk.Room sdkRoom;
 	private final User activeUser;
 
-	private URL lasatAvatarURL = null;
+
+	private URL lastAvatarURL = null;
 
 	Room(Repository<User> repo, com.github.cypher.sdk.Room sdkRoom, User activeUser) {
 		this.sdkRoom = sdkRoom;
@@ -129,19 +130,19 @@ public class Room {
 		if(newImage == null && isPmChat()){
 			for (Member member: members) {
 				if (member.getUser() != activeUser){
-					if (lasatAvatarURL == null || lasatAvatarURL.equals(member.getUser().getAvatarUrl())){
+					if (lastAvatarURL == null || lastAvatarURL.equals(member.getUser().getAvatarUrl())){
 						avatar.setValue(member.getUser().getAvatar());
-						lasatAvatarURL = member.getUser().getAvatarUrl();
+						lastAvatarURL = member.getUser().getAvatarUrl();
 					}
 				}
 			}
 		}else{
 			try {
-				if (lasatAvatarURL == null || lasatAvatarURL.equals(sdkRoom.getAvatarUrl())){
+				if (lastAvatarURL == null || lastAvatarURL.equals(sdkRoom.getAvatarUrl())){
 					this.avatar.set(
 						newImage == null ? null : Util.createImage(newImage)
 					);
-					lasatAvatarURL = sdkRoom.getAvatarUrl();
+					lastAvatarURL = sdkRoom.getAvatarUrl();
 				}
 			} catch (IOException e) {
 				System.out.printf("IOException when converting user avatar image: %s\n", e);
