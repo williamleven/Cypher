@@ -23,6 +23,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 
@@ -49,6 +50,9 @@ public class RootPresenter {
 
 	@FXML
 	private ListView<RoomCollection> roomCollectionListView;
+
+	@FXML
+	private Button logoutButton;
 
 	private static final double ROOM_COLLECTION_LIST_CELL_HEIGHT =60;
 	private static final double ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM =5;
@@ -200,12 +204,14 @@ public class RootPresenter {
 
 	@FXML
 	private void logout() {
+		logoutButton.setDisable(true);
 		executor.handle(() -> {
 			try {
 				client.logout();
 			} catch (SdkException e) {
 				System.out.printf("SdkException when trying to logout - %s\n", e.getMessage());
 			}
+			Platform.runLater(() -> logoutButton.setDisable(false));
 		});
 	}
 

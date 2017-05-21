@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import java.lang.*?>
-<StackPane fx:id="mainStackPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.RootPresenter">
+<StackPane fx:id="mainStackPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.RootPresenter">
     <children>
         <HBox>
             <children>
@@ -29,7 +29,7 @@
                                 </graphic>
                             </Button>
                         </VBox>
-                        <Button layoutX="13.0" layoutY="370.0" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="60.0" style="-fx-min-width: 2px;" wrapText="true" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="21.0">
+                        <Button fx:id="logoutButton" layoutX="13.0" layoutY="370.0" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="60.0" style="-fx-min-width: 2px;" wrapText="true" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="21.0">
                             <graphic>
                                 <FontIcon iconColor="WHITE" iconLiteral="fa-angle-left" iconSize="40" textAlignment="CENTER" />
                             </graphic>
