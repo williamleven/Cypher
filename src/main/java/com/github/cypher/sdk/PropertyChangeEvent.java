@@ -6,8 +6,8 @@ public class PropertyChangeEvent<T> extends Event {
 	private final String property;
 	private final T value;
 
-	PropertyChangeEvent(ApiLayer api, int originServerTs, User sender, String eventId, int age, String property, T value) {
-		super(api, originServerTs, sender, eventId, age);
+	PropertyChangeEvent(ApiLayer api, int originServerTs, User sender, String eventId, String type, int age, String property, T value) {
+		super(api, originServerTs, sender, eventId, type, age);
 		this.property = property;
 		this.value = value;
 	}

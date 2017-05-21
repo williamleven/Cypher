@@ -8,18 +8,21 @@ public class Event {
 	private final long originServerTs;
 	private final User sender;
 	private final String eventId;
+	private final String type;
 	private final int age;
 
-	Event(ApiLayer api, long originServerTs, User sender, String eventId, int age) {
+	Event(ApiLayer api, long originServerTs, User sender, String eventId, String type, int age) {
 		this.api            = api;
 		this.originServerTs = originServerTs;
 		this.sender         = sender;
 		this.eventId        = eventId;
+		this.type           = type;
 		this.age            = age;
 	}
 
-	public long    getOriginServerTs(){ return originServerTs; }
+	public long   getOriginServerTs(){ return originServerTs; }
 	public User   getSender()         { return sender; }
 	public String getEventId()        { return eventId; }
+	public String getType()           { return type; }
 	public int    getAge()            { return age; }
 }

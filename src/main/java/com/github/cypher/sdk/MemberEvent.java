@@ -7,7 +7,7 @@ public class MemberEvent extends Event {
 	private final String membership;
 
 	MemberEvent(ApiLayer api, int originServerTs, User sender, String eventId, int age, String userId, String membership) {
-		super(api, originServerTs, sender, eventId, age);
+		super(api, originServerTs, sender, eventId, "m.room.member", age);
 		this.userId = userId;
 		this.membership = membership;
 	}
