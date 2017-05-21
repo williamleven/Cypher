@@ -49,14 +49,13 @@ public class ChatPresenter {
 	@FXML
 	private Label roomTopic;
 
-	private final ResourceBundle bundle = ResourceBundle.getBundle(
-		"com.github.cypher.gui.root.roomcollection.room.chat.chat",
-		settings.getLanguage());
+	private ResourceBundle bundle;
 
 
 	@FXML
 	private void initialize() {
 		eventBus.register(this);
+		bundle = ResourceBundle.getBundle("com.github.cypher.gui.root.roomcollection.room.chat.chat", settings.getLanguage());
 		messageBox.setDisable(client.getSelectedRoom() == null);
 	}
 
