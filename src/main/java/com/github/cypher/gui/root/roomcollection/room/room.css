@@ -1,14 +1,14 @@
 .member-list-anchor {
-    -fx-background-color: #e1e1e1;
+    -fx-background-color: -member-list-background;
 }
 
 .member-list {
-    -fx-background-color: #e1e1e1;
+    -fx-background-color: -member-list-background;
 }
 
 .member-list .list-cell {
     -fx-padding: 2 0 2 0;
-    -fx-background-color: #e1e1e1;
+    -fx-background-color: -member-list-background;
 }
 
 .member-list .scroll-bar:horizontal .increment-arrow,

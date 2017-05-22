@@ -1,4 +1,4 @@
 .member-list-cell {
     -fx-padding: 2 0 2 0;
-    -fx-background-color: #e1e1e1;
+    -fx-background-color: -member-item-background;
 }

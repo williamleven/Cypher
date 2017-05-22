@@ -27,4 +27,7 @@ AnchorPane {
 	-room-list-background: #f9f9f9;
 	-room-item-background: #e1e1e1;
 	-room-item-selection-color: #09cdda;
+
+	-member-list-background: -room-item-background;
+	-member-item-background: -room-item-background;
 }
