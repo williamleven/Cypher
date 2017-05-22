@@ -31,7 +31,7 @@ AnchorPane {
 
 /*Colors */
 * {
-	-fx-base: #404040;
+	-fx-color-base: #404040;
 	-fx-lighter: #808080;
 	-fx-soft-popup: #008CBA;
 	-fx-popup: #09CDDA;
