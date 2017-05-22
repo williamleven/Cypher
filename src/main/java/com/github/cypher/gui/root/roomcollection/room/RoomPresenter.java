@@ -22,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class RoomPresenter {
@@ -54,13 +55,11 @@ public class RoomPresenter {
 	private Parent settingsPane;
 	private boolean showRoomSettings;
 
-	private ResourceBundle bundle;
+	private final ResourceBundle bundle = ResourceBundle.getBundle("com.github.cypher.gui.root.roomcollection.room.room", Locale.getDefault());
 
 	@FXML
 	private void initialize() {
 		eventBus.register(this);
-
-		bundle = ResourceBundle.getBundle("com.github.cypher.gui.root.roomcollection.room.room", settings.getLanguage());;
 
 		ChatView chatView = new ChatView();
 		chat.getChildren().add(chatView.getView());

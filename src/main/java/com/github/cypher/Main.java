@@ -95,7 +95,7 @@ public class Main extends Application {
 		}
 
 		// Load labels from bundle
-		ResourceBundle labels = ResourceBundle.getBundle("com.github.cypher.labels", settings.getLanguage());
+		ResourceBundle labels = ResourceBundle.getBundle("com.github.cypher.labels", Locale.getDefault());
 
 		// Make sure application doesn't exit when main window is closed
 		Platform.setImplicitExit(false);

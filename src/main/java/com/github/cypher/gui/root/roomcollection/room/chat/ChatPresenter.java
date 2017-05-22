@@ -21,6 +21,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class ChatPresenter {
@@ -49,13 +50,14 @@ public class ChatPresenter {
 	@FXML
 	private Label roomTopic;
 
-	private ResourceBundle bundle;
+	private final ResourceBundle bundle = ResourceBundle.getBundle(
+		"com.github.cypher.gui.root.roomcollection.room.chat.chat",
+		Locale.getDefault());
 
 
 	@FXML
 	private void initialize() {
 		eventBus.register(this);
-		bundle = ResourceBundle.getBundle("com.github.cypher.gui.root.roomcollection.room.chat.chat", settings.getLanguage());
 		messageBox.setDisable(client.getSelectedRoom() == null);
 	}
 
