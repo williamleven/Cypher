@@ -31,10 +31,11 @@ abstract public class CustomListCell<T> extends ListCell<T> {
 	public void updateItem(T newModelComponent, boolean empty){
 		super.updateItem(newModelComponent, empty);
 
-		if (empty) {
+		if (empty || newModelComponent == null) {
 			// Clear and hide cell
-			setGraphic(null);
 			setModelComponent(null);
+			setText(null);
+			setGraphic(null);
 		} else {
 			// Populate and show cell
 			setModelComponent(newModelComponent);
@@ -46,9 +47,8 @@ abstract public class CustomListCell<T> extends ListCell<T> {
 	private void setModelComponent(T s) {
 		if (s != modelComponent) {
 			this.modelComponent = s;
-			if (s == null){
-				clearBindings();
-			}else{
+			clearBindings();
+			if (s != null){
 				updateBindings();
 			}
 		}

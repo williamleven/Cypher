@@ -52,6 +52,8 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 		}
 	};
 
+	private Message oldMessage = null;
+
 	private static final int LIST_CELL_PADDING = 19;
 
 	public EventListItemPresenter() {
@@ -81,6 +83,7 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 
 		if(event instanceof Message) {
 			Message message = (Message)event;
+			oldMessage = message;
 			author.textProperty().bind(new FXThreadedObservableValueWrapper<>(message.getSender().nameProperty()));
 
 			if(message.getFormattedBody() != null && !message.getFormattedBody().equals("")) {
@@ -105,15 +108,14 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 
 	@Override
 	protected void clearBindings() {
-		Event event = getModelComponent();
 		bodyContainer.getChildren().clear();
 		author.textProperty().unbind();
 		avatar.imageProperty().unbind();
 
-		if(event instanceof Message) {
-			Message message = (Message)event;
-			message.bodyProperty().removeListener(bodyChangeListener);
-			message.formattedBodyProperty().removeListener(bodyChangeListener);
+		if(oldMessage != null) {
+			oldMessage.bodyProperty().removeListener(bodyChangeListener);
+			oldMessage.formattedBodyProperty().removeListener(bodyChangeListener);
+			oldMessage = null;
 		}
 	}
 
