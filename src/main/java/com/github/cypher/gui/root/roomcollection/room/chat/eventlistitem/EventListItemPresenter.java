@@ -106,12 +106,14 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 	@Override
 	protected void clearBindings() {
 		Event event = getModelComponent();
+		bodyContainer.getChildren().clear();
+		author.textProperty().unbind();
+		avatar.imageProperty().unbind();
+
 		if(event instanceof Message) {
 			Message message = (Message)event;
-			author.textProperty().unbind();
 			message.bodyProperty().removeListener(bodyChangeListener);
 			message.formattedBodyProperty().removeListener(bodyChangeListener);
-			avatar.imageProperty().unbind();
 		}
 	}
 

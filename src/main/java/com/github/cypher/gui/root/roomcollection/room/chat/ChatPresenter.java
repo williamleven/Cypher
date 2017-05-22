@@ -3,10 +3,7 @@ package com.github.cypher.gui.root.roomcollection.room.chat;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
 import com.github.cypher.gui.FXThreadedObservableValueWrapper;
 import com.github.cypher.eventbus.ToggleEvent;
-import com.github.cypher.model.Client;
-import com.github.cypher.model.Event;
-import com.github.cypher.model.Room;
-import com.github.cypher.model.SdkException;
+import com.github.cypher.model.*;
 import com.github.cypher.settings.Settings;
 import com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem.EventListItemPresenter;
 import com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem.EventListItemView;
@@ -87,6 +84,13 @@ public class ChatPresenter {
 	private void initialize() {
 		eventBus.register(this);
 		messageBox.setDisable(client.getSelectedRoom() == null);
+
+		eventListView.setCellFactory(listView -> {
+			EventListItemView memberListItemView = new EventListItemView();
+			memberListItemView.getView();
+			return (EventListItemPresenter)memberListItemView.getPresenter();
+		});
+
 		eventListView.itemsProperty().addListener((observable, oldValue, newValue) -> {
 
 			if(eventListScrollBar != null) {
@@ -131,12 +135,6 @@ public class ChatPresenter {
 			}
 			backendListForEventView = new FXThreadedObservableListWrapper<>(room.getEvents());
 
-			eventListView.setCellFactory(listView -> {
-				EventListItemView memberListItemView = new EventListItemView();
-				memberListItemView.getView();
-				return (EventListItemPresenter)memberListItemView.getPresenter();
-			});
-
 			eventListView.setItems(backendListForEventView.getList());
 			InvalidationListener l = o -> {
 				if(scrollTo != null) {
@@ -144,6 +142,10 @@ public class ChatPresenter {
 				}
 			};
 			backendListForEventView.getList().addListener(l);
+
+			if(eventListScrollBar != null) {
+				scrollListener.changed(eventListScrollBar.valueProperty(), null, eventListScrollBar.getValue());
+			}
 		});
 	}
 
