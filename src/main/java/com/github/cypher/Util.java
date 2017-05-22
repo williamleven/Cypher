@@ -14,11 +14,13 @@ public class Util {
 
 	// Creates the user data folder path
 	static String getUserDataDirectoryPath(String applicationName) {
-		if (System.getenv("APPDATA") != null) { // Windows style
-			return System.getenv("APPDATA") + File.separator + capitalize(applicationName);
-		} else if (System.getenv("XDG_CONFIG_HOME") != null){ // config style
+		if (System.getenv("XDG_CONFIG_HOME") != null){ // XDG Base Directory Specification
 			return System.getProperty("XDG_CONFIG_HOME") + File.separator + "." + decapitalize(applicationName);
-		} else { //Unix style
+
+		} else if (System.getenv("APPDATA") != null) { // Windows default
+			return System.getenv("APPDATA") + File.separator + capitalize(applicationName);
+
+		}  else {                                         // Unix default
 			return System.getProperty("user.home") + File.separator + ".config" + File.separator + decapitalize(applicationName);
 		}
 	}
