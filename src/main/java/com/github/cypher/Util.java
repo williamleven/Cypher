@@ -19,7 +19,7 @@ public class Util {
 		} else if (System.getenv("XDG_CONFIG_HOME") != null){ // config style
 			return System.getProperty("XDG_CONFIG_HOME") + File.separator + "." + decapitalize(applicationName);
 		} else { //Unix style
-			return System.getProperty("user.home") + File.separator + "." + decapitalize(applicationName);
+			return System.getProperty("user.home") + File.separator + ".config" + File.separator + decapitalize(applicationName);
 		}
 	}
 }
