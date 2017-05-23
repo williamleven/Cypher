@@ -6,11 +6,11 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="56.0" prefWidth="56.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemPresenter">
+<StackPane fx:id="root" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" prefHeight="40.0" prefWidth="40.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollectionlistitem.RoomCollectionListItemPresenter">
     <children>
-      <ImageView fx:id="imageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
       </ImageView>
-      <Label fx:id="letterIdentifier" alignment="CENTER" contentDisplay="CENTER" style="-fx-font-size: 48px;" text="M" textFill="WHITE">
+      <Label fx:id="letterIdentifier" alignment="CENTER" contentDisplay="CENTER" style="-fx-font-size: 34px;" text="M" textFill="WHITE">
          <font>
             <Font size="44.0" />
          </font>

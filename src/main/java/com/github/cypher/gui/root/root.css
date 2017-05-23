@@ -1,5 +1,5 @@
 .server-list .list-cell{
-    -fx-padding: 0 0 10 0;
+    -fx-padding: 0 0 5 0;
     -fx-background-color: -fx-color-base;
 }
 

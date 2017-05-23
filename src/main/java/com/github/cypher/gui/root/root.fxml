@@ -15,31 +15,31 @@
             <children>
                 <AnchorPane minHeight="300.0" minWidth="-Infinity" style="-fx-background-color: -fx-color-base !important;">
                     <children>
-                         <ListView fx:id="roomCollectionListView" focusTraversable="false" prefHeight="0.0" prefWidth="65.0" style="-fx-background-color: -fx-color-base !important;" AnchorPane.bottomAnchor="155.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
+                         <ListView fx:id="roomCollectionListView" focusTraversable="false" prefHeight="0.0" prefWidth="49.0" style="-fx-background-color: -fx-color-base;" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <styleClass>
                         <String fx:value="server-list" />
                         <String fx:value="fancy-scroll" />
                      </styleClass>
                          </ListView>
-                  <VBox alignment="CENTER" AnchorPane.bottomAnchor="76.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                  <VBox alignment="CENTER" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                      <children>
-                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="56.0" prefWidth="56.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable">
+                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable">
                            <children>
-                                       <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="56" onMouseClicked="#openAddDialog" text="" translateY="2.0" />
+                                       <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="40" onMouseClicked="#openAddDialog" text="" translateY="2.0" />
                            </children>
                         </VBox>
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                  <VBox alignment="CENTER" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                      <children>
-                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="56.0" prefWidth="56.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable">
+                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable">
                            <children>
-                                      <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="56" onMouseClicked="#toggleSettings" textAlignment="CENTER" />
+                                      <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="40" onMouseClicked="#toggleSettings" textAlignment="CENTER" />
                            </children>
                         </VBox>
                      </children>
                   </VBox>
-                  <Separator layoutX="-57.0" layoutY="199.0" styleClass="base-separator" AnchorPane.bottomAnchor="140.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+                  <Separator layoutX="-57.0" layoutY="199.0" styleClass="base-separator" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
                     </children>
                 </AnchorPane>
                 <StackPane fx:id="rightSideStackPane" HBox.hgrow="ALWAYS" />
