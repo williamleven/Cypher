@@ -350,25 +350,27 @@ public class Room {
 			String memberId = event.get("state_key").getAsString();
 			String membership = content.get("membership").getAsString();
 
-			User user = userRepository.get(memberId);
-			user.update(event);
+			User sender = userRepository.get(senderId);
+			MemberEvent memberEvent = new MemberEvent(api, originServerTs, sender, eventId, age, memberId, membership);
 
-			if (membership.equals("join")) {
-				if (members.stream().noneMatch(m -> m.getUser().getId().equals(memberId))) {
+			if(isLatestStateEvent(memberEvent)) {
+				User user = userRepository.get(memberId);
+				user.update(event);
+
+				if (membership.equals("join") &&
+				   (members.stream().noneMatch(m -> m.getUser().getId().equals(memberId)))) {
 					members.add(new Member(user));
+				} else if (membership.equals("leave")) {
+					Optional<Member> optionalMember = members.stream().filter(m -> m.getUser().getId().equals(memberId)).findAny();
+					optionalMember.ifPresent(member -> members.remove(member));
 				}
-			} else if (membership.equals("leave")) {
-				Optional<Member> optionalMember = members.stream().filter(m -> m.getUser().getId().equals(memberId)).findAny();
-				optionalMember.ifPresent(member -> members.remove(member));
-			}
 
-			// Add membership event to the log
-			if(!events.containsKey(eventId)) {
-				User sender = userRepository.get(senderId);
-				events.put(
-						eventId,
-						new MemberEvent(api, originServerTs, sender, eventId, age, memberId, membership)
-				);
+				// Add membership event to the log
+				if(!events.containsKey(eventId)) {
+					events.put(eventId, memberEvent);
+				}
+
+				latestStateEvents.put(memberId, memberEvent);
 			}
 		}
 	}
@@ -407,8 +409,14 @@ public class Room {
 	}
 
 	private boolean isLatestStateEvent(Event event) {
-		return !latestStateEvents.containsKey(event.getType()) ||
-		       (latestStateEvents.get(event.getType()).getOriginServerTs() <= event.getOriginServerTs());
+		String key;
+		if(event instanceof MemberEvent) {
+			key = ((MemberEvent)event).getUserId();
+		} else {
+			key = event.getType();
+		}
+		return !latestStateEvents.containsKey(key) ||
+		       (latestStateEvents.get(key).getOriginServerTs() <= event.getOriginServerTs());
 	}
 
 	private <T> Event addPropertyChangeEvent(int originServerTs, String senderId, String eventId, String eventType, int age, String property, T value) {
