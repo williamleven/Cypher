@@ -36,7 +36,7 @@ public class Main extends Application {
 	private final Client client = ModelFactory.createClient(settings, eventBus, USER_DATA_DIRECTORY, SETTINGS_NAMESPACE);
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) {
 		Locale.setDefault(settings.getLanguage());
 		// Starts the Executors thread
 		executor.start();

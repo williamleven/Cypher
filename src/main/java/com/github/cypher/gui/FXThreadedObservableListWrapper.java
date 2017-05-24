@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 public class FXThreadedObservableListWrapper<T> {
 	private final ObservableList<T> sourceList;
 	private final ObservableList<T> delegatedList;
-	private ListChangeListener<? super T> sourceListListener; // CurrentRoomCollectionListener?
+	private final ListChangeListener<? super T> sourceListListener; // CurrentRoomCollectionListener?
 
 	public FXThreadedObservableListWrapper(ObservableList<T> sourceList) {
 		this.sourceList = sourceList;

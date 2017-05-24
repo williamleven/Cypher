@@ -12,8 +12,4 @@ public class SettingsPresenter {
 
 	@Inject
 	private Settings settings;
-
-	@FXML
-	private void initialize() {
-	}
 }

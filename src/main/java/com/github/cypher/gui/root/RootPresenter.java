@@ -74,12 +74,12 @@ public class RootPresenter {
 
 		// Only load login pane if user is not already logged in
 		// User might already be logged in if a valid session is available when the application is launched
-		if (!client.isLoggedIn()) {
+		if (client.isLoggedIn()) {
+			eventBus.post(ToggleEvent.SHOW_LOADING);
+		} else {
 			LoginView loginPane = new LoginView();
 			loginPane.getView().setUserData(loginPane.getPresenter());
 			mainStackPane.getChildren().add(loginPane.getView());
-		} else {
-			eventBus.post(ToggleEvent.SHOW_LOADING);
 		}
 
 		settingsPane = new SettingsView().getView();
