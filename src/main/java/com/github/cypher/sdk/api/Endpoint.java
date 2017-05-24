@@ -26,7 +26,8 @@ enum Endpoint {
 	ROOM_KICK         ("client/r0/rooms/{0}/kick"),          // {0} = roomId
 	ROOM_INVITE       ("client/r0/rooms/{0}/invite"),        // {0} = roomId
 	PRESENCE_LIST     ("client/r0/presence/list/{0}"),       // {0} = userId
-	MEDIA_DOWNLOAD    ("media/r0/download/{0}/{1}");         // {0} = serverName, {1} = mediaId
+	MEDIA_DOWNLOAD    ("media/r0/download/{0}/{1}"),         // {0} = serverName, {1} = mediaId
+	MEDIA_THUMBNAIL   ("media/r0/thumbnail/{0}/{1}");        // {0} = serverName, {1} = mediaId
 
 	/*
 		The code bellow allows for custom return of .toString() for each endpoint.
