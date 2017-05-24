@@ -57,8 +57,10 @@ public class Main extends Application {
 		RootView rootView = new RootView();
 
 		Scene scene = new Scene(rootView.getView());
-		final String uri = getClass().getResource("main.css").toExternalForm();
-		scene.getStylesheets().add(uri);
+		final String cssMain = getClass().getResource("main.css").toExternalForm();
+		final String cssScroll = getClass().getResource("scrollbars.css").toExternalForm();
+		scene.getStylesheets().add(cssMain);
+		scene.getStylesheets().add(cssScroll);
 		scene.getStylesheets().add("bootstrapfx.css");
 
 		primaryStage.setTitle("Cypher");

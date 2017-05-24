@@ -51,19 +51,12 @@ public class RootPresenter {
 	@FXML
 	private ListView<RoomCollection> roomCollectionListView;
 
-	@FXML
-	private Button logoutButton;
-
-	private static final double ROOM_COLLECTION_LIST_CELL_HEIGHT =60;
-	private static final double ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM =5;
-
 	private Parent settingsPane;
 	private boolean showSettings;
 	private Parent roomCollectionPane;
 	private Parent addDialogPane;
 	private boolean showAddDialog;
 	private Parent loadingPane;
-
 
 	@FXML
 	private void initialize() {
@@ -99,11 +92,6 @@ public class RootPresenter {
 		});
 
 		roomCollectionListView.setItems(new FXThreadedObservableListWrapper<>(client.getRoomCollections()).getList());
-
-		updateRoomCollectionListHeight();
-		client.getRoomCollections().addListener((ListChangeListener.Change<? extends RoomCollection> change) -> {
-			Platform.runLater(this::updateRoomCollectionListHeight);
-		});
 
 
 		roomCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -198,25 +186,8 @@ public class RootPresenter {
 		eventBus.post(ToggleEvent.TOGGLE_SETTINGS);
 	}
 
-	private void updateRoomCollectionListHeight() {
-		roomCollectionListView.setPrefHeight((ROOM_COLLECTION_LIST_CELL_HEIGHT + ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM) * client.getRoomCollections().size() );
-	}
-
 	@FXML
-	private void logout() {
-		logoutButton.setDisable(true);
-		executor.handle(() -> {
-			try {
-				client.logout();
-			} catch (SdkException e) {
-				System.out.printf("SdkException when trying to logout - %s\n", e.getMessage());
-			}
-			Platform.runLater(() -> logoutButton.setDisable(false));
-		});
-	}
-
-	@FXML
-	public void onAddButtonAction(ActionEvent actionEvent) {
+	public void openAddDialog() {
 		eventBus.post(ToggleEvent.SHOW_ADD_DIALOG);
 	}
 }
