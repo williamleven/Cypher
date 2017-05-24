@@ -32,7 +32,8 @@ public class User {
 
 		sdkUser.addAvatarListener((observable, oldValue, newValue) -> {
 			updateAvatar(newValue);
-		});
+		},
+			24);
 	}
 
 	private void updateAvatar(java.awt.Image image) {
