@@ -28,10 +28,11 @@ public class FXThreadedObservableValueWrapper<T> implements ObservableValue<T>{
 	}
 
 	@Override
-	public synchronized void addListener(ChangeListener<? super T> changeListener) {
-		// If first listener start listening to inner value
-		if (listeners.isEmpty()) {
-			changeListenerObject = (observable, oldValue, newValue) -> {
+	public void addListener(ChangeListener<? super T> changeListener) {
+		synchronized (this) {
+			// If first listener start listening to inner value
+			if (listeners.isEmpty()) {
+				changeListenerObject = (observable, oldValue, newValue) -> {
 					Platform.runLater(() -> {
 						synchronized (this) {
 							for (ChangeListener<? super T> l : listeners) {
@@ -39,33 +40,39 @@ public class FXThreadedObservableValueWrapper<T> implements ObservableValue<T>{
 							}
 						}
 					});
-			};
-			inner.addListener(changeListenerObject);
-		}
-		listeners.add(changeListener);
-	}
-
-	@Override
-	public synchronized void removeListener(ChangeListener changeListener) {
-		listeners.remove(changeListener);
-
-		// Remove listener on inner object if listeners list is empty
-		if (listeners.isEmpty()){
-			inner.removeListener(changeListenerObject);
-			changeListenerObject = null;
+				};
+				inner.addListener(changeListenerObject);
+			}
+			listeners.add(changeListener);
 		}
 	}
 
 	@Override
-	public synchronized T getValue() {
-		return inner.getValue();
+	public void removeListener(ChangeListener changeListener) {
+		synchronized (this) {
+			listeners.remove(changeListener);
+
+			// Remove listener on inner object if listeners list is empty
+			if (listeners.isEmpty()) {
+				inner.removeListener(changeListenerObject);
+				changeListenerObject = null;
+			}
+		}
 	}
 
 	@Override
-	public synchronized void addListener(InvalidationListener invalidationListener) {
-		// If first listener start listening to inner value
-		if (invalidationListeners.isEmpty()){
-			invalidationListenerObject = (observable) -> {
+	public T getValue() {
+		synchronized (this) {
+			return inner.getValue();
+		}
+	}
+
+	@Override
+	public void addListener(InvalidationListener invalidationListener) {
+		synchronized (this) {
+			// If first listener start listening to inner value
+			if (invalidationListeners.isEmpty()) {
+				invalidationListenerObject = (observable) -> {
 					Platform.runLater(() -> {
 						synchronized (this) {
 							for (InvalidationListener listener : invalidationListeners) {
@@ -73,20 +80,23 @@ public class FXThreadedObservableValueWrapper<T> implements ObservableValue<T>{
 							}
 						}
 					});
-			};
-			inner.addListener(invalidationListenerObject);
+				};
+				inner.addListener(invalidationListenerObject);
+			}
+			invalidationListeners.add(invalidationListener);
 		}
-		invalidationListeners.add(invalidationListener);
 	}
 
 	@Override
-	public synchronized void removeListener(InvalidationListener invalidationListener) {
-		invalidationListeners.remove(invalidationListener);
+	public void removeListener(InvalidationListener invalidationListener) {
+		synchronized (this) {
+			invalidationListeners.remove(invalidationListener);
 
-		// Remove listener on inner object if listeners list is empty
-		if (invalidationListeners.isEmpty()){
-			inner.removeListener(invalidationListenerObject);
-			invalidationListenerObject = null;
+			// Remove listener on inner object if listeners list is empty
+			if (invalidationListeners.isEmpty()) {
+				inner.removeListener(invalidationListenerObject);
+				invalidationListenerObject = null;
+			}
 		}
 	}
 }

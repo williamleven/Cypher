@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class Executor extends Thread {
 
 	// Queue of actions
-	private Queue<Runnable> queue = new ConcurrentLinkedQueue<>();
+	private final Queue<Runnable> queue = new ConcurrentLinkedQueue<>();
 
 	// Flag for handling interruptions that shouldn't kill the thread
 	private volatile boolean wakeUp = false;
@@ -21,10 +21,7 @@ public class Executor extends Thread {
 
 			// Get action.
 			current = queue.poll();
-			if (current != null) {
-				// execute action
-				current.run();
-			} else {
+			if (current == null) {
 				try {
 					// Sleep for a long time
 					Thread.sleep(100000);
@@ -35,6 +32,9 @@ public class Executor extends Thread {
 						isRunning = false;  // Otherwise, kill thread.
 					}
 				}
+			} else {
+				// execute action
+				current.run();
 			}
 		}
 	}
@@ -46,8 +46,10 @@ public class Executor extends Thread {
 	}
 
 	// Make the thread wake up from sleep
-	private synchronized void wakeUp() {
-		this.wakeUp = true;
-		this.interrupt();
+	private void wakeUp() {
+		synchronized (this) {
+			this.wakeUp = true;
+			this.interrupt();
+		}
 	}
 }

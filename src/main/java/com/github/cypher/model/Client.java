@@ -106,7 +106,7 @@ public class Client {
 		selectedRoom = null;
 	}
 
-	public User getActiveUser(){
+	public final User getActiveUser(){
 		return getUser(sdkClient.getActiveUser().getId());
 	}
 
@@ -254,13 +254,9 @@ public class Client {
 				addServer(mainServer);
 			}
 			boolean placed = false;
-			boolean firstServer = true;
 			for (Server server : servers) {
 				boolean placedHere = false;
 				for (String alias:room.aliasesList()) {
-					if (firstServer){
-						//System.out.printf("Alias: %50s\n", alias);
-					}
 					if (server.getAddress().equals(extractServer(alias))){
 						pmCollection.removeRoom(room);
 						genCollection.removeRoom(room);
@@ -273,7 +269,6 @@ public class Client {
 				if (!placedHere){
 					server.removeRoom(room);
 				}
-				firstServer = false;
 			}
 			// Place in General if not placed in any server
 			if (!placed) {

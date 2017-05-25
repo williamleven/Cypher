@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.net.URL;
 
 public class UserTest {
-	private ApiMock api = new ApiMock();
-	private User user = new User(api, "@morpheus:matrix.org");
+	private final ApiMock api = new ApiMock();
+	private final User user = new User(api, "@morpheus:matrix.org");
 
 	@Test
 	public void update() throws RestfulHTTPException, IOException {

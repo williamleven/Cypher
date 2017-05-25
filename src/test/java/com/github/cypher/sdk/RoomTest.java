@@ -10,8 +10,8 @@ import java.io.IOException;
 
 public class RoomTest {
 
-	private ApiMock api = new ApiMock();
-	private Room room = new Room(api, new Repository<User>((String id) -> {
+	private final ApiMock api = new ApiMock();
+	private final Room room = new Room(api, new Repository<User>((String id) -> {
 		return new User(api, id);
 	}), "!zion:matrix.org");
 

@@ -26,7 +26,7 @@ public class ApiMock implements ApiLayer {
 			data.add("presence", getPrecenceData());
 			data.add("rooms", getRoomData());
 			data.add("account_data", getAccountData());
-		} else if (since.equals("Test")) {
+		} else if ("Test".equals(since)) {
 			data.addProperty("next_batch", "");
 			data.add("presence", getNewPrecenceData());
 			data.add("rooms", getNewRoomData());
@@ -135,7 +135,7 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
-		if (username.equals("user") && password.equals("pass") && homeserver.equals("matrix.org")) {
+		if ("user".equals(username) && "pass".equals(password) && "matrix.org".equals(homeserver)) {
 			loggedIn = true; // Record that it was called and untempered with
 		}
 	}
@@ -190,11 +190,11 @@ public class ApiMock implements ApiLayer {
 	public JsonObject roomSendEvent(String roomId, String eventType, JsonObject content) throws RestfulHTTPException, IOException {
 
 		if (roomId.equals("!zion:matrix.org") &&
-		    eventType.equals("m.room.message") &&
+			"m.room.message".equals(eventType) &&
 		    content.has("body") &&
 		    content.has("msgtype") &&
-		    content.get("body").getAsString().equals("Down the rabbit hole") &&
-		    content.get("msgtype").getAsString().equals("m.text")) {
+			"Down the rabbit hole".equals(content.get("body").getAsString()) &&
+			"m.text".equals(content.get("msgtype").getAsString())) {
 			JsonObject response = new JsonObject();
 			response.addProperty("event_id", "OISAJdiojd8s");
 			textMessageSent = true;
