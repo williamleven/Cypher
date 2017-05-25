@@ -2,7 +2,10 @@ package com.github.cypher;
 
 import java.io.*;
 
-public class Util {
+public final class Util {
+
+	// Util class shouldn't be creatable
+	private Util(){}
 
 	static String capitalize(String name) {
 		return name.substring(0, 1).toUpperCase() + name.substring(1);

@@ -49,7 +49,6 @@ public class RoomCollectionPresenter {
 
 	private Parent directoryPane;
 	private boolean showDirectory;
-	private Parent roomPane;
 
 	private FXThreadedObservableListWrapper<Room> backendListForView;
 
@@ -58,7 +57,7 @@ public class RoomCollectionPresenter {
 		eventBus.register(this);
 		directoryPane = new DirectoryView().getView();
 		rightSideStackPane.getChildren().add(directoryPane);
-		roomPane = new RoomView().getView();
+		Parent roomPane = new RoomView().getView();
 		rightSideStackPane.getChildren().add(roomPane);
 
 		roomCollectionChanged(client.getSelectedRoomCollection());

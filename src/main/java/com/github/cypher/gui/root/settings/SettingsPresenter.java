@@ -16,13 +16,9 @@ public class SettingsPresenter {
 
 	@Inject
 	private Settings settings;
-
+  
 	@Inject
 	private Executor executor;
-
-	@FXML
-	private void initialize() {
-	}
 
 	@FXML
 	private Button logoutButton;
