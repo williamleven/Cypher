@@ -23,6 +23,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 
@@ -50,16 +51,12 @@ public class RootPresenter {
 	@FXML
 	private ListView<RoomCollection> roomCollectionListView;
 
-	private static final double ROOM_COLLECTION_LIST_CELL_HEIGHT =60;
-	private static final double ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM =5;
-
 	private Parent settingsPane;
 	private boolean showSettings;
 	private Parent roomCollectionPane;
 	private Parent addDialogPane;
 	private boolean showAddDialog;
 	private Parent loadingPane;
-
 
 	@FXML
 	private void initialize() {
@@ -70,12 +67,12 @@ public class RootPresenter {
 
 		// Only load login pane if user is not already logged in
 		// User might already be logged in if a valid session is available when the application is launched
-		if (!client.isLoggedIn()) {
+		if (client.isLoggedIn()) {
+			eventBus.post(ToggleEvent.SHOW_LOADING);
+		} else {
 			LoginView loginPane = new LoginView();
 			loginPane.getView().setUserData(loginPane.getPresenter());
 			mainStackPane.getChildren().add(loginPane.getView());
-		} else {
-			eventBus.post(ToggleEvent.SHOW_LOADING);
 		}
 
 		settingsPane = new SettingsView().getView();
@@ -95,11 +92,6 @@ public class RootPresenter {
 		});
 
 		roomCollectionListView.setItems(new FXThreadedObservableListWrapper<>(client.getRoomCollections()).getList());
-
-		updateRoomCollectionListHeight();
-		client.getRoomCollections().addListener((ListChangeListener.Change<? extends RoomCollection> change) -> {
-			Platform.runLater(this::updateRoomCollectionListHeight);
-		});
 
 
 		roomCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -194,23 +186,8 @@ public class RootPresenter {
 		eventBus.post(ToggleEvent.TOGGLE_SETTINGS);
 	}
 
-	private void updateRoomCollectionListHeight() {
-		roomCollectionListView.setPrefHeight((ROOM_COLLECTION_LIST_CELL_HEIGHT + ROOM_COLLECTION_LIST_CELL_PADDING_BOTTOM) * client.getRoomCollections().size() );
-	}
-
 	@FXML
-	private void logout() {
-		executor.handle(() -> {
-			try {
-				client.logout();
-			} catch (SdkException e) {
-				System.out.printf("SdkException when trying to logout - %s\n", e.getMessage());
-			}
-		});
-	}
-
-	@FXML
-	public void onAddButtonAction(ActionEvent actionEvent) {
+	public void openAddDialog() {
 		eventBus.post(ToggleEvent.SHOW_ADD_DIALOG);
 	}
 }

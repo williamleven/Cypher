@@ -11,6 +11,7 @@ public class GeneralCollection implements RoomCollection {
 	private final ObjectProperty<Image> imageProperty = new SimpleObjectProperty<>(GENERAL_COLLECTION_IMAGE); // Should this maybe be generated on first request instead?
 	private final ObservableList<Room> rooms = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
+	// Package private empty constructor
 	GeneralCollection(){}
 
 	@Override
