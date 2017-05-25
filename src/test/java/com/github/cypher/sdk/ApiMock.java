@@ -142,6 +142,7 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public void register(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
+		// Not used by the tests
 	}
 
 	@Override
@@ -168,7 +169,7 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public void setUserAvatarUrl(URL avatarUrl) throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
@@ -178,7 +179,7 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public void setUserDisplayName(String displayName) throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
@@ -189,7 +190,7 @@ public class ApiMock implements ApiLayer {
 	@Override
 	public JsonObject roomSendEvent(String roomId, String eventType, JsonObject content) throws RestfulHTTPException, IOException {
 
-		if (roomId.equals("!zion:matrix.org") &&
+		if ("!zion:matrix.org".equals(roomId) &&
 			"m.room.message".equals(eventType) &&
 		    content.has("body") &&
 		    content.has("msgtype") &&
@@ -211,17 +212,17 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public void setSession(Session session) {
-
+		// Not used by the tests
 	}
 
 	@Override
 	public void logout() throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
 	public void refreshToken() throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
@@ -251,22 +252,22 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public void postLeaveRoom(String roomId) throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
 	public void postKickFromRoom(String roomId, String reason, String userId) throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
 	public void postInviteToRoom(String roomId, String address, String idServer, String medium) throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
 	public void postInviteToRoom(String roomId, String userId) throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
