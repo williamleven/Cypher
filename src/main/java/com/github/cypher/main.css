@@ -28,3 +28,24 @@ AnchorPane {
 	-room-item-background: #e1e1e1;
 	-room-item-selection-color: #09cdda;
 }
+
+/*Colors */
+* {
+	-fx-color-base: #404040;
+	-fx-lighter: #808080;
+	-fx-soft-popup: #008CBA;
+	-fx-popup: #09CDDA;
+
+}
+
+.base-separator {
+	-fx-background-color: -fx-lighter;
+
+}
+
+.clickable:hover {
+	-fx-background-color: -fx-popup;
+	-fx-border-width: 1, 1, 1, 1;
+	-fx-border-color: -fx-soft-popup;
+	-fx-cursor: hand;
+}

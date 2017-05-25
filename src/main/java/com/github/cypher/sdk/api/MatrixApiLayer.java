@@ -475,4 +475,32 @@ public class MatrixApiLayer implements ApiLayer {
 			return null;
 		}
 	}
+	@Override
+	public InputStream getMediaContentThumbnail(URL mediaUrl, int size) throws RestfulHTTPException, IOException {
+		//Make parameter map
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("height", String.valueOf(size));
+		parameters.put("width", String.valueOf(size));
+		parameters.put("method", "crop");
+		URL url;
+
+
+		//Build request URL.
+		if (mediaUrl.getPort()!=-1) {
+			url = Util.UrlBuilder(session.getHomeServer(), Endpoint.MEDIA_THUMBNAIL, new Object[]{mediaUrl.getHost()+":"+mediaUrl.getPort(), mediaUrl.getPath().replaceFirst("/", "")}, parameters);
+		}
+		else {
+			url = Util.UrlBuilder(session.getHomeServer(), Endpoint.MEDIA_THUMBNAIL, new Object[]{mediaUrl.getHost(), mediaUrl.getPath().replaceFirst("/", "")}, parameters);
+		}
+		HttpURLConnection conn = null;
+		try {
+			// Setup the connection
+			conn = (HttpURLConnection)url.openConnection();
+			conn.setRequestMethod("GET");
+			return conn.getInputStream();
+		} catch (IOException e) {
+			Util.handleRestfulHTTPException(conn);
+			return null;
+		}
+	}
 }

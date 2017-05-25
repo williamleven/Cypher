@@ -24,6 +24,7 @@ public class Room {
 	private final com.github.cypher.sdk.Room sdkRoom;
 	private final User activeUser;
 
+
 	private URL lastAvatarURL = null;
 
 	Room(Repository<User> repo, com.github.cypher.sdk.Room sdkRoom, User activeUser) {
