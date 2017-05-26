@@ -25,7 +25,8 @@ public class User {
 	protected final StringProperty name               = new SimpleStringProperty(null);
 	protected final ObjectProperty<URL> avatarUrl     = new SimpleObjectProperty<>(null);
 	protected final ObjectProperty<Image> avatar      = new SimpleObjectProperty<>(null);
-	private Boolean avatarWanted = false;
+	private boolean avatarWanted = false;
+	private final Object avatarLock = new Object();
 	protected final ObjectProperty<Presence> presence = new SimpleObjectProperty<>(null);
 	protected final BooleanProperty isActive          = new SimpleBooleanProperty(false);
 	protected final LongProperty lastActiveAgo        = new SimpleLongProperty(0);
@@ -115,7 +116,7 @@ public class User {
 	}
 
 	private void updateAvatar() throws RestfulHTTPException, IOException{
-		synchronized (avatarWanted) {
+		synchronized (avatarLock) {
 			if (avatarWanted && avatarUrl.get() != null) {
 				avatar.set(ImageIO.read(api.getMediaContentThumbnail(avatarUrl.getValue(),avatarSize)));
 			} else {
@@ -142,7 +143,7 @@ public class User {
 	}
 
 	public void addAvatarListener(ChangeListener<? super Image> listener,int size ) {
-		synchronized (avatarWanted) {
+		synchronized (avatarLock) {
 			avatarListeners.add(listener);
 			avatarWanted = true;
 			try {
@@ -156,7 +157,7 @@ public class User {
 	}
 
 	public void removeAvatarListener(ChangeListener<? super Image> listener) {
-		synchronized (avatarWanted) {
+		synchronized (avatarLock) {
 			avatarListeners.remove(listener);
 			if (avatarListeners.isEmpty()) {
 				avatarWanted = false;
@@ -195,7 +196,7 @@ public class User {
 	public String getName() { return name.get(); }
 	public URL getAvatarUrl() { return avatarUrl.get(); }
 	public Image getAvatar() {
-		synchronized (avatarWanted) {
+		synchronized (avatarLock) {
 			boolean old = avatarWanted;
 			avatarWanted = true;
 			try {

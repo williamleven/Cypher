@@ -42,7 +42,8 @@ public class Room {
 	private final StringProperty topic = new SimpleStringProperty(null);
 	private final ObjectProperty<URL> avatarUrl = new SimpleObjectProperty<>(null);
 	private final ObjectProperty<Image> avatar = new SimpleObjectProperty<>(null);
-	private Boolean avatarWanted = false;
+	private boolean avatarWanted = false;
+	private final Object avatarLock = new Object();
 	private final ObjectProperty<PermissionTable> permissions = new SimpleObjectProperty<>(null);
 
 	private ObservableMap<String, Event> events =
@@ -249,7 +250,7 @@ public class Room {
 	}
 
 	private void updateAvatar() throws RestfulHTTPException, IOException{
-		synchronized (avatarWanted) {
+		synchronized (avatarLock) {
 			if (avatarWanted && avatarUrl.get() != null) {
 				avatar.set(ImageIO.read(api.getMediaContent(avatarUrl.getValue())));
 			} else {
@@ -369,7 +370,7 @@ public class Room {
 	}
 
 	public void addAvatarListener(ChangeListener<? super Image> listener) {
-		synchronized (avatarWanted) {
+		synchronized (avatarLock) {
 			avatarListeners.add(listener);
 			avatarWanted = true;
 			try {
@@ -380,7 +381,7 @@ public class Room {
 	}
 
 	public void removeAvatarListener(ChangeListener<? super Image> listener) {
-		synchronized (avatarWanted) {
+		synchronized (avatarLock) {
 			avatarListeners.remove(listener);
 			if (avatarListeners.isEmpty()) {
 				avatarWanted = false;
@@ -397,7 +398,7 @@ public class Room {
 	public String getTopic()     { return topic.get(); }
 	public URL    getAvatarUrl() { return avatarUrl.get(); }
 	public Image getAvatar()    {
-		synchronized (avatarWanted) {
+		synchronized (avatarLock) {
 			boolean old = avatarWanted;
 			avatarWanted = true;
 			try {
