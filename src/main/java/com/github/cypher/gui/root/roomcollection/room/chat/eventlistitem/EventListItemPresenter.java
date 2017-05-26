@@ -18,7 +18,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.jsoup.Jsoup;
@@ -31,6 +30,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class EventListItemPresenter extends CustomListCell<Event> {
+
+	private static final int LIST_CELL_PADDING = 19;
 
 	@Inject
 	private Client client;
@@ -51,6 +52,7 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 	private ImageView avatar;
 
 	private boolean formatted = false;
+
 	private ChangeListener<String> bodyChangeListener = (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
 		if(formatted) {
 			generateFormattedTextObjects(newValue);
@@ -58,8 +60,6 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 			generateTextObjects(newValue);
 		}
 	};
-
-	private static final int LIST_CELL_PADDING = 19;
 
 	public EventListItemPresenter() {
 		super.parentProperty().addListener((observable, oldParent, newParent) -> {
