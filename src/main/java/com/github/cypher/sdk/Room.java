@@ -47,6 +47,9 @@ public class Room {
 	private final ObjectProperty<PermissionTable> permissions = new SimpleObjectProperty<>(null);
 	private int avatarSize=24;
 
+	private URL loadedAvatarUrl = null;
+	private int loadedAvatarSize = 0;
+
 	private ObservableMap<String, Event> events =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
@@ -249,9 +252,6 @@ public class Room {
 			}
 		}
 	}
-
-	private URL loadedAvatarUrl = null;
-	private int loadedAvatarSize = 0;
 
 	private void updateAvatar() throws RestfulHTTPException, IOException{
 		synchronized (avatarLock) {

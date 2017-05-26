@@ -32,6 +32,9 @@ public class User {
 	protected final LongProperty lastActiveAgo        = new SimpleLongProperty(0);
 	private int avatarSize=24;
 
+	private URL loadedAvatarUrl = null;
+	private int loadedAvatarSize = 0;
+
 	private java.util.List<ChangeListener<? super Image>> avatarListeners = new ArrayList<>();
 
 	User(ApiLayer api, String id) {
@@ -113,8 +116,6 @@ public class User {
 			avatarUrl.set(null);
 		}
 	}
-	private URL loadedAvatarUrl = null;
-	private int loadedAvatarSize = 0;
 
 	private void updateAvatar() throws RestfulHTTPException, IOException{
 		synchronized (avatarLock) {
