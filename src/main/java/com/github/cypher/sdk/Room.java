@@ -250,10 +250,17 @@ public class Room {
 		}
 	}
 
+	private URL loadedAvatarUrl = null;
+	private int loadedAvatarSize = 0;
+
 	private void updateAvatar() throws RestfulHTTPException, IOException{
 		synchronized (avatarLock) {
-			if (avatarWanted && avatarUrl.get() != null) {
-				avatar.set(ImageIO.read(api.getMediaContentThumbnail(avatarUrl.getValue(), avatarSize)));
+			if (avatarWanted && avatarUrl.get() != null ) {
+				if (!avatarUrl.get().equals(loadedAvatarUrl) || avatarSize > loadedAvatarSize){
+					avatar.set(ImageIO.read(api.getMediaContentThumbnail(avatarUrl.getValue(),avatarSize)));
+					loadedAvatarUrl = avatarUrl.get();
+					loadedAvatarSize = avatarSize;
+				}
 			} else {
 				avatar.set(null);
 			}
