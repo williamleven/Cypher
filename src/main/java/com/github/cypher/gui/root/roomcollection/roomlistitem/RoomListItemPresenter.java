@@ -4,10 +4,13 @@ import com.github.cypher.gui.CustomListCell;
 import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.FXThreadedObservableValueWrapper;
 import com.github.cypher.model.Room;
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
@@ -42,7 +45,12 @@ public class RoomListItemPresenter extends CustomListCell<Room> {
 
 		name.textProperty().bind(new FXThreadedObservableValueWrapper<>(room.nameProperty()));
 		executor.handle(() -> {
-			avatar.imageProperty().bind(new FXThreadedObservableValueWrapper<>(room.avatarProperty()));
+			ObjectProperty<Image> image = room.avatarProperty();
+			Platform.runLater(() -> {
+				if (room.equals(getModelComponent())) {
+					avatar.imageProperty().bind(new FXThreadedObservableValueWrapper<>(image));
+				}
+			});
 		});
 		topic.textProperty().bind(new FXThreadedObservableValueWrapper<>(room.topicProperty()));
 	}

@@ -6,6 +6,8 @@ import com.github.cypher.gui.FXThreadedObservableValueWrapper;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Event;
 import com.github.cypher.model.Message;
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -13,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -82,6 +85,7 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 	@Override
 	protected void updateBindings() {
 		Event event = getModelComponent();
+		System.out.printf("Update bindings called %n");
 
 		if(event instanceof Message) {
 			Message message = (Message)event;
@@ -104,7 +108,12 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 				generateTextObjects(message.getBody());
 			}
 			executor.handle(() -> {
-				avatar.imageProperty().bind(new FXThreadedObservableValueWrapper<>(message.getSender().avatarProperty()));
+				ObjectProperty<Image> image = message.getSender().avatarProperty();
+				Platform.runLater(() -> {
+					if(message.equals(getModelComponent())){
+						avatar.imageProperty().bind(new FXThreadedObservableValueWrapper<>(image));
+					}
+				});
 			});
 		}
 	}
