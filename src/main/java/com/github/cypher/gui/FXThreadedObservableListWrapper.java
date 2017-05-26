@@ -13,11 +13,13 @@ public class FXThreadedObservableListWrapper<T> {
 	private final ObservableList<T> delegatedList;
 	private InvalidationListener sourceListListener; // CurrentRoomCollectionListener?
 
+	@SuppressWarnings("unchecked")
 	public FXThreadedObservableListWrapper(ObservableList<T> sourceList) {
 		this.sourceList = sourceList;
 		this.delegatedList = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
-		delegatedList.addAll(sourceList);
-		sourceListListener = i -> Platform.runLater(() -> delegatedList.setAll(sourceList));
+		Platform.runLater(() -> delegatedList.addAll(sourceList.toArray((T[])new Object[sourceList.size()])));
+		sourceListListener = i -> Platform.runLater(() ->
+			delegatedList.setAll(sourceList.toArray((T[])new Object[sourceList.size()])));
 		sourceList.addListener(sourceListListener);
 	}
 
