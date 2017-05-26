@@ -85,7 +85,6 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 	@Override
 	protected void updateBindings() {
 		Event event = getModelComponent();
-		System.out.printf("Update bindings called %n");
 
 		if(event instanceof Message) {
 			Message message = (Message)event;
