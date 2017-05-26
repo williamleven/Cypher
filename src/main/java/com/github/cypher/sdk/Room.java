@@ -42,6 +42,7 @@ public class Room {
 	private final StringProperty topic = new SimpleStringProperty(null);
 	private final ObjectProperty<URL> avatarUrl = new SimpleObjectProperty<>(null);
 	private final ObjectProperty<Image> avatar = new SimpleObjectProperty<>(null);
+	private Boolean avatarWanted = false;
 	private final ObjectProperty<PermissionTable> permissions = new SimpleObjectProperty<>(null);
 
 	private ObservableMap<String, Event> events =
@@ -75,6 +76,8 @@ public class Room {
 			aliases.setAll(list);
 		});
 	}
+
+	private List<ChangeListener<? super Image>> avatarListeners = new ArrayList<>();
 
 	public void addEventListener(MapChangeListener<String, Event> listener) {
 		events.addListener(listener);
@@ -234,18 +237,26 @@ public class Room {
 				try {
 					URL newAvatarUrl = new URL(data.get(key).getAsString());
 					if (!newAvatarUrl.equals(avatarUrl.getValue())) {
-						avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
 						this.avatarUrl.set(newAvatarUrl);
+						updateAvatar();
 					}
 					break;
 				} catch(RestfulHTTPException | IOException e) {
-					avatar.set(null);
 					avatarUrl.set(null);
 				}
 			}
 		}
 	}
 
+	private void updateAvatar() throws RestfulHTTPException, IOException{
+		synchronized (avatarWanted) {
+			if (avatarWanted && avatarUrl.get() != null) {
+				avatar.set(ImageIO.read(api.getMediaContent(avatarUrl.getValue())));
+			} else {
+				avatar.set(null);
+			}
+		}
+	}
 
 	private void parseMessageEvent(int originServerTs, String sender, String eventId, int age, JsonObject content) {
 		User author = userRepository.get(sender);
@@ -358,11 +369,24 @@ public class Room {
 	}
 
 	public void addAvatarListener(ChangeListener<? super Image> listener) {
-		avatar.addListener(listener);
+		synchronized (avatarWanted) {
+			avatarListeners.add(listener);
+			avatarWanted = true;
+			try {
+				updateAvatar();
+			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
+			avatar.addListener(listener);
+		}
 	}
 
 	public void removeAvatarListener(ChangeListener<? super Image> listener) {
-		avatar.removeListener(listener);
+		synchronized (avatarWanted) {
+			avatarListeners.remove(listener);
+			if (avatarListeners.isEmpty()) {
+				avatarWanted = false;
+			}
+			avatar.removeListener(listener);
+		}
 	}
 
 	/**
@@ -372,7 +396,16 @@ public class Room {
 	public String getName()      { return name.get(); }
 	public String getTopic()     { return topic.get(); }
 	public URL    getAvatarUrl() { return avatarUrl.get(); }
-	public Image getAvatar()    { return avatar.get(); }
+	public Image getAvatar()    {
+		synchronized (avatarWanted) {
+			avatarWanted = true;
+			try {
+				updateAvatar();
+			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
+			avatarWanted = false;
+			return avatar.get();
+		}
+	}
 
 	public Map<String, Event> getEvents() { return new HashMap<>(events); }
 	public int getEventCount() { return events.size(); }
