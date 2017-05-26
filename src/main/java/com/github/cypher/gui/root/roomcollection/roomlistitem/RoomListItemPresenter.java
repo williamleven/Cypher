@@ -51,6 +51,7 @@ public class RoomListItemPresenter extends CustomListCell<Room> {
 	protected void clearBindings() {
 		name.textProperty().unbind();
 		avatar.imageProperty().unbind();
+		avatar.imageProperty().set(null);
 		topic.textProperty().unbind();
 	}
 }

@@ -118,6 +118,7 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 			message.bodyProperty().removeListener(bodyChangeListener);
 			message.formattedBodyProperty().removeListener(bodyChangeListener);
 			avatar.imageProperty().unbind();
+			avatar.imageProperty().set(null);
 		}
 	}
 
