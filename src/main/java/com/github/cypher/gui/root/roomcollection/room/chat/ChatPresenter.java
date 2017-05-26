@@ -1,16 +1,15 @@
 package com.github.cypher.gui.root.roomcollection.room.chat;
 
+import com.github.cypher.eventbus.ToggleEvent;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
 import com.github.cypher.gui.FXThreadedObservableValueWrapper;
-import com.github.cypher.eventbus.ToggleEvent;
-import com.github.cypher.gui.FXThreadedObservableValueWrapper;
-import com.github.cypher.settings.Settings;
 import com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem.EventListItemPresenter;
 import com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem.EventListItemView;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Event;
 import com.github.cypher.model.Room;
 import com.github.cypher.model.SdkException;
+import com.github.cypher.settings.Settings;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;

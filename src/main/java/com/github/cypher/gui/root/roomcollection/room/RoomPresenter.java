@@ -2,25 +2,28 @@ package com.github.cypher.gui.root.roomcollection.room;
 
 import com.github.cypher.eventbus.ToggleEvent;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
+import com.github.cypher.gui.root.roomcollection.room.chat.ChatView;
 import com.github.cypher.gui.root.roomcollection.room.memberlistitem.MemberListItemPresenter;
 import com.github.cypher.gui.root.roomcollection.room.memberlistitem.MemberListItemView;
+import com.github.cypher.gui.root.roomcollection.room.settings.SettingsView;
+import com.github.cypher.model.Client;
 import com.github.cypher.model.Member;
 import com.github.cypher.model.Room;
 import com.github.cypher.settings.Settings;
-import com.github.cypher.gui.root.roomcollection.room.chat.ChatView;
-import com.github.cypher.gui.root.roomcollection.room.settings.SettingsView;
-import com.github.cypher.model.Client;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class RoomPresenter {
 
@@ -43,11 +46,16 @@ public class RoomPresenter {
 	private AnchorPane chat;
 
 	@FXML
+	private Label membersLabel;
+
+	@FXML
 	private ListView<Member> memberListView;
 	private FXThreadedObservableListWrapper<Member> backendListForMemberView;
 
 	private Parent settingsPane;
 	private boolean showRoomSettings;
+
+	private final ResourceBundle bundle = ResourceBundle.getBundle("com.github.cypher.gui.root.roomcollection.room.room", Locale.getDefault());
 
 	@FXML
 	private void initialize() {
@@ -104,6 +112,10 @@ public class RoomPresenter {
 			});
 
 			memberListView.setItems(backendListForMemberView.getList());
+			//Fix that is needed for css to work properly.
+			memberListView.getSelectionModel().clearSelection();
+			//TODO: Fix this so that the label is updated when room.getMembersProperty change!
+			membersLabel.setText(bundle.getString("members") + " - " + room.getMemberCount());
 		});
 	}
 }
