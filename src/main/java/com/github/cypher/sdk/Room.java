@@ -238,7 +238,7 @@ public class Room {
 						this.avatarUrl.set(newAvatarUrl);
 					}
 					break;
-				} catch(IOException e) {
+				} catch(RestfulHTTPException | IOException e) {
 					avatar.set(null);
 					avatarUrl.set(null);
 				}

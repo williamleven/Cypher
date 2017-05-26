@@ -99,7 +99,7 @@ public class User {
 					avatar.set(ImageIO.read(api.getMediaContentThumbnail(newAvatarUrl,avatarSize)));
 				}
 				avatarUrl.set(newAvatarUrl);
-			} catch (IOException e) {
+			} catch (RestfulHTTPException | IOException e) {
 				avatar.set(null);
 				avatarUrl.set(null);
 			}
