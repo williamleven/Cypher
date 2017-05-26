@@ -38,7 +38,7 @@ public class Room {
 
 		topic = new SimpleStringProperty(sdkRoom.getTopic());
 		avatarUrl = new SimpleObjectProperty<>(sdkRoom.getAvatarUrl());
-		avatar = new SimpleObjectProperty<>(null);
+		avatar = new SimpleObjectProperty<>();
 		canonicalAlias = new SimpleStringProperty(sdkRoom.getCanonicalAlias());
 		members = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 		for (com.github.cypher.sdk.Member sdkMember : sdkRoom.getMembers()) {
