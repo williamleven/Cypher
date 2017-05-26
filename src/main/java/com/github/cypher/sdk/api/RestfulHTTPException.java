@@ -77,9 +77,9 @@ public class RestfulHTTPException extends HTTPException {
 	 */
 	@Override
 	public String getMessage() {
-		if (!errorMessage.equals("")) {
+		if (!errorMessage.isEmpty()) {
 			return Integer.toString(super.getStatusCode()).concat(": ").concat(errorMessage);
-		} else if (!errorCode.equals("")) {
+		} else if (!errorCode.isEmpty()) {
 			return Integer.toString(super.getStatusCode()).concat(": ").concat(errorCode);
 		} else {
 			return Integer.toString(super.getStatusCode());

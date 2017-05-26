@@ -85,7 +85,7 @@ public class Main extends Application {
 	}
 
 	private boolean useSystemTray() {
-		return (settings.getUseSystemTray() && SystemTray.get() != null);
+		return settings.getUseSystemTray() && SystemTray.get() != null;
 	}
 
 	private void addTrayIcon(Stage primaryStage) {

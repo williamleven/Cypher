@@ -1,6 +1,7 @@
 package com.github.cypher.sdk;
 
-import com.github.cypher.sdk.api.*;
+import com.github.cypher.sdk.api.ApiLayer;
+import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -11,7 +12,9 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ListChangeListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.MapChangeListener;
@@ -430,6 +433,6 @@ public class Room {
 	public List<Member> getMembers() { return new ArrayList<>(members); }
 	public int getMemberCount() { return members.size(); }
 
-	public String[] getAliases() { return aliases.toArray(new String[0]); }
+	public String[] getAliases() { return aliases.toArray(new String[aliases.size()]); }
 	public String getCanonicalAlias() { return canonicalAlias.get(); }
 }

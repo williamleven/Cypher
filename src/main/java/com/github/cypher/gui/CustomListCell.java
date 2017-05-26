@@ -44,7 +44,8 @@ abstract public class CustomListCell<T> extends ListCell<T> {
 
 	// Populate, update or clear the cell
 	private void setModelComponent(T s) {
-		if (s != modelComponent) {
+		if (s == null && modelComponent != null ||
+		    s != null &&!s.equals(modelComponent)) {
 			this.modelComponent = s;
 			if (s == null){
 				clearBindings();
