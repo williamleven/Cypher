@@ -59,6 +59,8 @@ public class Room {
 
 	private final StringProperty canonicalAlias = new SimpleStringProperty();
 
+	private List<ChangeListener<? super Image>> avatarListeners = new ArrayList<>();
+
 	Room(ApiLayer api, Repository<User> userRepository, String id) {
 		this.api = api;
 		this.userRepository = userRepository;
@@ -76,8 +78,6 @@ public class Room {
 			aliases.setAll(list);
 		});
 	}
-
-	private List<ChangeListener<? super Image>> avatarListeners = new ArrayList<>();
 
 	public void addEventListener(MapChangeListener<String, Event> listener) {
 		events.addListener(listener);
@@ -398,11 +398,12 @@ public class Room {
 	public URL    getAvatarUrl() { return avatarUrl.get(); }
 	public Image getAvatar()    {
 		synchronized (avatarWanted) {
+			boolean old = avatarWanted;
 			avatarWanted = true;
 			try {
 				updateAvatar();
 			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
-			avatarWanted = false;
+			avatarWanted = old;
 			return avatar.get();
 		}
 	}
