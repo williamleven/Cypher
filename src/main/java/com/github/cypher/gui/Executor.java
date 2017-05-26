@@ -47,7 +47,9 @@ public class Executor extends Thread {
 
 	// Make the thread wake up from sleep
 	private synchronized void wakeUp() {
-		this.wakeUp = true;
-		this.interrupt();
+		if (!wakeUp) {
+			this.wakeUp = true;
+			this.interrupt();
+		}
 	}
 }
