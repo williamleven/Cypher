@@ -53,7 +53,7 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 
 	private boolean formatted = false;
 
-	private ChangeListener<String> bodyChangeListener = (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+	private final ChangeListener<String> bodyChangeListener = (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
 		if(formatted) {
 			generateFormattedTextObjects(newValue);
 		} else {
@@ -63,7 +63,9 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 
 	public EventListItemPresenter() {
 		super.parentProperty().addListener((observable, oldParent, newParent) -> {
-			if(newParent != null) {
+			if(newParent == null) {
+				root.maxWidthProperty().unbind();
+			} else {
 				Parent recursiveParent = newParent;
 				while(recursiveParent != null && !(recursiveParent instanceof ListView)) {
 					recursiveParent = recursiveParent.getParent();
@@ -71,8 +73,6 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 				if(recursiveParent != null) {
 					root.maxWidthProperty().bind(((ListView)recursiveParent).widthProperty().subtract(LIST_CELL_PADDING));
 				}
-			} else {
-				root.maxWidthProperty().unbind();
 			}
 		});
 	}
@@ -90,11 +90,11 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 			Message message = (Message)event;
 			author.textProperty().bind(new FXThreadedObservableValueWrapper<>(message.getSender().nameProperty()));
 
-			if(message.getFormattedBody() != null && !message.getFormattedBody().equals("")) {
+			if(message.getFormattedBody() == null || message.getFormattedBody().equals("")) {
+				new FXThreadedObservableValueWrapper<>(message.bodyProperty()).addListener(bodyChangeListener);
+			} else {
 				formatted = true;
 				new FXThreadedObservableValueWrapper<>(message.formattedBodyProperty()).addListener(bodyChangeListener);
-			} else {
-				new FXThreadedObservableValueWrapper<>(message.bodyProperty()).addListener(bodyChangeListener);
 			}
 
 			if(formatted) {
@@ -143,8 +143,9 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 		parseFormattedMessageNode(document.body(), new LinkedList<>());
 	}
 
-	private void parseFormattedMessageNode(org.jsoup.nodes.Node node, List<Element> parents) {
+	private void parseFormattedMessageNode(org.jsoup.nodes.Node node, List<Element> p) {
 		List textFlowList = bodyContainer.getChildren();
+		List<Element> parents = p;
 
 		if(node instanceof TextNode) {
 			// Ignore TextNodes containing only whitespace
@@ -158,22 +159,22 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 				for(Element element : parents) {
 					String tagName = element.tagName();
 
-					if       (tagName.equals("ul")) { // Begin bullet list
-					} else if(tagName.equals("ol")) { // TODO: Begin numbered list
-					} else if(tagName.equals("li")) {
+					if       ("ul".equals(tagName)) { // Begin bullet list
+					} else if("ol".equals(tagName)) { // TODO: Begin numbered list
+					} else if("li".equals(tagName)) {
 						// List item
 						textFlowList.add(new Text(" • "));
-					} else if(tagName.equals("blockquote")) {
+					} else if("blockquote".equals(tagName)) {
 						textObject.getStyleClass().add("block-quote");
-					} else if(tagName.equals("pre")) {
+					} else if("pre".equals(tagName)) {
 						// Preceeds a <code> tag to specify a multiline block
 						pre = true;
-					} else if(tagName.equals("code")) {
+					} else if("code".equals(tagName)) {
 						// Monospace and TODO: code highlighting
-						if(!pre) {
-							textObject.getStyleClass().add("inline-monospace");
-						} else {
+						if(pre) {
 							textObject.getStyleClass().add("block-monospace");
+						} else {
+							textObject.getStyleClass().add("inline-monospace");
 						}
 						break; // We don't care about anything appearing within a <code> tag
 					} else {

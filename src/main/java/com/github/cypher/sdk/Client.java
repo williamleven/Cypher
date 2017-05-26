@@ -28,19 +28,16 @@ public class Client {
 
 	private final Repository<User> users;
 
-	private ObservableMap<String, String> accountData =
+	private final ObservableMap<String, String> accountData =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
-	public void addAccountDataListener   (MapChangeListener<String, String> listener) { accountData.addListener(listener);    }
-	public void removeAccountDataListener(MapChangeListener<String, String> listener) { accountData.removeListener(listener); }
-
-	private ObservableMap<String, Room> joinRooms =
+	private final ObservableMap<String, Room> joinRooms =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
-	private ObservableMap<String, Room> inviteRooms =
+	private final ObservableMap<String, Room> inviteRooms =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
-	private ObservableMap<String, Room> leaveRooms =
+	private final ObservableMap<String, Room> leaveRooms =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
 	public void addJoinRoomsListener     (MapChangeListener<String, Room> listener) { joinRooms.addListener(listener);      }
@@ -49,6 +46,9 @@ public class Client {
 	public void removeInviteRoomsListener(MapChangeListener<String, Room> listener) { inviteRooms.removeListener(listener); }
 	public void addLeaveRoomsListener    (MapChangeListener<String, Room> listener) { leaveRooms.addListener(listener);     }
 	public void removeLeaveRoomsListener (MapChangeListener<String, Room> listener) { leaveRooms.removeListener(listener);  }
+
+	public void addAccountDataListener   (MapChangeListener<String, String> listener) { accountData.addListener(listener);    }
+	public void removeAccountDataListener(MapChangeListener<String, String> listener) { accountData.removeListener(listener); }
 
 	/**
 	 * @see com.github.cypher.sdk.api.ApiLayer

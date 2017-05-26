@@ -15,7 +15,9 @@ import java.util.Map;
 /*
 	Provides utils for the ApiLayer
  */
-public class Util {
+public final class Util {
+
+	private Util() {}
 
 	/*
 		Build a URL with a specified set of parameters
@@ -143,6 +145,6 @@ public class Util {
 		}
 
 		@Override
-		public void connect() throws IOException {}
+		public void connect() throws IOException {} // Matrix Media URLs can't be used to establish a connection.
 	}
 }
