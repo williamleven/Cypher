@@ -1,6 +1,8 @@
 package com.github.cypher.sdk;
 
-import com.github.cypher.sdk.api.*;
+import com.github.cypher.sdk.api.ApiLayer;
+import com.github.cypher.sdk.api.RestfulHTTPException;
+import com.github.cypher.sdk.api.Session;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -19,14 +21,12 @@ import java.util.Map;
  */
 public class Client {
 
-	private ApiLayer api;
+	private final ApiLayer api;
 	private String lastSyncMarker = null;
 
 	private final String settingsNamespace;
 
-	private Repository<User> users = new Repository<>((String id) -> {
-		return new User(api, id);
-	});
+	private final Repository<User> users;
 
 	private ObservableMap<String, String> accountData =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
@@ -57,6 +57,9 @@ public class Client {
 	Client(ApiLayer api, String settingsNamespace) {
 		this.api = api;
 		this.settingsNamespace = settingsNamespace;
+		users = new Repository<>((String id) -> {
+			return new User(api, id);
+		});
 	}
 
 	public Session getSession() {

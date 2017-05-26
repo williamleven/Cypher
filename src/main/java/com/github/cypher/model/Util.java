@@ -8,7 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class Util {
+public final class Util {
 
 	// Check if sting could be a roomcollection
 	static boolean isHomeserver(String s) {
@@ -32,9 +32,11 @@ public class Util {
 
 	/**
 	 * Code taken from: <a href="https://community.oracle.com/thread/2238566">oracle community.</a>
-	 * Comments added.
+	 * Comments and slight modifications added.
 	 */
 	public static javafx.scene.image.Image createImage(java.awt.Image image) throws IOException {
+
+		java.awt.Image imageReady;
 
 		// Make sure the image is rendered
 		if (!(image instanceof RenderedImage)) {
@@ -46,16 +48,20 @@ public class Util {
 			g.drawImage(image, 0, 0, null);
 			g.dispose();
 
-			image = bufferedImage;
+			imageReady = bufferedImage;
+		}else {
+			imageReady = image;
 		}
 
 		// Convert image to byte array
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ImageIO.write((RenderedImage) image, "png", out);
+		ImageIO.write((RenderedImage) imageReady, "png", out);
 		out.flush();
 
 		// Construct FX-image from byte array
 		ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
 		return new javafx.scene.image.Image(in);
 	}
+
+	private Util(){}
 }

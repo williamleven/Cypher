@@ -7,7 +7,12 @@ import com.github.cypher.gui.root.roomcollection.directory.DirectoryView;
 import com.github.cypher.gui.root.roomcollection.room.RoomView;
 import com.github.cypher.gui.root.roomcollection.roomlistitem.RoomListItemPresenter;
 import com.github.cypher.gui.root.roomcollection.roomlistitem.RoomListItemView;
-import com.github.cypher.model.*;
+import com.github.cypher.model.Room;
+import com.github.cypher.model.Client;
+import com.github.cypher.model.RoomCollection;
+import com.github.cypher.model.PMCollection;
+import com.github.cypher.model.GeneralCollection;
+import com.github.cypher.model.Server;
 import com.github.cypher.settings.Settings;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -24,7 +29,7 @@ import java.util.ResourceBundle;
 
 public class RoomCollectionPresenter {
 
-	private ResourceBundle bundle = ResourceBundle.getBundle(
+	private final ResourceBundle bundle = ResourceBundle.getBundle(
 		"com.github.cypher.gui.root.roomcollection.roomcollection",
 		Locale.getDefault()
 	);

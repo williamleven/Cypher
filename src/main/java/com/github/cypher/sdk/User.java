@@ -1,6 +1,7 @@
 package com.github.cypher.sdk;
 
-import com.github.cypher.sdk.api.*;
+import com.github.cypher.sdk.api.ApiLayer;
+import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.google.gson.JsonObject;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
@@ -8,7 +9,6 @@ import javafx.beans.value.ChangeListener;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**

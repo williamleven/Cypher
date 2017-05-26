@@ -4,7 +4,7 @@ import com.github.cypher.sdk.SdkFactory;
 import com.github.cypher.settings.Settings;
 import com.google.common.eventbus.EventBus;
 
-public class ModelFactory {
+public final class ModelFactory {
 	public static Client createClient(Settings settings, EventBus eventBus, String userDataDirectory, String settingsNamespace){
 		return new Client(() -> SdkFactory.createClient(settingsNamespace),
 		                  settings,
@@ -12,4 +12,6 @@ public class ModelFactory {
 		                  userDataDirectory
 		);
 	}
+
+	private ModelFactory(){}
 }
