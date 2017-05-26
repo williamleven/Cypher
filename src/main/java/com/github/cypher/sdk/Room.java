@@ -23,7 +23,6 @@ import javafx.collections.ObservableMap;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -47,10 +46,10 @@ public class Room {
 	private final ObjectProperty<Image> avatar = new SimpleObjectProperty<>(null);
 	private final ObjectProperty<PermissionTable> permissions = new SimpleObjectProperty<>(null);
 
-	private ObservableMap<String, Event> events =
+	private final ObservableMap<String, Event> events =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
-	private ObservableList<Member> members =
+	private final ObservableList<Member> members =
 		FXCollections.synchronizedObservableList(new ObservableListWrapper<Member>(new ArrayList<>()));
 
 	private final ObservableList<String> aliases =
@@ -163,27 +162,27 @@ public class Room {
 
 			JsonObject content = event.get("content").getAsJsonObject();
 
-			if (eventType.equals("m.room.message")) {
+			if        ("m.room.message".equals(eventType)) {
 				parseMessageEvent(originServerTs, sender, eventId, age, content);
-			} else if (eventType.equals("m.room.member")) {
+			} else if ("m.room.member".equals(eventType)) {
 				parseMemberEvent(event, originServerTs, sender, eventId, age, content);
-			} else if (eventType.equals("m.room.name")) {
+			} else if ("m.room.name".equals(eventType)) {
 				parseNameData(content);
 				addPropertyChangeEvent(originServerTs, sender, eventId, age, "name", name.getValue());
-			} else if (eventType.equals("m.room.topic")) {
+			} else if ("m.room.topic".equals(eventType)) {
 				parseTopicData(content);
 				addPropertyChangeEvent(originServerTs, sender, eventId, age, "topic", topic.getValue());
-			} else if (eventType.equals("m.room.avatar")) {
+			} else if ("m.room.avatar".equals(eventType)) {
 				parseAvatarUrlData(content);
 				addPropertyChangeEvent(originServerTs, sender, eventId, age, "avatar_url", avatarUrl.getValue());
-			} else if (eventType.equals("m.room.aliases")) {
+			} else if ("m.room.aliases".equals(eventType)) {
 				if (event.has("state_key") &&
 					event.get("state_key").isJsonPrimitive()){
 					parseAliasesEvent(content, event.get("state_key").getAsString());
 				}
-			} else if (eventType.equals("m.room.canonical_alias")) {
+			} else if ("m.room.canonical_alias".equals(eventType)) {
 				parseCanonicalAlias(content);
-			} else if (eventType.equals("m.room.power_levels")) {
+			} else if ("m.room.power_levels".equals(eventType)) {
 				parsePowerLevelsEvent(content);
 				addPropertyChangeEvent(originServerTs, sender, eventId, age, "power_levels", permissions.getValue());
 			}
@@ -267,11 +266,11 @@ public class Room {
 			User user = userRepository.get(memberId);
 			user.update(event);
 
-			if (membership.equals("join")) {
+			if        ("join".equals(membership)) {
 				if (members.stream().noneMatch(m -> m.getUser().getId().equals(memberId))) {
 					members.add(new Member(user));
 				}
-			} else if (membership.equals("leave")) {
+			} else if ("leave".equals(membership)) {
 				Optional<Member> optionalMember = members.stream().filter(m -> m.getUser().getId().equals(memberId)).findAny();
 				optionalMember.ifPresent(member -> members.remove(member));
 			}
@@ -288,7 +287,9 @@ public class Room {
 	private void parsePowerLevelsEvent(JsonObject data) {
 		try {
 			this.permissions.set(new PermissionTable(data));
-		} catch(IOException e) {}
+		} catch(IOException e) {
+			this.permissions.set(null);
+		}
 
 		if(data.has("users") &&
 		   data.get("users").isJsonObject()) {
