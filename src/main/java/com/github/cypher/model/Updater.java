@@ -8,7 +8,7 @@ class Updater extends Thread {
 	// Holds all updatable classes
 	// Initiated to size 10 but will resize if necessary
 	// The value (Integer) represents the "tick interval". I.e. the Updatable will be notified every {i}'th tic (where i is the value of the Integer)
-	private Map<Updatable, Integer> watching = new ConcurrentHashMap<>(10);
+	private final Map<Updatable, Integer> watching = new ConcurrentHashMap<>(10);
 
 	private volatile boolean stopping = false;
 

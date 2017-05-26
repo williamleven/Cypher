@@ -254,4 +254,6 @@ public interface ApiLayer {
 	 * @throws IOException
 	 */
 	InputStream getMediaContent(URL mediaUrl) throws RestfulHTTPException, IOException;
+
+	InputStream getMediaContentThumbnail(URL mediaUrl, int size)throws RestfulHTTPException, IOException;
 }

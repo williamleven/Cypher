@@ -54,99 +54,125 @@ public class TOMLSettings implements Settings {
 		}
 	}
 
-	private static synchronized SettingsData load(File settingsFile) {
+	private SettingsData load(File settingsFile) {
 		// Make sure settingsFile is set before loading settings
-		if (settingsFile != null) {
-			System.out.printf("Reading settings from: %s\n", settingsFile);
-			return new Toml().read(settingsFile).to(SettingsData.class);
-		} else {
+		if (settingsFile == null) {
 			System.out.printf("Could not access settings file, defaults will be loaded.\n");
 			return new SettingsData();
+		} else {
+			System.out.printf("Reading settings from: %s\n", settingsFile);
+			return new Toml().read(settingsFile).to(SettingsData.class);
 		}
 	}
 
-	private synchronized void save() {
-		// Make sure settingsFile is set before saving settings
-		if (settingsFile != null) {
-			try {
-				new TomlWriter().write(settingsData, settingsFile);
-				System.out.printf("Settings saved to: %s\n", settingsFile);
-			} catch (IOException e) {
+	private void save() {
+		synchronized (this){
+			// Make sure settingsFile is set before saving settings
+			if (settingsFile == null) {
 				System.out.printf("Could not access settings file, settings won't be saved.\n");
+			} else {
+				try {
+					new TomlWriter().write(settingsData, settingsFile);
+					System.out.printf("Settings saved to: %s\n", settingsFile);
+				} catch (IOException e) {
+					System.out.printf("Could not access settings file, settings won't be saved.\n");
+				}
 			}
-		} else {
-			System.out.printf("Could not access settings file, settings won't be saved.\n");
 		}
 	}
 
 	// Language setting
 	@Override
-	public synchronized Locale getLanguage() {
-		return Locale.forLanguageTag(settingsData.languageTag);
+	public Locale getLanguage() {
+		synchronized (this) {
+			return Locale.forLanguageTag(settingsData.languageTag);
+		}
 	}
 
 	@Override
-	public synchronized void setLanguage(Locale language) {
-		settingsData.languageTag = language.toLanguageTag();
-		save();
+	public void setLanguage(Locale language) {
+		synchronized (this){
+			settingsData.languageTag = language.toLanguageTag();
+			save();
+		}
 	}
 
 	// Save session ("keep me logged in") settings
 	@Override
-	public synchronized boolean getSaveSession() {
-		return settingsData.saveSession;
+	public boolean getSaveSession() {
+		synchronized (this){
+			return settingsData.saveSession;
+		}
 	}
 
 	@Override
-	public synchronized void setSaveSession(boolean saveSession) {
-		settingsData.saveSession = saveSession;
-		save();
+	public void setSaveSession(boolean saveSession) {
+		synchronized (this) {
+			settingsData.saveSession = saveSession;
+			save();
+		}
 	}
 
 	@Override
-	public synchronized boolean getUseSystemTray() {
-		return settingsData.useSystemTray;
+	public boolean getUseSystemTray() {
+		synchronized (this) {
+			return settingsData.useSystemTray;
+		}
 	}
 
 	@Override
-	public synchronized void setUseSystemTray(boolean useSystemTray) {
-		settingsData.useSystemTray = useSystemTray;
-		save();
+	public void setUseSystemTray(boolean useSystemTray) {
+		synchronized (this) {
+			settingsData.useSystemTray = useSystemTray;
+			save();
+		}
 	}
 
 	// If control + enter should be used for sending messages (if false only enter is needed)
 	@Override
-	public synchronized boolean getControlEnterToSendMessage() {
-		return settingsData.controlEnterToSendMessage;
+	public boolean getControlEnterToSendMessage() {
+		synchronized (this) {
+			return settingsData.controlEnterToSendMessage;
+		}
 	}
 
 	@Override
-	public synchronized void setControlEnterToSendMessage(boolean controlEnterToSendMessage) {
-		settingsData.controlEnterToSendMessage = controlEnterToSendMessage;
-		save();
+	public void setControlEnterToSendMessage(boolean controlEnterToSendMessage) {
+		synchronized (this) {
+			settingsData.controlEnterToSendMessage = controlEnterToSendMessage;
+			save();
+		}
 	}
 
 	// Timeout is maximum time to poll in milliseconds before returning a request
 	@Override
-	public synchronized int getSDKTimeout() {
-		return settingsData.SDKTimeout;
+	public int getSDKTimeout() {
+		synchronized (this) {
+			return settingsData.SDKTimeout;
+		}
 	}
 
 	@Override
-	public synchronized void setSDKTimeout(int timeout) {
-		settingsData.SDKTimeout = timeout;
-		save();
+	public void setSDKTimeout(int timeout) {
+		synchronized (this) {
+			settingsData.SDKTimeout = timeout;
+			save();
+		}
 	}
 
 	// The time between each tick in the model in ms
 	@Override
-	public synchronized int getModelTickInterval() {
-		return settingsData.modelTickInterval;
+	public int getModelTickInterval() {
+		synchronized (this) {
+			return settingsData.modelTickInterval;
+		}
 	}
 
 	@Override
-	public synchronized void setModelTickInterval(int interval) {
-		settingsData.modelTickInterval = interval;
-		save();
+	public void setModelTickInterval(int interval) {
+		synchronized (this) {
+			settingsData.modelTickInterval = interval;
+			save();
+		}
 	}
 }

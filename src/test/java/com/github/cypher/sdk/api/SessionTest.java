@@ -21,12 +21,14 @@ public class SessionTest {
 		jsonObject.addProperty("device_id", "123");
 
 		// Make sure lacking object fails
+		boolean passedCreation;
 		try {
-			Session s = new Session(jsonObject);
-			assertFalse("Parsing should fail without access_token", true);
+			new Session(jsonObject);
+			passedCreation = true;
 		}catch (IOException err){
+			passedCreation = false;
 		}
-
+		assertFalse("Parsing should fail without access_token", passedCreation);
 
 		// Complete Object
 		jsonObject.addProperty("access_token", "555");

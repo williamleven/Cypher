@@ -1,9 +1,9 @@
 package com.github.cypher.model;
 
 import com.github.cypher.eventbus.ToggleEvent;
-import com.github.cypher.settings.Settings;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;
+import com.github.cypher.settings.Settings;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
@@ -13,7 +13,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
-import java.util.Observable;
 import java.util.function.Supplier;
 
 import static com.github.cypher.model.Util.extractServer;
@@ -107,7 +106,7 @@ public class Client {
 		selectedRoom = null;
 	}
 
-	public User getActiveUser(){
+	public final User getActiveUser(){
 		return getUser(sdkClient.getActiveUser().getId());
 	}
 
@@ -154,19 +153,13 @@ public class Client {
 
 	public void logout() throws SdkException{
 		updater.endGracefully();
-		try {
-			updater.join();
-			updater = null;
-		} catch (InterruptedException e) {
-			System.out.printf("InterruptedException when joining updater thread - %s\n", e.getMessage());
-			throw new RuntimeException("InterruptedException when joining updater thread - " + e.getMessage());
-		}
+		updater = null;
 		try {
 			sdkClient.logout();
 			sessionManager.deleteSessionFromDisk();
 			eventBus.post(ToggleEvent.LOGOUT);
 			initialize();
-		}catch(RestfulHTTPException | IOException ex){
+		} catch (RestfulHTTPException | IOException ex) {
 			throw new SdkException(ex);
 		}
 	}
@@ -261,13 +254,9 @@ public class Client {
 				addServer(mainServer);
 			}
 			boolean placed = false;
-			boolean firstServer = true;
 			for (Server server : servers) {
 				boolean placedHere = false;
 				for (String alias:room.aliasesList()) {
-					if (firstServer){
-						//System.out.printf("Alias: %50s\n", alias);
-					}
 					if (server.getAddress().equals(extractServer(alias))){
 						pmCollection.removeRoom(room);
 						genCollection.removeRoom(room);
@@ -280,7 +269,6 @@ public class Client {
 				if (!placedHere){
 					server.removeRoom(room);
 				}
-				firstServer = false;
 			}
 			// Place in General if not placed in any server
 			if (!placed) {

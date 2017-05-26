@@ -5,9 +5,9 @@ import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.root.RootView;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.ModelFactory;
-import com.google.common.eventbus.EventBus;
 import com.github.cypher.settings.Settings;
 import com.github.cypher.settings.TOMLSettings;
+import com.google.common.eventbus.EventBus;
 import dorkbox.systemTray.MenuItem;
 import dorkbox.systemTray.SystemTray;
 import javafx.application.Application;
@@ -36,7 +36,7 @@ public class Main extends Application {
 	private final Client client = ModelFactory.createClient(settings, eventBus, USER_DATA_DIRECTORY, SETTINGS_NAMESPACE);
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) {
 		Locale.setDefault(settings.getLanguage());
 		// Starts the Executors thread
 		executor.start();
@@ -57,15 +57,17 @@ public class Main extends Application {
 		RootView rootView = new RootView();
 
 		Scene scene = new Scene(rootView.getView());
-		final String uri = getClass().getResource("main.css").toExternalForm();
-		scene.getStylesheets().add(uri);
+		final String cssMain = getClass().getResource("main.css").toExternalForm();
+		final String cssScroll = getClass().getResource("scrollbars.css").toExternalForm();
+		scene.getStylesheets().add(cssMain);
+		scene.getStylesheets().add(cssScroll);
 		scene.getStylesheets().add("bootstrapfx.css");
 
 		primaryStage.setTitle("Cypher");
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
 		primaryStage.setScene(scene);
-		primaryStage.setMinWidth(1100);
-		primaryStage.setMinHeight(500);
+		primaryStage.setMinWidth(780);
+		primaryStage.setMinHeight(425);
 
 		// Only hide close the main window if system tray is enabled and supported.
 		primaryStage.setOnCloseRequest(event -> {
@@ -83,7 +85,7 @@ public class Main extends Application {
 	}
 
 	private boolean useSystemTray() {
-		return (settings.getUseSystemTray() && SystemTray.get() != null);
+		return settings.getUseSystemTray() && SystemTray.get() != null;
 	}
 
 	private void addTrayIcon(Stage primaryStage) {

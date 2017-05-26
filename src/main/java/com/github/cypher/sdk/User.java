@@ -1,6 +1,7 @@
 package com.github.cypher.sdk;
 
-import com.github.cypher.sdk.api.*;
+import com.github.cypher.sdk.api.ApiLayer;
+import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.google.gson.JsonObject;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
@@ -8,7 +9,6 @@ import javafx.beans.value.ChangeListener;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -27,6 +27,7 @@ public class User {
 	protected final ObjectProperty<Presence> presence = new SimpleObjectProperty<>(null);
 	protected final BooleanProperty isActive          = new SimpleBooleanProperty(false);
 	protected final LongProperty lastActiveAgo        = new SimpleLongProperty(0);
+	private int avatarSize=24;
 
 	User(ApiLayer api, String id) {
 		this.api = api;
@@ -80,7 +81,9 @@ public class User {
 						name.set(contentObject.get("displayname").getAsString());
 					}
 				}
-				//setAvatar(contentObject);
+				if(avatar.getValue()==null) {
+					setAvatar(contentObject);
+				}
 			}
 
 		}
@@ -93,7 +96,7 @@ public class User {
 			try {
 				URL newAvatarUrl = new URL(contentObject.get("avatar_url").getAsString());
 				if(!newAvatarUrl.equals(avatarUrl)) {
-					avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
+					avatar.set(ImageIO.read(api.getMediaContentThumbnail(newAvatarUrl,avatarSize)));
 				}
 				avatarUrl.set(newAvatarUrl);
 			} catch (RestfulHTTPException | IOException e) {
@@ -123,7 +126,10 @@ public class User {
 		avatarUrl.removeListener(listener);
 	}
 
-	public void addAvatarListener(ChangeListener<? super Image> listener) {
+	public void addAvatarListener(ChangeListener<? super Image> listener,int size ) {
+		if (size>avatarSize) {
+			avatarSize = size;
+		}
 		avatar.addListener(listener);
 	}
 

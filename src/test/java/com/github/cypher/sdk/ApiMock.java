@@ -26,7 +26,7 @@ public class ApiMock implements ApiLayer {
 			data.add("presence", getPrecenceData());
 			data.add("rooms", getRoomData());
 			data.add("account_data", getAccountData());
-		} else if (since.equals("Test")) {
+		} else if ("Test".equals(since)) {
 			data.addProperty("next_batch", "");
 			data.add("presence", getNewPrecenceData());
 			data.add("rooms", getNewRoomData());
@@ -135,13 +135,14 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
-		if (username.equals("user") && password.equals("pass") && homeserver.equals("matrix.org")) {
+		if ("user".equals(username) && "pass".equals(password) && "matrix.org".equals(homeserver)) {
 			loggedIn = true; // Record that it was called and untempered with
 		}
 	}
 
 	@Override
 	public void register(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
+		// Not used by the tests
 	}
 
 	@Override
@@ -168,7 +169,7 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public void setUserAvatarUrl(URL avatarUrl) throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
@@ -178,7 +179,7 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public void setUserDisplayName(String displayName) throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
@@ -189,12 +190,12 @@ public class ApiMock implements ApiLayer {
 	@Override
 	public JsonObject roomSendEvent(String roomId, String eventType, JsonObject content) throws RestfulHTTPException, IOException {
 
-		if (roomId.equals("!zion:matrix.org") &&
-		    eventType.equals("m.room.message") &&
+		if ("!zion:matrix.org".equals(roomId) &&
+			"m.room.message".equals(eventType) &&
 		    content.has("body") &&
 		    content.has("msgtype") &&
-		    content.get("body").getAsString().equals("Down the rabbit hole") &&
-		    content.get("msgtype").getAsString().equals("m.text")) {
+			"Down the rabbit hole".equals(content.get("body").getAsString()) &&
+			"m.text".equals(content.get("msgtype").getAsString())) {
 			JsonObject response = new JsonObject();
 			response.addProperty("event_id", "OISAJdiojd8s");
 			textMessageSent = true;
@@ -211,17 +212,17 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public void setSession(Session session) {
-
+		// Not used by the tests
 	}
 
 	@Override
 	public void logout() throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
 	public void refreshToken() throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
@@ -251,22 +252,22 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public void postLeaveRoom(String roomId) throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
 	public void postKickFromRoom(String roomId, String reason, String userId) throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
 	public void postInviteToRoom(String roomId, String address, String idServer, String medium) throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
 	public void postInviteToRoom(String roomId, String userId) throws RestfulHTTPException, IOException {
-
+		// Not used by the tests
 	}
 
 	@Override
@@ -276,6 +277,11 @@ public class ApiMock implements ApiLayer {
 
 	@Override
 	public InputStream getMediaContent(URL mediaUrl) throws RestfulHTTPException, IOException {
+		return null;
+	}
+
+	@Override
+	public InputStream getMediaContentThumbnail(URL mediaUrl, int size) throws RestfulHTTPException, IOException {
 		return null;
 	}
 }
