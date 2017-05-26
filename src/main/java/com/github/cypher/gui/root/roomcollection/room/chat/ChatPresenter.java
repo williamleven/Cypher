@@ -1,5 +1,6 @@
 package com.github.cypher.gui.root.roomcollection.room.chat;
 
+import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.FXThreadedObservableListWrapper;
 import com.github.cypher.gui.FXThreadedObservableValueWrapper;
 import com.github.cypher.eventbus.ToggleEvent;
@@ -42,6 +43,9 @@ public class ChatPresenter {
 	@Inject
 	private EventBus eventBus;
 
+	@Inject
+	private Executor executor;
+
 	@FXML
 	private ListView<Event> eventListView;
 
@@ -59,13 +63,15 @@ public class ChatPresenter {
 
 			scrollTo = backendListForEventView.getList().size() - 1;
 
-			if(room != null) {
-				try {
-					room.loadEventHistory(HISTORY_CHUNK_SIZE);
-				} catch(SdkException e) {
-					System.out.printf("SdkException when trying to get room history: %s\n", e);
+			executor.handle(() -> {
+				if (room != null) {
+					try {
+						room.loadEventHistory(HISTORY_CHUNK_SIZE);
+					} catch (SdkException e) {
+						System.out.printf("SdkException when trying to get room history: %s\n", e);
+					}
 				}
-			}
+			});
 		}
 	};
 
