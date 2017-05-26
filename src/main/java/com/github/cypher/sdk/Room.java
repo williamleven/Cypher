@@ -45,6 +45,7 @@ public class Room {
 	private boolean avatarWanted = false;
 	private final Object avatarLock = new Object();
 	private final ObjectProperty<PermissionTable> permissions = new SimpleObjectProperty<>(null);
+	private int avatarSize=24;
 
 	private ObservableMap<String, Event> events =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
@@ -252,7 +253,7 @@ public class Room {
 	private void updateAvatar() throws RestfulHTTPException, IOException{
 		synchronized (avatarLock) {
 			if (avatarWanted && avatarUrl.get() != null) {
-				avatar.set(ImageIO.read(api.getMediaContent(avatarUrl.getValue())));
+				avatar.set(ImageIO.read(api.getMediaContentThumbnail(avatarUrl.getValue(), avatarSize)));
 			} else {
 				avatar.set(null);
 			}
@@ -369,25 +370,29 @@ public class Room {
 		avatarUrl.removeListener(listener);
 	}
 
-	public void addAvatarListener(ChangeListener<? super Image> listener) {
-		synchronized (avatarLock) {
+	public void addAvatarListener(ChangeListener<? super Image> listener, int size) {
+		//synchronized (avatarLock) {
 			avatarListeners.add(listener);
 			avatarWanted = true;
+			if (size > avatarSize) {
+				avatarSize = size;
+			}
 			try {
 				updateAvatar();
 			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
+
 			avatar.addListener(listener);
-		}
+		//}
 	}
 
 	public void removeAvatarListener(ChangeListener<? super Image> listener) {
-		synchronized (avatarLock) {
+		//synchronized (avatarLock) {
 			avatarListeners.remove(listener);
 			if (avatarListeners.isEmpty()) {
 				avatarWanted = false;
 			}
 			avatar.removeListener(listener);
-		}
+		//}
 	}
 
 	/**
@@ -397,10 +402,13 @@ public class Room {
 	public String getName()      { return name.get(); }
 	public String getTopic()     { return topic.get(); }
 	public URL    getAvatarUrl() { return avatarUrl.get(); }
-	public Image getAvatar()    {
+	public Image getAvatar(int size)    {
 		synchronized (avatarLock) {
 			boolean old = avatarWanted;
 			avatarWanted = true;
+			if (size > avatarSize) {
+				avatarSize = size;
+			}
 			try {
 				updateAvatar();
 			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
