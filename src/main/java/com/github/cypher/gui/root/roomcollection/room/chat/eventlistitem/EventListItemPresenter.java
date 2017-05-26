@@ -1,6 +1,7 @@
 package com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem;
 
 import com.github.cypher.gui.CustomListCell;
+import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.FXThreadedObservableValueWrapper;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Event;
@@ -30,6 +31,9 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 
 	@Inject
 	private Client client;
+
+	@Inject
+	private Executor executor;
 
 	@FXML
 	private AnchorPane root;
@@ -99,7 +103,9 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 			} else {
 				generateTextObjects(message.getBody());
 			}
-			avatar.imageProperty().bind(new FXThreadedObservableValueWrapper<>(message.getSender().avatarProperty()));
+			executor.handle(() -> {
+				avatar.imageProperty().bind(new FXThreadedObservableValueWrapper<>(message.getSender().avatarProperty()));
+			});
 		}
 	}
 
