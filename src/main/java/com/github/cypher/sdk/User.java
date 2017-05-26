@@ -103,7 +103,6 @@ public class User {
 				if(!newAvatarUrl.equals(avatarUrl)) {
 					avatarUrl.set(newAvatarUrl);
 					updateAvatar();
-					//avatar.set(ImageIO.read(api.getMediaContentThumbnail(newAvatarUrl,avatarSize)));
 				}
 			} catch (RestfulHTTPException | IOException e) {
 				avatar.set(null);
@@ -146,12 +145,13 @@ public class User {
 		synchronized (avatarLock) {
 			avatarListeners.add(listener);
 			avatarWanted = true;
-			try {
-				updateAvatar();
-			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
 			if (size > avatarSize) {
 				avatarSize = size;
 			}
+			try {
+				updateAvatar();
+			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
+
 			avatar.addListener(listener);
 		}
 	}
@@ -195,10 +195,13 @@ public class User {
 	public String getId() { return id; }
 	public String getName() { return name.get(); }
 	public URL getAvatarUrl() { return avatarUrl.get(); }
-	public Image getAvatar() {
+	public Image getAvatar(int size) {
 		synchronized (avatarLock) {
 			boolean old = avatarWanted;
 			avatarWanted = true;
+			if (size > avatarSize) {
+				avatarSize = size;
+			}
 			try {
 				updateAvatar();
 			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
