@@ -17,6 +17,7 @@ public class User {
 	private final ObjectProperty<Image> avatar;
 	private boolean avatarWanted = false;
 	private final com.github.cypher.sdk.User sdkUser;
+	private final static int AVATAR_SIZE = 24;
 
 	private ChangeListener avatarListener = (observable, oldValue, newValue) -> {
 		updateAvatar();
@@ -40,7 +41,7 @@ public class User {
 
 	private void updateAvatar() {
 		if (avatarWanted) {
-			java.awt.Image image = sdkUser.getAvatar();
+			java.awt.Image image = sdkUser.getAvatar(AVATAR_SIZE);
 			try {
 				this.avatar.set(
 					image == null ? null : Util.createImage(image)
@@ -55,7 +56,7 @@ public class User {
 		if (!avatarWanted) {
 			avatarWanted = true;
 			updateAvatar();
-			sdkUser.addAvatarListener(avatarListener, 24);
+			sdkUser.addAvatarListener(avatarListener, AVATAR_SIZE);
 		}
 	}
 

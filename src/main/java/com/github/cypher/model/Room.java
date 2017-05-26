@@ -23,6 +23,8 @@ public class Room {
 	private final ObservableList<Event> events;
 	private final com.github.cypher.sdk.Room sdkRoom;
 	private final User activeUser;
+	private boolean avatarWanted = false;
+	private final static int AVATAR_SIZE = 56;
 
 
 	private URL lastAvatarURL = null;
@@ -36,7 +38,7 @@ public class Room {
 
 		topic = new SimpleStringProperty(sdkRoom.getTopic());
 		avatarUrl = new SimpleObjectProperty<>(sdkRoom.getAvatarUrl());
-		avatar = new SimpleObjectProperty<>();
+		avatar = new SimpleObjectProperty<>(null);
 		canonicalAlias = new SimpleStringProperty(sdkRoom.getCanonicalAlias());
 		members = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 		for (com.github.cypher.sdk.Member sdkMember : sdkRoom.getMembers()) {
@@ -49,7 +51,6 @@ public class Room {
 
 
 		updateName();
-		updateAvatar();
 
 		sdkRoom.addNameListener((observable, oldValue, newValue) -> {
 			updateName();
@@ -62,10 +63,6 @@ public class Room {
 
 		sdkRoom.addAvatarUrlListener((observable, oldValue, newValue) -> {
 			avatarUrl.set(newValue);
-		});
-
-		sdkRoom.addAvatarListener((observable, oldValue, newValue) -> {
-			updateAvatar();
 		});
 
 		sdkRoom.addCanonicalAliasListener((observable, oldValue, newValue) -> {
@@ -117,6 +114,16 @@ public class Room {
 		}));
 	}
 
+	private void initiateAvatar(){
+		if (!avatarWanted) {
+			avatarWanted = true;
+			updateAvatar();
+			sdkRoom.addAvatarListener((observable, oldValue, newValue) -> {
+				updateAvatar();
+			}, AVATAR_SIZE);
+		}
+	}
+
 	public void sendMessage(String body) throws SdkException {
 		try {
 			sdkRoom.sendTextMessage(body);
@@ -126,7 +133,7 @@ public class Room {
 	}
 
 	private void updateAvatar() {
-		java.awt.Image newImage = sdkRoom.getAvatar();
+		java.awt.Image newImage = sdkRoom.getAvatar(AVATAR_SIZE);
 		if(newImage == null && isPmChat()){
 			for (Member member: members) {
 				if (member.getUser() != activeUser){
@@ -189,10 +196,12 @@ public class Room {
 	}
 
 	public Image getAvatar() {
+		initiateAvatar();
 		return avatar.get();
 	}
 
 	public ObjectProperty<Image> avatarProperty() {
+		initiateAvatar();
 		return avatar;
 	}
 
