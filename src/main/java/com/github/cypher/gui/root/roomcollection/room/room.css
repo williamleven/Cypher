@@ -10,14 +10,3 @@
     -fx-padding: 2 0 2 0;
     -fx-background-color: -member-list-background;
 }
-
-.member-list .scroll-bar:horizontal .increment-arrow,
-.member-list .scroll-bar:horizontal .decrement-arrow,
-.member-list .scroll-bar:horizontal .increment-button,
-.member-list .scroll-bar:horizontal .decrement-button {
-    -fx-padding:0;
-}
-
-.member-list .list-cell:filled:selected, .member-list .list-cell:filled:hover{
-    -fx-font-size: 14px;
-}
