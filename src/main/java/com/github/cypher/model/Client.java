@@ -1,9 +1,9 @@
 package com.github.cypher.model;
 
 import com.github.cypher.eventbus.ToggleEvent;
-import com.github.cypher.settings.Settings;
 import com.github.cypher.sdk.api.RestfulHTTPException;
 import com.github.cypher.sdk.api.Session;
+import com.github.cypher.settings.Settings;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
@@ -13,7 +13,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
-import java.util.Observable;
 import java.util.function.Supplier;
 
 import static com.github.cypher.model.Util.extractServer;
@@ -189,7 +188,8 @@ public class Client {
 			try {
 				addRoom(input);
 			} catch (SdkException e) {
-
+				System.out.printf("Adding room failed! - %s\n", e.getMessage());
+				throw new IOException("Adding room failed! - " + e.getMessage()); // e.getMessage() is only a temporary solution.
 			}
 		} else if (Util.isUser(input)) {
 			addUser(input);
@@ -224,7 +224,7 @@ public class Client {
 		try {
 			sdkClient.joinRoom(room);
 		} catch (RestfulHTTPException | IOException e) {
-			
+			throw new SdkException(e);
 		}
 	}
 
