@@ -189,7 +189,7 @@ public class Client {
 			try {
 				addRoom(input);
 			} catch (SdkException e) {
-				
+
 			}
 		} else if (Util.isUser(input)) {
 			addUser(input);
@@ -224,7 +224,7 @@ public class Client {
 		try {
 			sdkClient.joinRoom(room);
 		} catch (RestfulHTTPException | IOException e) {
-			e.printStackTrace();
+			
 		}
 	}
 
