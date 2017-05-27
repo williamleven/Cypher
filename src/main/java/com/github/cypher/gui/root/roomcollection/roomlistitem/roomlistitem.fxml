@@ -3,12 +3,11 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane fx:id="root" focusTraversable="true" prefHeight="100.0" prefWidth="184.0" style="-fx-background-color: -fx-medium-base;" styleClass="room-item" stylesheets="@roomlistitem.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.roomlistitem.RoomListItemPresenter">
+<AnchorPane fx:id="root" focusTraversable="true" prefHeight="110.0" prefWidth="184.0" style="-fx-background-color: -fx-medium-base;" styleClass="room-item" stylesheets="@roomlistitem.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.roomlistitem.RoomListItemPresenter">
    <children>
       <Group layoutX="10.0" layoutY="2.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
@@ -20,7 +19,7 @@
          </children>
       </Group>
       <Label fx:id="name" focusTraversable="false" layoutX="53.0" layoutY="7.0" prefHeight="48.0" prefWidth="127.0" style="-fx-font-size: 16;" text="&lt;name&gt;" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-      <TextArea fx:id="topic" editable="false" focusTraversable="false" layoutX="14.0" layoutY="38.0" styleClass="topic-area" text="&lt;topic&gt;" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0" />
+      <Label fx:id="topic" alignment="TOP_LEFT" layoutX="17.0" prefHeight="32.0" prefWidth="30.0" text="Topic" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="58.0" />
       <SVGPath content="M 40 10 L 60 30 L 40 30 L 40 10" fill="TRANSPARENT" rotate="90.0" styleClass="room-item-selector" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <SVGPath content="M 40 10 L 60 30 L 40 30 L 40 10" fill="TRANSPARENT" rotate="-90.0" styleClass="room-item-selector" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
    </children>

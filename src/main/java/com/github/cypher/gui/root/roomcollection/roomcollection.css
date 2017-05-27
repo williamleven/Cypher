@@ -10,7 +10,7 @@
 }
 
 .room-list .list-cell {
-	-fx-padding: 2 0 2 0;
+	-fx-padding: 0 0 0 0;
 	-fx-background-color: -room-list-background;
 }
 
@@ -20,4 +20,14 @@
 }
 .room-list .list-cell:selected {
 	-fx-background-color: -room-item-selection-color;
+}
+
+.heading {
+	-fx-font-size: 20px;
+	-fx-font-weight: bold;
+	-fx-text-fill: black;
+}
+
+.fancy-scroll AnchorPane{
+	-fx-background-color: -room-list-background;
 }

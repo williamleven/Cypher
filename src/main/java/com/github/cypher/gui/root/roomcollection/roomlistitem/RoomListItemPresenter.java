@@ -31,7 +31,7 @@ public class RoomListItemPresenter extends CustomListCell<Room> {
 	private ImageView avatar;
 
 	@FXML
-	private TextArea topic;
+	private Label topic;
 
 
 	@Override

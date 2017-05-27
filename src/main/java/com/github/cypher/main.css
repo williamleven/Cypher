@@ -19,10 +19,7 @@ root {
 	-fx-background-color: #777777;
 }
 
-.heading {
-	-fx-font-size: 20px;
-	-fx-font-weight: bold;
-}
+
 
 * {
 	-room-list-background: -fx-medium-base;
@@ -39,10 +36,10 @@ root {
 	-fx-light-base: #ECFAFF;
 	-fx-medium-base: #829296;
 	-fx-dark-base: #404040;
-	-fx-lighter: -fx-medium-base;
-	/*-fx-lighter: #808080;*/
 	-fx-soft-popup: #008CBA;
 	-fx-popup: #09CDDA;
+	-fx-lighter: -fx-medium-base;
+	/*-fx-lighter: #808080;*/
 }
 
 .base-separator {
