@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.TextFlow?>
 
 <AnchorPane id="messagePane" fx:id="root" minHeight="28.0" style="-fx-background-color: -fx-light-base;" styleClass="textMessage" stylesheets="@eventlistitem.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem.EventListItemPresenter">
    <children>
-      <ImageView id="avatar" fx:id="avatar" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <HBox styleClass="textMessage" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
-         <children>
-            <Separator focusTraversable="false" orientation="VERTICAL" visible="false" />
-            <Label fx:id="author" alignment="TOP_LEFT" focusTraversable="false" minWidth="-Infinity" prefHeight="20.0" text="&lt;author&gt;" HBox.hgrow="ALWAYS" />
-            <Label alignment="TOP_LEFT" prefHeight="20.0" text=": " />
-            <TextFlow fx:id="bodyContainer" styleClass="text-body" HBox.hgrow="SOMETIMES" />
-         </children>
-      </HBox>
+      <ImageView id="avatar" fx:id="avatar" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
+      <Label fx:id="author" focusTraversable="false" minWidth="-Infinity" styleClass="author" text="&lt;author&gt;" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+      <TextFlow fx:id="bodyContainer" layoutX="40.0" layoutY="24.0" styleClass="text-body" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="24.0" />
    </children>
 </AnchorPane>

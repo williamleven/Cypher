@@ -2,4 +2,20 @@
 
 .event-list-view .list-cell{
     -fx-background-color: -fx-light-base;
+    -fx-padding: 0 0 8 0;
+}
+
+.heading {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+
+.message-box{
+    -fx-background-color: -fx-light-base;
+    -fx-prompt-text-fill: -fx-medium-base;
+}
+
+.message-box .content{
+    -fx-text-fill: black;
 }

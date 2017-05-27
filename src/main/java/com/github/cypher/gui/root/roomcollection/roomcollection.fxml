@@ -15,9 +15,9 @@
         <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" style="-fx-background-color: -fx-medium-base;">
             <children>
                 <Label fx:id="serverName" layoutX="5.0" layoutY="7.0" prefHeight="27.0" prefWidth="121.0" styleClass="heading" text="Server Name" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="49.0" AnchorPane.topAnchor="7.0" />
-            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onShowDirectoryClick" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onShowDirectoryClick" prefHeight="32.0" prefWidth="32.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                <children>
-                  <FontIcon iconLiteral="fa-folder-open" iconSize="24" textAlignment="CENTER" />
+                  <FontIcon iconLiteral="fa-folder-open" iconSize="24" textAlignment="CENTER" translateX="2.0" />
                </children>
             </VBox>
             <Separator layoutX="5.0" layoutY="40.0" prefWidth="200.0" styleClass="base-separator" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
