@@ -186,7 +186,11 @@ public class Client {
 		if (Util.isHomeserver(input)) {
 			addServer(input);
 		} else if (Util.isRoomLabel(input)) {
-			addRoom(input);
+			try {
+				addRoom(input);
+			} catch (SdkException e) {
+				e.printStackTrace();
+			}
 		} else if (Util.isUser(input)) {
 			addUser(input);
 		} else {
@@ -216,8 +220,12 @@ public class Client {
 		}
 	}
 
-	private void addRoom(String room) throws IOException{
+	private void addRoom(String room) throws SdkException{
+		try {
 			sdkClient.joinRoom(room);
+		} catch (RestfulHTTPException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void addUser(String user) {
