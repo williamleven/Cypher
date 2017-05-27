@@ -84,7 +84,6 @@ public class Client {
 		roomCollections.add(pmCollection);
 		roomCollections.add(genCollection);
 		selectedRoomCollection = pmCollection;
-		eventBus.post(selectedRoomCollection);
 
 		servers.clear();
 
@@ -130,6 +129,9 @@ public class Client {
 				sdkClient.update(settings.getSDKTimeout());
 				if (!initalSyncDone) {
 					initalSyncDone = true;
+					// Default selected roomCollection is PMCollection. Placed here instead of in initialize
+					// to make the first room in PMCollection be selected when logging in.
+					eventBus.post(selectedRoomCollection);
 					eventBus.post(ToggleEvent.HIDE_LOADING);
 				}
 			} catch (RestfulHTTPException | IOException e) {
@@ -299,7 +301,7 @@ public class Client {
 	}
 
 	@Subscribe
-	public void RoomChanged(Room e){
+	public void selectedRoomChanged(Room e){
 		Platform.runLater(() -> {
 			this.selectedRoom = e;
 			System.out.printf("Selected room changed\n");
