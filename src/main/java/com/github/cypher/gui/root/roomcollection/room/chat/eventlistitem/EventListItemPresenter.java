@@ -1,10 +1,13 @@
 package com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem;
 
 import com.github.cypher.gui.CustomListCell;
+import com.github.cypher.gui.Executor;
 import com.github.cypher.gui.FXThreadedObservableValueWrapper;
 import com.github.cypher.model.Client;
 import com.github.cypher.model.Event;
 import com.github.cypher.model.Message;
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -12,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -27,8 +31,13 @@ import java.util.List;
 
 public class EventListItemPresenter extends CustomListCell<Event> {
 
+	private static final int LIST_CELL_PADDING = 19;
+
 	@Inject
 	private Client client;
+
+	@Inject
+	private Executor executor;
 
 	@FXML
 	private AnchorPane root;
@@ -43,6 +52,7 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 	private ImageView avatar;
 
 	private boolean formatted = false;
+
 	private final ChangeListener<String> bodyChangeListener = (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
 		if(formatted) {
 			generateFormattedTextObjects(newValue);
@@ -52,8 +62,6 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 	};
 
 	private Message oldMessage = null;
-
-	private static final int LIST_CELL_PADDING = 19;
 
 	public EventListItemPresenter() {
 		super.parentProperty().addListener((observable, oldParent, newParent) -> {
@@ -101,7 +109,14 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 			} else {
 				generateTextObjects(message.getBody());
 			}
-			avatar.imageProperty().bind(new FXThreadedObservableValueWrapper<>(message.getSender().avatarProperty()));
+			executor.handle(() -> {
+				ObjectProperty<Image> image = message.getSender().avatarProperty();
+				Platform.runLater(() -> {
+					if(message.equals(getModelComponent())){
+						avatar.imageProperty().bind(new FXThreadedObservableValueWrapper<>(image));
+					}
+				});
+			});
 		}
 	}
 
@@ -110,6 +125,7 @@ public class EventListItemPresenter extends CustomListCell<Event> {
 		bodyContainer.getChildren().clear();
 		author.textProperty().unbind();
 		avatar.imageProperty().unbind();
+		avatar.imageProperty().set(null);
 
 		if(oldMessage != null) {
 			oldMessage.bodyProperty().removeListener(bodyChangeListener);

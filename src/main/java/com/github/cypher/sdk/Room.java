@@ -44,7 +44,13 @@ public class Room {
 	private final StringProperty topic = new SimpleStringProperty(null);
 	private final ObjectProperty<URL> avatarUrl = new SimpleObjectProperty<>(null);
 	private final ObjectProperty<Image> avatar = new SimpleObjectProperty<>(null);
+	private boolean avatarWanted = false;
+	private final Object avatarLock = new Object();
 	private final ObjectProperty<PermissionTable> permissions = new SimpleObjectProperty<>(null);
+	private int avatarSize=24;
+
+	private URL loadedAvatarUrl = null;
+	private int loadedAvatarSize = 0;
 
 	private String earliestBatch = null;
 
@@ -65,6 +71,8 @@ public class Room {
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
 	private final StringProperty canonicalAlias = new SimpleStringProperty();
+
+	private List<ChangeListener<? super Image>> avatarListeners = new ArrayList<>();
 
 	Room(ApiLayer api, Repository<User> userRepository, String id) {
 		this.api = api;
@@ -320,13 +328,15 @@ public class Room {
 				try {
 					URL newAvatarUrl = new URL(data.get(key).getAsString());
 
+
 					Event event = addPropertyChangeEvent(originServerTs, sender, eventId, "m.room.avatar", age, "avatar", newAvatarUrl);
 
 					if (isLatestStateEvent(event) &&
 					   !newAvatarUrl.equals(avatarUrl.getValue())) {
-						avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
 						this.avatarUrl.set(newAvatarUrl);
+						updateAvatar();
 					}
+
 				} catch(RestfulHTTPException | IOException e) {
 					avatar.set(null);
 					avatarUrl.set(null);
@@ -336,6 +346,19 @@ public class Room {
 		}
 	}
 
+	private void updateAvatar() throws RestfulHTTPException, IOException{
+		synchronized (avatarLock) {
+			if (avatarWanted && avatarUrl.get() != null ) {
+				if (!avatarUrl.get().equals(loadedAvatarUrl) || avatarSize > loadedAvatarSize){
+					avatar.set(ImageIO.read(api.getMediaContentThumbnail(avatarUrl.getValue(),avatarSize)));
+					loadedAvatarUrl = avatarUrl.get();
+					loadedAvatarSize = avatarSize;
+				}
+			} else {
+				avatar.set(null);
+			}
+		}
+	}
 
 	private void parseMessageEvent(int originServerTs, String sender, String eventId, int age, JsonObject content) {
 		if (!events.containsKey(eventId)){
@@ -488,12 +511,29 @@ public class Room {
 		avatarUrl.removeListener(listener);
 	}
 
-	public void addAvatarListener(ChangeListener<? super Image> listener) {
-		avatar.addListener(listener);
+	public void addAvatarListener(ChangeListener<? super Image> listener, int size) {
+		//synchronized (avatarLock) {
+			avatarListeners.add(listener);
+			avatarWanted = true;
+			if (size > avatarSize) {
+				avatarSize = size;
+			}
+			try {
+				updateAvatar();
+			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
+
+			avatar.addListener(listener);
+		//}
 	}
 
 	public void removeAvatarListener(ChangeListener<? super Image> listener) {
-		avatar.removeListener(listener);
+		//synchronized (avatarLock) {
+			avatarListeners.remove(listener);
+			if (avatarListeners.isEmpty()) {
+				avatarWanted = false;
+			}
+			avatar.removeListener(listener);
+		//}
 	}
 
 	/**
@@ -503,7 +543,20 @@ public class Room {
 	public String getName()      { return name.get(); }
 	public String getTopic()     { return topic.get(); }
 	public URL    getAvatarUrl() { return avatarUrl.get(); }
-	public Image getAvatar()    { return avatar.get(); }
+	public Image getAvatar(int size)    {
+		synchronized (avatarLock) {
+			boolean old = avatarWanted;
+			avatarWanted = true;
+			if (size > avatarSize) {
+				avatarSize = size;
+			}
+			try {
+				updateAvatar();
+			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
+			avatarWanted = old;
+			return avatar.get();
+		}
+	}
 
 	public Map<String, Event> getEvents() { return new HashMap<>(events); }
 	public int getEventCount() { return events.size(); }
