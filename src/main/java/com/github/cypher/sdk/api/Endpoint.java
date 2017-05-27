@@ -22,6 +22,7 @@ enum Endpoint {
 	ROOM_MEMBERS      ("client/r0/rooms/{0}/members"),       // {0} = roomId
 	ROOM_SEND_EVENT   ("client/r0/rooms/{0}/send/{1}/{2}"),  // {0} = roomId, {1} = ToggleEvent, {2} = txnId
 	ROOM_JOIN         ("client/r0/rooms/{0}/join"),          // {0} = roomId
+	ROOM_JOIN_ID_OR_A ("client/r0/join/{0}"),                // {0} = roomIdorAlias
 	ROOM_LEAVE        ("client/r0/rooms/{0}/leave"),         // {0} = roomId
 	ROOM_KICK         ("client/r0/rooms/{0}/kick"),          // {0} = roomId
 	ROOM_INVITE       ("client/r0/rooms/{0}/invite"),        // {0} = roomId

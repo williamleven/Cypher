@@ -388,12 +388,12 @@ public class MatrixApiLayer implements ApiLayer {
 		return  Util.makeJsonPostRequest(url, roomCreation).getAsJsonObject();
 	}
 	@Override
-	public JsonObject postJoinRoom(String roomId, JsonObject thirdPartySigned) throws RestfulHTTPException, IOException {
+	public JsonObject postJoinRoomIdorAlias(String roomIdorAlias, JsonObject thirdPartySigned) throws RestfulHTTPException, IOException {
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("access_token", session.getAccessToken());
 		//Build request URL.
-		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_JOIN,new Object[] {roomId}, parameters);
+		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_JOIN_ID_OR_A,new Object[] {roomIdorAlias}, parameters);
 
 		//Send request URL.
 		return  Util.makeJsonPostRequest(url, thirdPartySigned).getAsJsonObject();
