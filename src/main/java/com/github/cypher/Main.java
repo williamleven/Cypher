@@ -29,6 +29,8 @@ public class Main extends Application {
 	private static final String APPLICATION_NAME = "Cypher";
 	private static final String USER_DATA_DIRECTORY = getUserDataDirectoryPath(APPLICATION_NAME); //The path to the folder where settings, credentials etc are saved.
 	private static final String SETTINGS_NAMESPACE = "com.github.cypher.settings";
+	private static final int MIN_WINDOW_WIDTH = 600;
+	private static final int MIN_WINDOW_HEIGHT = 438;
 
 	private final Settings settings = new TOMLSettings(USER_DATA_DIRECTORY);
 	private final Executor executor = new Executor();
@@ -66,15 +68,23 @@ public class Main extends Application {
 		primaryStage.setTitle("Cypher");
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
 		primaryStage.setScene(scene);
-		primaryStage.setMinWidth(780);
-		primaryStage.setMinHeight(425);
+		if (settings.getLastWindowPosX() != -1 && settings.getLastWindowPosY() != -1) {
+			primaryStage.setX(settings.getLastWindowPosX());
+			primaryStage.setY(settings.getLastWindowPosY());
+		}
+		if (settings.getLastWindowWidth() != -1 && settings.getLastWindowHeight() != -1) {
+			primaryStage.setWidth(settings.getLastWindowWidth());
+			primaryStage.setHeight(settings.getLastWindowHeight());
+		}
+		primaryStage.setMinWidth(MIN_WINDOW_WIDTH);
+		primaryStage.setMinHeight(MIN_WINDOW_HEIGHT);
 
 		// Only hide close the main window if system tray is enabled and supported.
 		primaryStage.setOnCloseRequest(event -> {
 			if (useSystemTray()) {
 				primaryStage.close();
 			} else {
-				exit();
+				exit(primaryStage);
 			}
 		});
 		if (useSystemTray()) {
@@ -119,7 +129,7 @@ public class Main extends Application {
 
 		{ /* The "EXIT" menu item */
 			MenuItem item = new MenuItem(labels.getString("exit"), e -> {
-				exit();
+				exit(primaryStage);
 			});
 			item.setShortcut('q');
 			systemTray.getMenu().add(item);
@@ -131,7 +141,11 @@ public class Main extends Application {
 		launch(args);
 	}
 
-	private void exit() {
+	private void exit(Stage primaryStage) {
+		settings.setLastWindowPosX((int) primaryStage.getX());
+		settings.setLastWindowPosY((int) primaryStage.getY());
+		settings.setLastWindowWidth((int) primaryStage.getWidth());
+		settings.setLastWindowHeight((int) primaryStage.getHeight());
 		client.exit();
 		Platform.exit();
 		System.exit(0);
