@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.*;
 
 /**
  * Represents a Matrix user
@@ -24,10 +25,17 @@ public class User {
 	protected final StringProperty name               = new SimpleStringProperty(null);
 	protected final ObjectProperty<URL> avatarUrl     = new SimpleObjectProperty<>(null);
 	protected final ObjectProperty<Image> avatar      = new SimpleObjectProperty<>(null);
+	private boolean avatarWanted = false;
+	private final Object avatarLock = new Object();
 	protected final ObjectProperty<Presence> presence = new SimpleObjectProperty<>(null);
 	protected final BooleanProperty isActive          = new SimpleBooleanProperty(false);
 	protected final LongProperty lastActiveAgo        = new SimpleLongProperty(0);
 	private int avatarSize=24;
+
+	private URL loadedAvatarUrl = null;
+	private int loadedAvatarSize = 0;
+
+	private java.util.List<ChangeListener<? super Image>> avatarListeners = new ArrayList<>();
 
 	User(ApiLayer api, String id) {
 		this.api = api;
@@ -96,9 +104,9 @@ public class User {
 			try {
 				URL newAvatarUrl = new URL(contentObject.get("avatar_url").getAsString());
 				if(!newAvatarUrl.equals(avatarUrl)) {
-					avatar.set(ImageIO.read(api.getMediaContentThumbnail(newAvatarUrl,avatarSize)));
+					avatarUrl.set(newAvatarUrl);
+					updateAvatar();
 				}
-				avatarUrl.set(newAvatarUrl);
 			} catch (RestfulHTTPException | IOException e) {
 				avatar.set(null);
 				avatarUrl.set(null);
@@ -107,7 +115,21 @@ public class User {
 			avatar.set(null);
 			avatarUrl.set(null);
 		}
-}
+	}
+
+	private void updateAvatar() throws RestfulHTTPException, IOException{
+		synchronized (avatarLock) {
+			if (avatarWanted && avatarUrl.get() != null ) {
+				if (!avatarUrl.get().equals(loadedAvatarUrl) || avatarSize > loadedAvatarSize){
+					avatar.set(ImageIO.read(api.getMediaContentThumbnail(avatarUrl.getValue(),avatarSize)));
+					loadedAvatarUrl = avatarUrl.get();
+					loadedAvatarSize = avatarSize;
+				}
+			} else {
+				avatar.set(null);
+			}
+		}
+	}
 
 
 	public void addNameListener(ChangeListener<? super String> listener) {
@@ -127,14 +149,28 @@ public class User {
 	}
 
 	public void addAvatarListener(ChangeListener<? super Image> listener,int size ) {
-		if (size>avatarSize) {
-			avatarSize = size;
+		synchronized (avatarLock) {
+			avatarListeners.add(listener);
+			avatarWanted = true;
+			if (size > avatarSize) {
+				avatarSize = size;
+			}
+			try {
+				updateAvatar();
+			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
+
+			avatar.addListener(listener);
 		}
-		avatar.addListener(listener);
 	}
 
 	public void removeAvatarListener(ChangeListener<? super Image> listener) {
-		avatar.removeListener(listener);
+		synchronized (avatarLock) {
+			avatarListeners.remove(listener);
+			if (avatarListeners.isEmpty()) {
+				avatarWanted = false;
+			}
+			avatar.removeListener(listener);
+		}
 	}
 
 	public void addPresenceListener(ChangeListener<? super Presence> listener) {
@@ -166,7 +202,20 @@ public class User {
 	public String getId() { return id; }
 	public String getName() { return name.get(); }
 	public URL getAvatarUrl() { return avatarUrl.get(); }
-	public Image getAvatar() { return avatar.get(); }
+	public Image getAvatar(int size) {
+		synchronized (avatarLock) {
+			boolean old = avatarWanted;
+			avatarWanted = true;
+			if (size > avatarSize) {
+				avatarSize = size;
+			}
+			try {
+				updateAvatar();
+			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
+			avatarWanted = old;
+			return avatar.get();
+		}
+	}
 	public Presence getPresence() { return presence.get(); }
 	public boolean getIsActive() { return isActive.get(); }
 	public long getLastActiveAgo() { return lastActiveAgo.get(); }
