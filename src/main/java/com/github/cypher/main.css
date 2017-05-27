@@ -11,8 +11,8 @@ AnchorPane {
 }
 
 .image-btn {
-	-fx-min-width: 0px !important;
-	-fx-padding: 5px !important;
+	-fx-padding: 5px;
+	-fx-background-color: -fx-popup;
 }
 
 .inline-monospace {
@@ -21,6 +21,11 @@ AnchorPane {
 
 .block-monospace {
 	-fx-background-color: #777777;
+}
+
+.heading {
+	-fx-font-size: 20px;
+	-fx-font-weight: bold;
 }
 
 * {
