@@ -66,8 +66,8 @@ public class Main extends Application {
 		primaryStage.setTitle("Cypher");
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
 		primaryStage.setScene(scene);
-		primaryStage.setMinWidth(780);
-		primaryStage.setMinHeight(425);
+		primaryStage.setMinWidth(600);
+		primaryStage.setMinHeight(438);
 
 		// Only hide close the main window if system tray is enabled and supported.
 		primaryStage.setOnCloseRequest(event -> {

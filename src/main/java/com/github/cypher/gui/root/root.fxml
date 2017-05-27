@@ -1,49 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-
+<?import java.lang.String?>
 <StackPane fx:id="mainStackPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.RootPresenter">
     <children>
-        <HBox>
-            <children>
+        <BorderPane>
+            <center>
+                <StackPane minWidth="0" fx:id="rightSideStackPane" HBox.hgrow="ALWAYS"/>
+            </center>
+            <left>
                 <AnchorPane minHeight="300.0" minWidth="-Infinity" style="-fx-background-color: -fx-color-base !important;">
                     <children>
-                         <ListView fx:id="roomCollectionListView" focusTraversable="false" prefHeight="0.0" prefWidth="49.0" style="-fx-background-color: -fx-color-base;" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-                     <styleClass>
-                        <String fx:value="server-list" />
-                        <String fx:value="fancy-scroll" />
-                     </styleClass>
-                         </ListView>
-                  <VBox alignment="CENTER" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
-                     <children>
-                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable">
-                           <children>
-                                       <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="40" onMouseClicked="#openAddDialog" text="" translateY="2.0" />
-                           </children>
+                        <ListView fx:id="roomCollectionListView" focusTraversable="false" prefHeight="0.0" prefWidth="49.0" style="-fx-background-color: -fx-color-base;" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                            <styleClass>
+                                <String fx:value="server-list"/>
+                                <String fx:value="fancy-scroll"/>
+                            </styleClass>
+                        </ListView>
+                        <VBox alignment="CENTER" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                            <children>
+                                <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable">
+                                    <children>
+                                        <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="40" onMouseClicked="#openAddDialog" text="" translateY="2.0"/>
+                                    </children>
+                                </VBox>
+                            </children>
                         </VBox>
-                     </children>
-                  </VBox>
-                  <VBox alignment="CENTER" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
-                     <children>
-                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable">
-                           <children>
-                                      <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="40" onMouseClicked="#toggleSettings" textAlignment="CENTER" />
-                           </children>
+                        <VBox alignment="CENTER" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                            <children>
+                                <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable">
+                                    <children>
+                                        <FontIcon iconColor="WHITE" iconLiteral="fa-cog" iconSize="40" onMouseClicked="#toggleSettings" textAlignment="CENTER"/>
+                                    </children>
+                                </VBox>
+                            </children>
                         </VBox>
-                     </children>
-                  </VBox>
-                  <Separator layoutX="-57.0" layoutY="199.0" styleClass="base-separator" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+                        <Separator layoutX="-57.0" layoutY="199.0" styleClass="base-separator" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0"/>
                     </children>
                 </AnchorPane>
-                <StackPane fx:id="rightSideStackPane" HBox.hgrow="ALWAYS" />
-            </children>
-        </HBox>
+            </left>
+        </BorderPane>
     </children>
 </StackPane>

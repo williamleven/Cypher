@@ -4,12 +4,12 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<StackPane fx:id="mainStackPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.room.RoomPresenter">
+<StackPane fx:id="mainStackPane" minWidth="0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.room.RoomPresenter">
     <children>
-        <HBox fx:id="chatRoot">
+        <HBox>
             <children>
                 <AnchorPane fx:id="chat" HBox.hgrow="ALWAYS" />
-                <AnchorPane prefWidth="200.0" styleClass="member-list-anchor">
+                <AnchorPane prefWidth="200.0" minWidth="0" styleClass="member-list-anchor">
                     <children>
                         <ListView fx:id="memberListView" focusTraversable="false" layoutY="32.0" prefHeight="368.0" prefWidth="200.0" styleClass="member-list" />
                         <Label fx:id="membersLabel" prefHeight="20.0" prefWidth="165.0" text="%members" underline="true" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
