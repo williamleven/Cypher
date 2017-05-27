@@ -35,9 +35,12 @@ public class Main extends Application {
 	private final EventBus eventBus = new EventBus();
 	private final Client client = ModelFactory.createClient(settings, eventBus, USER_DATA_DIRECTORY, SETTINGS_NAMESPACE);
 
+	private boolean systemTrayInUse;
+
 	@Override
 	public void start(Stage primaryStage) {
 		Locale.setDefault(settings.getLanguage());
+		systemTrayInUse = settings.getUseSystemTray();
 		// Starts the Executors thread
 		executor.start();
 		URL.setURLStreamHandlerFactory(new com.github.cypher.sdk.api.Util.MatrixMediaURLStreamHandlerFactory());
@@ -66,29 +69,26 @@ public class Main extends Application {
 		primaryStage.setTitle("Cypher");
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
 		primaryStage.setScene(scene);
-		primaryStage.setMinWidth(780);
-		primaryStage.setMinHeight(425);
+		primaryStage.setMinWidth(600);
+		primaryStage.setMinHeight(438);
 
-		// Only hide close the main window if system tray is enabled and supported.
-		primaryStage.setOnCloseRequest(event -> {
-			if (useSystemTray()) {
-				primaryStage.close();
-			} else {
-				exit();
-			}
-		});
+		// addSystemTray sets its own "onCloseRequest" on the primaryStage
 		if (useSystemTray()) {
-			addTrayIcon(primaryStage);
+			addSystemTray(primaryStage);
+		} else {
+			primaryStage.setOnCloseRequest(event -> {
+				exit();
+			});
 		}
 
 		primaryStage.show();
 	}
 
 	private boolean useSystemTray() {
-		return settings.getUseSystemTray() && SystemTray.get() != null;
+		return systemTrayInUse && SystemTray.get() != null;
 	}
 
-	private void addTrayIcon(Stage primaryStage) {
+	private void addSystemTray(Stage primaryStage) {
 
 		// Load systemtray
 		SystemTray systemTray = SystemTray.get();
@@ -106,24 +106,35 @@ public class Main extends Application {
 		systemTray.setImage(getClass().getResourceAsStream("/icon.png"));
 		systemTray.setStatus("Cypher");
 
-		{ /* The "SHOW" menu item */
-			MenuItem item = new MenuItem(labels.getString("show"), e -> {
-				Platform.runLater(() -> {
-					primaryStage.show();
-					primaryStage.requestFocus();
-				});
+		/* The "SHOW" menu item */
+		MenuItem showMenuItem = new MenuItem(labels.getString("show"));
+		showMenuItem.setCallback(e -> {
+			Platform.runLater(() -> {
+				primaryStage.show();
+				primaryStage.requestFocus();
+				showMenuItem.setEnabled(false);
 			});
-			item.setShortcut('o');
-			systemTray.getMenu().add(item);
-		}
+		});
+		showMenuItem.setShortcut('o');
+		showMenuItem.setEnabled(false);
+		systemTray.getMenu().add(showMenuItem);
 
-		{ /* The "EXIT" menu item */
-			MenuItem item = new MenuItem(labels.getString("exit"), e -> {
+		/* The "EXIT" menu item */
+		MenuItem exitMenuItem = new MenuItem(labels.getString("exit"), e -> {
+			exit();
+		});
+		exitMenuItem.setShortcut('q');
+		systemTray.getMenu().add(exitMenuItem);
+
+		// Only hide close the main window if system tray is enabled and supported.
+		primaryStage.setOnCloseRequest(event -> {
+			if (systemTrayInUse) {
+				primaryStage.close();
+				showMenuItem.setEnabled(true);
+			} else {
 				exit();
-			});
-			item.setShortcut('q');
-			systemTray.getMenu().add(item);
-		}
+			}
+		});
 	}
 
 
