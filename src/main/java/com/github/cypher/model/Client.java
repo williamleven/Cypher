@@ -158,12 +158,14 @@ public class Client {
 		updater = null;
 		try {
 			sdkClient.logout();
-			sessionManager.deleteSessionFromDisk();
-			eventBus.post(ToggleEvent.LOGOUT);
-			initialize();
 		} catch (RestfulHTTPException | IOException ex) {
+			// Restart updater if logout failed
+			startNewUpdater();
 			throw new SdkException(ex);
 		}
+		sessionManager.deleteSessionFromDisk();
+		eventBus.post(ToggleEvent.LOGOUT);
+		initialize();
 	}
 
 	public void register(String username, String password, String homeserver) throws SdkException {
