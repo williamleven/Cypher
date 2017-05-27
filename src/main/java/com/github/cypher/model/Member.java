@@ -10,7 +10,7 @@ import javafx.scene.image.Image;
 public class Member {
 	private final User user;
 
-	private ObjectProperty<Image> imageProperty = new SimpleObjectProperty();
+	private final ObjectProperty<Image> imageProperty = new SimpleObjectProperty();
 
 	private final StringProperty name = new SimpleStringProperty();
 
