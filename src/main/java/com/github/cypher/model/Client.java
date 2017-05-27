@@ -189,7 +189,7 @@ public class Client {
 			try {
 				addRoom(input);
 			} catch (SdkException e) {
-				e.printStackTrace();
+				
 			}
 		} else if (Util.isUser(input)) {
 			addUser(input);
