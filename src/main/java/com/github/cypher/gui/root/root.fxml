@@ -13,9 +13,9 @@
     <children>
         <HBox>
             <children>
-                <AnchorPane minHeight="300.0" minWidth="-Infinity" style="-fx-background-color: -fx-color-base !important;">
+                <AnchorPane minHeight="300.0" minWidth="-Infinity" style="-fx-background-color: -fx-dark-base;">
                     <children>
-                         <ListView fx:id="roomCollectionListView" focusTraversable="false" prefHeight="0.0" prefWidth="49.0" style="-fx-background-color: -fx-color-base;" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                         <ListView fx:id="roomCollectionListView" focusTraversable="false" prefHeight="0.0" prefWidth="49.0" style="-fx-background-color: -fx-dark-base;" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <styleClass>
                         <String fx:value="server-list" />
                         <String fx:value="fancy-scroll" />

@@ -23,7 +23,7 @@
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-border-width: 0 0 0 0;
-    -fx-background-radius: 0em;
+    -fx-background-radius: 10px;
     -fx-border-radius: 10px;
 }
 /* The main scrollbar **thumb** CSS class which we drag every time (movable) */
@@ -56,10 +56,10 @@
 .fancy-scroll:hover .scroll-bar .thumb:hover,
 .fancy-scroll:pressed .scroll-bar .thumb:hover,
 .fancy-scroll .scroll-bar .thumb:hover{
-    -fx-background-color: -fx-soft-popup;
+    -fx-background-color: -fx-popup;
 }
 .fancy-scroll .scroll-bar .thumb:pressed,
 .fancy-scroll:pressed .scroll-bar .thumb:pressed,
 .fancy-scroll:hover .scroll-bar .thumb:pressed{
-    -fx-background-color: -fx-popup;
+    -fx-background-color: -fx-soft-popup;
 }

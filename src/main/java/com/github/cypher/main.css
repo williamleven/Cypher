@@ -6,10 +6,6 @@ root {
 	-fx-font-size: 14px;
 }
 
-AnchorPane {
-	-fx-background-color: -fx-base;
-}
-
 .image-btn {
 	-fx-padding: 5px;
 	-fx-background-color: -fx-popup;
@@ -29,26 +25,28 @@ AnchorPane {
 }
 
 * {
-	-room-list-background: #f9f9f9;
-	-room-item-background: #e1e1e1;
-	-room-item-selection-color: #09cdda;
+	-room-list-background: -fx-medium-base;
+	-room-item-background: -fx-medium-base;
+	-room-item-selection-color: -fx-soft-popup;
 
-	-member-list-background: -room-item-background;
-	-member-item-background: -room-item-background;
+	-member-list-background: -fx-medium-base;
+	-member-item-background: -fx-medium-base;
 }
 
 /*Colors */
 * {
-	-fx-color-base: #404040;
-	-fx-lighter: #808080;
+	-fx-base: transparent;
+	-fx-light-base: #ECFAFF;
+	-fx-medium-base: #829296;
+	-fx-dark-base: #404040;
+	-fx-lighter: -fx-medium-base;
+	/*-fx-lighter: #808080;*/
 	-fx-soft-popup: #008CBA;
 	-fx-popup: #09CDDA;
-
 }
 
 .base-separator {
 	-fx-background-color: -fx-lighter;
-	-fx-border-color: transparent;
 }
 
 .clickable:hover {

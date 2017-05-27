@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<AnchorPane minHeight="300.0" minWidth="400.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.settings.SettingsPresenter">
+<AnchorPane minHeight="300.0" minWidth="400.0" style="-fx-background-color: -fx-light-base;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.settings.SettingsPresenter">
    <children>
       <Label alignment="CENTER" layoutX="13.0" layoutY="30.0" prefHeight="42.0" prefWidth="376.0" styleClass="h1" text="Settings" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0" />
       <Button fx:id="logoutButton" layoutX="163.0" layoutY="101.0" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="60.0" style="-fx-min-width: 2px;" wrapText="true">

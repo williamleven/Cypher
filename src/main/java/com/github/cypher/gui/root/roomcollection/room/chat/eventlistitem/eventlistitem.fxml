@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane id="messagePane" fx:id="root" minHeight="28.0" styleClass="textMessage" stylesheets="@eventlistitem.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem.EventListItemPresenter">
+<AnchorPane id="messagePane" fx:id="root" minHeight="28.0" style="-fx-background-color: -fx-light-base;" styleClass="textMessage" stylesheets="@eventlistitem.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.room.chat.eventlistitem.EventListItemPresenter">
    <children>
       <ImageView id="avatar" fx:id="avatar" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <HBox styleClass="textMessage" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
