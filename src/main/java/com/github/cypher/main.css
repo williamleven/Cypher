@@ -48,7 +48,7 @@ AnchorPane {
 
 .base-separator {
 	-fx-background-color: -fx-lighter;
-
+	-fx-border-color: transparent;
 }
 
 .clickable:hover {
