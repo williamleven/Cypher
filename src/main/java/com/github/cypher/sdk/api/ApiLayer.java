@@ -88,12 +88,18 @@ public interface ApiLayer {
 	void refreshToken() throws RestfulHTTPException, IOException;
 
 	/**
-	 * This API returns a list of message and state events for a room. It uses pagination query parameters to paginate history in the room.
-	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Room_participation/get_matrix_client_r0_rooms_roomId_messages">matrix.org</a>
-	 * @param roomId The unique ID of a room (e.g. "!cURbafjkfsMDVwdRDQ:matrix.org")
+	 * This API returns a list of message and state events for a room.
+	 * <p>
+	 * It uses pagination query parameters to paginate history in the room.
+	 * @see <a href="https://matrix.org/docs/api/client-server/#!/Room32participation/get_matrix_client_r0_rooms_roomId_messages">matrix.org</a>
+	 * @param roomId ID of the room from which to get events
+	 * @param from The token to start returning events from. This token can be obtained from a prev_batch token returned for each room by the sync API, or from a start or end token returned by a previous request to this endpoint.
+	 * @param to The token to stop returning events at. This token can be obtained from a prev_batch token returned for each room by the sync endpoint, or from a start or end token returned by a previous request to this endpoint.
+	 * @param backward The direction to return events from. false = forward
+	 * @param limit The maximum number of events to return. May be null.
 	 * @return Valid Json response
 	 */
-	JsonObject getRoomMessages(String roomId) throws RestfulHTTPException, IOException;
+	JsonObject getRoomMessages(String roomId, String from, String to, boolean backward, Integer limit) throws RestfulHTTPException, IOException;
 
 	/**
 	 * Get the list of members for this room.

@@ -46,7 +46,13 @@ public class Room {
 	private final ObjectProperty<Image> avatar = new SimpleObjectProperty<>(null);
 	private final ObjectProperty<PermissionTable> permissions = new SimpleObjectProperty<>(null);
 
+	private String earliestBatch = null;
+
 	private final ObservableMap<String, Event> events =
+		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
+
+	// The latest state event for every event type
+	private ObservableMap<String, Event> latestStateEvents =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
 	private final ObservableList<Member> members =
@@ -111,28 +117,93 @@ public class Room {
 	}
 
 	void update(JsonObject data) {
-		parseNameData(data);
+		parseBasicPropertiesData(data);
 
-		parseTopicData(data);
+		parseEventData(data);
 
-		parseAvatarUrlData(data);
+		parseTimelineEvents(data);
 
-		parseEvents("timeline", data);
-
-		parseEvents("state", data);
+		parseStateEvents(data);
 	}
 
-	private void parseEvents(String category, JsonObject data) {
-		if (data.has(category) &&
-		    data.get(category).isJsonObject()) {
-			JsonObject timeline = data.get(category).getAsJsonObject();
-			if (timeline.has("events") &&
-			    timeline.get("events").isJsonArray()) {
-				JsonArray events = timeline.get("events").getAsJsonArray();
-				for (JsonElement eventElement : events) {
-					if (eventElement.isJsonObject()) {
-						parseEventData(eventElement.getAsJsonObject());
-					}
+	public void getEventHistory(Integer limit) throws RestfulHTTPException, IOException {
+		if(earliestBatch == null) {
+			throw new IOException("sdk.Room.getHistory(...) called before first sdk.Client.sync(...)");
+		}
+
+		JsonObject data = api.getRoomMessages(id, earliestBatch, null, true, limit);
+
+		if(data.has("end") &&
+		   data.get("end").isJsonPrimitive()) {
+
+			earliestBatch = data.get("end").getAsString();
+		} else {
+			throw new IOException("No pagination token was given by the server");
+		}
+
+		if(data.has("chunk") &&
+		   data.get("chunk").isJsonArray()) {
+
+			JsonArray chunk = data.get("chunk").getAsJsonArray();
+
+			for(JsonElement eventElement : chunk) {
+				if(eventElement.isJsonObject()) {
+					parseEventData(eventElement.getAsJsonObject());
+				}
+			}
+		}
+	}
+
+	private void parseBasicPropertiesData(JsonObject data) {
+		if (data.has("name")) {
+			name.setValue(data.get("name").getAsString());
+		}
+		if (data.has("topic")) {
+			topic.setValue(data.get("topic").getAsString());
+		}
+		if (data.has("avatar_url")) {
+			try {
+				URL newAvatarUrl = new URL(data.get("avatar_url").getAsString());
+				avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
+				this.avatarUrl.set(newAvatarUrl);
+			} catch(RestfulHTTPException | IOException e) {
+				avatar.set(null);
+				avatarUrl.set(null);
+			}
+		}
+	}
+
+	private void parseTimelineEvents(JsonObject data) {
+		if (data.has("timeline") &&
+		    data.get("timeline").isJsonObject()) {
+			JsonObject timeline = data.get("timeline").getAsJsonObject();
+
+			if(earliestBatch == null &&
+			   timeline.has("prev_batch") &&
+			   timeline.get("prev_batch").isJsonPrimitive()) {
+
+				earliestBatch = timeline.get("prev_batch").getAsString();
+			}
+
+			parseEvents(timeline);
+		}
+	}
+
+	private void parseStateEvents(JsonObject data) {
+		if (data.has("state") &&
+		    data.get("state").isJsonObject()) {
+			JsonObject timeline = data.get("state").getAsJsonObject();
+			parseEvents(timeline);
+		}
+	}
+
+	private void parseEvents(JsonObject timeline) {
+		if (timeline.has("events") &&
+		    timeline.get("events").isJsonArray()) {
+			JsonArray events = timeline.get("events").getAsJsonArray();
+			for (JsonElement eventElement : events) {
+				if (eventElement.isJsonObject()) {
+					parseEventData(eventElement.getAsJsonObject());
 				}
 			}
 		}
@@ -167,37 +238,37 @@ public class Room {
 			} else if ("m.room.member".equals(eventType)) {
 				parseMemberEvent(event, originServerTs, sender, eventId, age, content);
 			} else if ("m.room.name".equals(eventType)) {
-				parseNameData(content);
-				addPropertyChangeEvent(originServerTs, sender, eventId, age, "name", name.getValue());
+				parseNameData(content, originServerTs, sender, eventId, age);
 			} else if ("m.room.topic".equals(eventType)) {
-				parseTopicData(content);
-				addPropertyChangeEvent(originServerTs, sender, eventId, age, "topic", topic.getValue());
+				parseTopicData(content, originServerTs, sender, eventId, age);
 			} else if ("m.room.avatar".equals(eventType)) {
-				parseAvatarUrlData(content);
-				addPropertyChangeEvent(originServerTs, sender, eventId, age, "avatar_url", avatarUrl.getValue());
+				parseAvatarUrlData(content, originServerTs, sender, eventId, age);
 			} else if ("m.room.aliases".equals(eventType)) {
 				if (event.has("state_key") &&
 					event.get("state_key").isJsonPrimitive()){
-					parseAliasesEvent(content, event.get("state_key").getAsString());
+					parseAliasesEvent(content, event.get("state_key").getAsString(), originServerTs, sender, eventId, age);
 				}
 			} else if ("m.room.canonical_alias".equals(eventType)) {
-				parseCanonicalAlias(content);
+				parseCanonicalAlias(content, originServerTs, sender, eventId, age);
 			} else if ("m.room.power_levels".equals(eventType)) {
-				parsePowerLevelsEvent(content);
-				addPropertyChangeEvent(originServerTs, sender, eventId, age, "power_levels", permissions.getValue());
+				parsePowerLevelsEvent(content, originServerTs, sender, eventId, age);
 			}
 		}
 	}
 
-	private void parseCanonicalAlias(JsonObject content) {
+	private void parseCanonicalAlias(JsonObject content, int originServerTs, String sender, String eventId, int age) {
 		if (content.has("alias") &&
 		    content.get("alias").isJsonPrimitive() &&
 		   !content.get("alias").getAsString().isEmpty()) {
-			canonicalAlias.setValue(content.get("alias").getAsString());
+			String newAlias = "";
+			Event event = addPropertyChangeEvent(originServerTs, sender, eventId, "m.room.canonical_alias", age, "canonical_alias", newAlias);
+			if(isLatestStateEvent(event)) {
+				canonicalAlias.setValue(content.get("alias").getAsString());
+			}
 		}
 	}
 
-	private void parseAliasesEvent(JsonObject content, String stateKey) {
+	private void parseAliasesEvent(JsonObject content, String stateKey, int originServerTs, String sender, String eventId, int age) {
 		if (content.has("aliases") &&
 		    content.get("aliases").isJsonArray()) {
 
@@ -209,52 +280,71 @@ public class Room {
 			for (JsonElement alias : aliases) {
 				list.add(alias.getAsString());
 			}
-			if (list.size() == 0){
-				this.aliasLists.remove(stateKey);
-			}else{
-				this.aliasLists.put(stateKey, list);
+
+			Event event = addPropertyChangeEvent(originServerTs, sender, eventId, "m.room.aliases", age, "aliases", list);
+
+			if (isLatestStateEvent(event)) {
+				if (list.size() == 0){
+					this.aliasLists.remove(stateKey);
+				} else{
+					this.aliasLists.put(stateKey, list);
+				}
 			}
 		}
 	}
 
-	private void parseNameData(JsonObject data) {
+	private void parseNameData(JsonObject data, int originServerTs, String sender, String eventId, int age) {
 		if (data.has("name")) {
-			name.set(data.get("name").getAsString());
+			String newName = data.get("name").getAsString();
+			Event event = addPropertyChangeEvent(originServerTs, sender, eventId, "m.room.name", age, "name", newName);
+			if(isLatestStateEvent(event)) {
+				name.set(newName);
+			}
 		}
 	}
 
-	private void parseTopicData(JsonObject data) {
+	private void parseTopicData(JsonObject data, int originServerTs, String sender, String eventId, int age) {
 		if (data.has("topic")) {
-			topic.set(data.get("topic").getAsString());
+			String newTopic = data.get("topic").getAsString();
+			Event event = addPropertyChangeEvent(originServerTs, sender, eventId, "m.room.topic", age, "topic", newTopic);
+			if (isLatestStateEvent(event)) {
+				topic.set(newTopic);
+			}
 		}
 	}
 
 
-	private void parseAvatarUrlData(JsonObject data) {
-		for(String key : new String[] {"url", "avatar_url"}) {
+	private void parseAvatarUrlData(JsonObject data, int originServerTs, String sender, String eventId, int age) {
+		for(String key : new String[] {"avatar_url", "url"}) {
 			if (data.has(key)) {
 				try {
 					URL newAvatarUrl = new URL(data.get(key).getAsString());
-					if (!newAvatarUrl.equals(avatarUrl.getValue())) {
+
+					Event event = addPropertyChangeEvent(originServerTs, sender, eventId, "m.room.avatar", age, "avatar", newAvatarUrl);
+
+					if (isLatestStateEvent(event) &&
+					   !newAvatarUrl.equals(avatarUrl.getValue())) {
 						avatar.set(ImageIO.read(api.getMediaContent(newAvatarUrl)));
 						this.avatarUrl.set(newAvatarUrl);
 					}
-					break;
-				} catch(IOException e) {
+				} catch(RestfulHTTPException | IOException e) {
 					avatar.set(null);
 					avatarUrl.set(null);
 				}
+				break;
 			}
 		}
 	}
 
 
 	private void parseMessageEvent(int originServerTs, String sender, String eventId, int age, JsonObject content) {
-		User author = userRepository.get(sender);
-		this.events.put(
-			eventId,
-			new Message(api, originServerTs, author, eventId, age, content)
-		               );
+		if (!events.containsKey(eventId)){
+			User author = userRepository.get(sender);
+			this.events.put(
+					eventId,
+					new Message(api, originServerTs, author, eventId, age, content)
+			);
+		}
 	}
 
 	private void parseMemberEvent(JsonObject event, int originServerTs, String senderId, String eventId, int age, JsonObject content) {
@@ -263,32 +353,52 @@ public class Room {
 			String memberId = event.get("state_key").getAsString();
 			String membership = content.get("membership").getAsString();
 
-			User user = userRepository.get(memberId);
-			user.update(event);
-
-			if        ("join".equals(membership)) {
-				if (members.stream().noneMatch(m -> m.getUser().getId().equals(memberId))) {
-					members.add(new Member(user));
-				}
-			} else if ("leave".equals(membership)) {
-				Optional<Member> optionalMember = members.stream().filter(m -> m.getUser().getId().equals(memberId)).findAny();
-				optionalMember.ifPresent(member -> members.remove(member));
-			}
-
-			// Add membership event to the log
 			User sender = userRepository.get(senderId);
-			events.put(
-					eventId,
-					new MemberEvent(api, originServerTs, sender, eventId, age, memberId, membership)
-			);
+			MemberEvent memberEvent = new MemberEvent(api, originServerTs, sender, eventId, age, memberId, membership);
+
+			if(isLatestStateEvent(memberEvent)) {
+				User user = userRepository.get(memberId);
+				user.update(event);
+
+				if        ("join".equals(membership)) {
+					if (members.stream().noneMatch(m -> m.getUser().getId().equals(memberId))) {
+						members.add(new Member(user));
+					}
+				} else if ("leave".equals(membership)) {
+					Optional<Member> optionalMember = members.stream().filter(m -> m.getUser().getId().equals(memberId)).findAny();
+					optionalMember.ifPresent(member -> members.remove(member));
+				}
+
+				// Add membership event to the log
+				if(!events.containsKey(eventId)) {
+					events.put(eventId, memberEvent);
+				}
+
+				latestStateEvents.put(memberId, memberEvent);
+			}
 		}
 	}
 
-	private void parsePowerLevelsEvent(JsonObject data) {
+	private void parsePowerLevelsEvent(JsonObject data, int originServerTs, String senderId, String eventId, int age) {
 		try {
-			this.permissions.set(new PermissionTable(data));
+			PermissionTable newTable = new PermissionTable(data);
+			Event event = addPropertyChangeEvent(
+					originServerTs,
+					senderId,
+					eventId,
+					"m.room.power_levels",
+					age,
+					"power_levels",
+					newTable
+			);
+
+			if (!isLatestStateEvent(event)) {
+				return;
+			}
+
+			this.permissions.set(newTable);
 		} catch(IOException e) {
-			this.permissions.set(null);
+			return;
 		}
 
 		if(data.has("users") &&
@@ -302,12 +412,29 @@ public class Room {
 		}
 	}
 
-	private <T> void addPropertyChangeEvent(int originServerTs, String senderId, String eventId, int age, String property, T value) {
-		User sender = userRepository.get(senderId);
-		events.put(
-				eventId,
-				new PropertyChangeEvent<>(api, originServerTs, sender, eventId, age, property, value)
-		);
+	private boolean isLatestStateEvent(Event event) {
+		String key;
+		if(event instanceof MemberEvent) {
+			key = ((MemberEvent)event).getUserId();
+		} else {
+			key = event.getType();
+		}
+		return !latestStateEvents.containsKey(key) ||
+		       (latestStateEvents.get(key).getOriginServerTs() <= event.getOriginServerTs());
+	}
+
+	private <T> Event addPropertyChangeEvent(int originServerTs, String senderId, String eventId, String eventType, int age, String property, T value) {
+		if(!events.containsKey(eventId))
+		{
+			User sender = userRepository.get(senderId);
+			PropertyChangeEvent<T> event = new PropertyChangeEvent<>(api, originServerTs, sender, eventId, eventType, age, property, value);
+			events.put(eventId, event);
+			if(isLatestStateEvent(event)) {
+				latestStateEvents.put(eventType, event);
+			}
+			return event;
+		}
+		return events.get(eventId);
 	}
 
 	/**

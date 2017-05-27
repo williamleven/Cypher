@@ -19,7 +19,7 @@ public class Message extends Event {
 	private final StringProperty formatType    = new SimpleStringProperty(null);
 
 	Message(ApiLayer api, int originServerTs, User sender, String eventId, int age, JsonObject content) {
-		super(api, originServerTs, sender, eventId, age);
+		super(api, originServerTs, sender, eventId, "m.room.message", age);
 		if(content.has("body")) {
 			this.body.set(content.get("body").getAsString());
 		}
