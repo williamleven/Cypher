@@ -104,12 +104,29 @@ public class Room {
 				events.add(new Message(repo, (com.github.cypher.sdk.Message)event));
 			}
 		}
+		events.sort((a, b) -> (int)(a.getOriginServerTimeStamp() - b.getOriginServerTimeStamp()));
+
 		sdkRoom.addEventListener((change -> {
 			if (change.wasAdded()) {
-				com.github.cypher.sdk.Event event = change.getValueAdded();
-				if(event instanceof com.github.cypher.sdk.Message) {
-					events.add(new Message(repo, (com.github.cypher.sdk.Message)event));
+				com.github.cypher.sdk.Event sdkEvent = change.getValueAdded();
+
+				Event event;
+
+				if(sdkEvent instanceof com.github.cypher.sdk.Message) {
+					event = new Message(repo, (com.github.cypher.sdk.Message)sdkEvent);
+				} else {
+					return;
 				}
+
+				long timestamp = sdkEvent.getOriginServerTs();
+
+				for(int i = 0; i < events.size(); i++) {
+					if(timestamp < events.get(i).getOriginServerTimeStamp()) {
+						events.add(i, event);
+						return;
+					}
+				}
+				events.add(event);
 			}
 		}));
 	}
@@ -155,6 +172,14 @@ public class Room {
 			}
 		}
 
+	}
+
+	public void loadEventHistory(Integer limit) throws SdkException {
+		try {
+			sdkRoom.getEventHistory(limit);
+		} catch(RestfulHTTPException | IOException e) {
+			throw new SdkException(e);
+		}
 	}
 
 	public final boolean isPmChat() {

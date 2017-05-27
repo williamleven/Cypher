@@ -1,6 +1,7 @@
 package com.github.cypher.gui;
 
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -10,24 +11,15 @@ import javafx.collections.ObservableList;
 public class FXThreadedObservableListWrapper<T> {
 	private final ObservableList<T> sourceList;
 	private final ObservableList<T> delegatedList;
-	private final ListChangeListener<? super T> sourceListListener; // CurrentRoomCollectionListener?
+	private InvalidationListener sourceListListener; // CurrentRoomCollectionListener?
 
+	@SuppressWarnings("unchecked")
 	public FXThreadedObservableListWrapper(ObservableList<T> sourceList) {
 		this.sourceList = sourceList;
 		this.delegatedList = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
-		delegatedList.addAll(sourceList);
-		sourceListListener = ((ListChangeListener.Change<? extends T> change) -> {
-			Platform.runLater(() -> {
-				while (change.next()) {
-					if (change.wasAdded()) {
-						delegatedList.addAll(change.getAddedSubList());
-					}
-					if (change.wasRemoved()) {
-						delegatedList.removeAll(change.getRemoved());
-					}
-				}
-			});
-		});
+		Platform.runLater(() -> delegatedList.addAll(sourceList.toArray((T[])new Object[sourceList.size()])));
+		sourceListListener = i -> Platform.runLater(() ->
+			delegatedList.setAll(sourceList.toArray((T[])new Object[sourceList.size()])));
 		sourceList.addListener(sourceListListener);
 	}
 
