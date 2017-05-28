@@ -161,7 +161,7 @@ public class User {
 			try {
 				updateAvatar();
 			} catch (RestfulHTTPException | IOException e) {
-				System.out.printf("Failed to load image &s&n", e.getMessage());
+				System.out.printf("Failed to load image %s%n", e.getMessage());
 			}
 
 			avatar.addListener(listener);
@@ -217,7 +217,7 @@ public class User {
 			try {
 				updateAvatar();
 			} catch (RestfulHTTPException | IOException e) {
-				System.out.printf("Failed to load image &s&n", e.getMessage());
+				System.out.printf("Failed to load image %s%n", e.getMessage());
 			}
 			avatarWanted = old;
 			return avatar.get();
