@@ -15,6 +15,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 import javax.inject.Inject;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class RoomListItemPresenter extends CustomListCell<Room> {
 
@@ -31,7 +33,11 @@ public class RoomListItemPresenter extends CustomListCell<Room> {
 	private ImageView avatar;
 
 	@FXML
-	private TextArea topic;
+	private Label topic;
+
+	private final ResourceBundle bundle = ResourceBundle.getBundle(
+			"com.github.cypher.gui.root.roomcollection.roomlistitem.roomlistitem",
+			Locale.getDefault());
 
 
 	@Override
@@ -42,8 +48,18 @@ public class RoomListItemPresenter extends CustomListCell<Room> {
 	@Override
 	protected void updateBindings() {
 		Room room = getModelComponent();
+		Platform.runLater(() ->{
+			(new FXThreadedObservableValueWrapper<>(room.nameProperty())).addListener((invalidated) -> {
+				updateRoomName(room);
+			} );
 
-		name.textProperty().bind(new FXThreadedObservableValueWrapper<>(room.nameProperty()));
+			(new FXThreadedObservableValueWrapper<>(room.topicProperty())).addListener((invalidated) -> {
+				updateTopicName(room);
+			} );
+			updateRoomName(room);
+			updateTopicName(room);
+		});
+
 		executor.handle(() -> {
 			ObjectProperty<Image> image = room.avatarProperty();
 			Platform.runLater(() -> {
@@ -52,7 +68,7 @@ public class RoomListItemPresenter extends CustomListCell<Room> {
 				}
 			});
 		});
-		topic.textProperty().bind(new FXThreadedObservableValueWrapper<>(room.topicProperty()));
+
 	}
 
 	@Override
@@ -62,4 +78,21 @@ public class RoomListItemPresenter extends CustomListCell<Room> {
 		avatar.imageProperty().set(null);
 		topic.textProperty().unbind();
 	}
+
+	private void updateRoomName(Room room){
+		if (room.getName() == null || room.getName().isEmpty()) {
+			name.textProperty().setValue(bundle.getString("name.default"));
+		}else{
+			name.textProperty().setValue(room.getName());
+		}
+	}
+
+	private void updateTopicName(Room room){
+		if (room.getTopic() == null || room.getTopic().isEmpty()) {
+			topic.textProperty().setValue(bundle.getString("topic.default"));
+		}else{
+			topic.textProperty().setValue(room.getTopic());
+		}
+	}
+
 }

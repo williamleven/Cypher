@@ -24,7 +24,7 @@ public class Room {
 	private final com.github.cypher.sdk.Room sdkRoom;
 	private final User activeUser;
 	private boolean avatarWanted = false;
-	private final static int AVATAR_SIZE = 56;
+	private final static int AVATAR_SIZE = 48;
 
 
 	private URL lastAvatarURL = null;
@@ -89,14 +89,7 @@ public class Room {
 		});
 
 		sdkRoom.addAliasesListener(change -> {
-			while (change.next()){
-				if (change.wasAdded()){
-					aliases.addAll(change.getAddedSubList());
-				}
-				if (change.wasRemoved()){
-					aliases.removeAll(change.getRemoved());
-				}
-			}
+			aliases.setAll(change.getList());
 		});
 
 		for (com.github.cypher.sdk.Event event :sdkRoom.getEvents().values()){

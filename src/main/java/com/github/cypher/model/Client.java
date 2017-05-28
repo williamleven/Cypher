@@ -171,6 +171,9 @@ public class Client {
 	public void register(String username, String password, String homeserver) throws SdkException {
 		try {
 			sdkClient.register(username, password, homeserver);
+			loggedIn = true;
+			eventBus.post(ToggleEvent.LOGIN);
+			eventBus.post(ToggleEvent.SHOW_LOADING);
 			startNewUpdater();
 		}catch(RestfulHTTPException | IOException ex){
 			throw new SdkException(ex);
@@ -183,7 +186,12 @@ public class Client {
 		if (Util.isHomeserver(input)) {
 			addServer(input);
 		} else if (Util.isRoomLabel(input)) {
-			addRoom(input);
+			try {
+				addRoom(input);
+			} catch (SdkException e) {
+				System.out.printf("Adding room failed! - %s\n", e.getMessage());
+				throw new IOException("Adding room failed! - " + e.getMessage()); // e.getMessage() is only a temporary solution.
+			}
 		} else if (Util.isUser(input)) {
 			addUser(input);
 		} else {
@@ -213,8 +221,12 @@ public class Client {
 		}
 	}
 
-	private void addRoom(String room) {
-		//Todo
+	private void addRoom(String room) throws SdkException{
+		try {
+			sdkClient.joinRoom(room);
+		} catch (RestfulHTTPException | IOException e) {
+			throw new SdkException(e);
+		}
 	}
 
 	private void addUser(String user) {

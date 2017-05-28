@@ -17,7 +17,7 @@ public class User {
 	private final ObjectProperty<Image> avatar;
 	private boolean avatarWanted = false;
 	private final com.github.cypher.sdk.User sdkUser;
-	private final static int AVATAR_SIZE = 24;
+	private final static int AVATAR_SIZE = 48;
 
 	private ChangeListener avatarListener = (observable, oldValue, newValue) -> {
 		updateAvatar();
@@ -43,8 +43,9 @@ public class User {
 		if (avatarWanted) {
 			java.awt.Image image = sdkUser.getAvatar(AVATAR_SIZE);
 			try {
+				//56x56 is from Room avatar size. Shouldn't be hardcoded here!
 				this.avatar.set(
-					image == null ? null : Util.createImage(image)
+					image == null ? Util.generateIdenticon(name.getValue() + id.getValue(), AVATAR_SIZE, AVATAR_SIZE) : Util.createImage(image)
 				);
 			} catch (IOException e) {
 				System.out.printf("IOException when converting user avatar image: %s\n", e);

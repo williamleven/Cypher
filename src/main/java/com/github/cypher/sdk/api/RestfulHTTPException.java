@@ -9,67 +9,17 @@ import javax.xml.ws.http.HTTPException;
  */
 public class RestfulHTTPException extends HTTPException {
 
-	private final String errorMessage;
-	private final String errorCode;
-
-	/**
-	 * Create error without error code and error message.
-	 *
-	 * @param statusCode HTTP status code
-	 */
-	public RestfulHTTPException(int statusCode) {
-		super(statusCode);
-		errorMessage = "";
-		errorCode = "";
-	}
-
-	/**
-	 * Create error without error message.
-	 *
-	 * @param statusCode HTTP status code
-	 * @param errorCode  Json error code
-	 */
-	public RestfulHTTPException(int statusCode, String errorCode) {
-		super(statusCode);
-		this.errorCode = errorCode;
-		errorMessage = "";
-	}
-
-	/**
-	 * Create error with error message and error code
-	 *
-	 * @param statusCode   HTTP status code
-	 * @param errorCode    Json error code
-	 * @param errorMessage Message corresponding to the error code
-	 */
-	public RestfulHTTPException(int statusCode, String errorCode, String errorMessage) {
-		super(statusCode);
-		this.errorCode = errorCode;
-		this.errorMessage = errorMessage;
-	}
+	private final JsonObject errorResponse;
 
 	/**
 	 * Create error from a jsonObject
 	 *
 	 * @param statusCode HTTP status code
-	 * @param error      JsonObject containing error information
+	 * @param errorResponse JsonObject containing error information
 	 */
-	public RestfulHTTPException(int statusCode, JsonObject error) {
+	public RestfulHTTPException(int statusCode, JsonObject errorResponse) {
 		super(statusCode);
-
-		// Parse error message
-		if (error.has("error")) {
-			errorMessage = error.get("error").getAsString();
-		} else {
-			errorMessage = "";
-		}
-
-		// Parse error code
-		if (error.has("errcode")) {
-			errorCode = error.get("errcode").getAsString();
-		} else {
-			errorCode = "";
-		}
+		this.errorResponse = errorResponse;
 	}
 
 	/**
@@ -77,6 +27,10 @@ public class RestfulHTTPException extends HTTPException {
 	 */
 	@Override
 	public String getMessage() {
+		String errorCode = getErrorCode();
+		String errorMessage = errorResponse.has("error") ?
+				errorResponse.get("error").getAsString() : "";
+
 		if (!errorMessage.isEmpty()) {
 			return Integer.toString(super.getStatusCode()).concat(": ").concat(errorMessage);
 		} else if (!errorCode.isEmpty()) {
@@ -90,6 +44,16 @@ public class RestfulHTTPException extends HTTPException {
 	 * Returns the errorcode
 	 */
 	public String getErrorCode(){
-		return this.errorCode;
+		if(errorResponse.has("errcode")) {
+			return errorResponse.get("errcode").getAsString();
+		}
+		return "";
+	}
+
+	/**
+	 * Returns the server request response
+	 */
+	public JsonObject getErrorResponse() {
+		return errorResponse;
 	}
 }
