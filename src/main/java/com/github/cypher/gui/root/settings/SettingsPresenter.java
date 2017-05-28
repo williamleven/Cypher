@@ -41,24 +41,20 @@ public class SettingsPresenter {
 
 	@FXML
 	private void initialize() {
-		switch (settings.getLanguage().getLanguage()) {
-			case "en":
-				languageChoiceBox.setValue("English");
-				break;
-			case "sv":
-				languageChoiceBox.setValue("Svenska");
-				break;
+		String language = settings.getLanguage().getLanguage();
+		if ("en".equals(language)) {
+			languageChoiceBox.setValue("English");
+		}else if ("sv".equals(language)) {
+			languageChoiceBox.setValue("Svenska");
 		}
 
 		languageChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldLanguage, newLanguage) -> {
-			switch (newLanguage) {
-				case "English":
-					settings.setLanguage(Locale.ENGLISH);
-					break;
-				case "Svenska":
-					settings.setLanguage(new Locale("sv","SE"));
-					break;
+			if ("English".equals(newLanguage)) {
+				settings.setLanguage(Locale.ENGLISH);
+			} else if ("Svenska".equals(newLanguage)) {
+				settings.setLanguage(new Locale("sv","SE"));
 			}
+
 			changesRequireRestartLabel.setVisible(true);
 		});
 

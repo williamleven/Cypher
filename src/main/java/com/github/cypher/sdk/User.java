@@ -35,7 +35,7 @@ public class User {
 	private URL loadedAvatarUrl = null;
 	private int loadedAvatarSize = 0;
 
-	private java.util.List<ChangeListener<? super Image>> avatarListeners = new ArrayList<>();
+	private final java.util.List<ChangeListener<? super Image>> avatarListeners = new ArrayList<>();
 
 	User(ApiLayer api, String id) {
 		this.api = api;
@@ -59,10 +59,9 @@ public class User {
 	 */
 	public void update() throws RestfulHTTPException, IOException {
 		JsonObject profile = api.getUserProfile(id);
-		if(profile.has("displayname")) {
-			if (profile.get("displayname").isJsonPrimitive()){
-				name.set(profile.get("displayname").getAsString());
-			}
+		if(profile.has("displayname") &&
+		   profile.get("displayname").isJsonPrimitive()) {
+			name.set(profile.get("displayname").getAsString());
 		}
 
 		//setAvatar(profile);
@@ -73,23 +72,26 @@ public class User {
 		   data.has("content")) {
 			String type = data.get("type").getAsString();
 			JsonObject contentObject = data.get("content").getAsJsonObject();
-			if(type.equals("m.presence") &&
+
+			// Parse presence data
+			if("m.presence".equals(type) &&
 			   contentObject.has("presence")) {
 				String presenceString = contentObject.get("presence").getAsString();
 				presence.set(Presence.ONLINE);
-				if(presenceString.equals("offline")) {
+				if("offline".equals(presenceString)) {
 					presence.set(Presence.OFFLINE);
-				} else if(presenceString.equals("unavailable")) {
+				} else if("unavailable".equals(presenceString)) {
 					presence.set(Presence.UNAVAILABLE);
 				}
 			}
-			if (type.equals("m.room.member")){
-				if (contentObject.has("displayname")) {
-					if (contentObject.get("displayname").isJsonPrimitive()) {
-						name.set(contentObject.get("displayname").getAsString());
-					}
+
+			// Parse member data
+			if ("m.room.member".equals(type)){
+				if (contentObject.has("displayname") &&
+				    contentObject.get("displayname").isJsonPrimitive()) {
+					name.set(contentObject.get("displayname").getAsString());
 				}
-				if(avatar.getValue()==null) {
+				if(avatar.getValue() == null) {
 					setAvatar(contentObject);
 				}
 			}
@@ -158,7 +160,9 @@ public class User {
 			}
 			try {
 				updateAvatar();
-			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
+			} catch (RestfulHTTPException | IOException e) {
+				System.out.printf("Failed to load image %s%n", e.getMessage());
+			}
 
 			avatar.addListener(listener);
 		}
@@ -212,7 +216,9 @@ public class User {
 			}
 			try {
 				updateAvatar();
-			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
+			} catch (RestfulHTTPException | IOException e) {
+				System.out.printf("Failed to load image %s%n", e.getMessage());
+			}
 			avatarWanted = old;
 			return avatar.get();
 		}

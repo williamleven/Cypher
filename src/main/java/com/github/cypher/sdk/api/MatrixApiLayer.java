@@ -56,7 +56,7 @@ public class MatrixApiLayer implements ApiLayer {
 	 *
 	 * <p> Use {@link #login(String username, String password, String homeserver)} to create a session.
 	 */
-	public MatrixApiLayer() {}
+	public MatrixApiLayer() { /*Used for javadoc*/}
 
 	@Override
 	public void login(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
@@ -513,11 +513,11 @@ public class MatrixApiLayer implements ApiLayer {
 
 
 		//Build request URL.
-		if (mediaUrl.getPort()!=-1) {
-			url = Util.UrlBuilder(session.getHomeServer(), Endpoint.MEDIA_THUMBNAIL, new Object[]{mediaUrl.getHost()+":"+mediaUrl.getPort(), mediaUrl.getPath().replaceFirst("/", "")}, parameters);
+		if (mediaUrl.getPort()==-1) {
+			url = Util.UrlBuilder(session.getHomeServer(), Endpoint.MEDIA_THUMBNAIL, new Object[]{mediaUrl.getHost(), mediaUrl.getPath().replaceFirst("/", "")}, parameters);
 		}
 		else {
-			url = Util.UrlBuilder(session.getHomeServer(), Endpoint.MEDIA_THUMBNAIL, new Object[]{mediaUrl.getHost(), mediaUrl.getPath().replaceFirst("/", "")}, parameters);
+			url = Util.UrlBuilder(session.getHomeServer(), Endpoint.MEDIA_THUMBNAIL, new Object[]{mediaUrl.getHost()+":"+mediaUrl.getPort(), mediaUrl.getPath().replaceFirst("/", "")}, parameters);
 		}
 		HttpURLConnection conn = null;
 		try {

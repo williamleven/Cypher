@@ -167,12 +167,20 @@ public class Client {
 	public Map<String, Room> getPublicRooms(String server) throws RestfulHTTPException, IOException {
 		JsonObject data = api.getPublicRooms(server);
 		Map<String, Room> listedRooms = new HashMap<>();
+
+		// Get data chunk
 		if(data.has("chunk") &&
 		   data.get("chunk").isJsonArray()) {
 			JsonArray directoryArray = data.get("chunk").getAsJsonArray();
+
+			// Iterate over datachunks
 			for(JsonElement roomElement : directoryArray) {
+
+				// Collect room data
 				if(roomElement.isJsonObject()) {
 					JsonObject roomData = roomElement.getAsJsonObject();
+
+					// Construct room object
 					if(roomData.has("room_id")) {
 						String roomId = roomData.get("room_id").getAsString();
 						Room room = new Room(api, users, roomId);

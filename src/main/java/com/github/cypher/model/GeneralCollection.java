@@ -12,7 +12,7 @@ public class GeneralCollection implements RoomCollection {
 	private final ObservableList<Room> rooms = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
 	// Package private empty constructor
-	GeneralCollection(){}
+	GeneralCollection(){ /*Empty*/}
 
 	@Override
 	public ObservableList<Room> getRoomsProperty() {

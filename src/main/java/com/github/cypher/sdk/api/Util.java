@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public final class Util {
 
-	private Util() {}
+	private Util() { /*Not constructable*/}
 
 	/*
 		Build a URL with a specified set of parameters

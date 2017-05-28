@@ -58,7 +58,7 @@ public class Room {
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
 	// The latest state event for every event type
-	private ObservableMap<String, Event> latestStateEvents =
+	private final ObservableMap<String, Event> latestStateEvents =
 		FXCollections.synchronizedObservableMap(new ObservableMapWrapper<>(new HashMap<>()));
 
 	private final ObservableList<Member> members =
@@ -72,7 +72,7 @@ public class Room {
 
 	private final StringProperty canonicalAlias = new SimpleStringProperty();
 
-	private List<ChangeListener<? super Image>> avatarListeners = new ArrayList<>();
+	private final List<ChangeListener<? super Image>> avatarListeners = new ArrayList<>();
 
 	Room(ApiLayer api, Repository<User> userRepository, String id) {
 		this.api = api;
@@ -444,7 +444,7 @@ public class Room {
 			key = event.getType();
 		}
 		return !latestStateEvents.containsKey(key) ||
-		       (latestStateEvents.get(key).getOriginServerTs() <= event.getOriginServerTs());
+		       latestStateEvents.get(key).getOriginServerTs() <= event.getOriginServerTs();
 	}
 
 	private <T> Event addPropertyChangeEvent(int originServerTs, String senderId, String eventId, String eventType, int age, String property, T value) {
@@ -521,7 +521,9 @@ public class Room {
 			}
 			try {
 				updateAvatar();
-			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
+			} catch (RestfulHTTPException | IOException e) {
+				System.out.printf("Failed to load image %s%n", e.getMessage());
+			}
 
 			avatar.addListener(listener);
 		//}
@@ -553,7 +555,9 @@ public class Room {
 			}
 			try {
 				updateAvatar();
-			} catch (RestfulHTTPException | IOException e) { /* Nothing */}
+			} catch (RestfulHTTPException | IOException e) {
+				System.out.printf("Failed to load image %s%n", e.getMessage());
+			}
 			avatarWanted = old;
 			return avatar.get();
 		}
