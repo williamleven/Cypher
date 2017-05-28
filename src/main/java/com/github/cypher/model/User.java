@@ -43,8 +43,9 @@ public class User {
 		if (avatarWanted) {
 			java.awt.Image image = sdkUser.getAvatar(AVATAR_SIZE);
 			try {
+				//56x56 is from Room avatar size. Shouldn't be hardcoded here!
 				this.avatar.set(
-					image == null ? null : Util.createImage(image)
+					image == null ? Util.generateIdenticon(name.getValue(), 56, 56) : Util.createImage(image)
 				);
 			} catch (IOException e) {
 				System.out.printf("IOException when converting user avatar image: %s\n", e);
