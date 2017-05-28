@@ -4,11 +4,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="200.0" prefHeight="32.0" prefWidth="200.0" styleClass="member-list-cell" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.room.memberlistitem.MemberListItemPresenter">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="200.0" prefHeight="32.0" prefWidth="200.0" styleClass="member-list-cell" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.room.memberlistitem.MemberListItemPresenter">
    <children>
       <ImageView fx:id="imageView" fitHeight="24.0" fitWidth="24.0" layoutX="2.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="3.0" />
-      <Label fx:id="label" focusTraversable="false" layoutX="34.0" layoutY="6.0" styleClass="member-label" text="placeholder" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
+      <Label fx:id="label" layoutX="34.0" layoutY="6.0" text="placeholder" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
          <font>
             <Font size="14.0" />
          </font></Label>

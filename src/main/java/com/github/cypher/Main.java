@@ -71,8 +71,6 @@ public class Main extends Application {
 		primaryStage.setTitle("Cypher");
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
 		primaryStage.setScene(scene);
-		primaryStage.setMinWidth(600);
-		primaryStage.setMinHeight(438);
 		if (settings.getLastWindowPosX() != -1 && settings.getLastWindowPosY() != -1) {
 			primaryStage.setX(settings.getLastWindowPosX());
 			primaryStage.setY(settings.getLastWindowPosY());
