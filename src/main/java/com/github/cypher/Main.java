@@ -16,7 +16,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -45,7 +44,6 @@ public class Main extends Application {
 		systemTrayInUse = settings.getUseSystemTray();
 		// Starts the Executors thread
 		executor.start();
-		URL.setURLStreamHandlerFactory(new com.github.cypher.sdk.api.Util.MatrixMediaURLStreamHandlerFactory());
 
 		// Dependency injection with afterburner.fx
 		//
