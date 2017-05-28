@@ -31,7 +31,7 @@ import java.util.List;
 
 public class EventListItemPresenter extends CustomListCell<Event> {
 
-	private static final int LIST_CELL_PADDING = 19;
+	private static final int LIST_CELL_PADDING = 14;
 
 	@Inject
 	private Client client;

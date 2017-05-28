@@ -6,13 +6,9 @@ root {
 	-fx-font-size: 14px;
 }
 
-AnchorPane {
-	-fx-background-color: -fx-base;
-}
-
 .image-btn {
-	-fx-min-width: 0px !important;
-	-fx-padding: 5px !important;
+	-fx-padding: 5px;
+	-fx-background-color: -fx-popup;
 }
 
 .inline-monospace {
@@ -23,27 +19,48 @@ AnchorPane {
 	-fx-background-color: #777777;
 }
 
-* {
-	-room-list-background: #f9f9f9;
-	-room-item-background: #e1e1e1;
-	-room-item-selection-color: #09cdda;
 
-	-member-list-background: -room-item-background;
-	-member-item-background: -room-item-background;
+
+* {
+	-room-list-background: -fx-medium-base;
+	-room-item-background: -fx-medium-base;
+	-room-item-selection-color: -fx-soft-popup;
+
+	-member-list-background: #e8e8e8;
+	-member-item-background: #e8e8e8;
 }
 
 /*Colors */
 * {
-	-fx-color-base: #404040;
-	-fx-lighter: #808080;
+	-fx-base: -fx-light-base;
+	-fx-light-base: #efefef;
+	-fx-medium-base: #cecece;
+	-fx-dark-base: #404040;
 	-fx-soft-popup: #008CBA;
 	-fx-popup: #09CDDA;
+	-fx-lighter: #8c8c8c;
+}
 
+.-fx-medium *{
+	-fx-base: -fx-medium-base;
+	-fx-scroll-hover: -fx-dark-base;
+}
+
+.-fx-custom *{
+	-fx-base: -member-item-background;
+	-fx-scroll-hover: -fx-dark-base;
+}
+.-fx-light *{
+	-fx-base: -fx-light-base;
+	-fx-scroll-hover: -fx-medium-base;
+}
+.-fx-dark *{
+	-fx-base: -fx-dark-base;
+	-fx-scroll-hover: -fx-medium-base;
 }
 
 .base-separator {
 	-fx-background-color: -fx-lighter;
-
 }
 
 .clickable:hover {

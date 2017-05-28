@@ -38,7 +38,7 @@
 /* ------------------------------------------------------------------------------------- */
 .fancy-scroll:hover .scroll-bar .thumb,
 .fancy-scroll:pressed .scroll-bar .thumb{
-    -fx-background-color: -fx-lighter;
+    -fx-background-color: -fx-scroll-hover;
 }
 
 /* The main scrollbar **track** CSS class on event of "hover" and "pressed" */

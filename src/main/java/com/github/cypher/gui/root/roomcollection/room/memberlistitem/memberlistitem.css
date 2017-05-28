@@ -2,3 +2,7 @@
     -fx-padding: 2 0 2 0;
     -fx-background-color: -member-item-background;
 }
+
+.member-label{
+    -fx-font-size: 14px;
+}

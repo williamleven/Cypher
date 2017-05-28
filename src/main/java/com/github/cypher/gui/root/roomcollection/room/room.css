@@ -17,7 +17,8 @@
 .member-list .scroll-bar:horizontal .decrement-button {
     -fx-padding:0;
 }
-
-.member-list .list-cell:filled:selected, .member-list .list-cell:filled:hover{
-    -fx-font-size: 14px;
+.heading {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
 }

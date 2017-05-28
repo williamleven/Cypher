@@ -33,7 +33,8 @@ public class RoomListItemPresenter extends CustomListCell<Room> {
 	private ImageView avatar;
 
 	@FXML
-	private TextArea topic;
+	private Label topic;
+
 	private final ResourceBundle bundle = ResourceBundle.getBundle(
 			"com.github.cypher.gui.root.roomcollection.roomlistitem.roomlistitem",
 			Locale.getDefault());

@@ -1,37 +1,7 @@
 .room-item {
 	-fx-background-color: -room-item-background;
-}
-
-/* Disable all TextArea stylng */
-.topic-area {
-	-fx-text-box-border: transparent;
-	-fx-font-style: italic;
-	-fx-background-insets: 0;
-	-fx-background-color: -room-item-background;
-}
-
-.topic-area .content {
-	-fx-background-color: -room-item-background;
-}
-
-.topic-area:focused .content {
-	-fx-background-color: -room-item-background;
-}
-
-.topic-area:focused {
-	-fx-highlight-fill: #7ecfff;
-	-fx-focus-color: transparent;
-}
-
-.topic-area .content {
-	-fx-padding: 10px;
-	-fx-text-fill: gray;
-	-fx-highlight-fill: #7ecfff;
-}
-
-/* Hide topic-area scroll bar */
-.topic-area .scroll-bar:vertical {
-	-fx-scale-x: 0;
+	-fx-border-color: -fx-dark-base;
+	-fx-border-width: 0 0 2 0;
 }
 
 .room-item-selector {
