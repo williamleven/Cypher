@@ -12,16 +12,16 @@
 
 <HBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.RoomCollectionPresenter">
     <children>
-        <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" style="-fx-background-color: -fx-medium-base;">
+        <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" style="-fx-background-color: -fx-medium-base;" styleClass="-fx-medium">
             <children>
-                <Label fx:id="serverName" layoutX="5.0" layoutY="7.0" prefHeight="27.0" prefWidth="121.0" styleClass="heading" text="Server Name" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="49.0" AnchorPane.topAnchor="7.0" />
+                <Label fx:id="serverName" layoutX="5.0" layoutY="7.0" prefHeight="27.0" prefWidth="121.0" styleClass="heading" text="Server Name" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="49.0" AnchorPane.topAnchor="10.0" />
             <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onShowDirectoryClick" prefHeight="32.0" prefWidth="32.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                <children>
                   <FontIcon iconLiteral="fa-folder-open" iconSize="24" textAlignment="CENTER" translateX="2.0" />
                </children>
             </VBox>
-            <Separator layoutX="5.0" layoutY="40.0" prefWidth="200.0" styleClass="base-separator" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
-                <ListView fx:id="roomListView" layoutY="47.0" minWidth="-Infinity" prefWidth="193.0" style="-fx-background-color: -fx-medium-base;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="47.0">
+            <Separator layoutX="5.0" layoutY="40.0" prefWidth="200.0" styleClass="base-separator" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="35.0" />
+                <ListView fx:id="roomListView" layoutY="42.0" minWidth="-Infinity" prefHeight="405.0" prefWidth="210.0" style="-fx-background-color: -fx-medium-base;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
                <styleClass>
                   <String fx:value="room-list" />
                   <String fx:value="fancy-scroll" />

@@ -17,3 +17,8 @@
 .member-list .scroll-bar:horizontal .decrement-button {
     -fx-padding:0;
 }
+.heading {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}

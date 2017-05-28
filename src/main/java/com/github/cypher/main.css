@@ -32,13 +32,23 @@ root {
 
 /*Colors */
 * {
-	-fx-base: transparent;
+	-fx-base: -fx-light-base;
 	-fx-light-base: #ECFAFF;
 	-fx-medium-base: #92A2A6;
 	-fx-dark-base: #404040;
 	-fx-soft-popup: #008CBA;
 	-fx-popup: #09CDDA;
 	-fx-lighter: -fx-medium-base;
+}
+
+.-fx-medium *{
+	-fx-base: -fx-medium-base;
+}
+.-fx-light *{
+	-fx-base: -fx-light-base;
+}
+.-fx-dark *{
+	-fx-base: -fx-dark-base;
 }
 
 .base-separator {

@@ -23,7 +23,21 @@
 	-fx-fill: -fx-soft-popup;
 }
 
+.room-list .list-cell,
+.room-list:selected .list-cell,
+.room-list:focused .list-cell{
+	-fx-border-width: 0;
+	-fx-padding: 0;
+	-fx-background-insets: 0;
+}
 
+.room-list,
+.room-list:selected,
+.room-list:focused{
+	-fx-border-width: 0;
+	-fx-padding: 0;
+	-fx-background-insets: 0;
+}
 
 .heading {
 	-fx-font-size: 20px;

@@ -1,7 +1,7 @@
 .room-item {
 	-fx-background-color: -room-item-background;
 	-fx-border-color: -fx-dark-base;
-	-fx-border-width: 2 0 2 0;
+	-fx-border-width: 0 0 2 0;
 }
 
 .room-item-selector {

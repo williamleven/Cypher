@@ -14,20 +14,24 @@
         <HBox fx:id="chatRoot">
             <children>
                 <AnchorPane fx:id="chat" style="-fx-background-color: -fx-light-base;" HBox.hgrow="ALWAYS" />
-                <AnchorPane prefWidth="200.0" styleClass="member-list-anchor">
+                <AnchorPane prefWidth="200.0">
                     <children>
-                        <Label fx:id="membersLabel" prefHeight="20.0" prefWidth="165.0" style="-fx-text-fill: black;" text="%members" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
+                        <Label fx:id="membersLabel" prefHeight="20.0" prefWidth="165.0" styleClass="heading" text="%members" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                             <font>
                                 <Font size="14.0" />
                             </font>
                         </Label>
-                  <Separator layoutX="5.0" layoutY="26.0" prefWidth="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="26.0" />
-                        <ListView fx:id="memberListView" focusTraversable="false" layoutY="32.0" prefHeight="368.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+                  <Separator layoutX="5.0" layoutY="26.0" prefWidth="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="35.0" />
+                        <ListView fx:id="memberListView" focusTraversable="false" layoutY="32.0" prefHeight="368.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
                      <styleClass>
                         <String fx:value="member-list" />
                         <String fx:value="fancy-scroll" />
                      </styleClass></ListView>
                     </children>
+               <styleClass>
+                  <String fx:value="member-list-anchor" />
+                  <String fx:value="-fx-medium" />
+               </styleClass>
                 </AnchorPane>
             </children>
         </HBox>
