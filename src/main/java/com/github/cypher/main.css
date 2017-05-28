@@ -45,6 +45,11 @@ root {
 	-fx-base: -fx-medium-base;
 	-fx-scroll-hover: -fx-dark-base;
 }
+
+.-fx-custom *{
+	-fx-base: -member-item-background;
+	-fx-scroll-hover: -fx-dark-base;
+}
 .-fx-light *{
 	-fx-base: -fx-light-base;
 	-fx-scroll-hover: -fx-medium-base;

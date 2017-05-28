@@ -30,7 +30,7 @@
                     </children>
                <styleClass>
                   <String fx:value="member-list-anchor" />
-                  <String fx:value="-fx-medium" />
+                  <String fx:value="-fx-custom" />
                </styleClass>
                 </AnchorPane>
             </children>
