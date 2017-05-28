@@ -310,7 +310,6 @@ public class Client {
 	public void RoomCollectionChanged(RoomCollection e){
 		Platform.runLater(() -> {
 			this.selectedRoomCollection = e;
-			System.out.printf("Selected room collection changed\n");
 		});
 	}
 
@@ -318,7 +317,6 @@ public class Client {
 	public void selectedRoomChanged(Room e){
 		Platform.runLater(() -> {
 			this.selectedRoom = e;
-			System.out.printf("Selected room changed\n");
 		});
 	}
 }
