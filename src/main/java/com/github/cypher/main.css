@@ -26,19 +26,19 @@ root {
 	-room-item-background: -fx-medium-base;
 	-room-item-selection-color: -fx-soft-popup;
 
-	-member-list-background: -fx-medium-base;
-	-member-item-background: -fx-medium-base;
+	-member-list-background: #e8e8e8;
+	-member-item-background: #e8e8e8;
 }
 
 /*Colors */
 * {
 	-fx-base: -fx-light-base;
-	-fx-light-base: #ECFAFF;
-	-fx-medium-base: #92A2A6;
+	-fx-light-base: #efefef;
+	-fx-medium-base: #cecece;
 	-fx-dark-base: #404040;
 	-fx-soft-popup: #008CBA;
 	-fx-popup: #09CDDA;
-	-fx-lighter: -fx-medium-base;
+	-fx-lighter: #8c8c8c;
 }
 
 .-fx-medium *{
