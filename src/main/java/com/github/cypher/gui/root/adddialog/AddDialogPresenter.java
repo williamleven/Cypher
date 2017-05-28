@@ -1,8 +1,8 @@
 package com.github.cypher.gui.root.adddialog;
 
-import com.github.cypher.settings.Settings;
 import com.github.cypher.eventbus.ToggleEvent;
 import com.github.cypher.model.Client;
+import com.github.cypher.settings.Settings;
 import com.google.common.eventbus.EventBus;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,7 +30,7 @@ public class AddDialogPresenter {
 	public Text inputValidationFeedback;
 
 	@FXML
-	public void submit(ActionEvent actionEvent) throws IOException {
+	public void submit(ActionEvent actionEvent) {
 		try {
 			client.add(serverUrlField.getText());
 			exitPane();

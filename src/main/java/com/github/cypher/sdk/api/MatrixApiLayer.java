@@ -1,13 +1,14 @@
 package com.github.cypher.sdk.api;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -147,7 +148,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public void register(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
+	public void register(String username, String password, String homeserver) throws IOException {
 		// Only run if session isn't already set
 		if (session != null){
 			return;
@@ -163,11 +164,28 @@ public class MatrixApiLayer implements ApiLayer {
 			request.addProperty("username", username);
 		}
 
-		// Send Request
-		JsonObject response = Util.makeJsonPostRequest(url, request).getAsJsonObject();
+		// Send Request for session
+		JsonObject finalResponse;
+		try {
+			finalResponse = Util.makeJsonPostRequest(url, request).getAsJsonObject();
+		} catch (RestfulHTTPException e) {
+			if(e.getStatusCode() != 401) { throw e; }
+
+			JsonObject firstResponse = e.getErrorResponse();
+
+			// Create auth object
+			JsonObject auth = new JsonObject();
+			auth.addProperty("session", String.valueOf(firstResponse.get("session")));
+			auth.addProperty("type","m.login.dummy");
+			request.add("auth", auth.getAsJsonObject());
+
+			// Send Request for registering
+			finalResponse = Util.makeJsonPostRequest(url, request).getAsJsonObject();
+		}
+
 
 		// Set Session
-		this.session = new Session(response);
+		this.session = new Session(finalResponse);
 	}
 
 
@@ -388,12 +406,12 @@ public class MatrixApiLayer implements ApiLayer {
 		return  Util.makeJsonPostRequest(url, roomCreation).getAsJsonObject();
 	}
 	@Override
-	public JsonObject postJoinRoom(String roomId, JsonObject thirdPartySigned) throws RestfulHTTPException, IOException {
+	public JsonObject postJoinRoomIdorAlias(String roomIdorAlias, JsonObject thirdPartySigned) throws RestfulHTTPException, IOException {
 		// Build parameter Map
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("access_token", session.getAccessToken());
 		//Build request URL.
-		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_JOIN,new Object[] {roomId}, parameters);
+		URL url = Util.UrlBuilder(session.getHomeServer(),Endpoint.ROOM_JOIN_ID_OR_A,new Object[] {roomIdorAlias}, parameters);
 
 		//Send request URL.
 		return  Util.makeJsonPostRequest(url, thirdPartySigned).getAsJsonObject();

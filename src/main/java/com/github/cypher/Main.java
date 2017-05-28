@@ -29,15 +29,20 @@ public class Main extends Application {
 	private static final String APPLICATION_NAME = "Cypher";
 	private static final String USER_DATA_DIRECTORY = getUserDataDirectoryPath(APPLICATION_NAME); //The path to the folder where settings, credentials etc are saved.
 	private static final String SETTINGS_NAMESPACE = "com.github.cypher.settings";
+	private static final int MIN_WINDOW_WIDTH = 600;
+	private static final int MIN_WINDOW_HEIGHT = 438;
 
 	private final Settings settings = new TOMLSettings(USER_DATA_DIRECTORY);
 	private final Executor executor = new Executor();
 	private final EventBus eventBus = new EventBus();
 	private final Client client = ModelFactory.createClient(settings, eventBus, USER_DATA_DIRECTORY, SETTINGS_NAMESPACE);
 
+	private boolean systemTrayInUse;
+
 	@Override
 	public void start(Stage primaryStage) {
 		Locale.setDefault(settings.getLanguage());
+		systemTrayInUse = settings.getUseSystemTray();
 		// Starts the Executors thread
 		executor.start();
 		URL.setURLStreamHandlerFactory(new com.github.cypher.sdk.api.Util.MatrixMediaURLStreamHandlerFactory());
@@ -66,29 +71,34 @@ public class Main extends Application {
 		primaryStage.setTitle("Cypher");
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
 		primaryStage.setScene(scene);
-		primaryStage.setMinWidth(600);
-		primaryStage.setMinHeight(438);
+		if (settings.getLastWindowPosX() != -1 && settings.getLastWindowPosY() != -1) {
+			primaryStage.setX(settings.getLastWindowPosX());
+			primaryStage.setY(settings.getLastWindowPosY());
+		}
+		if (settings.getLastWindowWidth() != -1 && settings.getLastWindowHeight() != -1) {
+			primaryStage.setWidth(settings.getLastWindowWidth());
+			primaryStage.setHeight(settings.getLastWindowHeight());
+		}
+		primaryStage.setMinWidth(MIN_WINDOW_WIDTH);
+		primaryStage.setMinHeight(MIN_WINDOW_HEIGHT);
 
-		// Only hide close the main window if system tray is enabled and supported.
-		primaryStage.setOnCloseRequest(event -> {
-			if (useSystemTray()) {
-				primaryStage.close();
-			} else {
-				exit();
-			}
-		});
+		// addSystemTray sets its own "onCloseRequest" on the primaryStage
 		if (useSystemTray()) {
-			addTrayIcon(primaryStage);
+			addSystemTray(primaryStage);
+		} else {
+			primaryStage.setOnCloseRequest(event -> {
+				exit(primaryStage);
+			});
 		}
 
 		primaryStage.show();
 	}
 
 	private boolean useSystemTray() {
-		return settings.getUseSystemTray() && SystemTray.get() != null;
+		return systemTrayInUse && SystemTray.get() != null;
 	}
 
-	private void addTrayIcon(Stage primaryStage) {
+	private void addSystemTray(Stage primaryStage) {
 
 		// Load systemtray
 		SystemTray systemTray = SystemTray.get();
@@ -106,24 +116,35 @@ public class Main extends Application {
 		systemTray.setImage(getClass().getResourceAsStream("/icon.png"));
 		systemTray.setStatus("Cypher");
 
-		{ /* The "SHOW" menu item */
-			MenuItem item = new MenuItem(labels.getString("show"), e -> {
-				Platform.runLater(() -> {
-					primaryStage.show();
-					primaryStage.requestFocus();
-				});
+		/* The "SHOW" menu item */
+		MenuItem showMenuItem = new MenuItem(labels.getString("show"));
+		showMenuItem.setCallback(e -> {
+			Platform.runLater(() -> {
+				primaryStage.show();
+				primaryStage.requestFocus();
+				showMenuItem.setEnabled(false);
 			});
-			item.setShortcut('o');
-			systemTray.getMenu().add(item);
-		}
+		});
+		showMenuItem.setShortcut('o');
+		showMenuItem.setEnabled(false);
+		systemTray.getMenu().add(showMenuItem);
 
-		{ /* The "EXIT" menu item */
-			MenuItem item = new MenuItem(labels.getString("exit"), e -> {
-				exit();
-			});
-			item.setShortcut('q');
-			systemTray.getMenu().add(item);
-		}
+		/* The "EXIT" menu item */
+		MenuItem exitMenuItem = new MenuItem(labels.getString("exit"), e -> {
+			exit(primaryStage);
+		});
+		exitMenuItem.setShortcut('q');
+		systemTray.getMenu().add(exitMenuItem);
+
+		// Only hide close the main window if system tray is enabled and supported.
+		primaryStage.setOnCloseRequest(event -> {
+			if (systemTrayInUse) {
+				primaryStage.close();
+				showMenuItem.setEnabled(true);
+			} else {
+				exit(primaryStage);
+			}
+		});
 	}
 
 
@@ -131,7 +152,11 @@ public class Main extends Application {
 		launch(args);
 	}
 
-	private void exit() {
+	private void exit(Stage primaryStage) {
+		settings.setLastWindowPosX((int) primaryStage.getX());
+		settings.setLastWindowPosY((int) primaryStage.getY());
+		settings.setLastWindowWidth((int) primaryStage.getWidth());
+		settings.setLastWindowHeight((int) primaryStage.getHeight());
 		client.exit();
 		Platform.exit();
 		System.exit(0);
