@@ -99,7 +99,7 @@ public class Room {
 		}
 		events.sort((a, b) -> (int)(a.getOriginServerTimeStamp() - b.getOriginServerTimeStamp()));
 
-		sdkRoom.addEventListener((change -> {
+		sdkRoom.addEventListener(change -> {
 			if (change.wasAdded()) {
 				com.github.cypher.sdk.Event sdkEvent = change.getValueAdded();
 
@@ -121,7 +121,7 @@ public class Room {
 				}
 				events.add(event);
 			}
-		}));
+		});
 	}
 
 	private void initiateAvatar(){
@@ -144,7 +144,7 @@ public class Room {
 
 	private void updateAvatar() {
 		java.awt.Image newImage = sdkRoom.getAvatar(AVATAR_SIZE);
-		if(newImage == null && isPmChat()){
+		if(newImage == null && privateIsPmChat()){
 			for (Member member: members) {
 				if (member.getUser() != activeUser &&
 				    (lastAvatarURL == null || lastAvatarURL.equals(member.getUser().getAvatarUrl()))){
@@ -175,9 +175,13 @@ public class Room {
 		}
 	}
 
-	public final boolean isPmChat() {
+	private boolean privateIsPmChat(){
 		boolean hasName = sdkRoom.getName() != null && !sdkRoom.getName().isEmpty();
 		return this.getMemberCount() == 2 && !hasName;
+	}
+
+	public boolean isPmChat() {
+		return privateIsPmChat();
 	}
 
 	public String getId() {
@@ -256,7 +260,7 @@ public class Room {
 
 	private void updateName(){
 		String newName = sdkRoom.getName();
-		if (isPmChat()){
+		if (privateIsPmChat()){
 			for (Member member: members) {
 				if (member.getUser() != activeUser){
 					name.setValue(member.getName().getValue());

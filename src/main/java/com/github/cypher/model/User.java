@@ -19,7 +19,7 @@ public class User {
 	private final com.github.cypher.sdk.User sdkUser;
 	private final static int AVATAR_SIZE = 48;
 
-	private ChangeListener avatarListener = (observable, oldValue, newValue) -> {
+	private final ChangeListener avatarListener = (observable, oldValue, newValue) -> {
 		updateAvatar();
 	};
 

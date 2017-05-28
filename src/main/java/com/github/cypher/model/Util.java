@@ -42,9 +42,13 @@ public final class Util {
 		java.awt.Image imageReady;
 
 		// Make sure the image is rendered
-		if (!(image instanceof RenderedImage)) {
+		if (image instanceof RenderedImage) {
+			imageReady = image;
+
+		}else {
 			BufferedImage bufferedImage = new BufferedImage(image.getWidth(null),
-				image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+			                                                image.getHeight(null),
+			                                                BufferedImage.TYPE_INT_ARGB);
 
 			// Render the image
 			Graphics g = bufferedImage.createGraphics();
@@ -52,8 +56,6 @@ public final class Util {
 			g.dispose();
 
 			imageReady = bufferedImage;
-		}else {
-			imageReady = image;
 		}
 
 		// Convert image to byte array

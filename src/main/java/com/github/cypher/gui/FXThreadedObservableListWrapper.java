@@ -11,7 +11,7 @@ import javafx.collections.ObservableList;
 public class FXThreadedObservableListWrapper<T> {
 	private final ObservableList<T> sourceList;
 	private final ObservableList<T> delegatedList;
-	private InvalidationListener sourceListListener; // CurrentRoomCollectionListener?
+	private final InvalidationListener sourceListListener;
 
 	@SuppressWarnings("unchecked")
 	public FXThreadedObservableListWrapper(ObservableList<T> sourceList) {
