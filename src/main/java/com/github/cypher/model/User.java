@@ -17,7 +17,7 @@ public class User {
 	private final ObjectProperty<Image> avatar;
 	private boolean avatarWanted = false;
 	private final com.github.cypher.sdk.User sdkUser;
-	private final static int AVATAR_SIZE = 56;
+	private final static int AVATAR_SIZE = 48;
 
 	private ChangeListener avatarListener = (observable, oldValue, newValue) -> {
 		updateAvatar();
