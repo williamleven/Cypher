@@ -21,7 +21,7 @@
                     </children>
                 </VBox>
                 <Separator layoutX="5.0" layoutY="40.0" prefWidth="200.0" styleClass="base-separator" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="40.0" />
-                <ListView fx:id="roomListView" layoutY="42.0" maxHeight="-Infinity" styleClass="room-list" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" >
+                <ListView fx:id="roomListView" layoutY="42.0" maxHeight="-Infinity" prefWidth="265.0" style="-fx-background-color: -fx-medium-base;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" >
                     <styleClass>
                         <String fx:value="room-list" />
                         <String fx:value="fancy-scroll" />
