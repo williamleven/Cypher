@@ -89,14 +89,7 @@ public class Room {
 		});
 
 		sdkRoom.addAliasesListener(change -> {
-			while (change.next()){
-				if (change.wasAdded()){
-					aliases.addAll(change.getAddedSubList());
-				}
-				if (change.wasRemoved()){
-					aliases.removeAll(change.getRemoved());
-				}
-			}
+			aliases.setAll(change.getList());
 		});
 
 		for (com.github.cypher.sdk.Event event :sdkRoom.getEvents().values()){

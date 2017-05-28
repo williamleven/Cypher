@@ -289,7 +289,7 @@ public class Room {
 				list.add(alias.getAsString());
 			}
 
-			Event event = addPropertyChangeEvent(originServerTs, sender, eventId, "m.room.aliases", age, "aliases", list);
+			Event event = addPropertyChangeEvent(originServerTs, sender, eventId, stateKey, age, "aliases", list);
 
 			if (isLatestStateEvent(event)) {
 				if (list.size() == 0){
@@ -350,9 +350,10 @@ public class Room {
 		synchronized (avatarLock) {
 			if (avatarWanted && avatarUrl.get() != null ) {
 				if (!avatarUrl.get().equals(loadedAvatarUrl) || avatarSize > loadedAvatarSize){
-					avatar.set(ImageIO.read(api.getMediaContentThumbnail(avatarUrl.getValue(),avatarSize)));
+					Image ava = ImageIO.read(api.getMediaContentThumbnail(avatarUrl.getValue(),avatarSize));
 					loadedAvatarUrl = avatarUrl.get();
 					loadedAvatarSize = avatarSize;
+					avatar.set(ava);
 				}
 			} else {
 				avatar.set(null);

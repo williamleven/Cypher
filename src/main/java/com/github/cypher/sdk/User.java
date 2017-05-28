@@ -121,9 +121,10 @@ public class User {
 		synchronized (avatarLock) {
 			if (avatarWanted && avatarUrl.get() != null ) {
 				if (!avatarUrl.get().equals(loadedAvatarUrl) || avatarSize > loadedAvatarSize){
-					avatar.set(ImageIO.read(api.getMediaContentThumbnail(avatarUrl.getValue(),avatarSize)));
+					Image ava = ImageIO.read(api.getMediaContentThumbnail(avatarUrl.getValue(),avatarSize));
 					loadedAvatarUrl = avatarUrl.get();
 					loadedAvatarSize = avatarSize;
+					avatar.set(ava);
 				}
 			} else {
 				avatar.set(null);

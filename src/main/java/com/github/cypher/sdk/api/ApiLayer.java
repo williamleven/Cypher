@@ -205,7 +205,7 @@ public interface ApiLayer {
 	 * @return Valid Json response containing the Room ID.   CURRENTLY RETURNING NOTHING, BUT THE HTTP REQUEST IS GOING THROUGH
 
 	 */
-	JsonObject postJoinRoom(String roomId, JsonObject thirdPartySigned) throws RestfulHTTPException, IOException;
+	JsonObject postJoinRoomIdorAlias(String roomId, JsonObject thirdPartySigned) throws RestfulHTTPException, IOException;
 
 	/**
 	 * Used to leave a given room.
