@@ -29,7 +29,7 @@ public class Main extends Application {
 	private static final String APPLICATION_NAME = "Cypher";
 	private static final String USER_DATA_DIRECTORY = getUserDataDirectoryPath(APPLICATION_NAME); //The path to the folder where settings, credentials etc are saved.
 	private static final String SETTINGS_NAMESPACE = "com.github.cypher.settings";
-	private static final int MIN_WINDOW_WIDTH = 600;
+	private static final int MIN_WINDOW_WIDTH = 672;
 	private static final int MIN_WINDOW_HEIGHT = 438;
 
 	private final Settings settings = new TOMLSettings(USER_DATA_DIRECTORY);
