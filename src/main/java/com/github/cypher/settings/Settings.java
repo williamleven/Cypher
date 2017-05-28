@@ -25,4 +25,20 @@ public interface Settings {
 	// The time between each tick in the model in ms
 	int getModelTickInterval();
 	void setModelTickInterval(int interval);
+
+	// Used to remember the windows X position
+	int getLastWindowPosX();
+	void setLastWindowPosX(int posX);
+
+	// Used to remember the windows Y position
+	int getLastWindowPosY();
+	void setLastWindowPosY(int posY);
+
+	// Used to remember the windows width
+	int getLastWindowWidth();
+	void setLastWindowWidth(int width);
+
+	// Used to remember the windows height
+	int getLastWindowHeight();
+	void setLastWindowHeight(int height);
 }

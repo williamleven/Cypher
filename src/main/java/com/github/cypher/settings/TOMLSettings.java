@@ -26,6 +26,11 @@ public class TOMLSettings implements Settings {
 		boolean controlEnterToSendMessage = true;
 		int SDKTimeout = 30000; // In ms
 		int modelTickInterval = 500; // In ms
+
+		int lastWindowPosX = -1;
+		int lastWindowPosY = -1;
+		int lastWindowWidth = -1;
+		int lastWindowHeight = -1;
 	}
 
 	public TOMLSettings(String userDataDirectory) {
@@ -172,6 +177,66 @@ public class TOMLSettings implements Settings {
 	public void setModelTickInterval(int interval) {
 		synchronized (this) {
 			settingsData.modelTickInterval = interval;
+			save();
+		}
+	}
+
+	@Override
+	public int getLastWindowPosX() {
+		synchronized (this) {
+			return settingsData.lastWindowPosX;
+		}
+	}
+
+	@Override
+	public void setLastWindowPosX(int posX) {
+		synchronized (this) {
+			settingsData.lastWindowPosX = posX;
+			save();
+		}
+	}
+
+	@Override
+	public int getLastWindowPosY() {
+		synchronized (this) {
+			return settingsData.lastWindowPosY;
+		}
+	}
+
+	@Override
+	public void setLastWindowPosY(int posY) {
+		synchronized (this) {
+			settingsData.lastWindowPosY = posY;
+			save();
+		}
+	}
+
+	@Override
+	public int getLastWindowWidth() {
+		synchronized (this) {
+			return settingsData.lastWindowWidth;
+		}
+	}
+
+	@Override
+	public void setLastWindowWidth(int width) {
+		synchronized (this) {
+			settingsData.lastWindowWidth = width;
+			save();
+		}
+	}
+
+	@Override
+	public int getLastWindowHeight() {
+		synchronized (this) {
+			return settingsData.lastWindowHeight;
+		}
+	}
+
+	@Override
+	public void setLastWindowHeight(int height) {
+		synchronized (this) {
+			settingsData.lastWindowHeight = height;
 			save();
 		}
 	}
