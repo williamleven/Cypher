@@ -166,7 +166,7 @@ public class MatrixApiLayer implements ApiLayer {
 
 		// Send Request for session
 		JsonObject firstResponse = Util.makeJsonPostRequest(url, request).getAsJsonObject();
-
+		// Create auth object
 		JsonObject auth = new JsonObject();
 		auth.addProperty("session", String.valueOf(firstResponse.get("session")));
 		auth.addProperty("type","m.login.dummy");

@@ -171,6 +171,9 @@ public class Client {
 	public void register(String username, String password, String homeserver) throws SdkException {
 		try {
 			sdkClient.register(username, password, homeserver);
+			loggedIn = true;
+			eventBus.post(ToggleEvent.LOGIN);
+			eventBus.post(ToggleEvent.SHOW_LOADING);
 			startNewUpdater();
 		}catch(RestfulHTTPException | IOException ex){
 			throw new SdkException(ex);
