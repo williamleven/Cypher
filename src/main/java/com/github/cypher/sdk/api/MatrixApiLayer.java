@@ -1,13 +1,14 @@
 package com.github.cypher.sdk.api;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -147,7 +148,7 @@ public class MatrixApiLayer implements ApiLayer {
 	}
 
 	@Override
-	public void register(String username, String password, String homeserver) throws RestfulHTTPException, IOException {
+	public void register(String username, String password, String homeserver) throws IOException {
 		// Only run if session isn't already set
 		if (session != null){
 			return;
@@ -163,11 +164,21 @@ public class MatrixApiLayer implements ApiLayer {
 			request.addProperty("username", username);
 		}
 
-		// Send Request
-		JsonObject response = Util.makeJsonPostRequest(url, request).getAsJsonObject();
+		// Send Request for session
+		JsonObject firstResponse = Util.makeJsonPostRequest(url, request).getAsJsonObject();
+
+		JsonObject auth = new JsonObject();
+		auth.addProperty("session", String.valueOf(firstResponse.get("session")));
+		auth.addProperty("type","m.login.dummy");
+		JsonElement secondRequest = new JsonObject();
+		request.add("auth", auth.getAsJsonObject());
+
+		// Send Request for registering
+		JsonObject secondResponse = Util.makeJsonPostRequest(url, request).getAsJsonObject();
+
 
 		// Set Session
-		this.session = new Session(response);
+		this.session = new Session(secondResponse);
 	}
 
 
