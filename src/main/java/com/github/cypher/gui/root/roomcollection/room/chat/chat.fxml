@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="500.0" style="-fx-background-color: -fx-light-base;" styleClass="-fx-light" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.room.chat.ChatPresenter">
+<?import java.lang.String?>
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="350.0" style="-fx-background-color: -fx-light-base;" styleClass="-fx-light" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.room.chat.ChatPresenter">
    <children>
       <Label fx:id="roomName" alignment="TOP_LEFT" layoutX="14.0" layoutY="10.0" styleClass="heading" text="Room Name" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="43.0" AnchorPane.topAnchor="10.0" />
       <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#showRoomSettings" prefHeight="32.0" prefWidth="32.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
@@ -23,6 +18,7 @@
          <styleClass>
             <String fx:value="event-list-view" />
             <String fx:value="fancy-scroll" />
+            <String fx:value="-fx-light" />
          </styleClass></ListView>
       <Separator layoutX="5.0" layoutY="496.0" prefWidth="200.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
       <TextArea fx:id="messageBox" layoutX="50.0" layoutY="156.0" onKeyPressed="#onMessageBoxKeyPressed" prefColumnCount="0" prefRowCount="2" promptText="%messageBoxPrompt" styleClass="message-box" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />

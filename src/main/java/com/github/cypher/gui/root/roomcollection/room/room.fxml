@@ -9,12 +9,12 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="mainStackPane" style="-fx-background-color: -fx-light-base;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.room.RoomPresenter">
+<StackPane fx:id="mainStackPane" minWidth="0" style="-fx-background-color: -fx-light-base;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.room.RoomPresenter">
     <children>
-        <HBox fx:id="chatRoot">
+        <HBox>
             <children>
                 <AnchorPane fx:id="chat" style="-fx-background-color: -fx-light-base;" HBox.hgrow="ALWAYS" />
-                <AnchorPane prefWidth="200.0">
+                <AnchorPane prefWidth="200.0" minWidth="0">
                     <children>
                         <Label fx:id="membersLabel" prefHeight="20.0" prefWidth="165.0" styleClass="heading" text="%members" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                             <font>

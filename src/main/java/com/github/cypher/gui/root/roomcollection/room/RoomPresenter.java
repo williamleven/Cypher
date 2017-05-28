@@ -18,7 +18,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
@@ -38,9 +37,6 @@ public class RoomPresenter {
 
 	@FXML
 	private StackPane mainStackPane;
-
-	@FXML
-	private HBox chatRoot;
 
 	@FXML
 	private AnchorPane chat;
