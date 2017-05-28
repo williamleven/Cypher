@@ -34,12 +34,11 @@ root {
 * {
 	-fx-base: transparent;
 	-fx-light-base: #ECFAFF;
-	-fx-medium-base: #829296;
+	-fx-medium-base: #92A2A6;
 	-fx-dark-base: #404040;
 	-fx-soft-popup: #008CBA;
 	-fx-popup: #09CDDA;
 	-fx-lighter: -fx-medium-base;
-	/*-fx-lighter: #808080;*/
 }
 
 .base-separator {

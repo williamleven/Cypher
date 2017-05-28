@@ -24,7 +24,7 @@ public class Room {
 	private final com.github.cypher.sdk.Room sdkRoom;
 	private final User activeUser;
 	private boolean avatarWanted = false;
-	private final static int AVATAR_SIZE = 56;
+	private final static int AVATAR_SIZE = 48;
 
 
 	private URL lastAvatarURL = null;

@@ -18,8 +18,8 @@
             <SVGPath content="M 0.00128584,233.00128 32,233 C 0.0022132,233 1.0154363e-6,233.00417 0,265 Z" layoutX="16.0" layoutY="-217.0" scaleX="-1.0" scaleY="-1.0" styleClass="room-item-avatar-border" />
          </children>
       </Group>
-      <Label fx:id="name" focusTraversable="false" layoutX="53.0" layoutY="7.0" prefHeight="48.0" prefWidth="127.0" style="-fx-font-size: 16;" text="&lt;name&gt;" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-      <Label fx:id="topic" alignment="TOP_LEFT" layoutX="17.0" prefHeight="32.0" prefWidth="30.0" text="Topic" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="58.0" />
+      <Label fx:id="name" focusTraversable="false" layoutX="53.0" layoutY="7.0" prefHeight="48.0" prefWidth="127.0" style="-fx-font-size: 16; -fx-text-fill: black;" text="&lt;name&gt;" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+      <Label fx:id="topic" alignment="TOP_LEFT" layoutX="17.0" prefHeight="32.0" prefWidth="30.0" style="-fx-text-fill: black;" text="Topic" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="58.0" />
       <SVGPath content="M 40 10 L 60 30 L 40 30 L 40 10" fill="TRANSPARENT" rotate="90.0" styleClass="room-item-selector" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <SVGPath content="M 40 10 L 60 30 L 40 30 L 40 10" fill="TRANSPARENT" rotate="-90.0" styleClass="room-item-selector" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
    </children>

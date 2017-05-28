@@ -15,19 +15,18 @@
 }
 
 /* Color of the arrows which indicate the selected room item */
-.room-list .list-cell:selected .room-item > .room-item-selector {
-	-fx-fill: -room-item-selection-color;
+.room-list .list-cell:hover .room-item > .room-item-selector {
+	-fx-fill: -fx-popup;
 }
-.room-list .list-cell:selected {
-	-fx-background-color: -room-item-selection-color;
+.room-list .list-cell:selected .room-item > .room-item-selector,
+.room-list .list-cell:focused .room-item > .room-item-selector {
+	-fx-fill: -fx-soft-popup;
 }
+
+
 
 .heading {
 	-fx-font-size: 20px;
 	-fx-font-weight: bold;
 	-fx-text-fill: black;
-}
-
-.fancy-scroll AnchorPane{
-	-fx-background-color: -room-list-background;
 }
