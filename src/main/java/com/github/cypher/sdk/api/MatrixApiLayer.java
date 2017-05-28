@@ -165,20 +165,27 @@ public class MatrixApiLayer implements ApiLayer {
 		}
 
 		// Send Request for session
-		JsonObject firstResponse = Util.makeJsonPostRequest(url, request).getAsJsonObject();
-		// Create auth object
-		JsonObject auth = new JsonObject();
-		auth.addProperty("session", String.valueOf(firstResponse.get("session")));
-		auth.addProperty("type","m.login.dummy");
-		JsonElement secondRequest = new JsonObject();
-		request.add("auth", auth.getAsJsonObject());
+		JsonObject finalResponse;
+		try {
+			finalResponse = Util.makeJsonPostRequest(url, request).getAsJsonObject();
+		} catch (RestfulHTTPException e) {
+			if(e.getStatusCode() != 401) { throw e; }
 
-		// Send Request for registering
-		JsonObject secondResponse = Util.makeJsonPostRequest(url, request).getAsJsonObject();
+			JsonObject firstResponse = e.getErrorResponse();
+
+			// Create auth object
+			JsonObject auth = new JsonObject();
+			auth.addProperty("session", String.valueOf(firstResponse.get("session")));
+			auth.addProperty("type","m.login.dummy");
+			request.add("auth", auth.getAsJsonObject());
+
+			// Send Request for registering
+			finalResponse = Util.makeJsonPostRequest(url, request).getAsJsonObject();
+		}
 
 
 		// Set Session
-		this.session = new Session(secondResponse);
+		this.session = new Session(finalResponse);
 	}
 
 

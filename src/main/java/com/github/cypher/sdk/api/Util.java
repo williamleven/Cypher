@@ -86,13 +86,7 @@ public final class Util {
 				JsonReader reader = new JsonReader(new InputStreamReader(conn.getInputStream()));
 				json = new JsonParser().parse(reader);
 			} catch(IOException e) {
-				if (e.getMessage().contains("response code: 401")){
-					JsonReader reader = new JsonReader(new InputStreamReader(conn.getErrorStream()));
-					json = new JsonParser().parse(reader);
-				}
-				else {
-					handleRestfulHTTPException(conn);
-				}
+				handleRestfulHTTPException(conn);
 			}
 		} catch(IllegalStateException e) {
 			return null;
