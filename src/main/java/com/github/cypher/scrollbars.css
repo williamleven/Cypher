@@ -1,44 +1,65 @@
-
-/* The main scrollbar **track** CSS class  */
-.fancy-scroll .scroll-bar:horizontal .track,
-.fancy-scroll .scroll-bar:vertical .track{
-    -fx-background-color:transparent;
-    -fx-border-color:transparent;
-    -fx-background-radius: 0em;
-    -fx-border-radius:2em;
-}
-
 /* The increment and decrement button CSS class of scrollbar */
 .fancy-scroll .scroll-bar:horizontal .increment-button ,
 .fancy-scroll .scroll-bar:horizontal .decrement-button {
-    -fx-background-color:transparent;
-    -fx-background-radius: 0em;
-    -fx-padding:0 0 10 0;
-
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 10 0;
+    -fx-background-radius: 0;
 }
-
-/* The increment and decrement button CSS class of scrollbar */
-
-.fancy-scroll .scroll-bar:vertical .increment-button ,
+.fancy-scroll .scroll-bar:vertical  .increment-button ,
 .fancy-scroll .scroll-bar:vertical .decrement-button {
-
-    -fx-background-color:transparent;
-    -fx-background-radius: 0em;
-    -fx-padding:0 10 0 0;
-
+    -fx-background-color: transparent;
+    -fx-padding: 0 10 0 0;
+    -fx-background-radius: 0;
 }
-
-.fancy-scroll  .scroll-bar .increment-arrow,
-.fancy-scroll  .scroll-bar .decrement-arrow {
+.fancy-scroll .scroll-bar .increment-arrow,
+.fancy-scroll .scroll-bar .decrement-arrow{
     -fx-shape: " ";
-    -fx-padding:0;
+    -fx-padding: 0;
 }
 
+/* The main scrollbar **track** CSS class  */
+.fancy-scroll .scroll-bar:horizontal .track ,
+.fancy-scroll .scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 0;
+    -fx-background-radius: 0em;
+    -fx-border-radius: 10px;
+}
 /* The main scrollbar **thumb** CSS class which we drag every time (movable) */
 .fancy-scroll .scroll-bar:horizontal .thumb,
 .fancy-scroll .scroll-bar:vertical .thumb {
-    -fx-background-color:derive(black,90%);
+    -fx-background-color:transparent;
     -fx-background-insets: 2, 0, 0;
-    -fx-background-radius: 2em;
+    -fx-background-radius: 10px;
+}
+/* ------------------------------------------------------------------------------------- */
+/** EVENT CSS **/
+/* ------------------------------------------------------------------------------------- */
+.fancy-scroll:hover .scroll-bar .thumb,
+.fancy-scroll:pressed .scroll-bar .thumb{
+    -fx-background-color: -fx-scroll-hover;
+}
 
+/* The main scrollbar **track** CSS class on event of "hover" and "pressed" */
+.fancy-scroll:hover .scroll-bar:hover .track,
+.fancy-scroll:pressed .scroll-bar:pressed .track,
+.fancy-scroll:pressed .scroll-bar:hover .track,
+.fancy-scroll:hover .scroll-bar:pressed .track,
+.fancy-scroll .scroll-bar:hover .track,
+.fancy-scroll .scroll-bar:pressed .track{
+    -fx-background-color: -fx-lighter;
+    -fx-opacity: 0.2;
+}
+
+/* The main scrollbar **thumb** CSS class on event of "hover" and "pressed" */
+.fancy-scroll:hover .scroll-bar .thumb:hover,
+.fancy-scroll:pressed .scroll-bar .thumb:hover,
+.fancy-scroll .scroll-bar .thumb:hover{
+    -fx-background-color: -fx-soft-popup;
+}
+.fancy-scroll .scroll-bar .thumb:pressed,
+.fancy-scroll:pressed .scroll-bar .thumb:pressed,
+.fancy-scroll:hover .scroll-bar .thumb:pressed{
+    -fx-background-color: -fx-popup;
 }

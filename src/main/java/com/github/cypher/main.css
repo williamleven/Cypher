@@ -43,12 +43,15 @@ root {
 
 .-fx-medium *{
 	-fx-base: -fx-medium-base;
+	-fx-scroll-hover: -fx-dark-base;
 }
 .-fx-light *{
 	-fx-base: -fx-light-base;
+	-fx-scroll-hover: -fx-medium-base;
 }
 .-fx-dark *{
 	-fx-base: -fx-dark-base;
+	-fx-scroll-hover: -fx-medium-base;
 }
 
 .base-separator {
