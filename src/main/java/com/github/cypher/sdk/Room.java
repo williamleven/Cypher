@@ -289,7 +289,7 @@ public class Room {
 				list.add(alias.getAsString());
 			}
 
-			Event event = addPropertyChangeEvent(originServerTs, sender, eventId, "m.room.aliases", age, "aliases", list);
+			Event event = addPropertyChangeEvent(originServerTs, sender, eventId, stateKey, age, "aliases", list);
 
 			if (isLatestStateEvent(event)) {
 				if (list.size() == 0){
