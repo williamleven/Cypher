@@ -72,7 +72,7 @@ public final class Util {
 	 */
 	public static javafx.scene.image.Image generateIdenticon(String text, int image_width, int image_height) throws IOException {
 		// If the input name/text is null or empty no image can be created.
-		if (text == null || text.isEmpty()) {
+		if (text == null || text.length() < 3) {
 			return null;
 		}
 

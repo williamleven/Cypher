@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<AnchorPane maxHeight="99999.0" maxWidth="99999.0" minHeight="250.0" minWidth="400.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.directory.DirectoryPresenter">
+<AnchorPane maxHeight="99999.0" maxWidth="99999.0" minHeight="250.0" minWidth="400.0" style="-fx-background-color: -fx-light-base;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.directory.DirectoryPresenter">
    <children>
       <Label alignment="CENTER" layoutX="108.0" layoutY="19.0" prefHeight="27.0" prefWidth="185.0" styleClass="h3" text="Directory" AnchorPane.leftAnchor="108.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="19.0" />
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#hideDirectory" text="Back" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
