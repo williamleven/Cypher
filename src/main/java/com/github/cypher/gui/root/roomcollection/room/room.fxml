@@ -21,8 +21,8 @@
                                 <Font size="14.0" />
                             </font>
                         </Label>
-                  <Separator layoutX="5.0" layoutY="26.0" prefWidth="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="35.0" />
-                        <ListView fx:id="memberListView" focusTraversable="false" layoutY="32.0" prefHeight="368.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+                  <Separator layoutX="5.0" layoutY="26.0" prefWidth="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="40.0" />
+                        <ListView fx:id="memberListView" focusTraversable="false" layoutY="32.0" prefHeight="368.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
                      <styleClass>
                         <String fx:value="member-list" />
                         <String fx:value="fancy-scroll" />
