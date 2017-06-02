@@ -55,25 +55,9 @@ public class ChatPresenter {
 
 	private FXThreadedObservableListWrapper<Event> backendListForEventView;
 
-	private final ChangeListener<? super Number> scrollListener = (observable, oldValue, newValue) ->  {
-		double position = newValue.doubleValue();
-		if(position == eventListScrollBar.getMin()) {
+	private final ChangeListener<? super Number> scrollListener = (observable, oldValue, newValue) -> checkMessageHistoryDemand();
 
-			Room room = client.getSelectedRoom();
-
-			scrollTo = backendListForEventView.getList().size() - 1;
-
-			executor.handle(() -> {
-				if (room != null) {
-					try {
-						room.loadEventHistory(HISTORY_CHUNK_SIZE);
-					} catch (SdkException e) {
-						System.out.printf("SdkException when trying to get room history: %s\n", e);
-					}
-				}
-			});
-		}
-	};
+	private volatile boolean isLoadingHistory = false;
 
 	@FXML
 	private TextArea messageBox;
@@ -114,6 +98,41 @@ public class ChatPresenter {
 		});
 	}
 
+	private void checkMessageHistoryDemand() {
+		if(isLoadingHistory) { return; }
+
+		Room room = client.getSelectedRoom();
+		ScrollBar scrollBar = eventListScrollBar;
+
+		if(room != null &&
+		   scrollBar != null &&
+		   // Is the scroll bar at the top?
+		   scrollBar.getValue() == scrollBar.getMin()) {
+
+			// Save current scroll bar position
+			scrollTo = backendListForEventView.getList().size() - 1;
+
+			isLoadingHistory = true;
+
+			executor.handle(() -> {
+				try {
+					// Try to load more history
+					boolean more = room.loadEventHistory(HISTORY_CHUNK_SIZE);
+
+					isLoadingHistory = false;
+
+					if(more) {
+						// If not all history is loaded, run method again
+						checkMessageHistoryDemand();
+					}
+				} catch (SdkException e) {
+					isLoadingHistory = false;
+					System.out.printf("SdkException when trying to get room history: %s\n", e);
+				}
+			});
+		}
+	}
+
 	private ScrollBar getListViewScrollBar(ListView listView, Orientation orientation) {
 		for(Node node : listView.lookupAll(".scroll-bar")) {
 			if(node instanceof ScrollBar &&
@@ -152,9 +171,7 @@ public class ChatPresenter {
 			};
 			backendListForEventView.getList().addListener(l);
 
-			if(eventListScrollBar != null) {
-				scrollListener.changed(eventListScrollBar.valueProperty(), null, eventListScrollBar.getValue());
-			}
+			checkMessageHistoryDemand();
 		});
 	}
 
