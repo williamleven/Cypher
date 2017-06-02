@@ -57,7 +57,7 @@ public class ChatPresenter {
 
 	private final ChangeListener<? super Number> scrollListener = (observable, oldValue, newValue) -> checkMessageHistoryDemand();
 
-	private boolean isLoadingHistory = false;
+	private volatile boolean isLoadingHistory = false;
 
 	@FXML
 	private TextArea messageBox;
@@ -118,14 +118,14 @@ public class ChatPresenter {
 					// Try to load more history
 					boolean more = room.loadEventHistory(HISTORY_CHUNK_SIZE);
 
-					Platform.runLater(() -> isLoadingHistory = false);
+					isLoadingHistory = false;
 
 					if(more) {
 						// If not all history is loaded, run method again
 						Platform.runLater(this::checkMessageHistoryDemand);
 					}
 				} catch (SdkException e) {
-					Platform.runLater(() -> isLoadingHistory = false);
+					isLoadingHistory = false;
 					System.out.printf("SdkException when trying to get room history: %s\n", e);
 				}
 			});
