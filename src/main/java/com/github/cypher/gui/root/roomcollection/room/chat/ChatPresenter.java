@@ -102,11 +102,12 @@ public class ChatPresenter {
 		if(isLoadingHistory) { return; }
 
 		Room room = client.getSelectedRoom();
+		ScrollBar scrollBar = eventListScrollBar;
 
 		if(room != null &&
-		   eventListScrollBar != null &&
+		   scrollBar != null &&
 		   // Is the scroll bar at the top?
-		   eventListScrollBar.getValue() == eventListScrollBar.getMin()) {
+		   scrollBar.getValue() == scrollBar.getMin()) {
 
 			// Save current scroll bar position
 			scrollTo = backendListForEventView.getList().size() - 1;
@@ -122,7 +123,7 @@ public class ChatPresenter {
 
 					if(more) {
 						// If not all history is loaded, run method again
-						Platform.runLater(this::checkMessageHistoryDemand);
+						checkMessageHistoryDemand();
 					}
 				} catch (SdkException e) {
 					isLoadingHistory = false;
