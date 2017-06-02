@@ -57,6 +57,8 @@ public class ChatPresenter {
 
 	private final ChangeListener<? super Number> scrollListener = (observable, oldValue, newValue) -> checkMessageHistoryDemand();
 
+	private boolean isLoadingHistory = false;
+
 	@FXML
 	private TextArea messageBox;
 
@@ -97,6 +99,8 @@ public class ChatPresenter {
 	}
 
 	private void checkMessageHistoryDemand() {
+		if(isLoadingHistory) { return; }
+
 		Room room = client.getSelectedRoom();
 
 		if(room != null &&
@@ -107,14 +111,21 @@ public class ChatPresenter {
 			// Save current scroll bar position
 			scrollTo = backendListForEventView.getList().size() - 1;
 
+			isLoadingHistory = true;
+
 			executor.handle(() -> {
 				try {
 					// Try to load more history
-					if(room.loadEventHistory(HISTORY_CHUNK_SIZE)) {
+					boolean more = room.loadEventHistory(HISTORY_CHUNK_SIZE);
+
+					Platform.runLater(() -> isLoadingHistory = false);
+
+					if(more) {
 						// If not all history is loaded, run method again
 						Platform.runLater(this::checkMessageHistoryDemand);
 					}
 				} catch (SdkException e) {
+					Platform.runLater(() -> isLoadingHistory = false);
 					System.out.printf("SdkException when trying to get room history: %s\n", e);
 				}
 			});
