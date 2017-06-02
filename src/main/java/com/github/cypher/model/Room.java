@@ -167,9 +167,9 @@ public class Room {
 
 	}
 
-	public void loadEventHistory(Integer limit) throws SdkException {
+	public boolean loadEventHistory(Integer limit) throws SdkException {
 		try {
-			sdkRoom.getEventHistory(limit);
+			return sdkRoom.getEventHistory(limit);
 		} catch(RestfulHTTPException | IOException e) {
 			throw new SdkException(e);
 		}

@@ -55,25 +55,7 @@ public class ChatPresenter {
 
 	private FXThreadedObservableListWrapper<Event> backendListForEventView;
 
-	private final ChangeListener<? super Number> scrollListener = (observable, oldValue, newValue) ->  {
-		double position = newValue.doubleValue();
-		if(position == eventListScrollBar.getMin()) {
-
-			Room room = client.getSelectedRoom();
-
-			scrollTo = backendListForEventView.getList().size() - 1;
-
-			executor.handle(() -> {
-				if (room != null) {
-					try {
-						room.loadEventHistory(HISTORY_CHUNK_SIZE);
-					} catch (SdkException e) {
-						System.out.printf("SdkException when trying to get room history: %s\n", e);
-					}
-				}
-			});
-		}
-	};
+	private final ChangeListener<? super Number> scrollListener = (observable, oldValue, newValue) -> checkMessageHistoryDemand();
 
 	@FXML
 	private TextArea messageBox;
@@ -114,6 +96,31 @@ public class ChatPresenter {
 		});
 	}
 
+	private void checkMessageHistoryDemand() {
+		Room room = client.getSelectedRoom();
+
+		if(room != null &&
+		   eventListScrollBar != null &&
+		   // Is the scroll bar at the top?
+		   eventListScrollBar.getValue() == eventListScrollBar.getMin()) {
+
+			// Save current scroll bar position
+			scrollTo = backendListForEventView.getList().size() - 1;
+
+			executor.handle(() -> {
+				try {
+					// Try to load more history
+					if(room.loadEventHistory(HISTORY_CHUNK_SIZE)) {
+						// If not all history is loaded, run method again
+						Platform.runLater(this::checkMessageHistoryDemand);
+					}
+				} catch (SdkException e) {
+					System.out.printf("SdkException when trying to get room history: %s\n", e);
+				}
+			});
+		}
+	}
+
 	private ScrollBar getListViewScrollBar(ListView listView, Orientation orientation) {
 		for(Node node : listView.lookupAll(".scroll-bar")) {
 			if(node instanceof ScrollBar &&
@@ -152,9 +159,7 @@ public class ChatPresenter {
 			};
 			backendListForEventView.getList().addListener(l);
 
-			if(eventListScrollBar != null) {
-				scrollListener.changed(eventListScrollBar.valueProperty(), null, eventListScrollBar.getValue());
-			}
+			checkMessageHistoryDemand();
 		});
 	}
 

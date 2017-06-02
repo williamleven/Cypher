@@ -134,7 +134,14 @@ public class Room {
 		parseStateEvents(data);
 	}
 
-	public void getEventHistory(Integer limit) throws RestfulHTTPException, IOException {
+	/**
+	 * Try to download older events from the room event log
+	 * @param limit The maximum amount of events to get
+	 * @return false if all history is loaded, otherwise true
+	 * @throws RestfulHTTPException
+	 * @throws IOException
+	 */
+	public boolean getEventHistory(Integer limit) throws RestfulHTTPException, IOException {
 		if(earliestBatch == null) {
 			throw new IOException("sdk.Room.getHistory(...) called before first sdk.Client.sync(...)");
 		}
@@ -154,12 +161,18 @@ public class Room {
 
 			JsonArray chunk = data.get("chunk").getAsJsonArray();
 
+			if (chunk.size() == 0) {
+				return false;
+			}
+
 			for(JsonElement eventElement : chunk) {
 				if(eventElement.isJsonObject()) {
 					parseEventData(eventElement.getAsJsonObject());
 				}
 			}
 		}
+
+		return true;
 	}
 
 	private void parseBasicPropertiesData(JsonObject data) {
