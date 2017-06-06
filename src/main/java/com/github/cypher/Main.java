@@ -69,13 +69,18 @@ public class Main extends Application {
 		primaryStage.setTitle("Cypher");
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
 		primaryStage.setScene(scene);
-		if (settings.getLastWindowPosX() != -1 && settings.getLastWindowPosY() != -1) {
-			primaryStage.setX(settings.getLastWindowPosX());
-			primaryStage.setY(settings.getLastWindowPosY());
-		}
-		if (settings.getLastWindowWidth() != -1 && settings.getLastWindowHeight() != -1) {
-			primaryStage.setWidth(settings.getLastWindowWidth());
-			primaryStage.setHeight(settings.getLastWindowHeight());
+
+		if (settings.getMaximized()) {
+			primaryStage.setMaximized(true);
+		} else {
+			if (settings.getLastWindowPosX() != -1 && settings.getLastWindowPosY() != -1) {
+				primaryStage.setX(settings.getLastWindowPosX());
+				primaryStage.setY(settings.getLastWindowPosY());
+			}
+			if (settings.getLastWindowWidth() != -1 && settings.getLastWindowHeight() != -1) {
+				primaryStage.setWidth(settings.getLastWindowWidth());
+				primaryStage.setHeight(settings.getLastWindowHeight());
+			}
 		}
 		primaryStage.setMinWidth(MIN_WINDOW_WIDTH);
 		primaryStage.setMinHeight(MIN_WINDOW_HEIGHT);
@@ -151,10 +156,14 @@ public class Main extends Application {
 	}
 
 	private void exit(Stage primaryStage) {
-		settings.setLastWindowPosX((int) primaryStage.getX());
-		settings.setLastWindowPosY((int) primaryStage.getY());
-		settings.setLastWindowWidth((int) primaryStage.getWidth());
-		settings.setLastWindowHeight((int) primaryStage.getHeight());
+		if (primaryStage.isMaximized()) {
+			settings.setMaximized(true);
+		} else {
+			settings.setLastWindowPosX((int) primaryStage.getX());
+			settings.setLastWindowPosY((int) primaryStage.getY());
+			settings.setLastWindowWidth((int) primaryStage.getWidth());
+			settings.setLastWindowHeight((int) primaryStage.getHeight());
+		}
 		client.exit();
 		Platform.exit();
 		System.exit(0);
