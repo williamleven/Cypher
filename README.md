@@ -2,9 +2,9 @@
 Matrix desktop client written in java
 
 ## Compile
-Compile with maven:
+##### Using maven:
 ```
-mvn jfx:jar
+mvn package
 ```
-Runnable output jar-file can be found in:
-%project_root%/target/jfx/app/cypher-0.1.X-jfx.jar
+Will output runnable jar-file as:
+`%project_root%/target/cypher-X.Y.Z-jfx.jar`
