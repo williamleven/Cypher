@@ -97,7 +97,7 @@ public class Room {
 				events.add(new Message(repo, (com.github.cypher.sdk.Message)event));
 			}
 		}
-		events.sort((a, b) -> (int)(a.getOriginServerTimeStamp() - b.getOriginServerTimeStamp()));
+		events.sort((a, b) -> (int)(a.getTimeStamp() - b.getTimeStamp()));
 
 		sdkRoom.addEventListener(change -> {
 			if (change.wasAdded()) {
@@ -111,10 +111,10 @@ public class Room {
 					return;
 				}
 
-				long timestamp = sdkEvent.getOriginServerTs();
+				long timestamp = sdkEvent.getUnsignedTimeStamp();
 
 				for(int i = 0; i < events.size(); i++) {
-					if(timestamp < events.get(i).getOriginServerTimeStamp()) {
+					if(timestamp < events.get(i).getTimeStamp()) {
 						events.add(i, event);
 						return;
 					}
