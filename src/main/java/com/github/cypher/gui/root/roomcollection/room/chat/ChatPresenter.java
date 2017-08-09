@@ -75,6 +75,7 @@ public class ChatPresenter {
 
 	@FXML
 	private SVGPath bufferingIcon;
+	private RotateTransition bufferIconAnimation;
 	private FadeTransition bufferFadeIn;
 	private FadeTransition bufferFadeOut;
 
@@ -107,21 +108,15 @@ public class ChatPresenter {
 			}
 		});
 
-		{	// Buffering icon animations
-			RotateTransition ft = new RotateTransition(Duration.millis(1000), bufferingIcon);
-			ft.setFromAngle(0);
-			ft.setToAngle(360);
-			ft.setAutoReverse(false);
-			ft.setCycleCount(Timeline.INDEFINITE);
-			ft.play();
-
-			bufferFadeIn = new FadeTransition(Duration.millis(200), bufferingIcon);
-			bufferFadeIn.setFromValue(0.0);
-			bufferFadeIn.setToValue(1.0);
-			bufferFadeOut = new FadeTransition(Duration.millis(200), bufferingIcon);
-			bufferFadeOut.setFromValue(1.0);
-			bufferFadeOut.setToValue(0.0);
-		}
+		// Buffering icon animations
+		bufferIconAnimation = new RotateTransition(Duration.millis(1000), bufferingIcon);
+		bufferIconAnimation.setCycleCount(Timeline.INDEFINITE);
+		bufferFadeIn = new FadeTransition(Duration.millis(200), bufferingIcon);
+		bufferFadeIn.setFromValue(0.0);
+		bufferFadeIn.setToValue(1.0);
+		bufferFadeOut = new FadeTransition(Duration.millis(200), bufferingIcon);
+		bufferFadeOut.setFromValue(1.0);
+		bufferFadeOut.setToValue(0.0);
 	}
 
 	private void checkMessageHistoryDemand() {
@@ -142,6 +137,9 @@ public class ChatPresenter {
 			bufferFadeOut.stop();
 			bufferFadeIn.setFromValue(bufferingIcon.getOpacity());
 			bufferFadeIn.play();
+			bufferIconAnimation.setFromAngle(bufferingIcon.getRotate());
+			bufferIconAnimation.setToAngle(bufferingIcon.getRotate() + 360);
+			bufferIconAnimation.play();
 
 			executor.handle(() -> {
 				try {
@@ -152,6 +150,7 @@ public class ChatPresenter {
 					bufferFadeIn.stop();
 					bufferFadeOut.setFromValue(bufferingIcon.getOpacity());
 					bufferFadeOut.play();
+					bufferIconAnimation.stop();
 
 					if(more) {
 						// If not all history is loaded, run method again
