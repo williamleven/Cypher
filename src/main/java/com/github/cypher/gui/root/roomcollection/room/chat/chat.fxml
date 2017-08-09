@@ -11,7 +11,7 @@
 <?import java.lang.String?>
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="350.0" style="-fx-background-color: -fx-light-base;" styleClass="-fx-light" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.room.chat.ChatPresenter">
    <children>
-      <Label fx:id="roomName" alignment="TOP_LEFT" layoutX="14.0" layoutY="10.0" styleClass="heading" text="Room Name" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="43.0" AnchorPane.topAnchor="10.0" />
+      <Label fx:id="roomName" alignment="TOP_LEFT" layoutX="14.0" layoutY="10.0" styleClass="heading" text="Room Name" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="10.0" />
       <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#showRoomSettings" prefHeight="32.0" prefWidth="32.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
             <FontIcon iconLiteral="fa-cog" iconSize="24" textAlignment="CENTER" />
