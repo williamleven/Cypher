@@ -111,6 +111,7 @@ public class ChatPresenter {
 		// Buffering icon animations
 		bufferIconAnimation = new RotateTransition(Duration.millis(1000), bufferingIcon);
 		bufferIconAnimation.setCycleCount(Timeline.INDEFINITE);
+		bufferIconAnimation.setByAngle(360);
 		bufferFadeIn = new FadeTransition(Duration.millis(200), bufferingIcon);
 		bufferFadeIn.setFromValue(0.0);
 		bufferFadeIn.setToValue(1.0);
@@ -137,8 +138,6 @@ public class ChatPresenter {
 			bufferFadeOut.stop();
 			bufferFadeIn.setFromValue(bufferingIcon.getOpacity());
 			bufferFadeIn.play();
-			bufferIconAnimation.setFromAngle(bufferingIcon.getRotate());
-			bufferIconAnimation.setToAngle(bufferingIcon.getRotate() + 360);
 			bufferIconAnimation.play();
 
 			executor.handle(() -> {
