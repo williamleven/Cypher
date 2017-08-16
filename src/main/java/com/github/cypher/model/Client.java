@@ -135,7 +135,7 @@ public class Client {
 					eventBus.post(ToggleEvent.HIDE_LOADING);
 				}
 			} catch (RestfulHTTPException | IOException e) {
-				System.out.printf("%s\n", e.getMessage());
+				e.printStackTrace();
 			}
 		});
 		updater.start();
