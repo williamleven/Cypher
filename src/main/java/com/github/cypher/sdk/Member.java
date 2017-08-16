@@ -40,4 +40,9 @@ public class Member {
 	IntegerProperty privilegeProperty() {
 		return privilege;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof Member && user.equals(((Member)o).user);
+	}
 }
