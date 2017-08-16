@@ -89,7 +89,7 @@ public final class Util {
 				handleRestfulHTTPException(conn);
 			}
 		} catch(IllegalStateException e) {
-			return null;
+			throw new IOException(e.getMessage(), e.getCause());
 		}
 
 		// Return response
