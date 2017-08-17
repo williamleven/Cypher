@@ -409,7 +409,7 @@ public class Room {
 				} else if ("invite".equals(membership)) {
 					// TODO: Handle invited room members in some way
 				} else {
-					System.out.printf("Unknown room membership type: \"%s\"%n", membership);
+					System.err.printf("Unknown room membership type: \"%s\"%n", membership);
 				}
 
 				// Add membership event to the log
