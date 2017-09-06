@@ -45,4 +45,9 @@ public class Member {
 	public boolean equals(Object o) {
 		return o instanceof Member && user.equals(((Member)o).user);
 	}
+
+	@Override
+	public int hashCode() {
+		return user.hashCode();
+	}
 }
