@@ -145,11 +145,11 @@ public class ChatPresenter {
 					// Try to load more history
 					boolean more = room.loadEventHistory(HISTORY_CHUNK_SIZE);
 
-					isLoadingHistory = false;
 					bufferFadeIn.stop();
 					bufferFadeOut.setFromValue(bufferingIcon.getOpacity());
 					bufferFadeOut.play();
 					bufferIconAnimation.stop();
+					isLoadingHistory = false;
 
 					if(more) {
 						// If not all history is loaded, run method again
