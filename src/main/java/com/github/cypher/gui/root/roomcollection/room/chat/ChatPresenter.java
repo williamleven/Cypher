@@ -13,6 +13,9 @@ import com.github.cypher.model.SdkException;
 import com.github.cypher.settings.Settings;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import javafx.animation.FadeTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
@@ -25,6 +28,8 @@ import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.shape.SVGPath;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.util.Locale;
@@ -68,6 +73,12 @@ public class ChatPresenter {
 	@FXML
 	private Label roomTopic;
 
+	@FXML
+	private SVGPath bufferingIcon;
+	private RotateTransition bufferIconAnimation;
+	private FadeTransition bufferFadeIn;
+	private FadeTransition bufferFadeOut;
+
 	private final ResourceBundle bundle = ResourceBundle.getBundle(
 		"com.github.cypher.gui.root.roomcollection.room.chat.chat",
 		Locale.getDefault());
@@ -96,6 +107,17 @@ public class ChatPresenter {
 				eventListScrollBar.valueProperty().addListener(scrollListener);
 			}
 		});
+
+		// Buffering icon animations
+		bufferIconAnimation = new RotateTransition(Duration.millis(1000), bufferingIcon);
+		bufferIconAnimation.setCycleCount(Timeline.INDEFINITE);
+		bufferIconAnimation.setByAngle(360);
+		bufferFadeIn = new FadeTransition(Duration.millis(200), bufferingIcon);
+		bufferFadeIn.setFromValue(0.0);
+		bufferFadeIn.setToValue(1.0);
+		bufferFadeOut = new FadeTransition(Duration.millis(200), bufferingIcon);
+		bufferFadeOut.setFromValue(1.0);
+		bufferFadeOut.setToValue(0.0);
 	}
 
 	private void checkMessageHistoryDemand() {
@@ -113,12 +135,20 @@ public class ChatPresenter {
 			scrollTo = backendListForEventView.getList().size() - 1;
 
 			isLoadingHistory = true;
+			bufferFadeOut.stop();
+			bufferFadeIn.setFromValue(bufferingIcon.getOpacity());
+			bufferFadeIn.play();
+			bufferIconAnimation.play();
 
 			executor.handle(() -> {
 				try {
 					// Try to load more history
 					boolean more = room.loadEventHistory(HISTORY_CHUNK_SIZE);
 
+					bufferFadeIn.stop();
+					bufferFadeOut.setFromValue(bufferingIcon.getOpacity());
+					bufferFadeOut.play();
+					bufferIconAnimation.stop();
 					isLoadingHistory = false;
 
 					if(more) {
