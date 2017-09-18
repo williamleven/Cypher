@@ -397,13 +397,19 @@ public class Room {
 				User user = userRepository.get(memberId);
 				user.update(event);
 
+				Member member = new Member(user);
+
 				if        ("join".equals(membership)) {
-					if (members.stream().noneMatch(m -> m.getUser().getId().equals(memberId))) {
-						members.add(new Member(user));
+					if (!members.contains(member)) {
+						members.add(member);
 					}
-				} else if ("leave".equals(membership)) {
-					Optional<Member> optionalMember = members.stream().filter(m -> m.getUser().getId().equals(memberId)).findAny();
-					optionalMember.ifPresent(member -> members.remove(member));
+				} else if ("leave".equals(membership)
+				        || "ban".equals(membership)) {
+					members.remove(member);
+				} else if ("invite".equals(membership)) {
+					// TODO: Handle invited room members in some way
+				} else {
+					System.err.printf("Unknown room membership type: \"%s\"%n", membership);
 				}
 
 				// Add membership event to the log
