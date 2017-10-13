@@ -134,7 +134,14 @@ public class Room {
 		parseStateEvents(data);
 	}
 
-	public void getEventHistory(Integer limit) throws RestfulHTTPException, IOException {
+	/**
+	 * Try to download older events from the room event log
+	 * @param limit The maximum amount of events to get
+	 * @return false if all history is loaded, otherwise true
+	 * @throws RestfulHTTPException
+	 * @throws IOException
+	 */
+	public boolean getEventHistory(Integer limit) throws RestfulHTTPException, IOException {
 		if(earliestBatch == null) {
 			throw new IOException("sdk.Room.getHistory(...) called before first sdk.Client.sync(...)");
 		}
@@ -154,12 +161,18 @@ public class Room {
 
 			JsonArray chunk = data.get("chunk").getAsJsonArray();
 
+			if (chunk.size() == 0) {
+				return false;
+			}
+
 			for(JsonElement eventElement : chunk) {
 				if(eventElement.isJsonObject()) {
 					parseEventData(eventElement.getAsJsonObject());
 				}
 			}
 		}
+
+		return true;
 	}
 
 	private void parseBasicPropertiesData(JsonObject data) {
@@ -384,13 +397,19 @@ public class Room {
 				User user = userRepository.get(memberId);
 				user.update(event);
 
+				Member member = new Member(user);
+
 				if        ("join".equals(membership)) {
-					if (members.stream().noneMatch(m -> m.getUser().getId().equals(memberId))) {
-						members.add(new Member(user));
+					if (!members.contains(member)) {
+						members.add(member);
 					}
-				} else if ("leave".equals(membership)) {
-					Optional<Member> optionalMember = members.stream().filter(m -> m.getUser().getId().equals(memberId)).findAny();
-					optionalMember.ifPresent(member -> members.remove(member));
+				} else if ("leave".equals(membership)
+				        || "ban".equals(membership)) {
+					members.remove(member);
+				} else if ("invite".equals(membership)) {
+					// TODO: Handle invited room members in some way
+				} else {
+					System.err.printf("Unknown room membership type: \"%s\"%n", membership);
 				}
 
 				// Add membership event to the log

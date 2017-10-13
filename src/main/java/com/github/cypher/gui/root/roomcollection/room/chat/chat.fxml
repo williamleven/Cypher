@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import java.lang.String?>
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="350.0" style="-fx-background-color: -fx-light-base;" styleClass="-fx-light" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.room.chat.ChatPresenter">
    <children>
-      <Label fx:id="roomName" alignment="TOP_LEFT" layoutX="14.0" layoutY="10.0" styleClass="heading" text="Room Name" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="43.0" AnchorPane.topAnchor="10.0" />
+      <Label fx:id="roomName" alignment="TOP_LEFT" layoutX="14.0" layoutY="10.0" styleClass="heading" text="Room Name" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="10.0" />
       <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#showRoomSettings" prefHeight="32.0" prefWidth="32.0" style="-fx-background-radius: 10px; -fx-border-radius: 10px;" styleClass="clickable" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
             <FontIcon iconLiteral="fa-cog" iconSize="24" textAlignment="CENTER" />
          </children>
       </VBox>
+      <SVGPath fx:id="bufferingIcon" content="M 27.313709,292.31371 21.547031,276.89779 16,297 22.823047,282.02164 4.6862915,292.31371 20.102214,286.54703 0,281 14.97836,287.82305 4.6862915,269.68629 10.452969,285.10221 16,265 9.1769532,279.97836 27.313708,269.68629 11.897786,275.45297 32,281 17.02164,274.17695 Z" opacity="0.0" styleClass="eventBufferingIcon" AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="5.0" />
       <Label fx:id="roomTopic" layoutX="5.0" layoutY="35.0" style="-fx-text-fill: black;" text="Room Topic" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="35.0" />
       <Separator layoutX="5.0" layoutY="52.0" prefWidth="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="52.0" />
       <ListView fx:id="eventListView" focusTraversable="false" layoutY="56.0" prefHeight="431.0" prefWidth="500.0" style="-fx-background-color: -fx-light-base;" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="56.0">

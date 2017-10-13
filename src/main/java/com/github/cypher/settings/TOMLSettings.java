@@ -1,3 +1,4 @@
+
 package com.github.cypher.settings;
 
 import com.moandjiezana.toml.Toml;
@@ -27,6 +28,7 @@ public class TOMLSettings implements Settings {
 		int SDKTimeout = 30000; // In ms
 		int modelTickInterval = 500; // In ms
 
+		boolean maximized = false;
 		int lastWindowPosX = -1;
 		int lastWindowPosY = -1;
 		int lastWindowWidth = -1;
@@ -165,6 +167,19 @@ public class TOMLSettings implements Settings {
 		}
 	}
 
+	@Override
+	public boolean getMaximized() {
+		return settingsData.maximized;
+	}
+
+	@Override
+	public void setMaximized(boolean maximized) {
+		synchronized (this) {
+			settingsData.maximized = maximized;
+			save();
+		}
+	}
+
 	// The time between each tick in the model in ms
 	@Override
 	public int getModelTickInterval() {
@@ -240,4 +255,5 @@ public class TOMLSettings implements Settings {
 			save();
 		}
 	}
+
 }

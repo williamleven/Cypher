@@ -22,6 +22,9 @@ public interface Settings {
 	int getSDKTimeout();
 	void setSDKTimeout(int timeout);
 
+	boolean getMaximized();
+	void setMaximized(boolean maximized);
+
 	// The time between each tick in the model in ms
 	int getModelTickInterval();
 	void setModelTickInterval(int interval);

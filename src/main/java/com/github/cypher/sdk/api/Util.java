@@ -74,7 +74,7 @@ public final class Util {
 
 			// Push Data
 			DataOutputStream writer = new DataOutputStream(conn.getOutputStream());
-			writer.writeBytes(data.toString());
+			writer.write(data.toString().getBytes("UTF-8"));
 			writer.flush();
 			writer.close();
 		}
@@ -89,7 +89,7 @@ public final class Util {
 				handleRestfulHTTPException(conn);
 			}
 		} catch(IllegalStateException e) {
-			return null;
+			throw new IOException(e.getMessage(), e.getCause());
 		}
 
 		// Return response
