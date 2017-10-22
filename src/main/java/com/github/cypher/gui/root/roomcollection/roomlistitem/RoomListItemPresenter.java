@@ -9,10 +9,10 @@ import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
 import javax.inject.Inject;
 import java.util.Locale;
@@ -34,6 +34,12 @@ public class RoomListItemPresenter extends CustomListCell<Room> {
 
 	@FXML
 	private Label topic;
+
+	@FXML
+	private Label unreadCounter;
+
+	@FXML
+	private Pane unreadMessagesPane;
 
 	private final ResourceBundle bundle = ResourceBundle.getBundle(
 			"com.github.cypher.gui.root.roomcollection.roomlistitem.roomlistitem",
@@ -94,5 +100,4 @@ public class RoomListItemPresenter extends CustomListCell<Room> {
 			topic.textProperty().setValue(room.getTopic());
 		}
 	}
-
 }

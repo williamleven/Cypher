@@ -9,5 +9,19 @@
 }
 
 .room-item-avatar-border {
-	-fx-fill: -room-item-background
+	-fx-fill: -room-item-background;
+}
+
+.room-item-avatar-background {
+	-fx-fill: -room-item-avatar-background;
+}
+
+.room-item-unread-background {
+	-fx-fill: -room-item-unread-background-color;
+}
+
+.room-item-unread-counter {
+	-fx-fill: -room-item-unread-counter-color;
+	-fx-font-size: 22px;
+	-fx-font-weight: bold;
 }

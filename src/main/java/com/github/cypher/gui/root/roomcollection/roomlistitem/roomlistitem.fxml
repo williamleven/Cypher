@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
-<AnchorPane fx:id="root" focusTraversable="true" prefHeight="110.0" prefWidth="210.0" style="-fx-background-color: -fx-medium-base;" styleClass="room-item" stylesheets="@roomlistitem.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.roomlistitem.RoomListItemPresenter">
+
+<AnchorPane fx:id="root" focusTraversable="true" prefHeight="110.0" prefWidth="210.0" style="-fx-background-color: -fx-medium-base;" styleClass="room-item" stylesheets="@roomlistitem.css" xmlns="http://javafx.com/javafx/8.0.162-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.cypher.gui.root.roomcollection.roomlistitem.RoomListItemPresenter">
    <children>
       <Group layoutX="10.0" layoutY="2.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="room-item-avatar-background" width="48.0" />
             <ImageView fx:id="avatar" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="room-item-avatar" />
             <SVGPath content="M 0.00128584,233.00128 32,233 C 0.0022132,233 1.0154363e-6,233.00417 0,265 Z" layoutY="-233.0" styleClass="room-item-avatar-border" />
             <SVGPath content="M 0.00128584,233.00128 32,233 C 0.0022132,233 1.0154363e-6,233.00417 0,265 Z" layoutX="16.0" layoutY="-233.0" scaleX="-1.0" styleClass="room-item-avatar-border" />
@@ -17,6 +24,16 @@
             <SVGPath content="M 0.00128584,233.00128 32,233 C 0.0022132,233 1.0154363e-6,233.00417 0,265 Z" layoutX="16.0" layoutY="-217.0" scaleX="-1.0" scaleY="-1.0" styleClass="room-item-avatar-border" />
          </children>
       </Group>
+      <AnchorPane fx:id="unreadMessagesPane" layoutX="170.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <SVGPath content="M 40 10 L 60 30 L 40 30 L 40 10" fill="RED" rotate="180.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" strokeWidth="0.0" styleClass="room-item-unread-background" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+            <Label fx:id="unreadCounter" styleClass="room-item-unread-counter" text="0" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-2.0">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
       <Label fx:id="name" focusTraversable="false" layoutX="53.0" layoutY="7.0" prefHeight="48.0" prefWidth="127.0" style="-fx-font-size: 16; -fx-text-fill: black;" text="&lt;name&gt;" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
       <Label fx:id="topic" alignment="TOP_LEFT" layoutX="17.0" prefHeight="32.0" prefWidth="30.0" style="-fx-text-fill: black;" text="Topic" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="58.0" />
       <SVGPath content="M 40 10 L 60 30 L 40 30 L 40 10" fill="TRANSPARENT" rotate="90.0" styleClass="room-item-selector" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
